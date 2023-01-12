@@ -63,8 +63,10 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     var date:Date = Date()
     var modifiedDate: Date!
     @IBAction func dayBackButton(_ sender: UIButton) {
+        dayBack()
     }
     @IBAction func dayPassButton(_ sender: UIButton) {
+        dayPass()
     }
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     
@@ -92,6 +94,13 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     }
     
     func dayBack(){
+        date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+        dateLabel.text = dateFormatter.string(from: date)
+    }
+    
+    func dayPass(){
+        date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+        dateLabel.text = dateFormatter.string(from: date)
     }
     
     var paymentList = ["食費","衣類","通信費","保険"]
