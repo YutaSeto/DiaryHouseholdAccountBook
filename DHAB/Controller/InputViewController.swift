@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 import RealmSwift
 
-class InputViewController:UIViewController{
+class InputViewController:UIViewController,UICollectionViewDelegate,UICollectionViewDataSource{
+    
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
@@ -24,13 +25,13 @@ class InputViewController:UIViewController{
     
     func settingSubView(){
         householdAccountBookView.frame = CGRect(x: 0,
-                                         y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
-                                         width: self.view.frame.width,
-                                         height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
-                diaryView.frame = CGRect(x: 0,
-                                          y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
-                                          width: self.view.frame.width,
-                                          height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
+                                                y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
+                                                width: self.view.frame.width,
+                                                height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
+        diaryView.frame = CGRect(x: 0,
+                                 y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
+                                 width: self.view.frame.width,
+                                 height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
     }
     
     //segmentedControll関連
@@ -45,23 +46,52 @@ class InputViewController:UIViewController{
             return
         }
     }
-   
+    
     override func viewDidLoad(){
         super.viewDidLoad()
         addHouseholdAccountView()
         settingSubView()
-        dateLabel.text = dateFormatter.string(from:Date())
+        dateLabel.text = dateFormatter.string(from:date)
+        
+        paymentCollectionView.delegate = self
+        paymentCollectionView.dataSource = self
     }
     
     //家計簿記入画面関連
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
+    var date:Date = Date()
+    var modifiedDate: Date!
+    @IBAction func dayBackButton(_ sender: UIButton) {
+    }
+    @IBAction func dayPassButton(_ sender: UIButton) {
+    }
+    @IBOutlet weak var paymentCollectionView: UICollectionView!
     
     var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        paymentList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
+        contentLabel.text = paymentList[indexPath.row]
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        resultLabel.text = paymentList[indexPath.row]
+    }
+    
+    func dayBack(){
     }
     
     var paymentList = ["食費","衣類","通信費","保険"]
