@@ -52,7 +52,7 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         addHouseholdAccountView()
         settingSubView()
         dateLabel.text = dateFormatter.string(from:date)
-        
+        diaryDateLabel.text = dateFormatter.string(from: date)
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
     }
@@ -96,14 +96,26 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     func dayBack(){
         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
         dateLabel.text = dateFormatter.string(from: date)
+        diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
         dateLabel.text = dateFormatter.string(from: date)
+        diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
     var paymentList = ["食費","衣類","通信費","保険"]
     
-    
+    //日記記入関連の画面
+    @IBOutlet weak var diaryDateLabel: UILabel!
+    @IBOutlet weak var diaryInputTextField: UITextView!
+    @IBAction func diaryDayBackButton(_ sender: UIButton) {
+        dayBack()
+    }
+    @IBAction func diaryDayPassButton(_ sender: UIButton) {
+        dayPass()
+    }
+    @IBAction func addDiaryButton(_ sender: UIButton) {
+    }
 }

@@ -56,6 +56,8 @@
                     <tabBarItem key="tabBarItem" title="入力" id="bRp-GQ-DDW"/>
                     <connections>
                         <outlet property="dateLabel" destination="XZI-Bh-CeH" id="sSF-uE-BIi"/>
+                        <outlet property="diaryDateLabel" destination="4Il-0k-CcD" id="QGL-Fj-m9i"/>
+                        <outlet property="diaryInputTextField" destination="dRd-Aq-gve" id="GFh-ku-R3T"/>
                         <outlet property="diaryView" destination="tGw-d9-ELB" id="7Kp-FD-kPx"/>
                         <outlet property="householdAccountBookView" destination="Ozc-D1-KOw" id="xdO-ij-IqI"/>
                         <outlet property="paymentCollectionView" destination="p7p-Mb-CPZ" id="4ys-Iq-Eb9"/>
@@ -171,8 +173,68 @@
                 <view contentMode="scaleToFill" id="tGw-d9-ELB">
                     <rect key="frame" x="0.0" y="0.0" width="353" height="237"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Il-0k-CcD">
+                            <rect key="frame" x="159" y="23" width="34.666666666666657" height="20.333333333333485"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c7X-jS-Cta">
+                            <rect key="frame" x="70" y="16" width="58.666666666666657" height="35"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="戻す"/>
+                            <connections>
+                                <action selector="diaryDayBackButton:" destination="PqI-vN-2ou" eventType="touchUpInside" id="Rg0-gN-nfy"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="49O-l4-6eh">
+                            <rect key="frame" x="224" y="16" width="76" height="35"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="進める"/>
+                            <connections>
+                                <action selector="diaryDayPassButton:" destination="PqI-vN-2ou" eventType="touchUpInside" id="uxZ-21-jIZ"/>
+                            </connections>
+                        </button>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dRd-Aq-gve">
+                            <rect key="frame" x="20" y="119" width="300" height="200"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="200" id="4F4-es-55D"/>
+                                <constraint firstAttribute="width" constant="300" id="wbq-Hm-tXJ"/>
+                            </constraints>
+                            <color key="textColor" systemColor="labelColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtY-Xg-vfR">
+                            <rect key="frame" x="261.33333333333331" y="339" width="58.666666666666686" height="35"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="送信">
+                                <color key="baseForegroundColor" systemColor="tintColor"/>
+                            </buttonConfiguration>
+                            <connections>
+                                <action selector="addDiaryButton:" destination="PqI-vN-2ou" eventType="touchUpInside" id="GMG-M4-1EG"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <viewLayoutGuide key="safeArea" id="q0t-0W-qy4"/>
                     <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                    <constraints>
+                        <constraint firstItem="dRd-Aq-gve" firstAttribute="centerX" secondItem="tGw-d9-ELB" secondAttribute="centerX" id="5YP-Qu-etk"/>
+                        <constraint firstItem="GtY-Xg-vfR" firstAttribute="trailing" secondItem="dRd-Aq-gve" secondAttribute="trailing" id="9Ge-t8-FCO"/>
+                        <constraint firstItem="49O-l4-6eh" firstAttribute="centerY" secondItem="c7X-jS-Cta" secondAttribute="centerY" id="EyY-xI-wuv"/>
+                        <constraint firstItem="GtY-Xg-vfR" firstAttribute="top" secondItem="dRd-Aq-gve" secondAttribute="bottom" constant="20" id="GIe-oA-sBp"/>
+                        <constraint firstItem="4Il-0k-CcD" firstAttribute="top" secondItem="q0t-0W-qy4" secondAttribute="top" constant="20" id="Lut-50-jUO"/>
+                        <constraint firstItem="4Il-0k-CcD" firstAttribute="centerX" secondItem="tGw-d9-ELB" secondAttribute="centerX" id="Pvs-5r-rV9"/>
+                        <constraint firstItem="dRd-Aq-gve" firstAttribute="top" secondItem="q0t-0W-qy4" secondAttribute="top" constant="60" id="RTF-yf-ArQ"/>
+                        <constraint firstItem="q0t-0W-qy4" firstAttribute="trailing" secondItem="dRd-Aq-gve" secondAttribute="trailing" constant="20" id="TLz-Rr-t5I"/>
+                        <constraint firstItem="49O-l4-6eh" firstAttribute="leading" secondItem="4Il-0k-CcD" secondAttribute="trailing" constant="30" id="Y1K-of-P3e"/>
+                        <constraint firstItem="dRd-Aq-gve" firstAttribute="leading" secondItem="q0t-0W-qy4" secondAttribute="leading" constant="20" id="brg-rV-o1t"/>
+                        <constraint firstItem="4Il-0k-CcD" firstAttribute="leading" secondItem="c7X-jS-Cta" secondAttribute="trailing" constant="30" id="fzp-ok-f3I"/>
+                        <constraint firstItem="4Il-0k-CcD" firstAttribute="centerY" secondItem="c7X-jS-Cta" secondAttribute="centerY" id="lT4-yH-rRy"/>
+                    </constraints>
                 </view>
             </objects>
             <point key="canvasLocation" x="-274.04580152671753" y="-1000"/>
@@ -248,6 +310,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
