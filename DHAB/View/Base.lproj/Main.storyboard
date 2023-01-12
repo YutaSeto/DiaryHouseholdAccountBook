@@ -54,8 +54,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="入力" id="bRp-GQ-DDW"/>
                     <connections>
+                        <outlet property="dateLabel" destination="XZI-Bh-CeH" id="sSF-uE-BIi"/>
                         <outlet property="diaryView" destination="tGw-d9-ELB" id="7Kp-FD-kPx"/>
                         <outlet property="householdAccountBookView" destination="Ozc-D1-KOw" id="xdO-ij-IqI"/>
+                        <outlet property="resultLabel" destination="fni-qc-YQs" id="IRB-cZ-LmN"/>
                         <outlet property="viewChangeSegmentedControl" destination="zgF-Pr-4U3" id="8fl-gb-GYi"/>
                     </connections>
                 </viewController>
@@ -63,8 +65,48 @@
                 <view contentMode="scaleToFill" id="Ozc-D1-KOw">
                     <rect key="frame" x="0.0" y="0.0" width="353" height="237"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Dz-Uf-Q7h">
+                            <rect key="frame" x="20" y="119" width="224" height="34"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="34" id="kbP-Ks-xzD"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaG-9g-56K">
+                            <rect key="frame" x="274" y="118.66666666666669" width="59" height="35"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="追加">
+                                <color key="baseForegroundColor" systemColor="tintColor"/>
+                            </buttonConfiguration>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XZI-Bh-CeH">
+                            <rect key="frame" x="159" y="20" width="35" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fni-qc-YQs">
+                            <rect key="frame" x="155" y="170" width="42" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
                     <viewLayoutGuide key="safeArea" id="bcv-eq-wHt"/>
                     <color key="backgroundColor" systemColor="systemGreenColor"/>
+                    <constraints>
+                        <constraint firstItem="HaG-9g-56K" firstAttribute="leading" secondItem="8Dz-Uf-Q7h" secondAttribute="trailing" constant="30" id="D2M-xg-mE9"/>
+                        <constraint firstItem="HaG-9g-56K" firstAttribute="centerY" secondItem="8Dz-Uf-Q7h" secondAttribute="centerY" id="KhG-hX-0gi"/>
+                        <constraint firstAttribute="trailing" secondItem="HaG-9g-56K" secondAttribute="trailing" constant="20" id="Lu9-af-sHq"/>
+                        <constraint firstItem="8Dz-Uf-Q7h" firstAttribute="leading" secondItem="Ozc-D1-KOw" secondAttribute="leading" constant="20" id="hBU-2a-OHo"/>
+                        <constraint firstItem="8Dz-Uf-Q7h" firstAttribute="top" secondItem="bcv-eq-wHt" secondAttribute="top" constant="60" id="lKh-NZ-9fy"/>
+                        <constraint firstItem="XZI-Bh-CeH" firstAttribute="top" secondItem="Ozc-D1-KOw" secondAttribute="top" constant="20" id="mxR-WV-KM6"/>
+                        <constraint firstItem="XZI-Bh-CeH" firstAttribute="centerX" secondItem="Ozc-D1-KOw" secondAttribute="centerX" id="viQ-6M-c8t"/>
+                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="tGw-d9-ELB">
                     <rect key="frame" x="0.0" y="0.0" width="353" height="237"/>
@@ -144,21 +186,6 @@
             </objects>
             <point key="canvasLocation" x="-273" y="-308"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="zqA-cf-xSj">
-            <objects>
-                <viewController id="6pL-7D-Crg" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="M89-RE-dIm">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="zCy-PH-JNP"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kMJ-gh-mMI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-303" y="-1677"/>
-        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
@@ -172,6 +199,9 @@
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
