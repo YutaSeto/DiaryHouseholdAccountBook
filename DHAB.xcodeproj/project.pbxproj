@@ -13,6 +13,7 @@
 		237B85E62970471A001E4639 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237B85E42970471A001E4639 /* Main.storyboard */; };
 		237B85E82970471B001E4639 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 237B85E72970471B001E4639 /* Assets.xcassets */; };
 		237B85EB2970471B001E4639 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237B85E92970471B001E4639 /* LaunchScreen.storyboard */; };
+		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,9 @@
 		237B85E72970471B001E4639 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		237B85EA2970471B001E4639 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		237B85EC2970471B001E4639 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
+		C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				237B85DD2970471A001E4639 /* DHAB */,
 				237B85DC2970471A001E4639 /* Products */,
+				FE69DA473FAE4DA6B3C756F1 /* Pods */,
+				D2158A32236C05243A74B6CD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,6 +98,24 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		D2158A32236C05243A74B6CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FE69DA473FAE4DA6B3C756F1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */,
+				DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -98,9 +123,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 237B85EF2970471B001E4639 /* Build configuration list for PBXNativeTarget "DHAB" */;
 			buildPhases = (
+				72339C8B430D61FA6D58C0AA /* [CP] Check Pods Manifest.lock */,
 				237B85D72970471A001E4639 /* Sources */,
 				237B85D82970471A001E4639 /* Frameworks */,
 				237B85D92970471A001E4639 /* Resources */,
+				784DE5190519702EC67FB89D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -156,6 +183,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		72339C8B430D61FA6D58C0AA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DHAB-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		784DE5190519702EC67FB89D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DHAB/Pods-DHAB-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DHAB/Pods-DHAB-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DHAB/Pods-DHAB-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		237B85D72970471A001E4639 /* Sources */ = {
@@ -306,6 +375,7 @@
 		};
 		237B85F02970471B001E4639 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -334,6 +404,7 @@
 		};
 		237B85F12970471B001E4639 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
