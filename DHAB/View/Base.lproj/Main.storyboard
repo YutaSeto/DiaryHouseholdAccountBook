@@ -39,6 +39,9 @@
                                     <segment title="日記"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" systemColor="systemYellowColor"/>
+                                <connections>
+                                    <action selector="viewChangeSegmentedControl:" destination="PqI-vN-2ou" eventType="valueChanged" id="9f5-gc-cV2"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WHE-Xr-z3Q"/>
@@ -50,10 +53,27 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="入力" id="bRp-GQ-DDW"/>
+                    <connections>
+                        <outlet property="diaryView" destination="tGw-d9-ELB" id="7Kp-FD-kPx"/>
+                        <outlet property="householdAccountBookView" destination="Ozc-D1-KOw" id="xdO-ij-IqI"/>
+                        <outlet property="viewChangeSegmentedControl" destination="zgF-Pr-4U3" id="8fl-gb-GYi"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D05-Uh-P2X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="Ozc-D1-KOw">
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="237"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="bcv-eq-wHt"/>
+                    <color key="backgroundColor" systemColor="systemGreenColor"/>
+                </view>
+                <view contentMode="scaleToFill" id="tGw-d9-ELB">
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="237"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="q0t-0W-qy4"/>
+                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                </view>
             </objects>
-            <point key="canvasLocation" x="-274" y="-1000"/>
+            <point key="canvasLocation" x="-274.04580152671753" y="-1000"/>
         </scene>
         <!--家計簿-->
         <scene sceneID="2gj-Ff-IyR">
@@ -124,10 +144,31 @@
             </objects>
             <point key="canvasLocation" x="-273" y="-308"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="zqA-cf-xSj">
+            <objects>
+                <viewController id="6pL-7D-Crg" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="M89-RE-dIm">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="zCy-PH-JNP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kMJ-gh-mMI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-303" y="-1677"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
