@@ -55,11 +55,14 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         diaryDateLabel.text = dateFormatter.string(from: date)
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
+        settingCollectionView()
     }
     
     //家計簿記入画面関連
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     var date:Date = Date()
     var modifiedDate: Date!
     @IBAction func dayBackButton(_ sender: UIButton) {
@@ -90,6 +93,10 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         resultLabel.text = paymentList[indexPath.row]
+    }
+    
+    func settingCollectionView(){
+        collectionViewFlowLayout.estimatedItemSize = CGSize(width: collectionView.frame.width / 3,height: collectionView.frame.height / 3)
     }
     
     func dayBack(){

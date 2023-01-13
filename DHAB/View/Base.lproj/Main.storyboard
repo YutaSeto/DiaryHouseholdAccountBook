@@ -127,6 +127,8 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="入力" id="bRp-GQ-DDW"/>
                     <connections>
+                        <outlet property="collectionView" destination="p7p-Mb-CPZ" id="m7F-Ka-bw8"/>
+                        <outlet property="collectionViewFlowLayout" destination="9RC-dP-ZIu" id="w1K-ay-BcJ"/>
                         <outlet property="dateLabel" destination="XZI-Bh-CeH" id="sSF-uE-BIi"/>
                         <outlet property="diaryDateLabel" destination="4Il-0k-CcD" id="QGL-Fj-m9i"/>
                         <outlet property="diaryInputTextView" destination="dRd-Aq-gve" id="DIt-pB-haD"/>
