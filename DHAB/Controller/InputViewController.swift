@@ -9,6 +9,11 @@ import Foundation
 import UIKit
 import RealmSwift
 
+protocol InputViewControllerDelegate{
+    func updatePayment()
+    func updateDiary()
+}
+
 class InputViewController:UIViewController,UICollectionViewDelegate,UICollectionViewDataSource{
     
     //subView関連
@@ -64,7 +69,8 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     var date:Date = Date()
-    var modifiedDate: Date!
+    var inputViewControllerDelegate:InputViewControllerDelegate?
+    @IBOutlet weak var priceTextField: UITextField!
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
     }
@@ -72,6 +78,26 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         dayPass()
     }
     @IBOutlet weak var paymentCollectionView: UICollectionView!
+    
+    @IBAction func addButton(_ sender: UIButton) {
+        tapAddButton()
+    }
+    
+    var paymentModelList: [PaymentModel] = []
+    
+    func tapAddButton(){
+        let realm = try! Realm()
+        try! realm.write{
+            let paymentModel = PaymentModel()
+            paymentModel.date = date
+            paymentModel.price = Int(priceTextField.text!) ?? 0
+            paymentModel.expenceItem = resultLabel.text!
+            realm.add(paymentModel)
+        }
+        inputViewControllerDelegate?.updatePayment()
+        resultLabel.text = ""
+        priceTextField.text = ""
+    }
     
     var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
@@ -138,14 +164,10 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
             diaryModel.title = titleTextField.text!
             diaryModel.text = diaryInputTextView.text
             realm.add(diaryModel)
-            
-                       
-            print(diaryModel)
-            print(diaryList)
-            
-            titleTextField.text = ""
-            diaryInputTextView.text = ""
         }
+        titleTextField.text = ""
+        diaryInputTextView.text = ""
+        inputViewControllerDelegate?.updatePayment()
     }
     
     

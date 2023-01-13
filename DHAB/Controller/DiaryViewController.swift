@@ -9,7 +9,8 @@ import Foundation
 import RealmSwift
 import UIKit
 
-class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSource{
+class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSource,InputViewControllerDelegate{
+    
     var diaryList: [DiaryModel] = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,12 +40,26 @@ class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSo
         setDiaryData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        diaryTableView.delegate = self
+    }
+    
     @IBOutlet weak var diaryTableView: UITableView!
     
     func setDiaryData(){
         let realm = try! Realm()
         let result = realm.objects(DiaryModel.self)
         diaryList = Array(result)
+        diaryTableView.reloadData()
+    }
+    
+    func updatePayment() {
+        return
+    }
+    
+    func updateDiary() {
+        setDiaryData()
     }
     
 }
