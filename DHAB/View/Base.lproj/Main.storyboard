@@ -23,7 +23,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wbl-kJ-fS3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="459" y="-1012"/>
+            <point key="canvasLocation" x="459" y="-978"/>
         </scene>
         <!--入力-->
         <scene sceneID="x4k-D1-qcF">
@@ -57,11 +57,12 @@
                     <connections>
                         <outlet property="dateLabel" destination="XZI-Bh-CeH" id="sSF-uE-BIi"/>
                         <outlet property="diaryDateLabel" destination="4Il-0k-CcD" id="QGL-Fj-m9i"/>
-                        <outlet property="diaryInputTextField" destination="dRd-Aq-gve" id="GFh-ku-R3T"/>
+                        <outlet property="diaryInputTextView" destination="dRd-Aq-gve" id="DIt-pB-haD"/>
                         <outlet property="diaryView" destination="tGw-d9-ELB" id="7Kp-FD-kPx"/>
                         <outlet property="householdAccountBookView" destination="Ozc-D1-KOw" id="xdO-ij-IqI"/>
                         <outlet property="paymentCollectionView" destination="p7p-Mb-CPZ" id="4ys-Iq-Eb9"/>
                         <outlet property="resultLabel" destination="fni-qc-YQs" id="IRB-cZ-LmN"/>
+                        <outlet property="titleTextField" destination="cSU-fw-dJU" id="dUc-jE-bGX"/>
                         <outlet property="viewChangeSegmentedControl" destination="zgF-Pr-4U3" id="8fl-gb-GYi"/>
                     </connections>
                 </viewController>
@@ -197,7 +198,7 @@
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dRd-Aq-gve">
-                            <rect key="frame" x="20" y="119" width="300" height="200"/>
+                            <rect key="frame" x="20" y="133" width="300" height="200"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="200" id="4F4-es-55D"/>
@@ -208,7 +209,7 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtY-Xg-vfR">
-                            <rect key="frame" x="261.33333333333331" y="339" width="58.666666666666686" height="35"/>
+                            <rect key="frame" x="261.33333333333331" y="353" width="58.666666666666686" height="35"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="送信">
@@ -218,26 +219,35 @@
                                 <action selector="addDiaryButton:" destination="PqI-vN-2ou" eventType="touchUpInside" id="GMG-M4-1EG"/>
                             </connections>
                         </button>
+                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cSU-fw-dJU">
+                            <rect key="frame" x="20" y="79" width="300" height="34"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="q0t-0W-qy4"/>
                     <color key="backgroundColor" systemColor="systemOrangeColor"/>
                     <constraints>
                         <constraint firstItem="dRd-Aq-gve" firstAttribute="centerX" secondItem="tGw-d9-ELB" secondAttribute="centerX" id="5YP-Qu-etk"/>
                         <constraint firstItem="GtY-Xg-vfR" firstAttribute="trailing" secondItem="dRd-Aq-gve" secondAttribute="trailing" id="9Ge-t8-FCO"/>
+                        <constraint firstItem="cSU-fw-dJU" firstAttribute="trailing" secondItem="dRd-Aq-gve" secondAttribute="trailing" id="9Sq-LM-ciR"/>
                         <constraint firstItem="49O-l4-6eh" firstAttribute="centerY" secondItem="c7X-jS-Cta" secondAttribute="centerY" id="EyY-xI-wuv"/>
-                        <constraint firstItem="GtY-Xg-vfR" firstAttribute="top" secondItem="dRd-Aq-gve" secondAttribute="bottom" constant="20" id="GIe-oA-sBp"/>
+                        <constraint firstItem="dRd-Aq-gve" firstAttribute="top" secondItem="cSU-fw-dJU" secondAttribute="bottom" constant="20" id="FRx-AS-IEV"/>
                         <constraint firstItem="4Il-0k-CcD" firstAttribute="top" secondItem="q0t-0W-qy4" secondAttribute="top" constant="20" id="Lut-50-jUO"/>
                         <constraint firstItem="4Il-0k-CcD" firstAttribute="centerX" secondItem="tGw-d9-ELB" secondAttribute="centerX" id="Pvs-5r-rV9"/>
-                        <constraint firstItem="dRd-Aq-gve" firstAttribute="top" secondItem="q0t-0W-qy4" secondAttribute="top" constant="60" id="RTF-yf-ArQ"/>
                         <constraint firstItem="q0t-0W-qy4" firstAttribute="trailing" secondItem="dRd-Aq-gve" secondAttribute="trailing" constant="20" id="TLz-Rr-t5I"/>
                         <constraint firstItem="49O-l4-6eh" firstAttribute="leading" secondItem="4Il-0k-CcD" secondAttribute="trailing" constant="30" id="Y1K-of-P3e"/>
                         <constraint firstItem="dRd-Aq-gve" firstAttribute="leading" secondItem="q0t-0W-qy4" secondAttribute="leading" constant="20" id="brg-rV-o1t"/>
+                        <constraint firstItem="cSU-fw-dJU" firstAttribute="leading" secondItem="dRd-Aq-gve" secondAttribute="leading" id="cYg-aD-v6W"/>
                         <constraint firstItem="4Il-0k-CcD" firstAttribute="leading" secondItem="c7X-jS-Cta" secondAttribute="trailing" constant="30" id="fzp-ok-f3I"/>
                         <constraint firstItem="4Il-0k-CcD" firstAttribute="centerY" secondItem="c7X-jS-Cta" secondAttribute="centerY" id="lT4-yH-rRy"/>
+                        <constraint firstItem="cSU-fw-dJU" firstAttribute="centerX" secondItem="tGw-d9-ELB" secondAttribute="centerX" id="mGR-nI-6Jd"/>
+                        <constraint firstItem="GtY-Xg-vfR" firstAttribute="top" secondItem="dRd-Aq-gve" secondAttribute="bottom" constant="20" id="pTI-6z-Nb9"/>
+                        <constraint firstItem="cSU-fw-dJU" firstAttribute="top" secondItem="q0t-0W-qy4" secondAttribute="top" constant="20" id="t31-Ry-IBG"/>
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="-274.04580152671753" y="-1000"/>
+            <point key="canvasLocation" x="459" y="-1642"/>
         </scene>
         <!--家計簿-->
         <scene sceneID="2gj-Ff-IyR">
@@ -262,14 +272,29 @@
                     <view key="view" contentMode="scaleToFill" id="a5G-37-Vt3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="WVQ-ra-iAP">
+                                <rect key="frame" x="20" y="79" width="353" height="670"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="tUb-Sl-yqc"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="WVQ-ra-iAP" firstAttribute="top" secondItem="tUb-Sl-yqc" secondAttribute="top" constant="20" id="Bho-kg-BA2"/>
+                            <constraint firstItem="WVQ-ra-iAP" firstAttribute="leading" secondItem="tUb-Sl-yqc" secondAttribute="leading" constant="20" id="X8U-Ja-BMG"/>
+                            <constraint firstItem="tUb-Sl-yqc" firstAttribute="bottom" secondItem="WVQ-ra-iAP" secondAttribute="bottom" constant="20" id="Xkp-mN-FKz"/>
+                            <constraint firstItem="tUb-Sl-yqc" firstAttribute="trailing" secondItem="WVQ-ra-iAP" secondAttribute="trailing" constant="20" id="jh1-4M-Yt9"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="日記" id="5dh-1J-4eu"/>
+                    <connections>
+                        <outlet property="diaryTableView" destination="WVQ-ra-iAP" id="fxk-sy-wQU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecg-wr-9W6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="459" y="365"/>
+            <point key="canvasLocation" x="459" y="351"/>
         </scene>
         <!--設定-->
         <scene sceneID="qOt-K7-o2g">
@@ -285,7 +310,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k2U-8j-QbX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-228" y="365"/>
+            <point key="canvasLocation" x="459" y="1015"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="U4G-DK-pUF">
@@ -306,7 +331,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hGM-Vm-qF0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-273" y="-308"/>
+            <point key="canvasLocation" x="-1219" y="-308"/>
         </scene>
     </scenes>
     <resources>

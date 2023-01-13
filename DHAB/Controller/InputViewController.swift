@@ -77,7 +77,6 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         return dateFormatter
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         paymentList.count
     }
@@ -108,14 +107,39 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     var paymentList = ["食費","衣類","通信費","保険"]
     
     //日記記入関連の画面
+    @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var diaryDateLabel: UILabel!
-    @IBOutlet weak var diaryInputTextField: UITextView!
+    @IBOutlet weak var diaryInputTextView: UITextView!
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
         dayBack()
     }
     @IBAction func diaryDayPassButton(_ sender: UIButton) {
         dayPass()
     }
+    
     @IBAction func addDiaryButton(_ sender: UIButton) {
+        addDiary()
     }
+    
+    var diaryModel = DiaryModel()
+    var diaryList:[DiaryModel] = []
+    
+    func addDiary(){
+        let realm = try! Realm()
+        try! realm.write{
+            diaryModel.date = date
+            diaryModel.title = titleTextField.text!
+            diaryModel.text = diaryInputTextView.text
+            realm.add(diaryModel)
+            
+                       
+            print(diaryModel)
+            print(diaryList)
+            
+            titleTextField.text = ""
+            diaryInputTextView.text = ""
+        }
+    }
+    
+    
 }
