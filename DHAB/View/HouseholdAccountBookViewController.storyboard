@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xpm-Tn-k0g">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--家計簿-->
+        <scene sceneID="cJf-dF-F4b">
+            <objects>
+                <viewController id="xpm-Tn-k0g" customClass="HouseholdAccountBookViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AXZ-sd-Ye4">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="o0T-En-LdB">
+                                <rect key="frame" x="20" y="134" width="353" height="32"/>
+                                <segments>
+                                    <segment title="支出"/>
+                                    <segment title="収入"/>
+                                    <segment title="貯蓄"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" systemColor="systemYellowColor"/>
+                                <connections>
+                                    <action selector="householdAccountBookSegmentedControl:" destination="xpm-Tn-k0g" eventType="valueChanged" id="TLx-As-Bc2"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eR8-bB-D0J">
+                                <rect key="frame" x="179" y="79" width="35" height="35"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6eO-OR-cWP">
+                                <rect key="frame" x="70" y="79" width="59" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="戻す"/>
+                                <connections>
+                                    <action selector="dayBackButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="yDp-4x-l9N"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSE-hE-dXj">
+                                <rect key="frame" x="264" y="79" width="76" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="進める"/>
+                                <connections>
+                                    <action selector="dayPassButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="pGF-gH-VWe"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WzP-Vq-YV9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="SSE-hE-dXj" firstAttribute="top" secondItem="WzP-Vq-YV9" secondAttribute="top" constant="20" id="4ZP-YH-1Jd"/>
+                            <constraint firstItem="SSE-hE-dXj" firstAttribute="leading" secondItem="eR8-bB-D0J" secondAttribute="trailing" constant="50" id="7TL-Ls-LyH"/>
+                            <constraint firstItem="WzP-Vq-YV9" firstAttribute="trailing" secondItem="o0T-En-LdB" secondAttribute="trailing" constant="20" id="7hG-zF-692"/>
+                            <constraint firstItem="o0T-En-LdB" firstAttribute="leading" secondItem="WzP-Vq-YV9" secondAttribute="leading" constant="20" id="FyU-04-OMn"/>
+                            <constraint firstItem="6eO-OR-cWP" firstAttribute="top" secondItem="WzP-Vq-YV9" secondAttribute="top" constant="20" id="N1g-pK-1mN"/>
+                            <constraint firstItem="eR8-bB-D0J" firstAttribute="centerY" secondItem="6eO-OR-cWP" secondAttribute="centerY" id="YFY-cZ-3zI"/>
+                            <constraint firstItem="eR8-bB-D0J" firstAttribute="top" secondItem="WzP-Vq-YV9" secondAttribute="top" constant="20" id="YxW-hP-ajH"/>
+                            <constraint firstItem="SSE-hE-dXj" firstAttribute="centerY" secondItem="6eO-OR-cWP" secondAttribute="centerY" id="awJ-Kx-AUQ"/>
+                            <constraint firstItem="o0T-En-LdB" firstAttribute="top" secondItem="eR8-bB-D0J" secondAttribute="bottom" constant="20" id="bTQ-Av-lUR"/>
+                            <constraint firstItem="eR8-bB-D0J" firstAttribute="centerX" secondItem="AXZ-sd-Ye4" secondAttribute="centerX" id="gy2-8e-he3"/>
+                            <constraint firstItem="SSE-hE-dXj" firstAttribute="centerY" secondItem="6eO-OR-cWP" secondAttribute="centerY" id="jhT-wv-rYo"/>
+                            <constraint firstItem="eR8-bB-D0J" firstAttribute="leading" secondItem="6eO-OR-cWP" secondAttribute="trailing" constant="50" id="v8m-8i-6K3"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="家計簿" id="SBn-cY-MKk"/>
+                    <connections>
+                        <outlet property="dayBackButton" destination="SSE-hE-dXj" id="2a8-um-wxa"/>
+                        <outlet property="dayLabel" destination="eR8-bB-D0J" id="c5S-ED-TZU"/>
+                        <outlet property="dayPassButton" destination="SSE-hE-dXj" id="RPB-KV-Dtc"/>
+                        <outlet property="householdAccountBookSegmentedControl" destination="o0T-En-LdB" id="nw4-4a-Jde"/>
+                        <outlet property="incomeView" destination="QJg-aq-W54" id="NVX-bS-K9D"/>
+                        <outlet property="paymentTableView" destination="2l9-up-7Hb" id="pvO-id-Z8A"/>
+                        <outlet property="paymentView" destination="opO-ja-Hb5" id="XA2-Rt-Bn0"/>
+                        <outlet property="savingView" destination="CuD-Qs-UOb" id="Qjc-51-L7b"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Ye-qn-076" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="opO-ja-Hb5">
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="564"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-up-7Hb">
+                            <rect key="frame" x="0.0" y="59" width="353" height="505"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </tableView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="8RV-EQ-dha"/>
+                    <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                    <constraints>
+                        <constraint firstItem="8RV-EQ-dha" firstAttribute="trailing" secondItem="2l9-up-7Hb" secondAttribute="trailing" id="6jE-Ce-Pdx"/>
+                        <constraint firstItem="2l9-up-7Hb" firstAttribute="leading" secondItem="8RV-EQ-dha" secondAttribute="leading" id="FOt-iF-pk5"/>
+                        <constraint firstItem="8RV-EQ-dha" firstAttribute="bottom" secondItem="2l9-up-7Hb" secondAttribute="bottom" id="SfE-u5-ie1"/>
+                        <constraint firstItem="2l9-up-7Hb" firstAttribute="top" secondItem="8RV-EQ-dha" secondAttribute="top" id="YWO-Vo-hsv"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" id="QJg-aq-W54">
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="564"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="PhN-1N-W8m"/>
+                    <color key="backgroundColor" systemColor="linkColor"/>
+                </view>
+                <view contentMode="scaleToFill" id="CuD-Qs-UOb">
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="564"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="aJh-BJ-J6S"/>
+                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                </view>
+            </objects>
+            <point key="canvasLocation" x="1685" y="-308"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
