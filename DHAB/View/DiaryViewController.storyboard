@@ -18,27 +18,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NMR-Rv-0L7">
-                                <rect key="frame" x="20" y="79" width="353" height="719"/>
+                                <rect key="frame" x="20" y="155" width="353" height="643"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ZbT-AH-T2c">
+                                <rect key="frame" x="0.0" y="79" width="393" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="by8-77-SUy" id="ren-Zr-Xw6"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ybz-Ja-FBK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="NMR-Rv-0L7" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" constant="20" id="1Nw-m7-9KE"/>
                             <constraint firstItem="Ybz-Ja-FBK" firstAttribute="trailing" secondItem="NMR-Rv-0L7" secondAttribute="trailing" constant="20" id="Apb-uG-gXY"/>
-                            <constraint firstItem="NMR-Rv-0L7" firstAttribute="top" secondItem="Ybz-Ja-FBK" secondAttribute="top" constant="20" id="xqb-gy-FBw"/>
+                            <constraint firstItem="NMR-Rv-0L7" firstAttribute="top" secondItem="ZbT-AH-T2c" secondAttribute="bottom" constant="20" id="LeD-DP-Wsg"/>
+                            <constraint firstAttribute="trailing" secondItem="ZbT-AH-T2c" secondAttribute="trailing" id="fm4-FR-HOW"/>
+                            <constraint firstItem="ZbT-AH-T2c" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" id="q4y-y6-6EG"/>
+                            <constraint firstItem="ZbT-AH-T2c" firstAttribute="top" secondItem="Ybz-Ja-FBK" secondAttribute="top" constant="20" id="qUd-6u-TEz"/>
                             <constraint firstItem="Ybz-Ja-FBK" firstAttribute="bottom" secondItem="NMR-Rv-0L7" secondAttribute="bottom" constant="20" id="yKP-XW-gmT"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="日記" id="Jb0-b9-YGq"/>
                     <connections>
                         <outlet property="diaryTableView" destination="NMR-Rv-0L7" id="xTT-ek-wbZ"/>
+                        <outlet property="searchBar" destination="ZbT-AH-T2c" id="N72-FZ-oYg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1ut-K9-19e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="459" y="351"/>
+            <point key="canvasLocation" x="458.77862595419845" y="350.7042253521127"/>
         </scene>
     </scenes>
     <resources>

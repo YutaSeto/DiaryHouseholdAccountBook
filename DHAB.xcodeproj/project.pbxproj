@@ -30,6 +30,8 @@
 		23EEE7D32972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */; };
 		23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */; };
 		23EEE7D72972CF7600A52939 /* SettingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D62972CF7600A52939 /* SettingViewController.storyboard */; };
+		23EEE7D92972D7C000A52939 /* PaymentBudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7D82972D7C000A52939 /* PaymentBudgetModel.swift */; };
+		23EEE7DB2972D7D200A52939 /* IncomeBudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7DA2972D7D200A52939 /* IncomeBudgetModel.swift */; };
 		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +61,8 @@
 		23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HouseholdAccountBookViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DiaryViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D62972CF7600A52939 /* SettingViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingViewController.storyboard; sourceTree = "<group>"; };
+		23EEE7D82972D7C000A52939 /* PaymentBudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentBudgetModel.swift; sourceTree = "<group>"; };
+		23EEE7DA2972D7D200A52939 /* IncomeBudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeBudgetModel.swift; sourceTree = "<group>"; };
 		94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
 		C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 				237B85F52970492B001E4639 /* PaymentModel.swift */,
 				237B85F729704941001E4639 /* IncomeModel.swift */,
 				237B85F929704956001E4639 /* DiaryModel.swift */,
+				23EEE7D82972D7C000A52939 /* PaymentBudgetModel.swift */,
+				23EEE7DA2972D7D200A52939 /* IncomeBudgetModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23EC22BB2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift in Sources */,
+				23EEE7D92972D7C000A52939 /* PaymentBudgetModel.swift in Sources */,
 				237B85F62970492B001E4639 /* PaymentModel.swift in Sources */,
 				239137F52970FF5500BF09F8 /* DiaryTableViewCell.swift in Sources */,
 				237B85FA29704956001E4639 /* DiaryModel.swift in Sources */,
@@ -298,6 +305,7 @@
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
 				237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */,
 				237B85FF29704A49001E4639 /* TabBarController.swift in Sources */,
+				23EEE7DB2972D7D200A52939 /* IncomeBudgetModel.swift in Sources */,
 				237B860329704A68001E4639 /* CalendarViewController.swift in Sources */,
 				237B85E12970471A001E4639 /* SceneDelegate.swift in Sources */,
 				237B860929704A96001E4639 /* SettingViewController.swift in Sources */,

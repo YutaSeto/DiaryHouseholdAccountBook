@@ -8,8 +8,16 @@
 import Foundation
 import UIKit
 
-class TabBarController:UITabBarController{
+class TabBarController:UITabBarController, UITabBarControllerDelegate{
+    
+    @IBOutlet weak var tabMenuBar: UITabBar!
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         super.viewDidLoad()
         let names = ["InputViewController","CalendarViewController","HouseholdAccountBookViewController","DiaryViewController","SettingViewController"]
         var viewControllers = [UIViewController]()
@@ -20,7 +28,5 @@ class TabBarController:UITabBarController{
             }
         }
         setViewControllers(viewControllers, animated: false)
-        
     }
-    
 }

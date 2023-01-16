@@ -9,9 +9,27 @@ import Foundation
 import RealmSwift
 import UIKit
 
-class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSource,InputViewControllerDelegate{
+class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSource,InputViewControllerDelegate,UISearchBarDelegate{
+
+    //検索機能関連
+    @IBOutlet weak var searchBar: UISearchBar!
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let realm = try! Realm()
+        
+        if searchText.isEmpty{
+            var result = realm.objects(DiaryModel.self)
+            diaryList = Array(result)
+        }else{
+            result = realm.objects(DiaryModel.self).filter("text CONTAINS %@ " , searchText)
+            diaryList = Array(result!)
+        }
+        diaryTableView.reloadData()
+    }
+    
+    //日記関連
     var diaryList: [DiaryModel] = []
+    var result: Results<DiaryModel>?
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         diaryList.count
@@ -28,7 +46,7 @@ class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSo
         let diaryModel: DiaryModel = diaryList[indexPath.row]
         cell.cellDateLabel.text = dateFormatter.string(from:diaryModel.date)
         cell.cellTitleLabel.text = diaryModel.title
-        cell.cellTextTextView.text = diaryModel.text
+        cell.cellTextLabel.text = diaryModel.text
         return cell
     }
     
@@ -38,6 +56,7 @@ class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSo
         diaryTableView.delegate = self
         diaryTableView.dataSource = self
         setDiaryData()
+        searchBar.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +68,7 @@ class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func setDiaryData(){
         let realm = try! Realm()
-        let result = realm.objects(DiaryModel.self)
+        let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
         diaryList = Array(result)
         diaryTableView.reloadData()
     }

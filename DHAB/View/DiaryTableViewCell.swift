@@ -11,7 +11,8 @@ class DiaryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cellDateLabel: UILabel!
     @IBOutlet weak var cellTitleLabel: UILabel!
-    @IBOutlet weak var cellTextTextView: UITextView!
+    @IBOutlet weak var cellTextLabel: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

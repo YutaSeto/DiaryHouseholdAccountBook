@@ -41,21 +41,28 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
     
     func dayBack(){
         date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
-        dayLabel.text = dateFormatter.string(from: date)
+        dayLabel.text = monthDateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
-        dayLabel.text = dateFormatter.string(from: date)
+        dayLabel.text = monthDateFormatter.string(from: date)
     }
     
     var date = Date()
     
-    var dateFormatter: DateFormatter{
+    var monthDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
+    }
+    
+    var dayDateFormatter: DateFormatter{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yy年MM月dd日"
+            dateFormatter.locale = Locale(identifier: "ja-JP")
+            return dateFormatter
     }
     
     //subView関連
@@ -96,7 +103,7 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
     }
     
     override func viewDidLoad() {
-        dayLabel.text = dateFormatter.string(from:date)
+        dayLabel.text = dayDateFormatter.string(from:date)
         addPaymentView()
         settingSubView()
         paymentTableView.delegate = self
@@ -122,7 +129,7 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
         let paymentModel: PaymentModel = paymentModelList[indexPath.row]
-        cell.dateLabel.text = dateFormatter.string(from: paymentModel.date)
+        cell.dateLabel.text = dayDateFormatter.string(from: paymentModel.date)
         cell.expenceItemLabel.text = paymentModel.expenceItem
         cell.priceLabel.text = String(paymentModel.price)
         return cell

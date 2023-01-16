@@ -13,7 +13,7 @@
         <!--入力-->
         <scene sceneID="4ie-Lt-zgH">
             <objects>
-                <viewController id="4SW-au-oaO" customClass="InputViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InputViewController" id="4SW-au-oaO" customClass="InputViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lmZ-0c-7s3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -189,7 +189,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Csk-I7-mkc">
-                            <rect key="frame" x="261.33333333333331" y="393.33333333333331" width="58.666666666666686" height="35"/>
+                            <rect key="frame" x="274.33333333333331" y="334.33333333333331" width="58.666666666666686" height="35"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="送信">
@@ -200,12 +200,12 @@
                             </connections>
                         </button>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TTs-lB-pbb">
-                            <rect key="frame" x="20" y="119.33333333333331" width="300" height="34"/>
+                            <rect key="frame" x="20" y="60.333333333333343" width="313" height="34"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7cH-uk-sXu">
-                            <rect key="frame" x="20" y="173.33333333333337" width="300" height="200"/>
+                            <rect key="frame" x="20" y="114.33333333333331" width="313" height="200"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="200" id="EAd-fw-p62"/>

@@ -2,9 +2,9 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,23 +18,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="タイトル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDy-el-dRb">
-                        <rect key="frame" x="240" y="10" width="70" height="25"/>
+                        <rect key="frame" x="240" y="9.9999999999999982" width="70" height="20.333333333333329"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="本文" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="J55-1C-f26">
-                        <rect key="frame" x="10" y="45" width="300" height="60"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="60" id="jIZ-DU-QuK"/>
-                        </constraints>
-                        <color key="textColor" systemColor="labelColor"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    </textView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSc-4J-EYU">
-                        <rect key="frame" x="10" y="10" width="35" height="25"/>
+                        <rect key="frame" x="10" y="9.9999999999999982" width="35" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="本文" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dts-eX-Sa9">
+                        <rect key="frame" x="10" y="40.333333333333336" width="34.666666666666664" height="74.666666666666657"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -42,33 +38,22 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="yDy-el-dRb" secondAttribute="trailing" constant="10" id="54U-9b-8XI"/>
-                    <constraint firstAttribute="trailing" secondItem="J55-1C-f26" secondAttribute="trailing" constant="10" id="7LD-Vc-PB5"/>
                     <constraint firstItem="yDy-el-dRb" firstAttribute="centerY" secondItem="iSc-4J-EYU" secondAttribute="centerY" id="AC5-b0-ylr"/>
-                    <constraint firstItem="J55-1C-f26" firstAttribute="top" secondItem="yDy-el-dRb" secondAttribute="bottom" constant="10" id="Bv5-Fc-Cqy"/>
-                    <constraint firstItem="J55-1C-f26" firstAttribute="top" secondItem="iSc-4J-EYU" secondAttribute="bottom" constant="10" id="CPb-oR-wgu"/>
-                    <constraint firstAttribute="bottom" secondItem="J55-1C-f26" secondAttribute="bottom" constant="10" id="DGh-UL-v5X"/>
                     <constraint firstItem="yDy-el-dRb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Han-vG-fMh"/>
-                    <constraint firstItem="J55-1C-f26" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="N05-Rt-Z6p"/>
-                    <constraint firstItem="J55-1C-f26" firstAttribute="top" secondItem="yDy-el-dRb" secondAttribute="bottom" constant="10" id="Op5-RO-aCl"/>
+                    <constraint firstItem="Dts-eX-Sa9" firstAttribute="leading" secondItem="iSc-4J-EYU" secondAttribute="leading" id="IAE-gG-zBa"/>
                     <constraint firstItem="iSc-4J-EYU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gJA-Hf-tb6"/>
                     <constraint firstItem="iSc-4J-EYU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="mle-9V-fUl"/>
+                    <constraint firstAttribute="bottom" secondItem="Dts-eX-Sa9" secondAttribute="bottom" id="o1D-cJ-hEc"/>
+                    <constraint firstItem="Dts-eX-Sa9" firstAttribute="top" secondItem="iSc-4J-EYU" secondAttribute="bottom" constant="10" id="v6Z-UR-UyN"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="cellDateLabel" destination="iSc-4J-EYU" id="cDX-Sv-HXT"/>
-                <outlet property="cellTextTextView" destination="J55-1C-f26" id="bfG-Cr-uPd"/>
+                <outlet property="cellTextLabel" destination="Dts-eX-Sa9" id="rOl-uo-SGv"/>
                 <outlet property="cellTitleLabel" destination="yDy-el-dRb" id="eGV-YM-aQS"/>
             </connections>
             <point key="canvasLocation" x="-15.267175572519083" y="32.74647887323944"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>
