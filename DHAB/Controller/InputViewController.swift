@@ -69,7 +69,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     public var date:Date = Date()
-    private var inputViewControllerDelegate:InputViewControllerDelegate?
+    public var inputViewControllerDelegate:InputViewControllerDelegate?
     @IBOutlet weak var priceTextField: UITextField!
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
@@ -171,7 +171,7 @@ class InputViewController:UIViewController{
         }
         titleTextField.text = ""
         diaryInputTextView.text = ""
-        inputViewControllerDelegate?.updatePayment()
+        inputViewControllerDelegate?.updateDiary()
         dismiss(animated: true)
     }
     

@@ -39,8 +39,8 @@ class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchB
     func tapInputDiaryButton(){
         let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
         let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as! InputViewController
+        inputViewController.inputViewControllerDelegate = self
         present(inputViewController,animated:true)
-        
         inputViewController.addDiaryView()
     }
     

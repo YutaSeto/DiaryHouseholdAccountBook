@@ -9,9 +9,11 @@ import UIKit
 
 class HouseholdAccountBookTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var expenceItemLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var budgetLabel: UILabel!
+    @IBOutlet weak var balanceLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel! //データをわかりやすくするための借りのラベルあとで編集必要
     
     override func awakeFromNib() {
         super.awakeFromNib()

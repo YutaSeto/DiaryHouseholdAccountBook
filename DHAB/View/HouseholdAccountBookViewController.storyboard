@@ -93,7 +93,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUD-Hh-8Gq">
-                            <rect key="frame" x="263" y="474" width="60" height="60"/>
+                            <rect key="frame" x="263" y="443" width="60" height="60"/>
                             <color key="backgroundColor" name="AccentColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="60" id="4ix-Tn-bUg"/>
@@ -115,7 +115,7 @@
                         <constraint firstItem="8RV-EQ-dha" firstAttribute="bottom" secondItem="2l9-up-7Hb" secondAttribute="bottom" id="SfE-u5-ie1"/>
                         <constraint firstItem="2l9-up-7Hb" firstAttribute="top" secondItem="8RV-EQ-dha" secondAttribute="top" id="YWO-Vo-hsv"/>
                         <constraint firstItem="8RV-EQ-dha" firstAttribute="trailing" secondItem="fUD-Hh-8Gq" secondAttribute="trailing" constant="30" id="bvU-5X-T8T"/>
-                        <constraint firstItem="8RV-EQ-dha" firstAttribute="bottom" secondItem="fUD-Hh-8Gq" secondAttribute="bottom" constant="30" id="z8P-Ic-7pA"/>
+                        <constraint firstItem="8RV-EQ-dha" firstAttribute="bottom" secondItem="fUD-Hh-8Gq" secondAttribute="bottom" constant="61" id="qU5-0C-MPE"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="QJg-aq-W54">

@@ -56,7 +56,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JHf-Hx-Efu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <view contentMode="scaleToFill" id="nU6-bC-CYB">
-                    <rect key="frame" x="0.0" y="0.0" width="353" height="400"/>
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="E78-I1-bxO">
@@ -64,9 +64,12 @@
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMi-dv-ast">
-                            <rect key="frame" x="20" y="334" width="150" height="35"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMi-dv-ast">
+                            <rect key="frame" x="20" y="334.33333333333331" width="152.66666666666666" height="35"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="152.66999999999999" id="fDG-dp-c3I"/>
+                            </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="追加">
                                 <color key="baseForegroundColor" systemColor="tintColor"/>
@@ -133,8 +136,11 @@
                                 <action selector="dayPassButton:" destination="4SW-au-oaO" eventType="touchUpInside" id="gcK-hd-rvV"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2c-KJ-R3W">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2c-KJ-R3W">
                             <rect key="frame" x="187.66666666666663" y="334.33333333333331" width="145.33333333333337" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="145.33000000000001" id="zBN-Ah-jrh"/>
+                            </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="続けて記入する"/>
                             <connections>
@@ -154,10 +160,11 @@
                         <constraint firstItem="bRy-IY-AL9" firstAttribute="top" secondItem="Jit-i5-rE4" secondAttribute="bottom" constant="20" id="1pB-6x-2Yn"/>
                         <constraint firstItem="Jit-i5-rE4" firstAttribute="leading" secondItem="KUh-7d-STc" secondAttribute="trailing" constant="30" id="7zD-vB-MSh"/>
                         <constraint firstItem="W2c-KJ-R3W" firstAttribute="centerY" secondItem="qMi-dv-ast" secondAttribute="centerY" id="Ajz-1p-QVD"/>
+                        <constraint firstItem="qMi-dv-ast" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="Axe-ye-hoa"/>
                         <constraint firstItem="aAZ-jb-j6c" firstAttribute="centerY" secondItem="Jit-i5-rE4" secondAttribute="centerY" id="GPY-pU-3wX"/>
+                        <constraint firstItem="W2c-KJ-R3W" firstAttribute="leading" secondItem="qMi-dv-ast" secondAttribute="trailing" constant="15" id="K7U-du-1uy"/>
                         <constraint firstItem="qMi-dv-ast" firstAttribute="top" secondItem="E78-I1-bxO" secondAttribute="bottom" constant="20" id="LGe-Md-rGN"/>
                         <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" constant="20" id="Mru-rG-S8h"/>
-                        <constraint firstItem="W2c-KJ-R3W" firstAttribute="leading" secondItem="qMi-dv-ast" secondAttribute="trailing" constant="20" id="OTR-CH-AT3"/>
                         <constraint firstItem="Jit-i5-rE4" firstAttribute="top" secondItem="nU6-bC-CYB" secondAttribute="top" constant="20" id="Pxk-gY-UkD"/>
                         <constraint firstItem="W2c-KJ-R3W" firstAttribute="top" secondItem="E78-I1-bxO" secondAttribute="bottom" constant="20" id="SaF-EE-Xy6"/>
                         <constraint firstItem="E78-I1-bxO" firstAttribute="leading" secondItem="bRy-IY-AL9" secondAttribute="leading" id="WRJ-sR-dHU"/>
@@ -169,13 +176,14 @@
                         <constraint firstItem="bRy-IY-AL9" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="uev-ox-F6a"/>
                         <constraint firstItem="aaE-36-xv7" firstAttribute="centerX" secondItem="nU6-bC-CYB" secondAttribute="centerX" id="wuI-AB-C7k"/>
                         <constraint firstItem="aAZ-jb-j6c" firstAttribute="leading" secondItem="Jit-i5-rE4" secondAttribute="trailing" constant="30" id="xPZ-2d-9So"/>
+                        <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="W2c-KJ-R3W" secondAttribute="trailing" constant="20" id="ynG-P3-BxR"/>
                         <constraint firstItem="aaE-36-xv7" firstAttribute="top" secondItem="W2c-KJ-R3W" secondAttribute="bottom" constant="20" id="yne-vq-QZb"/>
                         <constraint firstItem="qMi-dv-ast" firstAttribute="leading" secondItem="E78-I1-bxO" secondAttribute="leading" id="yrk-qA-rrG"/>
                         <constraint firstItem="Jit-i5-rE4" firstAttribute="centerY" secondItem="KUh-7d-STc" secondAttribute="centerY" id="zfr-vr-r4A"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="rad-1v-mEU">
-                    <rect key="frame" x="0.0" y="0.0" width="353" height="400"/>
+                    <rect key="frame" x="0.0" y="0.0" width="353" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rvf-5A-BwN">

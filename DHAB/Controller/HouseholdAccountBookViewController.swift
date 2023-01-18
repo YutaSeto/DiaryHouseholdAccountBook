@@ -10,7 +10,7 @@ import RealmSwift
 import UIKit
 import Charts
 
-class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UITableViewDataSource,InputViewControllerDelegate{
+class HouseholdAccountBookViewController:UIViewController{
     
     
     @IBOutlet weak var dayLabel: UILabel!
@@ -59,10 +59,10 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
     }
     
     private var dayDateFormatter: DateFormatter{
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yy年MM月dd日"
-            dateFormatter.locale = Locale(identifier: "ja-JP")
-            return dateFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy年MM月dd日"
+        dateFormatter.locale = Locale(identifier: "ja-JP")
+        return dateFormatter
     }
     
     //subView関連
@@ -104,14 +104,17 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
     
     override func viewDidLoad() {
         paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        setPaymentData()
-        dayLabel.text = dayDateFormatter.string(from:date)
+        dayLabel.text = monthDateFormatter.string(from:date)
         addPaymentView()
         settingSubView()
-        setPaymentData()
         paymentTableView.delegate = self
         paymentTableView.dataSource = self
         configureInputButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setPaymentData()
     }
     
     //支出画面の設定
@@ -122,6 +125,37 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
         tapInputButton()
     }
     private var paymentModelList:[PaymentModel] = []
+    
+    func setPaymentData(){
+        let realm = try! Realm()
+        let result = realm.objects(PaymentModel.self)
+        paymentModelList = Array(result)
+        paymentTableView.reloadData()
+    }
+    
+    func configureInputButton(){
+        inputButton.layer.cornerRadius = inputButton.bounds.width / 2
+    }
+    
+    func  tapInputButton(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+        inputViewController.inputViewControllerDelegate = self
+        present(inputViewController,animated:true)
+    }
+}
+
+extension HouseholdAccountBookViewController:InputViewControllerDelegate{
+    func updatePayment() {
+        setPaymentData()
+    }
+    
+    func updateDiary() {
+        return
+    }
+}
+
+extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         paymentModelList.count
@@ -134,30 +168,5 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
         cell.expenceItemLabel.text = paymentModel.expenceItem
         cell.priceLabel.text = String(paymentModel.price)
         return cell
-    }
-    
-    func setPaymentData(){
-        let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self)
-        paymentModelList = Array(result)
-        paymentTableView.reloadData()
-    }
-        
-    func updatePayment() {
-        setPaymentData()
-    }
-    
-    func updateDiary() {
-        return
-    }
-    
-    func configureInputButton(){
-        inputButton.layer.cornerRadius = inputButton.bounds.width / 2
-    }
-    
-    func  tapInputButton(){
-        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-        let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as! InputViewController
-        present(inputViewController,animated:true)
     }
 }
