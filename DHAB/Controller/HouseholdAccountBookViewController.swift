@@ -49,16 +49,16 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
         dayLabel.text = monthDateFormatter.string(from: date)
     }
     
-    var date = Date()
+    private var date = Date()
     
-    var monthDateFormatter: DateFormatter{
+    private var monthDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
     
-    var dayDateFormatter: DateFormatter{
+    private var dayDateFormatter: DateFormatter{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yy年MM月dd日"
             dateFormatter.locale = Locale(identifier: "ja-JP")
@@ -103,24 +103,25 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
     }
     
     override func viewDidLoad() {
+        paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        setPaymentData()
         dayLabel.text = dayDateFormatter.string(from:date)
         addPaymentView()
         settingSubView()
+        setPaymentData()
         paymentTableView.delegate = self
         paymentTableView.dataSource = self
-        setPaymentData()
-        paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        paymentTableView.delegate = self
+        configureInputButton()
     }
     
     //支出画面の設定
     @IBOutlet weak var paymentTableView: UITableView!
+    @IBOutlet weak var inputButton: UIButton!
     
-    var paymentModelList:[PaymentModel] = []
+    @IBAction func inputButton(_ sender: Any) {
+        tapInputButton()
+    }
+    private var paymentModelList:[PaymentModel] = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         paymentModelList.count
@@ -150,4 +151,13 @@ class HouseholdAccountBookViewController:UIViewController,UITableViewDelegate,UI
         return
     }
     
+    func configureInputButton(){
+        inputButton.layer.cornerRadius = inputButton.bounds.width / 2
+    }
+    
+    func  tapInputButton(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as! InputViewController
+        present(inputViewController,animated:true)
+    }
 }

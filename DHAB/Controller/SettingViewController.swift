@@ -12,9 +12,8 @@ import RealmSwift
 class SettingViewController:UIViewController,UITableViewDelegate,UITableViewDataSource{
     
     @IBOutlet weak var settingTableView: UITableView!
-        
-    var paymentList = [(String)]()
-    var settingList = ["費目の設定","予算の設定","通知の設定"]
+    
+    private var settingList = ["費目の設定","予算の設定","通知の設定"]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         settingList.count
@@ -35,9 +34,13 @@ class SettingViewController:UIViewController,UITableViewDelegate,UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row{
         case 0:
-            return
+            let storyboard = UIStoryboard(name: "ExpenceItemViewController", bundle: nil)
+            guard let expenceItemViewController = storyboard.instantiateInitialViewController() as? ExpenceItemViewController else {return}
+            present(expenceItemViewController,animated: true)
         case 1:
-            return
+            let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
+            guard let budgetViewController = storyboard.instantiateInitialViewController() as? BudgetViewController else {return}
+            present(budgetViewController,animated: true)
         case 2:
             return
         default:

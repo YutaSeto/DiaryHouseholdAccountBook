@@ -19,7 +19,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         super.viewDidLoad()
-        let names = ["InputViewController","CalendarViewController","HouseholdAccountBookViewController","DiaryViewController","SettingViewController"]
+        let names = ["CalendarViewController","HouseholdAccountBookViewController","DiaryViewController"]
         var viewControllers = [UIViewController]()
         for name in names {
             let storyboard = UIStoryboard(name: name, bundle: nil)

@@ -9,8 +9,8 @@ import Foundation
 import RealmSwift
 import UIKit
 
-class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSource,InputViewControllerDelegate,UISearchBarDelegate{
-
+class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchBarDelegate{
+    
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -18,23 +18,70 @@ class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSo
         let realm = try! Realm()
         
         if searchText.isEmpty{
-            var result = realm.objects(DiaryModel.self)
+            let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
             diaryList = Array(result)
         }else{
-            result = realm.objects(DiaryModel.self).filter("text CONTAINS %@ " , searchText)
+            result = realm.objects(DiaryModel.self).filter("text CONTAINS %@ " , searchText).sorted(byKeyPath: "date", ascending: false)
             diaryList = Array(result!)
         }
         diaryTableView.reloadData()
     }
     
     //日記関連
-    var diaryList: [DiaryModel] = []
-    var result: Results<DiaryModel>?
+    private var diaryList: [DiaryModel] = []
+    private var result: Results<DiaryModel>?
     
+    @IBOutlet weak var inputDiaryButton: UIButton!
+    @IBAction func inputDiaryButton(_ sender: UIButton) {
+        tapInputDiaryButton()
+    }
+    
+    func tapInputDiaryButton(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as! InputViewController
+        present(inputViewController,animated:true)
+        
+        inputViewController.addDiaryView()
+    }
+    
+    func configureTapDiaryInputButton(){
+        inputDiaryButton.layer.cornerRadius = inputDiaryButton.bounds.width / 2
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        setDiaryData()
+        diaryTableView.delegate = self
+        diaryTableView.dataSource = self
+        searchBar.delegate = self
+        configureTapDiaryInputButton()
+    }
+    
+    @IBOutlet weak var diaryTableView: UITableView!
+    
+    func setDiaryData(){
+        let realm = try! Realm()
+        let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
+        diaryList = Array(result)
+        diaryTableView.reloadData()
+    }
+    
+    func updatePayment() {
+    }
+    
+    func updateDiary() {
+        setDiaryData()
+    }
+    
+}
+
+extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         diaryList.count
     }
-    var dateFormatter: DateFormatter{
+    private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
@@ -49,36 +96,4 @@ class DiaryViewController:UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.cellTextLabel.text = diaryModel.text
         return cell
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        diaryTableView.delegate = self
-        diaryTableView.dataSource = self
-        setDiaryData()
-        searchBar.delegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        diaryTableView.delegate = self
-    }
-    
-    @IBOutlet weak var diaryTableView: UITableView!
-    
-    func setDiaryData(){
-        let realm = try! Realm()
-        let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
-        diaryList = Array(result)
-        diaryTableView.reloadData()
-    }
-    
-    func updatePayment() {
-        return
-    }
-    
-    func updateDiary() {
-        setDiaryData()
-    }
-    
 }

@@ -14,12 +14,12 @@ protocol InputViewControllerDelegate{
     func updateDiary()
 }
 
-class InputViewController:UIViewController,UICollectionViewDelegate,UICollectionViewDataSource{
+class InputViewController:UIViewController{
     
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
-    func addHouseholdAccountView(){
+    private func addHouseholdAccountView(){
         diaryView.removeFromSuperview()
         self.view.addSubview(householdAccountBookView)
     }
@@ -28,7 +28,7 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         self.view.addSubview(diaryView)
     }
     
-    func settingSubView(){
+    private func settingSubView(){
         householdAccountBookView.frame = CGRect(x: 0,
                                                 y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
                                                 width: self.view.frame.width,
@@ -68,8 +68,8 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    var date:Date = Date()
-    var inputViewControllerDelegate:InputViewControllerDelegate?
+    public var date:Date = Date()
+    private var inputViewControllerDelegate:InputViewControllerDelegate?
     @IBOutlet weak var priceTextField: UITextField!
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
@@ -83,9 +83,26 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         tapAddButton()
     }
     
-    var paymentModelList: [PaymentModel] = []
+    @IBAction func continueAddButton(_ sender: UIButton) {
+        tapContinueAddButton()
+    }
     
-    func tapAddButton(){
+    private var paymentModelList: [PaymentModel] = []
+    
+    private func tapAddButton(){
+        let realm = try! Realm()
+        try! realm.write{
+            let paymentModel = PaymentModel()
+            paymentModel.date = date
+            paymentModel.price = Int(priceTextField.text!) ?? 0
+            paymentModel.expenceItem = resultLabel.text!
+            realm.add(paymentModel)
+        }
+        inputViewControllerDelegate?.updatePayment()
+        dismiss(animated: true)
+    }
+    
+    private func tapContinueAddButton(){
         let realm = try! Realm()
         try! realm.write{
             let paymentModel = PaymentModel()
@@ -99,27 +116,13 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         priceTextField.text = ""
     }
     
-    var dateFormatter: DateFormatter{
+    private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        paymentList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
-        contentLabel.text = paymentList[indexPath.row]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        resultLabel.text = paymentList[indexPath.row]
-    }
     
     func settingCollectionView(){
         collectionViewFlowLayout.estimatedItemSize = CGSize(width: collectionView.frame.width / 3,height: collectionView.frame.height / 3)
@@ -137,6 +140,7 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
+    //更新が必要
     var paymentList = ["食費","衣類","通信費","保険"]
     
     //日記記入関連の画面
@@ -154,10 +158,10 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         addDiary()
     }
     
-    var diaryModel = DiaryModel()
-    var diaryList:[DiaryModel] = []
+    private var diaryModel = DiaryModel()
+    private var diaryList:[DiaryModel] = []
     
-    func addDiary(){
+    private func addDiary(){
         let realm = try! Realm()
         try! realm.write{
             diaryModel.date = date
@@ -168,7 +172,26 @@ class InputViewController:UIViewController,UICollectionViewDelegate,UICollection
         titleTextField.text = ""
         diaryInputTextView.text = ""
         inputViewControllerDelegate?.updatePayment()
+        dismiss(animated: true)
     }
     
     
+}
+
+extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource{
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        paymentList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
+        contentLabel.text = paymentList[indexPath.row]
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        resultLabel.text = paymentList[indexPath.row]
+    }
 }
