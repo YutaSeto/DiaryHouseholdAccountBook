@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import RealmSwift
 
-class BudgetViewController: UIViewController,UITableViewDelegate,UITableViewDataSource{
+class BudgetViewController: UIViewController{
     
     private var date = Date()
     
@@ -44,6 +44,16 @@ class BudgetViewController: UIViewController,UITableViewDelegate,UITableViewData
     
     public var budgetList = ["食費","衣類","保険"]
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        budgetTableView.delegate = self
+        budgetTableView.dataSource = self
+    }
+    
+}
+
+extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         budgetList.count
     }
@@ -51,11 +61,4 @@ class BudgetViewController: UIViewController,UITableViewDelegate,UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         UITableViewCell()
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        budgetTableView.delegate = self
-        budgetTableView.dataSource = self
-    }
-    
 }

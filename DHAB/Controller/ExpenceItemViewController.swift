@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ExpenceItemViewController: UIViewController,UITableViewDelegate,UITableViewDataSource{
+class ExpenceItemViewController: UIViewController{
     
     public var userDefaults = UserDefaults.standard
     public var expenceItemList = ["食費","衣類","通信費","保険"]
@@ -18,19 +18,6 @@ class ExpenceItemViewController: UIViewController,UITableViewDelegate,UITableVie
     
     @IBAction func addButton(_ sender: UIButton) {
         tapAddButton()
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        expenceItemList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = expenceItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel!.text = userDefaults.array(forKey: "キー")?[indexPath.row] as? String
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        return
     }
     
     func configureAddButton(){
@@ -62,5 +49,22 @@ class ExpenceItemViewController: UIViewController,UITableViewDelegate,UITableVie
         }
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension ExpenceItemViewController: UITableViewDelegate,UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        expenceItemList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = expenceItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel!.text = userDefaults.array(forKey: "キー")?[indexPath.row] as? String
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        return
     }
 }

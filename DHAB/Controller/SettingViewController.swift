@@ -31,20 +31,5 @@ class SettingViewController:UIViewController,UITableViewDelegate,UITableViewData
         settingTableView.dataSource = self
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.row{
-        case 0:
-            let storyboard = UIStoryboard(name: "ExpenceItemViewController", bundle: nil)
-            guard let expenceItemViewController = storyboard.instantiateInitialViewController() as? ExpenceItemViewController else {return}
-            present(expenceItemViewController,animated: true)
-        case 1:
-            let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-            guard let budgetViewController = storyboard.instantiateInitialViewController() as? BudgetViewController else {return}
-            present(budgetViewController,animated: true)
-        case 2:
-            return
-        default:
-            return
-        }
-    }
+
 }
