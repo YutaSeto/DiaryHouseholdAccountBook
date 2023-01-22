@@ -47,7 +47,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Xpu-Dd-JB8"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.49742240650000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Xpu-Dd-JB8" firstAttribute="bottom" secondItem="xDD-zA-T0S" secondAttribute="bottom" constant="10" id="J8S-nv-nYv"/>
                             <constraint firstItem="xDD-zA-T0S" firstAttribute="top" secondItem="Xpu-Dd-JB8" secondAttribute="top" constant="10" id="KNj-f0-MEt"/>

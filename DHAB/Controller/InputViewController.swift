@@ -61,6 +61,7 @@ class InputViewController:UIViewController{
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
         settingCollectionView()
+        resultLabel.text = ""
     }
     
     //家計簿記入画面関連

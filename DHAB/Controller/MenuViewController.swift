@@ -1,28 +1,29 @@
 //
-//  menuViewController.swift
+//  MenuViewController2.swift
 //  DHAB
 //
 //  Created by setoon on 2023/01/18.
 //
 
-import Foundation
 import UIKit
 
-class MenuViewController: UIViewController{
+class MenuViewController: UIViewController {
+    
+    let menuList = ["カテゴリーの設定","予算の設定"]
     
     @IBOutlet weak var menuTableView: UITableView!
     @IBOutlet weak var menuView: UIView!
     
-    let menuList = ["予算の設定","カテゴリーの設定"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let menuPos = menuView.layer.position
-        self.menuView.layer.position.x = -self.menuView.frame.width
+        self.menuView.layer.position.x = UIScreen.main.bounds.width + self.menuView.frame.width
         UIView.animate(
             withDuration: 0.5,
             delay:0,
@@ -38,20 +39,11 @@ class MenuViewController: UIViewController{
         super.touchesEnded(touches, with: event)
         for touch in touches{
             if touch.view?.tag == 1{
-                UIView.animate(
-                    withDuration: 0.2,
-                    delay: 0,
-                    options: .curveEaseIn,
-                    animations:  {
-                        self.menuView.layer.position.x = -self.menuView.frame.width
-                    },
-                    completion: { bool in
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                )
+                returnView()
             }
         }
     }
+    // Do any additional setup after loading the view.
 }
 
 extension MenuViewController: UITableViewDelegate,UITableViewDataSource{
@@ -65,18 +57,48 @@ extension MenuViewController: UITableViewDelegate,UITableViewDataSource{
         return cell
     }
     
+    func returnView(){
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: .curveEaseIn,
+            animations:  {
+                self.menuView.layer.position.x = UIScreen.main.bounds.width + self.menuView.frame.width
+            },
+            completion: { bool in
+                self.dismiss(animated: true, completion: nil)
+            }
+        )
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row{
         case 0:
             let storyboard = UIStoryboard(name: "ExpenceItemViewController", bundle: nil)
             guard let expenceItemViewController = storyboard.instantiateInitialViewController() as? ExpenceItemViewController else {return}
             present(expenceItemViewController,animated: true)
+            returnView()
         case 1:
             let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
             guard let budgetViewController = storyboard.instantiateInitialViewController() as? BudgetViewController else {return}
             present(budgetViewController,animated: true)
+            returnView()
         default:
             return
         }
     }
 }
+
+
+
+/*
+ // MARK: - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+ // Get the new view controller using segue.destination.
+ // Pass the selected object to the new view controller.
+ }
+ */
+
+

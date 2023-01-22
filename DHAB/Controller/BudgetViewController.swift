@@ -17,6 +17,12 @@ class BudgetViewController: UIViewController{
     @IBOutlet weak var dateBackButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var datePassButton: UIButton!
+    @IBOutlet weak var configureButton: UIBarButtonItem!
+    
+    @IBAction func configureButton(_ sender: UIBarButtonItem) {
+        tapConfigureButton()
+    }
+    
     @IBAction func dateBackButton(_ sender: UIButton) {
         dayBack()
     }
@@ -24,6 +30,13 @@ class BudgetViewController: UIViewController{
     @IBAction func datePassButton(_ sender: UIButton) {
         dayPass()
     }
+    
+    @objc func tapConfigureButton(){
+        let storyboard = UIStoryboard(name: "BudgetConfigureViewController", bundle: nil)
+        let budgetConfigureViewcontroller = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
+        navigationController?.pushViewController(budgetConfigureViewcontroller, animated: true)
+    }
+    
     
     func dayBack(){
         date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
@@ -42,12 +55,24 @@ class BudgetViewController: UIViewController{
         return dateFormatter
     }
     
+    var expenceItemList:[ExpenceItemModel] = []
+    var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
+    
     public var budgetList = ["食費","衣類","保険"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dateLabel.text = dateFormatter.string(from: date)
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
+        setExpenceItemData()
+    }
+    
+    func setExpenceItemData(){
+        let realm = try! Realm()
+        let result = realm.objects(ExpenceItemModel.self)
+        expenceItemList = Array(result)
+        budgetTableView.reloadData()
     }
     
 }
@@ -55,10 +80,12 @@ class BudgetViewController: UIViewController{
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        budgetList.count
+        expenceItemList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        UITableViewCell()
+        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel!.text = expenceItemList[indexPath.row].category
+        return cell
     }
 }

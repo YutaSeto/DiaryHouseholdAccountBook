@@ -128,7 +128,7 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func setPaymentData(){
         let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self)
+        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
         paymentModelList = Array(result)
         paymentTableView.reloadData()
     }
@@ -168,5 +168,29 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         cell.expenceItemLabel.text = paymentModel.expenceItem
         cell.priceLabel.text = String(paymentModel.price)
         return cell
+    }
+}
+
+
+//使い方がわからない。月が一致するかどうか
+extension Date {
+    func isEqual(to date: Date, toGranularity component: Calendar.Component, in calendar: Calendar = .current) -> Bool {
+        calendar.isDate(self, equalTo: date, toGranularity: component)
+    }
+
+    func isInSameYear(as date: Date) -> Bool {
+        isEqual(to: date, toGranularity: .year)
+    }
+
+    func isInSameMonth(as date: Date) -> Bool {
+        isEqual(to: date, toGranularity: .month)
+    }
+
+    func isInSameWeek(as date: Date) -> Bool {
+        isEqual(to: date, toGranularity: .weekOfYear)
+    }
+    
+    func isInSameDay(as date: Date) -> Bool {
+        Calendar.current.isDate(self, inSameDayAs: date)
     }
 }
