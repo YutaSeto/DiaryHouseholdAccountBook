@@ -120,6 +120,7 @@ class InputViewController:UIViewController{
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
+        dateFormatter.timeStyle = .none
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }

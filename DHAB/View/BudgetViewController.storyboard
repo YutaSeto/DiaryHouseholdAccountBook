@@ -38,7 +38,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A1Q-fs-JLs">
-                                <rect key="frame" x="254" y="71.666666666666671" width="76" height="35"/>
+                                <rect key="frame" x="254" y="71.666666666666671" width="76" height="34.999999999999986"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="進める"/>
                                 <connections>
@@ -46,7 +46,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIl-i1-Ohr">
-                                <rect key="frame" x="80.333333333333329" y="71.666666666666671" width="58.666666666666671" height="35"/>
+                                <rect key="frame" x="80.333333333333329" y="71.666666666666671" width="58.666666666666671" height="34.999999999999986"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="戻す"/>
                                 <connections>
@@ -110,7 +110,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LL6-KL-xwR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="948.85496183206101" y="-2.1126760563380285"/>
+            <point key="canvasLocation" x="953" y="-2"/>
         </scene>
     </scenes>
     <resources>

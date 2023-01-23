@@ -83,6 +83,7 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     }
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter

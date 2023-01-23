@@ -42,17 +42,21 @@ class HouseholdAccountBookViewController:UIViewController{
     func dayBack(){
         date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
         dayLabel.text = monthDateFormatter.string(from: date)
+        paymentTableView.reloadData()
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
         dayLabel.text = monthDateFormatter.string(from: date)
+        paymentTableView.reloadData()
     }
     
     private var date = Date()
     
     private var monthDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .none
+        dateFormatter.dateStyle = .none
         dateFormatter.dateFormat = "yy年MM月"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
@@ -60,6 +64,7 @@ class HouseholdAccountBookViewController:UIViewController{
     
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
@@ -158,39 +163,25 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
 extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        paymentModelList.count
+        var cellCount: Int = 0
+        paymentModelList.forEach{_ in
+            if monthDateFormatter.string(from: paymentModelList[0].date) == monthDateFormatter.string(from: date){
+                cellCount += 1
+            }
+        }
+        return cellCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
         let paymentModel: PaymentModel = paymentModelList[indexPath.row]
-        cell.dateLabel.text = dayDateFormatter.string(from: paymentModel.date)
-        cell.expenceItemLabel.text = paymentModel.expenceItem
-        cell.priceLabel.text = String(paymentModel.price)
-        return cell
-    }
-}
-
-
-//使い方がわからない。月が一致するかどうか
-extension Date {
-    func isEqual(to date: Date, toGranularity component: Calendar.Component, in calendar: Calendar = .current) -> Bool {
-        calendar.isDate(self, equalTo: date, toGranularity: component)
-    }
-
-    func isInSameYear(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .year)
-    }
-
-    func isInSameMonth(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .month)
-    }
-
-    func isInSameWeek(as date: Date) -> Bool {
-        isEqual(to: date, toGranularity: .weekOfYear)
-    }
-    
-    func isInSameDay(as date: Date) -> Bool {
-        Calendar.current.isDate(self, inSameDayAs: date)
+        if monthDateFormatter.string(from: paymentModel.date) == monthDateFormatter.string(from: date){
+            cell.dateLabel.text = dayDateFormatter.string(from: paymentModel.date)
+            cell.expenceItemLabel.text = paymentModel.expenceItem
+            cell.priceLabel.text = String(paymentModel.price)
+            return cell
+        }else{
+            return UITableViewCell()
+        }
     }
 }
