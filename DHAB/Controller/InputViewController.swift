@@ -56,12 +56,12 @@ class InputViewController:UIViewController{
         super.viewDidLoad()
         addHouseholdAccountView()
         settingSubView()
-        dateLabel.text = dateFormatter.string(from:date)
-        diaryDateLabel.text = dateFormatter.string(from: date)
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
         settingCollectionView()
         resultLabel.text = ""
+        dateLabel.text = dateFormatter.string(from:date)
+        diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
     //家計簿記入画面関連
@@ -121,7 +121,7 @@ class InputViewController:UIViewController{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.timeStyle = .none
-        dateFormatter.locale = Locale(identifier: "ja-JP")
+//        dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
     

@@ -42,13 +42,13 @@ class HouseholdAccountBookViewController:UIViewController{
     func dayBack(){
         date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
         dayLabel.text = monthDateFormatter.string(from: date)
-        paymentTableView.reloadData()
+        setPaymentData()
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
         dayLabel.text = monthDateFormatter.string(from: date)
-        paymentTableView.reloadData()
+        setPaymentData()
     }
     
     private var date = Date()
@@ -109,9 +109,9 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewDidLoad() {
         paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        dayLabel.text = monthDateFormatter.string(from:date)
         addPaymentView()
         settingSubView()
+        dayLabel.text = monthDateFormatter.string(from:date)
         paymentTableView.delegate = self
         paymentTableView.dataSource = self
         configureInputButton()
