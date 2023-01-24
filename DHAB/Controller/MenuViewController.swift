@@ -80,8 +80,8 @@ extension MenuViewController: UITableViewDelegate,UITableViewDataSource{
             returnView()
         case 1:
             let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-            guard let budgetViewController = storyboard.instantiateInitialViewController() as? BudgetViewController else {return}
-            present(budgetViewController,animated: true)
+            let NavigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+            present(NavigationController,animated: true)
             returnView()
         default:
             return

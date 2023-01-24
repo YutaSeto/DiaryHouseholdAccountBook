@@ -148,6 +148,22 @@ class HouseholdAccountBookViewController:UIViewController{
         inputViewController.inputViewControllerDelegate = self
         present(inputViewController,animated:true)
     }
+    
+    func sumPrices(){
+        //重複しない費目の配列
+        var uniqueExpenceItems = Array(Set(paymentModelList.map({$0.expenceItem})))
+        var sumPrice:Int = 0
+        
+        let realm = try! Realm()
+        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
+        for i in 0 ..< result.count{
+            if result[i].expenceItem == "食費" {
+                sumPrice += result[i].price
+            }
+        }
+        print(sumPrice)
+        
+    }
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{

@@ -32,9 +32,15 @@ class BudgetViewController: UIViewController{
     }
     
     @objc func tapConfigureButton(){
-        let storyboard = UIStoryboard(name: "BudgetConfigureViewController", bundle: nil)
-        let budgetConfigureViewcontroller = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
-        navigationController?.pushViewController(budgetConfigureViewcontroller, animated: true)
+        let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
+        let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
+        navigationController?.pushViewController(budgetConfigureViewController, animated: true)
+    }
+    
+    func setNavigationBarButton(){
+        let buttonActionSelector:Selector = #selector(tapConfigureButton)
+        let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add,target: self,action: buttonActionSelector)
+        navigationItem.rightBarButtonItem = rightBarButton
     }
     
     
@@ -67,6 +73,7 @@ class BudgetViewController: UIViewController{
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
         setExpenceItemData()
+        setNavigationBarButton()
     }
     
     func setExpenceItemData(){
