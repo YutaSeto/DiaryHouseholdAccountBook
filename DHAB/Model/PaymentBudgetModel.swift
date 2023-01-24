@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 class PaymentBudgetModel: Object{
-    @objc dynamic var budgetDate:Date = Date()
+    @objc dynamic var budgetDate: Date = Date()
     @objc dynamic var budgetPrice:Int = 0
     @objc dynamic var budgetExpenceItem:String = ""
 }

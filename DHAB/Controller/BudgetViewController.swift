@@ -9,19 +9,22 @@ import Foundation
 import UIKit
 import RealmSwift
 
+protocol BudgetViewControllerDelegate{
+    func updateList()
+}
+
 class BudgetViewController: UIViewController{
     
     private var date = Date()
+    var expenceItemList:[ExpenceItemModel] = []
+    var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
+    var paymentBudgetList:[PaymentBudgetModel] = []
+    var budgetViewControllerDelegate:BudgetViewControllerDelegate?
     
     @IBOutlet weak var budgetTableView: UITableView!
     @IBOutlet weak var dateBackButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var datePassButton: UIButton!
-    @IBOutlet weak var configureButton: UIBarButtonItem!
-    
-    @IBAction func configureButton(_ sender: UIBarButtonItem) {
-        tapConfigureButton()
-    }
     
     @IBAction func dateBackButton(_ sender: UIButton) {
         dayBack()
@@ -56,22 +59,19 @@ class BudgetViewController: UIViewController{
     
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = "yy年MM月"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
     
-    var expenceItemList:[ExpenceItemModel] = []
-    var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
-    
-    public var budgetList = ["食費","衣類","保険"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         dateLabel.text = dateFormatter.string(from: date)
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
+        setPaymentData()
         setExpenceItemData()
         setNavigationBarButton()
     }
@@ -83,6 +83,11 @@ class BudgetViewController: UIViewController{
         budgetTableView.reloadData()
     }
     
+    func setPaymentData(){
+        let realm = try! Realm()
+        let result = realm.objects(PaymentBudgetModel.self)
+        paymentBudgetList = Array(result)
+    }
 }
 
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
@@ -92,8 +97,86 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel!.text = expenceItemList[indexPath.row].category
+        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+        cell.budgetExpenceItemLabel.text = expenceItemList[indexPath.row].category
+        
+        let realm = try! Realm()
+        let paymentBudgetData = realm.objects(PaymentBudgetModel.self)
+        for i in 0 ..< paymentBudgetList.count{
+            if dateFormatter.string(from: paymentBudgetData[i].budgetDate) == dateFormatter.string(from: date) && paymentBudgetData[i].budgetExpenceItem == cell.budgetExpenceItemLabel.text{
+                cell.budgetPriceLabel.text! = String(paymentBudgetData[i].budgetPrice)
+                break
+            } else {
+                cell.budgetPriceLabel.text = "0"
+            }
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let expenceItemCell = expenceItemList[indexPath.row]
+        budgetViewControllerDelegate = self
+        
+        let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
+        var textFieldOnAlert = UITextField()
+        alert.addTextField{textField in
+            textFieldOnAlert = textField
+            textField.placeholder = "0"
+        }
+        
+        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+        if cell.budgetPriceLabel.text! == "0"{
+            let add = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+                let realm = try! Realm()
+                let budgetData = PaymentBudgetModel()
+                try! realm.write{
+                    budgetData.budgetExpenceItem = expenceItemCell.category
+                    budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
+                    budgetData.budgetDate = self.date
+                    realm.add(budgetData)
+                    print(budgetData)
+                }
+                self.budgetViewControllerDelegate?.updateList()
+                self.budgetTableView.reloadData()
+            })
+            
+            let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                print("ミスしてます")
+                return
+            })
+            
+            alert.addAction(add)
+            alert.addAction(cancel)
+            
+            self.present(alert,animated: true, completion: nil)
+        }else{
+            let add = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+                let realm = try! Realm()
+                let budgetData = PaymentBudgetModel()//ここが違う
+                try! realm.write{
+                    budgetData.budgetExpenceItem = expenceItemCell.category
+                    budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
+                    budgetData.budgetDate = self.date
+                }
+                self.budgetViewControllerDelegate?.updateList()
+                self.budgetTableView.reloadData()
+            })
+            
+            let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                return
+            })
+            
+            alert.addAction(add)
+            alert.addAction(cancel)
+            
+            self.present(alert,animated: true, completion: nil)
+        }
+    }
+}
+
+extension BudgetViewController:BudgetViewControllerDelegate{
+    func updateList(){
+        setPaymentData()
+        setExpenceItemData()
     }
 }
