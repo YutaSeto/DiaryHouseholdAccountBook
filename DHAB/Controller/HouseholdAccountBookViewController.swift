@@ -115,11 +115,11 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentTableView.delegate = self
         paymentTableView.dataSource = self
         configureInputButton()
+        setPaymentData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setPaymentData()
     }
     
     //支出画面の設定
@@ -149,21 +149,21 @@ class HouseholdAccountBookViewController:UIViewController{
         present(inputViewController,animated:true)
     }
     
-    func sumPrices(){
-        //重複しない費目の配列
-        var uniqueExpenceItems = Array(Set(paymentModelList.map({$0.expenceItem})))
-        var sumPrice:Int = 0
-        
-        let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
-        for i in 0 ..< result.count{
-            if result[i].expenceItem == "食費" {
-                sumPrice += result[i].price
-            }
-        }
-        print(sumPrice)
-        
-    }
+//    func sumPrices(){
+//        //重複しない費目の配列
+//        var uniqueExpenceItems = Array(Set(paymentModelList.map({$0.expenceItem})))
+//        var sumPrice:Int = 0
+//
+//        let realm = try! Realm()
+//        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
+//        for i in 0 ..< result.count{
+//            if result[i].expenceItem == "食費" {
+//                sumPrice += result[i].price
+//            }
+//        }
+//        print(sumPrice)
+//
+//    }
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
@@ -180,8 +180,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cellCount: Int = 0
-        paymentModelList.forEach{_ in
-            if monthDateFormatter.string(from: paymentModelList[0].date) == monthDateFormatter.string(from: date){
+        for i in 0 ..< paymentModelList.count{
+            if monthDateFormatter.string(from: paymentModelList[i].date) == monthDateFormatter.string(from: date){
                 cellCount += 1
             }
         }
@@ -190,11 +190,22 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
-        let paymentModel: PaymentModel = paymentModelList[indexPath.row]
-        if monthDateFormatter.string(from: paymentModel.date) == monthDateFormatter.string(from: date){
-            cell.dateLabel.text = dayDateFormatter.string(from: paymentModel.date)
-            cell.expenceItemLabel.text = paymentModel.expenceItem
-            cell.priceLabel.text = String(paymentModel.price)
+        
+        var monthPaymentModel:[PaymentModel] = []
+        for i in 0 ..< paymentModelList.count{
+            if monthDateFormatter.string(from: paymentModelList[i].date) == monthDateFormatter.string(from: date){
+                monthPaymentModel.append(paymentModelList[i])
+            }
+        }
+        
+        let monthPaymentList = Array(monthPaymentModel)[indexPath.row]
+        print(monthPaymentList)
+        //月が一致しないからUITableViewCellを返しているため空欄に見えている
+        //であれば、一致しない時は飛ばす処理をしないといけない
+        if monthDateFormatter.string(from: monthPaymentList.date) == monthDateFormatter.string(from: date){
+            cell.dateLabel.text = dayDateFormatter.string(from: monthPaymentList.date)
+            cell.expenceItemLabel.text = monthPaymentList.expenceItem
+            cell.priceLabel.text = String(monthPaymentList.price)
             return cell
         }else{
             return UITableViewCell()

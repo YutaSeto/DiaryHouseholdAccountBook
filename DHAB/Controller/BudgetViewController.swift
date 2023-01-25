@@ -127,7 +127,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
         
         print("タップされたよ\(budgetCell.budgetPrice)")
         if budgetCell.budgetPrice < 0 {
-            let add = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+            let add = UIAlertAction(title:"追加する",style: .default, handler:{(action) ->Void in
                 let realm = try! Realm()
                 let budgetData = PaymentBudgetModel()
                 try! realm.write{
@@ -152,7 +152,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
         }else{
             let add = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let realm = try! Realm()
-                let budgetData = realm.objects(PaymentBudgetModel.self).filter("budgetExpenceItem CONTAINS %@" ,expenceItemCell.category)//ここが違う
+                let budgetData = realm.objects(PaymentBudgetModel.self).filter("budgetExpenceItem CONTAINS %@" ,expenceItemCell.category)
                 try! realm.write{
                     budgetData[0].budgetExpenceItem = expenceItemCell.category
                     budgetData[0].budgetPrice = Int(textFieldOnAlert.text!)!
