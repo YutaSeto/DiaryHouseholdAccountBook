@@ -115,6 +115,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let expenceItemCell = expenceItemList[indexPath.row]
+        let budgetCell = paymentBudgetList[indexPath.row]
         budgetViewControllerDelegate = self
         
         let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
@@ -124,8 +125,8 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             textField.placeholder = "0"
         }
         
-        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        if cell.budgetPriceLabel.text! == "0"{
+        print("タップされたよ\(budgetCell.budgetPrice)")
+        if budgetCell.budgetPrice < 0 {
             let add = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let realm = try! Realm()
                 let budgetData = PaymentBudgetModel()
@@ -134,14 +135,13 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
                     budgetData.budgetDate = self.date
                     realm.add(budgetData)
-                    print(budgetData)
                 }
                 self.budgetViewControllerDelegate?.updateList()
                 self.budgetTableView.reloadData()
+                print("text == 0 \(budgetData)")
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                print("ミスしてます")
                 return
             })
             
@@ -152,13 +152,15 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
         }else{
             let add = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let realm = try! Realm()
-                let budgetData = PaymentBudgetModel()//ここが違う
+                let budgetData = realm.objects(PaymentBudgetModel.self).filter("budgetExpenceItem CONTAINS %@" ,expenceItemCell.category)//ここが違う
                 try! realm.write{
-                    budgetData.budgetExpenceItem = expenceItemCell.category
-                    budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
-                    budgetData.budgetDate = self.date
+                    budgetData[0].budgetExpenceItem = expenceItemCell.category
+                    budgetData[0].budgetPrice = Int(textFieldOnAlert.text!)!
+                    budgetData[0].budgetDate = self.date
                 }
                 self.budgetViewControllerDelegate?.updateList()
+                print("text != 0 \(budgetData)")
+                
                 self.budgetTableView.reloadData()
             })
             
