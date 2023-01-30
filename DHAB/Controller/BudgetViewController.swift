@@ -97,6 +97,7 @@ class BudgetViewController: UIViewController{
             for i in 0 ..< expenceItemList.count{
                 paymentBudgetList[i].budgetExpenceItem = expenceItemList[i].category
                 paymentBudgetList[i].budgetDate = date
+                paymentBudgetList[i].budgetPrice = 0//これがわからない
             }
         }
         paymentBudgetList = Array(result)

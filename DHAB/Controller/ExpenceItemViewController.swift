@@ -15,7 +15,9 @@ protocol ExpenceItemViewControllerDelegate{
 
 class ExpenceItemViewController: UIViewController{
     
-    var expenceItemList:[ExpenceItemModel] = []
+    var paymentBudgetList:[PaymentBudgetModel] = []
+    
+    var expenceItemList = [""]
     var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
     
     @IBOutlet weak var addButton: UIButton!
@@ -31,6 +33,7 @@ class ExpenceItemViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setPaymentBudgetData()
         setExpenceItemData()
         expenceItemTableView.delegate = self
         expenceItemTableView.dataSource = self
@@ -46,15 +49,25 @@ class ExpenceItemViewController: UIViewController{
             textField.placeholder = "カテゴリーの名前を入力してください"
         }
         let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
+            let paymentBudgetModel = PaymentBudgetModel()
             let realm = try! Realm()
             try! realm.write{
-                let expenceItemModel = ExpenceItemModel()
-                expenceItemModel.category = textFieldOnAlert.text!
-                realm.add(expenceItemModel)
+                paymentBudgetModel.budgetExpenceItem = String(textFieldOnAlert.text!)
+                paymentBudgetModel.budgetPrice = -1
+                paymentBudgetModel.budgetDate = Date()
+                realm.add(paymentBudgetModel)
+                
+                print(paymentBudgetModel.budgetExpenceItem)
+                print(paymentBudgetModel)
+                self.setPaymentBudgetData()
+                self.setExpenceItemData()
+                print(self.expenceItemList)
+                
             }
             self.expenceItemViewDelegate?.updateExpenceItem()
             self.expenceItemTableView.reloadData()
         })
+        
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
         })
@@ -63,13 +76,20 @@ class ExpenceItemViewController: UIViewController{
         alert.addAction(cancel)
         
         self.present(alert,animated:true, completion: nil)
+        
     }
     
     func setExpenceItemData(){
-        let realm = try! Realm()
-        let result = realm.objects(ExpenceItemModel.self)
-        expenceItemList = Array(result)
+        _ = try! Realm()
+        let result = Array(Set(paymentBudgetList.map({$0.budgetExpenceItem})))
+        expenceItemList = result
         expenceItemTableView.reloadData()
+    }
+    
+    func setPaymentBudgetData(){
+        _ = try! Realm()
+        let result = Array(paymentBudgetList)
+        paymentBudgetList = result
     }
 }
 
@@ -81,7 +101,7 @@ extension ExpenceItemViewController: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = expenceItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel!.text = expenceItemList[indexPath.row].category
+        cell.textLabel!.text = expenceItemList[indexPath.row]
         return cell
     }
     
@@ -92,7 +112,7 @@ extension ExpenceItemViewController: UITableViewDelegate,UITableViewDataSource{
     
     //あとで変更必要
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let targetItem = expenceItemList[indexPath.row]
+        let targetItem = paymentBudgetList[indexPath.row]
         let realm = try! Realm()
         try! realm.write{
             realm.delete(targetItem)
