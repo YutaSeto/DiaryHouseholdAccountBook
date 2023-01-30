@@ -98,17 +98,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        cell.budgetExpenceItemLabel.text = expenceItemList[indexPath.row]
-        
-        let realm = try! Realm()
-        let paymentBudgetData = realm.objects(PaymentBudgetModel.self)
-        for i in 0 ..< paymentBudgetList.count{
-            if dateFormatter.string(from: paymentBudgetData[i].budgetDate) == dateFormatter.string(from: date) && paymentBudgetData[i].budgetExpenceItem == cell.budgetExpenceItemLabel.text{
-                cell.budgetPriceLabel.text! = String(paymentBudgetData[i].budgetPrice)
-                print("何を保存しているのか\(cell.budgetPriceLabel.text!)")
-                break
-            }
-        }
+        let paymentBudgetModel:PaymentBudgetModel = paymentBudgetList[indexPath.row]
+        cell.budgetPriceLabel.text = String(paymentBudgetModel.budgetPrice)
+        cell.budgetExpenceItemLabel.text = paymentBudgetModel.budgetExpenceItem
         return cell
     }
     
