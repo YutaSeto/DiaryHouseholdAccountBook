@@ -16,7 +16,7 @@ protocol BudgetViewControllerDelegate{
 class BudgetViewController: UIViewController{
     
     private var date = Date()
-    var expenceItemList:[ExpenceItemModel] = []
+    var expenceItemList = [""]
     var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
     var paymentBudgetList:[PaymentBudgetModel] = []
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
@@ -74,12 +74,11 @@ class BudgetViewController: UIViewController{
         setPaymentData()
         setExpenceItemData()
         setNavigationBarButton()
-        newTableView()
     }
     
     func setExpenceItemData(){
-        let realm = try! Realm()
-        let result = realm.objects(ExpenceItemModel.self)
+        _ = try! Realm()
+        let result = Array(Set(paymentBudgetList.map({$0.budgetExpenceItem})))
         expenceItemList = Array(result)
         budgetTableView.reloadData()
     }
@@ -88,20 +87,6 @@ class BudgetViewController: UIViewController{
         let realm = try! Realm()
         let result = realm.objects(PaymentBudgetModel.self)
         paymentBudgetList = Array(result)
-    }
-    
-    func newTableView(){
-        let realm = try! Realm()
-        let result = realm.objects(PaymentBudgetModel.self)
-        expenceItemList.forEach{ item in
-            for i in 0 ..< expenceItemList.count{
-                paymentBudgetList[i].budgetExpenceItem = expenceItemList[i].category
-                paymentBudgetList[i].budgetDate = date
-                paymentBudgetList[i].budgetPrice = 0//これがわからない
-            }
-        }
-        paymentBudgetList = Array(result)
-        
     }
 }
 
@@ -113,7 +98,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        cell.budgetExpenceItemLabel.text = expenceItemList[indexPath.row].category
+        cell.budgetExpenceItemLabel.text = expenceItemList[indexPath.row]
         
         let realm = try! Realm()
         let paymentBudgetData = realm.objects(PaymentBudgetModel.self)
@@ -130,9 +115,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
         print(cell.budgetPriceLabel.text!)
-        let expenceItemCell = expenceItemList[indexPath.row]
+        _ = expenceItemList[indexPath.row]
         
-        cell.budgetExpenceItemLabel.text = expenceItemList[indexPath.row].category
+        cell.budgetExpenceItemLabel.text = expenceItemList[indexPath.row]
         budgetViewControllerDelegate = self
         
         let realm = try! Realm()
@@ -146,65 +131,31 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             textField.placeholder = "0"
         }
         
-        var number = -1
-        func dateAndExpenceItemEqual() -> Int{
+        var isDateAndExpenceItemSame:Bool = false
+        func dateAndExpenceItemEqual(){
             for i in 0 ..< paymentBudgetList.count{
                 if dateFormatter.string(from: paymentBudgetData[i].budgetDate) == dateFormatter.string(from: date) && paymentBudgetData[i].budgetExpenceItem == cell.budgetExpenceItemLabel.text && paymentBudgetData[i].budgetPrice == Int(cell.budgetPriceLabel.text!){
-                    number = i
-                    break
-                }else{
-                    return -1
+                    isDateAndExpenceItemSame = true
                 }
             }
-            return number
-        }
-        func dateOrExpenceItemNotEqual() -> Int{
-            for i in 0 ..< paymentBudgetList.count{
-                if dateFormatter.string(from: paymentBudgetData[i].budgetDate) != dateFormatter.string(from: date){
-                    if paymentBudgetData[i].budgetExpenceItem != cell.budgetExpenceItemLabel.text{
-                        number = i
-                        break
-                    }else{
-                        
-                        return -1
-                    }
-                }else{
-                    return -1
-                }
-            }
-            return number
+            return
         }
         
-        if paymentBudgetList == []{
-            let add = UIAlertAction(title:"追加する",style: .default, handler:{(action) ->Void in
-                let budgetData = PaymentBudgetModel()
-                try! realm.write{
-                    budgetData.budgetExpenceItem = expenceItemCell.category
-                    budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
-                    budgetData.budgetDate = self.date
-                    cell.budgetPriceLabel.text = textFieldOnAlert.text!//ここが設定できない
-                    realm.add(budgetData)
-                    print(cell.budgetPriceLabel.text!)
-                    print(cell)
+        var isDateOrExpenceItemNotSame:Bool = false
+        func dateOrExpenceItemNotEqual(){
+            for i in 0 ..< paymentBudgetList.count{
+                if dateFormatter.string(from: paymentBudgetData[i].budgetDate) != dateFormatter.string(from: date) && paymentBudgetData[i].budgetExpenceItem != cell.budgetExpenceItemLabel.text{
+                    isDateOrExpenceItemNotSame = true
                 }
-                self.budgetViewControllerDelegate?.updateList()
-                self.budgetTableView.reloadData()
-            })
-            
-            let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                return
-            })
-            
-            alert.addAction(add)
-            alert.addAction(cancel)
-            
-            self.present(alert,animated: true, completion: nil)
-        }else if dateAndExpenceItemEqual() >= 0{
+            }
+        }
+        
+        if isDateAndExpenceItemSame{
             let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let realm = try! Realm()
-                let budgetData = realm.objects(PaymentBudgetModel.self).filter("budgetExpenceItem CONTAINS %@" ,expenceItemCell.category)
+                let budgetData = realm.objects(PaymentBudgetModel.self).filter("budgetExpenceItem CONTAINS %@" ,self.expenceItemList[indexPath.row])
                 try! realm.write{
-                    budgetData[0].budgetExpenceItem = expenceItemCell.category
+                    budgetData[0].budgetExpenceItem = self.expenceItemList[indexPath.row]
                     budgetData[0].budgetPrice = Int(textFieldOnAlert.text!)!
                     budgetData[0].budgetDate = self.date
                 }
@@ -224,12 +175,12 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             print(dateOrExpenceItemNotEqual())
             
             
-        }else if dateOrExpenceItemNotEqual() >= 0{
+        }else if isDateOrExpenceItemNotSame{
             let add = UIAlertAction(title:"追加する",style: .default, handler:{(action) ->Void in
                 let realm = try! Realm()
                 let budgetData = PaymentBudgetModel()
                 try! realm.write{
-                    budgetData.budgetExpenceItem = expenceItemCell.category
+                    budgetData.budgetExpenceItem = self.expenceItemList[indexPath.row]
                     budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
                     budgetData.budgetDate = self.date
                     realm.add(budgetData)

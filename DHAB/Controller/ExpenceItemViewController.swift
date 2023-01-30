@@ -48,24 +48,31 @@ class ExpenceItemViewController: UIViewController{
             textFieldOnAlert = textField
             textField.placeholder = "カテゴリーの名前を入力してください"
         }
+        
         let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
-            let paymentBudgetModel = PaymentBudgetModel()
-            let realm = try! Realm()
-            try! realm.write{
-                paymentBudgetModel.budgetExpenceItem = String(textFieldOnAlert.text!)
-                paymentBudgetModel.budgetPrice = -1
-                paymentBudgetModel.budgetDate = Date()
-                realm.add(paymentBudgetModel)
-                
-                print(paymentBudgetModel.budgetExpenceItem)
-                print(paymentBudgetModel)
-                self.setPaymentBudgetData()
-                self.setExpenceItemData()
-                print(self.expenceItemList)
-                
+        var check:Bool = false
+            
+            for i in 0 ..< self.paymentBudgetList.count{
+                if textFieldOnAlert.text! == self.paymentBudgetList[i].budgetExpenceItem{
+                    check = true
+                }else{
+                }
             }
-            self.expenceItemViewDelegate?.updateExpenceItem()
-            self.expenceItemTableView.reloadData()
+            if check{
+                print("ダブってるよ")
+                check = false
+                return
+            }else{
+                let paymentBudgetModel = PaymentBudgetModel()
+                let realm = try! Realm()
+                try! realm.write{
+                    paymentBudgetModel.budgetExpenceItem = String(textFieldOnAlert.text!)
+                    realm.add(paymentBudgetModel)
+                }
+                check = false
+                self.expenceItemViewDelegate?.updateExpenceItem()
+                self.expenceItemTableView.reloadData()
+            }
         })
         
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -80,16 +87,16 @@ class ExpenceItemViewController: UIViewController{
     }
     
     func setExpenceItemData(){
-        _ = try! Realm()
         let result = Array(Set(paymentBudgetList.map({$0.budgetExpenceItem})))
         expenceItemList = result
         expenceItemTableView.reloadData()
     }
     
     func setPaymentBudgetData(){
-        _ = try! Realm()
-        let result = Array(paymentBudgetList)
-        paymentBudgetList = result
+        let realm = try! Realm()
+        let result = realm.objects(PaymentBudgetModel.self)
+        let newResult = Array(result)
+        paymentBudgetList = newResult
     }
 }
 
@@ -106,7 +113,46 @@ extension ExpenceItemViewController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        return
+        expenceItemViewDelegate = self
+        
+        let alert = UIAlertController(title:"カテゴリーの名前を変更します", message: nil, preferredStyle: .alert)
+        var textFieldOnAlert = UITextField()
+        alert.addTextField{textField in
+            textFieldOnAlert = textField
+            textField.placeholder = "0"
+        }
+        
+        let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+            var isExpenceItemDuplication:Bool = false
+            let result = Array(Set(self.paymentBudgetList.map({$0.budgetExpenceItem})))
+            for i in 0 ..< result.count{
+                if textFieldOnAlert.text == result[i]{
+                    isExpenceItemDuplication = true
+                }
+            }
+            
+            if isExpenceItemDuplication{
+                isExpenceItemDuplication = false
+                print("費目が他のと被ってるよ")
+                return
+            }else{
+                
+                let realm = try! Realm()
+                try! realm.write{
+                    self.paymentBudgetList[indexPath.row].budgetExpenceItem = textFieldOnAlert.text!
+                }
+                self.expenceItemViewDelegate?.updateExpenceItem()
+                self.expenceItemTableView.reloadData()
+            }
+        })
+        
+        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+            return
+        })
+        
+        alert.addAction(edit)
+        alert.addAction(cancel)
+        self.present(alert,animated: true, completion: nil)
     }
     
     
@@ -124,6 +170,7 @@ extension ExpenceItemViewController: UITableViewDelegate,UITableViewDataSource{
 
 extension ExpenceItemViewController:ExpenceItemViewControllerDelegate{
     func updateExpenceItem() {
+        setPaymentBudgetData()
         setExpenceItemData()
     }
 }

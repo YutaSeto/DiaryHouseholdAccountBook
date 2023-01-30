@@ -12,7 +12,7 @@ import UIKit
 class BudgetConfigureViewController: UIViewController{
     
     var date: Date = Date()
-    var expenceItemList:[ExpenceItemModel] = []
+    var expenceItemList = [""]
     var paymentBudgetList:[PaymentBudgetModel] = []
     var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
     
@@ -27,8 +27,8 @@ class BudgetConfigureViewController: UIViewController{
     }
     
     func setPaymentBudgetData(){
-        let realm = try! Realm()
-        let result = realm.objects(ExpenceItemModel.self)
+        _ = try! Realm()
+        let result = Array(Set(paymentBudgetList.map({$0.budgetExpenceItem})))
         expenceItemList = Array(result)
         budgetConfigureTableView.reloadData()
     }
@@ -60,8 +60,7 @@ extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
         //費目についての記述
-        let expenceItemModel:ExpenceItemModel = expenceItemList[indexPath.row]
-        cell.expenceItemLabel.text = expenceItemModel.category
+        cell.expenceItemLabel.text = expenceItemList[indexPath.row]
         
         //予算についての記述
         let realm = try! Realm()
