@@ -136,7 +136,6 @@ extension ExpenceItemViewController: UITableViewDelegate,UITableViewDataSource{
                 print("費目が他のと被ってるよ")
                 return
             }else{
-                
                 let realm = try! Realm()
                 try! realm.write{
                     self.paymentBudgetList[indexPath.row].budgetExpenceItem = textFieldOnAlert.text!
