@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Expence Item View Controller-->
+        <!--Expense Item View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController id="Y6W-OH-hqX" customClass="ExpenceItemViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ExpenseItemViewController" id="Y6W-OH-hqX" customClass="ExpenseItemViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -60,7 +60,7 @@
                     </view>
                     <connections>
                         <outlet property="addButton" destination="fvS-eV-hVl" id="qgY-ry-8C6"/>
-                        <outlet property="expenceItemTableView" destination="rIY-2Q-a03" id="HM9-0L-uTn"/>
+                        <outlet property="expenseItemTableView" destination="rIY-2Q-a03" id="hB9-Ow-XwQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

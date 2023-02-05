@@ -48,7 +48,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="budgetExpenceItemLabel" destination="Pog-Os-Oc2" id="H9Y-BY-pqV"/>
+                <outlet property="budgetCategoryLabel" destination="Pog-Os-Oc2" id="zGI-P6-ri8"/>
                 <outlet property="budgetPriceLabel" destination="5ts-jV-BMt" id="Bhg-N3-1tF"/>
             </connections>
             <point key="canvasLocation" x="36.641221374045799" y="20.422535211267608"/>

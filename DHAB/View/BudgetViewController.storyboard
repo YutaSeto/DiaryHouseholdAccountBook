@@ -83,7 +83,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Jwf-Et-RGy"/>
                     <connections>
-                        <outlet property="budgetTableView" destination="xhI-sG-bq6" id="gkt-TT-QyB"/>
+                        <outlet property="budgetTableView" destination="xhI-sG-bq6" id="uEJ-7v-yKk"/>
                         <outlet property="dateBackButton" destination="OIl-i1-Ohr" id="cMi-vC-6b0"/>
                         <outlet property="dateLabel" destination="j1q-Ob-FDW" id="r40-bV-KVB"/>
                         <outlet property="datePassButton" destination="A1Q-fs-JLs" id="Uf3-9I-Xa7"/>

@@ -74,14 +74,14 @@ extension MenuViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row{
         case 0:
-            let storyboard = UIStoryboard(name: "ExpenceItemViewController", bundle: nil)
-            guard let expenceItemViewController = storyboard.instantiateInitialViewController() as? ExpenceItemViewController else {return}
-            present(expenceItemViewController,animated: true)
+            let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
+            let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController")
+            present(expenseItemViewController,animated: true)
             returnView()
         case 1:
             let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-            let NavigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
-            present(NavigationController,animated: true)
+            let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+            present(navigationController,animated: true)
             returnView()
         default:
             return

@@ -60,8 +60,16 @@ class InputViewController:UIViewController{
         diaryDateLabel.text = dateFormatter.string(from: date)
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        picker.delegate = self
         settingCollectionView()
         resultLabel.text = ""
+        
+        let nib = UINib(nibName: "SliderViewCell", bundle: nil)
+        collectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
+
+        
     }
     
     //家計簿記入画面関連
@@ -96,7 +104,7 @@ class InputViewController:UIViewController{
             let paymentModel = PaymentModel()
             paymentModel.date = date
             paymentModel.price = Int(priceTextField.text!) ?? 0
-            paymentModel.expenceItem = resultLabel.text!
+            paymentModel.category = resultLabel.text!
             realm.add(paymentModel)
         }
         inputViewControllerDelegate?.updatePayment()
@@ -109,7 +117,7 @@ class InputViewController:UIViewController{
             let paymentModel = PaymentModel()
             paymentModel.date = date
             paymentModel.price = Int(priceTextField.text!) ?? 0
-            paymentModel.expenceItem = resultLabel.text!
+            paymentModel.category = resultLabel.text!
             realm.add(paymentModel)
         }
         inputViewControllerDelegate?.updatePayment()
@@ -147,7 +155,11 @@ class InputViewController:UIViewController{
     //日記記入関連の画面
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var diaryDateLabel: UILabel!
+    @IBOutlet var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
+    
+    @IBOutlet weak var imageCollectionView: UICollectionView!
+    
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
         dayBack()
     }
@@ -158,7 +170,14 @@ class InputViewController:UIViewController{
     @IBAction func addDiaryButton(_ sender: UIButton) {
         addDiary()
     }
+    @IBAction func addImageButton(_ sender: UIButton) {
+        present(picker, animated:true)
+    }
     
+    var imageArray = [UIImage(named: "sample1")!]
+    var currentIndex = 0
+    
+    let picker = UIImagePickerController()
     private var diaryModel = DiaryModel()
     private var diaryList:[DiaryModel] = []
     
@@ -189,10 +208,42 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
         let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
         contentLabel.text = paymentList[indexPath.row]
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         resultLabel.text = paymentList[indexPath.row]
+    }
+}
+
+
+extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout{
+    
+    private func imagePickerConroller(_ Picker: UIImagePickerController,didFinishPickingMediaWithInfo info: [String: Any]){
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+          return imageArray.count
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+          let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderViewCell
+          cell.image = imageArray[indexPath.item]
+          return cell
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+          return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
+        }
+        
+        
+        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+          currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
+        }
+        //画像選択時の処理
+        let images = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
+        //キャンセル時の処理
     }
 }

@@ -9,12 +9,14 @@ import Foundation
 import RealmSwift
 import UIKit
 
+
 class BudgetConfigureViewController: UIViewController{
     
+    let realm = try! Realm()
     var date: Date = Date()
-    var expenceItemList = [""]
+    var categoryList:[CategoryModel] = []
     var paymentBudgetList:[PaymentBudgetModel] = []
-    var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
+    var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var budgetConfigureTableView: UITableView!
@@ -27,16 +29,14 @@ class BudgetConfigureViewController: UIViewController{
     }
     
     func setPaymentBudgetData(){
-        _ = try! Realm()
-        let result = Array(Set(paymentBudgetList.map({$0.budgetExpenceItem})))
-        expenceItemList = Array(result)
+        let result = realm.objects(PaymentBudgetModel.self)
+        paymentBudgetList = Array(result)
         budgetConfigureTableView.reloadData()
     }
     
-    func setExpenceItemData(){
-        let realm = try! Realm()
-        let result = realm.objects(PaymentBudgetModel.self)
-        paymentBudgetList = Array(result)
+    func setCategoryData(){
+        let result = realm.objects(CategoryModel.self)
+        categoryList = Array(result)
         budgetConfigureTableView.reloadData()
     }
     
@@ -45,7 +45,7 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         budgetConfigureTableView.delegate = self
         budgetConfigureTableView.dataSource = self
-        setExpenceItemData()
+        setCategoryData()
         setPaymentBudgetData()
     }
     
@@ -54,25 +54,43 @@ class BudgetConfigureViewController: UIViewController{
 extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        expenceItemList.count
+        budgetTableViewDataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
-        //費目についての記述
-        cell.expenceItemLabel.text = expenceItemList[indexPath.row]
-        
-        //予算についての記述
-        let realm = try! Realm()
-        let paymentBudgetData = realm.objects(PaymentBudgetModel.self)
-        for i in 0 ..< paymentBudgetData.count{
-            if dateFormatter.string(from: paymentBudgetData[i].budgetDate) == dateFormatter.string(from: date) && paymentBudgetData[i].budgetExpenceItem == cell.expenceItemLabel.text{
-                cell.priceTextField.text = String(paymentBudgetData[i].budgetPrice)
-                break
-            } else {
-                cell.priceTextField.text = "0"
-            }
-        }
+        let item = budgetTableViewDataSource[indexPath.row]
+        cell.categoryLabel.text = item.name
+        cell.priceTextField.text = String(item.price)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        _ = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
+        let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
+        
+        var textFieldOnAlert = UITextField()
+        alert.addTextField{textField in
+            textFieldOnAlert = textField
+            textField.placeholder = "0"
+        }
+        let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+            let dataSource = self.budgetTableViewDataSource[indexPath.row]
+            if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
+                let realm = try!Realm()
+                try! realm.write{
+                    budget.budgetPrice = Int(textFieldOnAlert.text!)!
+                }
+            }
+            print(self.budgetTableViewDataSource)
+        })
+        
+        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+            return
+        })
+        
+        alert.addAction(edit)
+        alert.addAction(cancel)
+        self.present(alert,animated: true, completion: nil)
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 
 class BudgetTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var budgetExpenceItemLabel: UILabel!
+    @IBOutlet weak var budgetCategoryLabel: UILabel!
     @IBOutlet weak var budgetPriceLabel: UILabel!
     
     override func awakeFromNib() {

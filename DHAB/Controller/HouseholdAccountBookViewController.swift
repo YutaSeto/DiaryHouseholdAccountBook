@@ -55,7 +55,6 @@ class HouseholdAccountBookViewController:UIViewController{
     
     private var monthDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .none
         dateFormatter.dateStyle = .none
         dateFormatter.dateFormat = "yy年MM月"
         dateFormatter.locale = Locale(identifier: "ja-JP")
@@ -64,7 +63,6 @@ class HouseholdAccountBookViewController:UIViewController{
     
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
@@ -204,7 +202,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         //であれば、一致しない時は飛ばす処理をしないといけない
         if monthDateFormatter.string(from: monthPaymentList.date) == monthDateFormatter.string(from: date){
             cell.dateLabel.text = dayDateFormatter.string(from: monthPaymentList.date)
-            cell.expenceItemLabel.text = monthPaymentList.expenceItem
+            cell.expenceItemLabel.text = monthPaymentList.category
             cell.priceLabel.text = String(monthPaymentList.price)
             return cell
         }else{

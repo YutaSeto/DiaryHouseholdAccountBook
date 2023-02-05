@@ -9,7 +9,7 @@ import UIKit
 
 class BudgetConfigureTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var expenceItemLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var priceTextField: UITextField!
     
     override func awakeFromNib() {

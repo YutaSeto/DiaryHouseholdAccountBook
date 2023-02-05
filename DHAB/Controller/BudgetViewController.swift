@@ -16,10 +16,11 @@ protocol BudgetViewControllerDelegate{
 class BudgetViewController: UIViewController{
     
     private var date = Date()
-    var expenceItemList = [""]
-    var expenceItemViewDelegate:ExpenceItemViewControllerDelegate?
+    var categoryList:[CategoryModel] = []
     var paymentBudgetList:[PaymentBudgetModel] = []
+    var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
+    let realm = try! Realm()
     
     @IBOutlet weak var budgetTableView: UITableView!
     @IBOutlet weak var dateBackButton: UIButton!
@@ -28,12 +29,10 @@ class BudgetViewController: UIViewController{
     
     @IBAction func dateBackButton(_ sender: UIButton) {
         dayBack()
-        monthSame(targetMonth: date)
     }
     
     @IBAction func datePassButton(_ sender: UIButton) {
         dayPass()
-        monthSame(targetMonth: date)
     }
     
     @objc func tapConfigureButton(){
@@ -50,20 +49,38 @@ class BudgetViewController: UIViewController{
     
     
     func dayBack(){
-        date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
+        budgetViewControllerDelegate = self
+        date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
+        setMonthFirstAndEnd()
         dateLabel.text = dateFormatter.string(from: date)
+        self.budgetViewControllerDelegate?.updateList()
+        budgetTableView.reloadData()
     }
     
     func dayPass(){
-        date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
+        budgetViewControllerDelegate = self
+        date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
+        setMonthFirstAndEnd()
         dateLabel.text = dateFormatter.string(from: date)
+        self.budgetViewControllerDelegate?.updateList()
+        budgetTableView.reloadData()
     }
     
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日"
+        dateFormatter.dateFormat = "yy年MM月"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
+    }
+    
+    func setMonthFirstAndEnd(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        var firstDay = calendar.date(from: comps)!
+        let add = DateComponents(day:1)
+        let addMonth = DateComponents(month: 1, day: -1)
+        firstDay = calendar.date(byAdding: add, to: firstDay)!
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!
     }
     
     override func viewDidLoad() {
@@ -72,22 +89,60 @@ class BudgetViewController: UIViewController{
         dateLabel.text = dateFormatter.string(from: date)
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
-        setPaymentData()
-        setExpenceItemData()
+        setPaymentBudgetData()
+        setCategoryData()
         setNavigationBarButton()
     }
     
-    func setExpenceItemData(){
-        _ = try! Realm()
-        let result = Array(Set(paymentBudgetList.map({$0.budgetExpenceItem})))
-        expenceItemList = Array(result)
+
+    
+    func setCategoryData(){
+        let result = realm.objects(CategoryModel.self)
+        categoryList = Array(result)
         budgetTableView.reloadData()
     }
     
-    func setPaymentData(){
-        let realm = try! Realm()
+    func setPaymentBudgetData(){
         let result = realm.objects(PaymentBudgetModel.self)
         paymentBudgetList = Array(result)
+        budgetTableView.reloadData()
+    }
+    
+    func setBudgetTableViewDataSourse(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let firstDay = calendar.date(from: comps)!
+        let add = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        categoryList.forEach{ expense in
+            var dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
+            var dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+                let item = BudgetTableViewCellItem(
+                    id: budget.id,
+                    name: expense.name,
+                    price: budget.budgetPrice
+                )
+                budgetTableViewDataSource.append(item)
+            } else {
+                let budget = PaymentBudgetModel()
+                budget.id = UUID().uuidString
+                budget.expenseID = expense.id
+                budget.budgetDate = date
+                budget.budgetPrice = 0
+                try! realm.write { realm.add(budget)}
+                paymentBudgetList.append(budget)
+                
+                let item = BudgetTableViewCellItem(
+                    id:budget.id,
+                    name: expense.name,
+                    price: budget.budgetPrice
+                )
+                budgetTableViewDataSource.append(item)
+            }
+            
+            budgetTableView.reloadData()
+        }
     }
     
 }
@@ -95,19 +150,19 @@ class BudgetViewController: UIViewController{
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        expenceItemList.count
+        budgetTableViewDataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        let paymentBudgetModel:PaymentBudgetModel = paymentBudgetList[indexPath.row]
-        cell.budgetPriceLabel.text = String(paymentBudgetModel.budgetPrice)
-        cell.budgetExpenceItemLabel.text = paymentBudgetModel.budgetExpenceItem
+        let item = budgetTableViewDataSource[indexPath.row]
+        cell.budgetCategoryLabel.text = item.name
+        cell.budgetPriceLabel.text = String(item.price)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+        _ = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
         budgetViewControllerDelegate = self
         
         let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
@@ -117,17 +172,17 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             textFieldOnAlert = textField
             textField.placeholder = "0"
         }
-        
         let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
-            let budgetData = self.paymentBudgetList[indexPath.row]
-            let realm = try! Realm()
-            try! realm.write{
-                budgetData.budgetExpenceItem = self.expenceItemList[indexPath.row]
-                budgetData.budgetPrice = Int(textFieldOnAlert.text!)!
-                budgetData.budgetDate = self.date
+            let dataSource = self.budgetTableViewDataSource[indexPath.row]
+            if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
+                let realm = try!Realm()
+                try! realm.write{
+                    budget.budgetPrice = Int(textFieldOnAlert.text!)!
+                }
             }
             self.budgetViewControllerDelegate?.updateList()
             self.budgetTableView.reloadData()
+            print(self.budgetTableViewDataSource)
         })
         
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -142,7 +197,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
 
 extension BudgetViewController:BudgetViewControllerDelegate{
     func updateList(){
-        setPaymentData()
-        setExpenceItemData()
+        setPaymentBudgetData()
+        setCategoryData()
+        budgetTableViewDataSource = []
+        setBudgetTableViewDataSourse()
     }
 }
