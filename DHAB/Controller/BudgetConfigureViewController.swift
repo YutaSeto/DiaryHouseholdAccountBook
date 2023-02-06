@@ -21,6 +21,33 @@ class BudgetConfigureViewController: UIViewController{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var budgetConfigureTableView: UITableView!
     
+    @IBAction func saveButton(_ sender: UIButton) {
+        tapSaveButton()
+    }
+    
+    @IBAction func cancelButton(_ sender: UIButton) {
+        navigationController?.popToViewController(navigationController!.viewControllers[0], animated: true)
+    }
+    
+    func tapSaveButton(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let firstDay = calendar.date(from: comps)!
+        let add = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
+        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+        budgetTableViewDataSource.forEach{ category in
+            if let data:PaymentBudgetModel = dayCheckBudget2.filter({$0.id == category.id}).first{
+//                data.budgetPrice = category[indexPath.row].priceTextField.text!
+            }
+            
+        }
+        
+        
+        navigationController?.popToViewController(navigationController!.viewControllers[0], animated: true)
+    }
+    
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月"
@@ -40,6 +67,43 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureTableView.reloadData()
     }
     
+    func setBudgetTableViewDataSourse(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let firstDay = calendar.date(from: comps)!
+        let add = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        categoryList.forEach{ expense in
+            let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
+            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+                let item = BudgetTableViewCellItem(
+                    id: budget.id,
+                    name: expense.name,
+                    price: budget.budgetPrice
+                )
+                budgetTableViewDataSource.append(item)
+            } else {
+                let budget = PaymentBudgetModel()
+                budget.id = UUID().uuidString
+                budget.expenseID = expense.id
+                budget.budgetDate = date
+                budget.budgetPrice = 0
+                try! realm.write { realm.add(budget)}
+                paymentBudgetList.append(budget)
+                
+                let item = BudgetTableViewCellItem(
+                    id:budget.id,
+                    name: expense.name,
+                    price: budget.budgetPrice
+                )
+                budgetTableViewDataSource.append(item)
+            }
+            
+            budgetConfigureTableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad(){
         super.viewDidLoad()
         budgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
@@ -47,6 +111,8 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureTableView.dataSource = self
         setCategoryData()
         setPaymentBudgetData()
+        setBudgetTableViewDataSourse()
+        dateLabel.text = dateFormatter.string(from:date)
     }
     
 }
@@ -65,32 +131,4 @@ extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSourc
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _ = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
-        let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
-        
-        var textFieldOnAlert = UITextField()
-        alert.addTextField{textField in
-            textFieldOnAlert = textField
-            textField.placeholder = "0"
-        }
-        let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
-            let dataSource = self.budgetTableViewDataSource[indexPath.row]
-            if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
-                let realm = try!Realm()
-                try! realm.write{
-                    budget.budgetPrice = Int(textFieldOnAlert.text!)!
-                }
-            }
-            print(self.budgetTableViewDataSource)
-        })
-        
-        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-            return
-        })
-        
-        alert.addAction(edit)
-        alert.addAction(cancel)
-        self.present(alert,animated: true, completion: nil)
-    }
 }

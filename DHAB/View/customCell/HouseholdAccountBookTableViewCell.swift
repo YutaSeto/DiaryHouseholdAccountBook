@@ -13,7 +13,6 @@ class HouseholdAccountBookTableViewCell: UITableViewCell {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var budgetLabel: UILabel!
     @IBOutlet weak var balanceLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel! //データをわかりやすくするための借りのラベルあとで編集必要
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -89,7 +89,34 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
         return cell
     }
 
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        categoryViewControllerDelegate = self
+        let cell = expenseItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let alert = UIAlertController(title: "\(categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
+        var textFieldOnAlert = UITextField()
+        alert.addTextField{ textField in
+            textFieldOnAlert = textField
+            textField.placeholder = "新しいカテゴリーの名前を入力してください"
+        }
+        
+        let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) -> Void in
+            let realm = try!Realm()
+            try! realm.write{
+                self.categoryList[indexPath.row].name = textFieldOnAlert.text!
+                self.categoryViewControllerDelegate?.updateCategory()
+                self.expenseItemTableView.reloadData()
+            }
+        })
+        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+            return
+        })
+        
+        
+        alert.addAction(add)
+        alert.addAction(cancel)
+        
+        self.present(alert,animated:true, completion: nil)
+    }
     
     //あとで変更必要
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

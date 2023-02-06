@@ -39,6 +39,7 @@ class BudgetViewController: UIViewController{
         let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
         let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
         navigationController?.pushViewController(budgetConfigureViewController, animated: true)
+        budgetConfigureViewController.date = date
     }
     
     func setNavigationBarButton(){
@@ -91,6 +92,7 @@ class BudgetViewController: UIViewController{
         budgetTableView.dataSource = self
         setPaymentBudgetData()
         setCategoryData()
+        setBudgetTableViewDataSourse()
         setNavigationBarButton()
     }
     
@@ -115,8 +117,8 @@ class BudgetViewController: UIViewController{
         let add = DateComponents(month: 1, day: -1)
         let lastDay = calendar.date(byAdding: add, to: firstDay)!
         categoryList.forEach{ expense in
-            var dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
-            var dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+            let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
+            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
             if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let item = BudgetTableViewCellItem(
                     id: budget.id,

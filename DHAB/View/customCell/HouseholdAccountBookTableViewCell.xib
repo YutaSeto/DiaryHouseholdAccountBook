@@ -118,7 +118,6 @@
             <connections>
                 <outlet property="balanceLabel" destination="5wz-Xe-cqi" id="tkS-fW-Jeu"/>
                 <outlet property="budgetLabel" destination="RCu-ak-NHr" id="F82-qy-8dS"/>
-                <outlet property="dateLabel" destination="X9X-pS-jLS" id="Srj-au-ljx"/>
                 <outlet property="expenceItemLabel" destination="Y0l-1T-Lhb" id="yTE-yK-dmI"/>
                 <outlet property="priceLabel" destination="qLv-Qu-mJT" id="JY2-4z-SuD"/>
             </connections>

@@ -49,7 +49,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="expenceItemLabel" destination="9kS-LN-8IO" id="3hT-oV-RWg"/>
+                <outlet property="categoryLabel" destination="9kS-LN-8IO" id="Zgs-G6-PBF"/>
                 <outlet property="priceTextField" destination="hXa-v1-tg7" id="UEP-80-lHD"/>
             </connections>
             <point key="canvasLocation" x="138.93129770992365" y="20.422535211267608"/>

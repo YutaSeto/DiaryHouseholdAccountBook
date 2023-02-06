@@ -68,6 +68,16 @@ class HouseholdAccountBookViewController:UIViewController{
         return dateFormatter
     }
     
+    func setMonthFirstAndEnd(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        var firstDay = calendar.date(from: comps)!
+        let add = DateComponents(day:1)
+        let addMonth = DateComponents(month: 1, day: -1)
+        firstDay = calendar.date(byAdding: add, to: firstDay)!
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!
+    }
+    
     //subView関連
     @IBOutlet var paymentView: UIView!
     @IBOutlet var incomeView: UIView!
@@ -114,6 +124,9 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentTableView.dataSource = self
         configureInputButton()
         setPaymentData()
+        setPaymentBudgetData()
+        setCategoryData()
+        setBudgetTableViewDataSourse()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,12 +140,28 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBAction func inputButton(_ sender: Any) {
         tapInputButton()
     }
-    private var paymentModelList:[PaymentModel] = []
+    
+    private var paymentList:[PaymentModel] = []
+    private var paymentBudgetList:[PaymentBudgetModel] = []
+    private var categoryList:[CategoryModel] = []
+    private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
+    let realm = try! Realm()
+    
+    func setCategoryData(){
+        let result = realm.objects(CategoryModel.self)
+        categoryList = Array(result)
+        paymentTableView.reloadData()
+    }
+    
+    func setPaymentBudgetData(){
+        let result = realm.objects(PaymentBudgetModel.self)
+        paymentBudgetList = Array(result)
+        paymentTableView.reloadData()
+    }
     
     func setPaymentData(){
-        let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
-        paymentModelList = Array(result)
+        let result = realm.objects(PaymentModel.self)
+        paymentList = Array(result)
         paymentTableView.reloadData()
     }
     
@@ -145,6 +174,55 @@ class HouseholdAccountBookViewController:UIViewController{
         guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
         inputViewController.inputViewControllerDelegate = self
         present(inputViewController,animated:true)
+    }
+    
+    func setBudgetTableViewDataSourse(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let firstDay = calendar.date(from: comps)!
+        let add = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
+        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+        
+        let dayCheckPayment = paymentList.filter({$0.date >= firstDay})
+        let dayCheckPayment2 = dayCheckPayment.filter{$0.date <= lastDay}
+        let sum = dayCheckPayment2.map{$0.price}.reduce(0){$0 + $1}
+
+        
+        categoryList.forEach{ expense in
+            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+                
+//                dayCheckPayment2のcategoryとexpenseのnameが一致しているpriceを全て取得する
+                var sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
+                
+                
+                let item = HouseholdAccountBookTableViewCellItem(
+                    id: budget.id,
+                    name: expense.name,
+                    paymentPrice:String(sum),
+                    budgetPrice: budget.budgetPrice
+                )
+                paymentTableViewDataSource.append(item)
+            } else {
+                let data = PaymentBudgetModel()
+                data.id = UUID().uuidString
+                data.expenseID = expense.id
+                data.budgetDate = date
+                data.budgetPrice = 0
+                try! realm.write { realm.add(data)}
+                paymentBudgetList.append(data)
+                
+                let item = HouseholdAccountBookTableViewCellItem(
+                    id:data.id,
+                    name: expense.name,
+                    budgetPrice: data.budgetPrice
+                )
+                paymentTableViewDataSource.append(item)
+            }
+            
+            paymentTableView.reloadData()
+        }
     }
     
 //    func sumPrices(){
@@ -177,36 +255,15 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
 extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var cellCount: Int = 0
-        for i in 0 ..< paymentModelList.count{
-            if monthDateFormatter.string(from: paymentModelList[i].date) == monthDateFormatter.string(from: date){
-                cellCount += 1
-            }
-        }
-        return cellCount
+        categoryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
-        
-        var monthPaymentModel:[PaymentModel] = []
-        for i in 0 ..< paymentModelList.count{
-            if monthDateFormatter.string(from: paymentModelList[i].date) == monthDateFormatter.string(from: date){
-                monthPaymentModel.append(paymentModelList[i])
-            }
-        }
-        
-        let monthPaymentList = Array(monthPaymentModel)[indexPath.row]
-        print(monthPaymentList)
-        //月が一致しないからUITableViewCellを返しているため空欄に見えている
-        //であれば、一致しない時は飛ばす処理をしないといけない
-        if monthDateFormatter.string(from: monthPaymentList.date) == monthDateFormatter.string(from: date){
-            cell.dateLabel.text = dayDateFormatter.string(from: monthPaymentList.date)
-            cell.expenceItemLabel.text = monthPaymentList.category
-            cell.priceLabel.text = String(monthPaymentList.price)
-            return cell
-        }else{
-            return UITableViewCell()
-        }
+        let item = paymentTableViewDataSource[indexPath.row]
+        cell.expenceItemLabel.text = item.name
+        cell.budgetLabel.text = String(item.budgetPrice)
+        cell.priceLabel.text = item.paymentPrice
+        return cell
     }
 }
