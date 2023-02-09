@@ -64,6 +64,8 @@ class InputViewController:UIViewController{
         collectionView.dataSource = self
         picker.delegate = self
         settingCollectionView()
+        setCategoryData()
+        setUniqueCategory()
         resultLabel.text = ""
         
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
@@ -97,6 +99,9 @@ class InputViewController:UIViewController{
     }
     
     private var paymentModelList: [PaymentModel] = []
+    let realm = try! Realm()
+    var categoryList:[CategoryModel] = []
+    var uniqueCategory = [""]
     
     private func tapAddButton(){
         let realm = try! Realm()
@@ -149,8 +154,14 @@ class InputViewController:UIViewController{
         diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
-    //更新が必要
-    var paymentList = ["食費","衣類","通信費","保険"]
+    func setCategoryData(){
+        let result = realm.objects(CategoryModel.self)
+        categoryList = Array(result)
+    }
+    
+    func setUniqueCategory(){
+        uniqueCategory = Array(Set(categoryList.map({$0.name})))
+    }
     
     //日記記入関連の画面
     @IBOutlet weak var titleTextField: UITextField!
@@ -181,6 +192,8 @@ class InputViewController:UIViewController{
     private var diaryModel = DiaryModel()
     private var diaryList:[DiaryModel] = []
     
+    
+    
     private func addDiary(){
         let realm = try! Realm()
         try! realm.write{
@@ -201,19 +214,19 @@ class InputViewController:UIViewController{
 extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        paymentList.count
+        categoryList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
-        contentLabel.text = paymentList[indexPath.row]
+        contentLabel.text = uniqueCategory[indexPath.row]
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        resultLabel.text = paymentList[indexPath.row]
+        resultLabel.text = uniqueCategory[indexPath.row]
     }
 }
 

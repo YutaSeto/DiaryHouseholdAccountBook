@@ -10,6 +10,10 @@ import RealmSwift
 import UIKit
 import Charts
 
+protocol HouseholdAccountBookControllerDelegate{
+    func updateList()
+}
+
 class HouseholdAccountBookViewController:UIViewController{
     
     
@@ -40,14 +44,20 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     func dayBack(){
+        householdeAccountBookViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
+        setMonthFirstAndEnd()
         dayLabel.text = monthDateFormatter.string(from: date)
+        self.householdeAccountBookViewControllerDelegate?.updateList()
         paymentTableView.reloadData()
     }
     
     func dayPass(){
+        householdeAccountBookViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
+        setMonthFirstAndEnd()
         dayLabel.text = monthDateFormatter.string(from: date)
+        self.householdeAccountBookViewControllerDelegate?.updateList()
         paymentTableView.reloadData()
     }
     
@@ -126,7 +136,7 @@ class HouseholdAccountBookViewController:UIViewController{
         setPaymentData()
         setPaymentBudgetData()
         setCategoryData()
-        setBudgetTableViewDataSourse()
+        setPaymentTableViewDataSourse()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -146,6 +156,8 @@ class HouseholdAccountBookViewController:UIViewController{
     private var categoryList:[CategoryModel] = []
     private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
     let realm = try! Realm()
+    
+    var householdeAccountBookViewControllerDelegate:HouseholdAccountBookControllerDelegate?
     
     func setCategoryData(){
         let result = realm.objects(CategoryModel.self)
@@ -176,7 +188,7 @@ class HouseholdAccountBookViewController:UIViewController{
         present(inputViewController,animated:true)
     }
     
-    func setBudgetTableViewDataSourse(){
+    func setPaymentTableViewDataSourse(){
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
         let firstDay = calendar.date(from: comps)!
@@ -224,22 +236,6 @@ class HouseholdAccountBookViewController:UIViewController{
             paymentTableView.reloadData()
         }
     }
-    
-//    func sumPrices(){
-//        //重複しない費目の配列
-//        var uniqueExpenceItems = Array(Set(paymentModelList.map({$0.expenceItem})))
-//        var sumPrice:Int = 0
-//
-//        let realm = try! Realm()
-//        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
-//        for i in 0 ..< result.count{
-//            if result[i].expenceItem == "食費" {
-//                sumPrice += result[i].price
-//            }
-//        }
-//        print(sumPrice)
-//
-//    }
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
@@ -265,5 +261,15 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         cell.budgetLabel.text = String(item.budgetPrice)
         cell.priceLabel.text = item.paymentPrice
         return cell
+    }
+}
+
+extension HouseholdAccountBookViewController:HouseholdAccountBookControllerDelegate{
+    func updateList() {
+        setPaymentData()
+        setCategoryData()
+        setPaymentBudgetData()
+        paymentTableViewDataSource = []
+        setPaymentTableViewDataSourse()
     }
 }
