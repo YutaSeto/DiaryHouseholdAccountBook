@@ -77,11 +77,7 @@ class BudgetViewController: UIViewController{
     func setMonthFirstAndEnd(){
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        var firstDay = calendar.date(from: comps)!
-        let add = DateComponents(day:1)
-        let addMonth = DateComponents(month: 1, day: -1)
-        firstDay = calendar.date(byAdding: add, to: firstDay)!
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!
+        let firstDay = calendar.date(from: comps)!
     }
     
     override func viewDidLoad() {
@@ -184,15 +180,14 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             }
             self.budgetViewControllerDelegate?.updateList()
             self.budgetTableView.reloadData()
-            print(self.budgetTableViewDataSource)
         })
         
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
         })
         
-        alert.addAction(edit)
         alert.addAction(cancel)
+        alert.addAction(edit)
         self.present(alert,animated: true, completion: nil)
     }
 }

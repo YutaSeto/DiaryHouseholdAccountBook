@@ -12,6 +12,6 @@ import RealmSwift
 struct HouseholdAccountBookTableViewCellItem{
     var id: String = ""
     var name: String = ""
-    var paymentPrice:String = ""
+    var paymentPrice:Int = 0
     var budgetPrice: Int = 0
 }

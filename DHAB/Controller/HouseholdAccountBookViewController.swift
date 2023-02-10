@@ -81,11 +81,7 @@ class HouseholdAccountBookViewController:UIViewController{
     func setMonthFirstAndEnd(){
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        var firstDay = calendar.date(from: comps)!
-        let add = DateComponents(day:1)
-        let addMonth = DateComponents(month: 1, day: -1)
-        firstDay = calendar.date(byAdding: add, to: firstDay)!
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!
+        let firstDay = calendar.date(from: comps)!
     }
     
     //subView関連
@@ -199,20 +195,19 @@ class HouseholdAccountBookViewController:UIViewController{
         
         let dayCheckPayment = paymentList.filter({$0.date >= firstDay})
         let dayCheckPayment2 = dayCheckPayment.filter{$0.date <= lastDay}
-        let sum = dayCheckPayment2.map{$0.price}.reduce(0){$0 + $1}
 
         
         categoryList.forEach{ expense in
             if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 
 //                dayCheckPayment2のcategoryとexpenseのnameが一致しているpriceを全て取得する
-                var sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
+                let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
                 
                 
                 let item = HouseholdAccountBookTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
-                    paymentPrice:String(sum),
+                    paymentPrice:sum,
                     budgetPrice: budget.budgetPrice
                 )
                 paymentTableViewDataSource.append(item)
@@ -241,6 +236,10 @@ class HouseholdAccountBookViewController:UIViewController{
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
     func updatePayment() {
         setPaymentData()
+        setCategoryData()
+        setPaymentBudgetData()
+        paymentTableViewDataSource = []
+        setPaymentTableViewDataSourse()
     }
     
     func updateDiary() {
@@ -259,7 +258,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         let item = paymentTableViewDataSource[indexPath.row]
         cell.expenceItemLabel.text = item.name
         cell.budgetLabel.text = String(item.budgetPrice)
-        cell.priceLabel.text = item.paymentPrice
+        cell.priceLabel.text = String(item.paymentPrice)
+        cell.balanceLabel.text = String(item.budgetPrice - item.paymentPrice)
         return cell
     }
 }

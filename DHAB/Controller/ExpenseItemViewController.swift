@@ -62,8 +62,8 @@ class ExpenseItemViewController: UIViewController{
         })
         
         
-        alert.addAction(add)
         alert.addAction(cancel)
+        alert.addAction(add)
         
         self.present(alert,animated:true, completion: nil)
     }
@@ -112,8 +112,8 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
         })
         
         
-        alert.addAction(add)
         alert.addAction(cancel)
+        alert.addAction(add)
         
         self.present(alert,animated:true, completion: nil)
     }

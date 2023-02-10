@@ -30,41 +30,70 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="○○円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUS-S5-QbJ">
-                                <rect key="frame" x="110" y="289" width="49" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="○○" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUS-S5-QbJ">
+                                <rect key="frame" x="110" y="289" width="31" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="××円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VhE-dt-iw7">
-                                <rect key="frame" x="335" y="289" width="38" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="××" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VhE-dt-iw7">
+                                <rect key="frame" x="324" y="289" width="21" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="月間収入" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19N-kI-EUS">
-                                <rect key="frame" x="245" y="289" width="70" height="21"/>
+                                <rect key="frame" x="234" y="289" width="70" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="css-5S-DnE">
+                                <rect key="frame" x="0.0" y="320" width="393" height="32"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujV-T4-dlh">
+                                <rect key="frame" x="146" y="289" width="18" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxo-Gc-Wjh">
+                                <rect key="frame" x="355" y="289" width="18" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aya-VF-Jvv">
+                                <rect key="frame" x="0.0" y="362" width="393" height="456"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xMG-n1-35c"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="css-5S-DnE" firstAttribute="top" secondItem="VJf-hq-Hty" secondAttribute="bottom" constant="10" id="1OY-jU-Ge1"/>
                             <constraint firstItem="VhE-dt-iw7" firstAttribute="leading" secondItem="19N-kI-EUS" secondAttribute="trailing" constant="20" id="2A4-O2-5Du"/>
                             <constraint firstItem="fUS-S5-QbJ" firstAttribute="leading" secondItem="VJf-hq-Hty" secondAttribute="trailing" constant="20" id="9ct-PK-dTB"/>
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="top" secondItem="xMG-n1-35c" secondAttribute="top" constant="20" id="9sF-1B-Mc6"/>
+                            <constraint firstItem="ujV-T4-dlh" firstAttribute="leading" secondItem="fUS-S5-QbJ" secondAttribute="trailing" constant="5" id="C3B-Xr-kBt"/>
                             <constraint firstItem="19N-kI-EUS" firstAttribute="centerY" secondItem="VJf-hq-Hty" secondAttribute="centerY" id="DDh-Oi-xyp"/>
+                            <constraint firstItem="xMG-n1-35c" firstAttribute="trailing" secondItem="dxo-Gc-Wjh" secondAttribute="trailing" constant="20" id="JOe-Ss-fc0"/>
+                            <constraint firstItem="ujV-T4-dlh" firstAttribute="bottom" secondItem="fUS-S5-QbJ" secondAttribute="bottom" id="LVY-7G-RvJ"/>
                             <constraint firstItem="VhE-dt-iw7" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="LXm-hZ-0Iy"/>
                             <constraint firstItem="VhE-dt-iw7" firstAttribute="centerY" secondItem="VJf-hq-Hty" secondAttribute="centerY" id="PSa-Jl-UKo"/>
-                            <constraint firstItem="xMG-n1-35c" firstAttribute="trailing" secondItem="VhE-dt-iw7" secondAttribute="trailing" constant="20" id="Pom-tk-7iK"/>
                             <constraint firstItem="19N-kI-EUS" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="RKJ-cX-kVk"/>
                             <constraint firstItem="VJf-hq-Hty" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="SIM-4t-R2w"/>
+                            <constraint firstItem="dxo-Gc-Wjh" firstAttribute="leading" secondItem="VhE-dt-iw7" secondAttribute="trailing" constant="10" id="XX9-m7-xPd"/>
                             <constraint firstItem="fUS-S5-QbJ" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="btL-E8-L3A"/>
                             <constraint firstItem="VJf-hq-Hty" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" constant="20" id="dBk-cE-fje"/>
                             <constraint firstItem="fUS-S5-QbJ" firstAttribute="centerY" secondItem="VJf-hq-Hty" secondAttribute="centerY" id="gau-tf-9Yx"/>
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="lKZ-HS-FzP"/>
+                            <constraint firstItem="dxo-Gc-Wjh" firstAttribute="bottom" secondItem="VhE-dt-iw7" secondAttribute="bottom" id="p4e-ua-ZS5"/>
                             <constraint firstAttribute="trailing" secondItem="REY-mA-5Sv" secondAttribute="trailing" id="wE1-KA-Si8"/>
                         </constraints>
                     </view>
@@ -74,6 +103,18 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cK5-qv-65j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="4lS-zk-Ukt">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="yjP-TY-qCb"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+                <view contentMode="scaleToFill" id="TIg-NR-Nlx">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="e7O-Rt-d31"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="458.77862595419845" y="-978.16901408450713"/>
         </scene>
