@@ -11,7 +11,7 @@ import RealmSwift
 import UIKit
 
 class CalendarViewController:UIViewController{
-    
+    var date:Date = Date()
     private var paymentModelList:[PaymentModel] = []
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
@@ -19,8 +19,7 @@ class CalendarViewController:UIViewController{
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
-    var date:Date = Date()
-    
+        
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var householdAccountBookTableView: UITableView!
     

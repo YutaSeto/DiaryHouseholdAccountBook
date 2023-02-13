@@ -27,59 +27,6 @@ class BudgetViewController: UIViewController{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var datePassButton: UIButton!
     
-    @IBAction func dateBackButton(_ sender: UIButton) {
-        dayBack()
-    }
-    
-    @IBAction func datePassButton(_ sender: UIButton) {
-        dayPass()
-    }
-    
-    @objc func tapConfigureButton(){
-        let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-        let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
-        navigationController?.pushViewController(budgetConfigureViewController, animated: true)
-        budgetConfigureViewController.date = date
-    }
-    
-    func setNavigationBarButton(){
-        let buttonActionSelector:Selector = #selector(tapConfigureButton)
-        let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add,target: self,action: buttonActionSelector)
-        navigationItem.rightBarButtonItem = rightBarButton
-    }
-    
-    
-    func dayBack(){
-        budgetViewControllerDelegate = self
-        date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
-        setMonthFirstAndEnd()
-        dateLabel.text = dateFormatter.string(from: date)
-        self.budgetViewControllerDelegate?.updateList()
-        budgetTableView.reloadData()
-    }
-    
-    func dayPass(){
-        budgetViewControllerDelegate = self
-        date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
-        setMonthFirstAndEnd()
-        dateLabel.text = dateFormatter.string(from: date)
-        self.budgetViewControllerDelegate?.updateList()
-        budgetTableView.reloadData()
-    }
-    
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
-    
-    func setMonthFirstAndEnd(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
@@ -92,7 +39,50 @@ class BudgetViewController: UIViewController{
         setNavigationBarButton()
     }
     
-
+    @IBAction func dateBackButton(_ sender: UIButton) {
+        dayBack()
+    }
+    
+    @IBAction func datePassButton(_ sender: UIButton) {
+        dayPass()
+    }
+    
+    @objc func tapConfigureButton(){
+        let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
+        let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
+        navigationController?.pushViewController(budgetConfigureViewController, animated: true)
+        budgetConfigureViewController.delegate = self
+        budgetConfigureViewController.date = date
+    }
+    
+    func setNavigationBarButton(){
+        let buttonActionSelector:Selector = #selector(tapConfigureButton)
+        let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add,target: self,action: buttonActionSelector)
+        navigationItem.rightBarButtonItem = rightBarButton
+    }
+    
+    func dayBack(){
+        budgetViewControllerDelegate = self
+        date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
+        dateLabel.text = dateFormatter.string(from: date)
+        self.budgetViewControllerDelegate?.updateList()
+        budgetTableView.reloadData()
+    }
+    
+    func dayPass(){
+        budgetViewControllerDelegate = self
+        date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
+        dateLabel.text = dateFormatter.string(from: date)
+        self.budgetViewControllerDelegate?.updateList()
+        budgetTableView.reloadData()
+    }
+    
+    private var dateFormatter: DateFormatter{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy年MM月"
+        dateFormatter.locale = Locale(identifier: "ja-JP")
+        return dateFormatter
+    }
     
     func setCategoryData(){
         let result = realm.objects(CategoryModel.self)
@@ -198,5 +188,14 @@ extension BudgetViewController:BudgetViewControllerDelegate{
         setCategoryData()
         budgetTableViewDataSource = []
         setBudgetTableViewDataSourse()
+    }
+}
+
+extension BudgetViewController:BudgetConfigureViewControllerDelegate{
+    func updateBudget(){
+            setPaymentBudgetData()
+            setCategoryData()
+            budgetTableViewDataSource = []
+            setBudgetTableViewDataSourse()
     }
 }

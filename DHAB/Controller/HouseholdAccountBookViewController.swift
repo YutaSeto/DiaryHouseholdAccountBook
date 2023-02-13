@@ -16,11 +16,29 @@ protocol HouseholdAccountBookControllerDelegate{
 
 class HouseholdAccountBookViewController:UIViewController{
     
-    
+    private var date = Date()
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var dayBackButton: UIButton!
     @IBOutlet weak var dayPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
+    
+    override func viewDidLoad() {
+        paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        dayLabel.text = monthDateFormatter.string(from:date)
+        addPaymentView()
+        settingSubView()
+        paymentTableView.delegate = self
+        paymentTableView.dataSource = self
+        configureInputButton()
+        setPaymentData()
+        setPaymentBudgetData()
+        setCategoryData()
+        setPaymentTableViewDataSourse()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
     
     @IBAction func householdAccountBookSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
@@ -46,7 +64,6 @@ class HouseholdAccountBookViewController:UIViewController{
     func dayBack(){
         householdeAccountBookViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
-        setMonthFirstAndEnd()
         dayLabel.text = monthDateFormatter.string(from: date)
         self.householdeAccountBookViewControllerDelegate?.updateList()
         paymentTableView.reloadData()
@@ -55,13 +72,11 @@ class HouseholdAccountBookViewController:UIViewController{
     func dayPass(){
         householdeAccountBookViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
-        setMonthFirstAndEnd()
         dayLabel.text = monthDateFormatter.string(from: date)
         self.householdeAccountBookViewControllerDelegate?.updateList()
         paymentTableView.reloadData()
     }
     
-    private var date = Date()
     
     private var monthDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
@@ -76,12 +91,6 @@ class HouseholdAccountBookViewController:UIViewController{
         dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
-    }
-    
-    func setMonthFirstAndEnd(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
     }
     
     //subView関連
@@ -121,39 +130,27 @@ class HouseholdAccountBookViewController:UIViewController{
                                   height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
     }
     
-    override func viewDidLoad() {
-        paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        dayLabel.text = monthDateFormatter.string(from:date)
-        addPaymentView()
-        settingSubView()
-        paymentTableView.delegate = self
-        paymentTableView.dataSource = self
-        configureInputButton()
-        setPaymentData()
-        setPaymentBudgetData()
-        setCategoryData()
-        setPaymentTableViewDataSourse()
-    }
+
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
+
     
     //支出画面の設定
-    @IBOutlet weak var paymentTableView: UITableView!
-    @IBOutlet weak var inputButton: UIButton!
+
     
-    @IBAction func inputButton(_ sender: Any) {
-        tapInputButton()
-    }
+
     
     private var paymentList:[PaymentModel] = []
     private var paymentBudgetList:[PaymentBudgetModel] = []
     private var categoryList:[CategoryModel] = []
     private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
     let realm = try! Realm()
-    
     var householdeAccountBookViewControllerDelegate:HouseholdAccountBookControllerDelegate?
+    
+    @IBOutlet weak var paymentTableView: UITableView!
+    @IBOutlet weak var inputButton: UIButton!
+    @IBAction func inputButton(_ sender: Any) {
+        tapInputButton()
+    }
     
     func setCategoryData(){
         let result = realm.objects(CategoryModel.self)

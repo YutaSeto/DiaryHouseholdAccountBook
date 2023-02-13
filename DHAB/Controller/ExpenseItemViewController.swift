@@ -22,20 +22,20 @@ class ExpenseItemViewController: UIViewController{
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var expenseItemTableView: UITableView!
     
-    @IBAction func addButton(_ sender: UIButton) {
-        tapAddButton()
-    }
-    
-    func configureAddButton(){
-        addButton.layer.cornerRadius = addButton.bounds.width / 2
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setCategoryData()
         expenseItemTableView.delegate = self
         expenseItemTableView.dataSource = self
         configureAddButton()
+    }
+    
+    @IBAction func addButton(_ sender: UIButton) {
+        tapAddButton()
+    }
+    
+    func configureAddButton(){
+        addButton.layer.cornerRadius = addButton.bounds.width / 2
     }
     
     @objc func tapAddButton(){
@@ -91,7 +91,6 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         categoryViewControllerDelegate = self
-        let cell = expenseItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let alert = UIAlertController(title: "\(categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
         var textFieldOnAlert = UITextField()
         alert.addTextField{ textField in

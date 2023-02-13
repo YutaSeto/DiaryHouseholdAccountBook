@@ -19,10 +19,31 @@ class InputViewController:UIViewController{
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
+    
+    override func viewDidLoad(){
+        super.viewDidLoad()
+        addHouseholdAccountView()
+        settingSubView()
+        dateLabel.text = dateFormatter.string(from:date)
+        diaryDateLabel.text = dateFormatter.string(from: date)
+        paymentCollectionView.delegate = self
+        paymentCollectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        picker.delegate = self
+        settingCollectionView()
+        setCategoryData()
+        setUniqueCategory()
+        resultLabel.text = ""
+        let nib = UINib(nibName: "SliderViewCell", bundle: nil)
+        collectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
+    }
+    
     private func addHouseholdAccountView(){
         diaryView.removeFromSuperview()
         self.view.addSubview(householdAccountBookView)
     }
+    
     func addDiaryView(){
         householdAccountBookView.removeFromSuperview()
         self.view.addSubview(diaryView)
@@ -52,36 +73,22 @@ class InputViewController:UIViewController{
         }
     }
     
-    override func viewDidLoad(){
-        super.viewDidLoad()
-        addHouseholdAccountView()
-        settingSubView()
-        dateLabel.text = dateFormatter.string(from:date)
-        diaryDateLabel.text = dateFormatter.string(from: date)
-        paymentCollectionView.delegate = self
-        paymentCollectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        picker.delegate = self
-        settingCollectionView()
-        setCategoryData()
-        setUniqueCategory()
-        resultLabel.text = ""
-        
-        let nib = UINib(nibName: "SliderViewCell", bundle: nil)
-        collectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
 
-        
-    }
     
     //家計簿記入画面関連
+    private var paymentModelList: [PaymentModel] = []
+    let realm = try! Realm()
+    var categoryList:[CategoryModel] = []
+    var uniqueCategory = [""]
+    public var date:Date = Date()
+    public var inputViewControllerDelegate:InputViewControllerDelegate?
+    
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    public var date:Date = Date()
-    public var inputViewControllerDelegate:InputViewControllerDelegate?
     @IBOutlet weak var priceTextField: UITextField!
+    
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
     }
@@ -97,11 +104,6 @@ class InputViewController:UIViewController{
     @IBAction func continueAddButton(_ sender: UIButton) {
         tapContinueAddButton()
     }
-    
-    private var paymentModelList: [PaymentModel] = []
-    let realm = try! Realm()
-    var categoryList:[CategoryModel] = []
-    var uniqueCategory = [""]
     
     private func tapAddButton(){
         let realm = try! Realm()
@@ -164,11 +166,16 @@ class InputViewController:UIViewController{
     }
     
     //日記記入関連の画面
+    var imageArray = [UIImage(named: "sample1")!]
+    var currentIndex = 0
+    let picker = UIImagePickerController()
+    private var diaryModel = DiaryModel()
+    private var diaryList:[DiaryModel] = []
+    
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var diaryDateLabel: UILabel!
     @IBOutlet var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
-    
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
@@ -184,15 +191,6 @@ class InputViewController:UIViewController{
     @IBAction func addImageButton(_ sender: UIButton) {
         present(picker, animated:true)
     }
-    
-    var imageArray = [UIImage(named: "sample1")!]
-    var currentIndex = 0
-    
-    let picker = UIImagePickerController()
-    private var diaryModel = DiaryModel()
-    private var diaryList:[DiaryModel] = []
-    
-    
     
     private func addDiary(){
         let realm = try! Realm()

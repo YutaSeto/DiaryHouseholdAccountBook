@@ -48,11 +48,11 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="css-5S-DnE">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="css-5S-DnE">
                                 <rect key="frame" x="0.0" y="320" width="393" height="32"/>
                                 <segments>
-                                    <segment title="First"/>
-                                    <segment title="Second"/>
+                                    <segment title="家計簿"/>
+                                    <segment title="日記"/>
                                 </segments>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujV-T4-dlh">
@@ -85,6 +85,7 @@
                             <constraint firstItem="xMG-n1-35c" firstAttribute="trailing" secondItem="dxo-Gc-Wjh" secondAttribute="trailing" constant="20" id="JOe-Ss-fc0"/>
                             <constraint firstItem="ujV-T4-dlh" firstAttribute="bottom" secondItem="fUS-S5-QbJ" secondAttribute="bottom" id="LVY-7G-RvJ"/>
                             <constraint firstItem="VhE-dt-iw7" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="LXm-hZ-0Iy"/>
+                            <constraint firstItem="css-5S-DnE" firstAttribute="trailing" secondItem="xMG-n1-35c" secondAttribute="trailing" id="MZ5-d2-Isd"/>
                             <constraint firstItem="VhE-dt-iw7" firstAttribute="centerY" secondItem="VJf-hq-Hty" secondAttribute="centerY" id="PSa-Jl-UKo"/>
                             <constraint firstItem="19N-kI-EUS" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="RKJ-cX-kVk"/>
                             <constraint firstItem="VJf-hq-Hty" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="10" id="SIM-4t-R2w"/>
@@ -94,6 +95,7 @@
                             <constraint firstItem="fUS-S5-QbJ" firstAttribute="centerY" secondItem="VJf-hq-Hty" secondAttribute="centerY" id="gau-tf-9Yx"/>
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="lKZ-HS-FzP"/>
                             <constraint firstItem="dxo-Gc-Wjh" firstAttribute="bottom" secondItem="VhE-dt-iw7" secondAttribute="bottom" id="p4e-ua-ZS5"/>
+                            <constraint firstItem="css-5S-DnE" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="uS2-s0-w36"/>
                             <constraint firstAttribute="trailing" secondItem="REY-mA-5Sv" secondAttribute="trailing" id="wE1-KA-Si8"/>
                         </constraints>
                     </view>

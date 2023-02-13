@@ -14,6 +14,16 @@ class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchB
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        setDiaryData()
+        diaryTableView.delegate = self
+        diaryTableView.dataSource = self
+        searchBar.delegate = self
+        configureTapDiaryInputButton()
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let realm = try! Realm()
         
@@ -32,6 +42,7 @@ class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchB
     private var result: Results<DiaryModel>?
     
     @IBOutlet weak var inputDiaryButton: UIButton!
+    @IBOutlet weak var diaryTableView: UITableView!
     @IBAction func inputDiaryButton(_ sender: UIButton) {
         tapInputDiaryButton()
     }
@@ -48,19 +59,6 @@ class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchB
         inputDiaryButton.layer.cornerRadius = inputDiaryButton.bounds.width / 2
     }
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        setDiaryData()
-        diaryTableView.delegate = self
-        diaryTableView.dataSource = self
-        searchBar.delegate = self
-        configureTapDiaryInputButton()
-    }
-    
-    @IBOutlet weak var diaryTableView: UITableView!
-    
     func setDiaryData(){
         let realm = try! Realm()
         let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
@@ -69,6 +67,7 @@ class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchB
     }
     
     func updatePayment() {
+        return
     }
     
     func updateDiary() {

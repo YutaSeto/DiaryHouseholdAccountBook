@@ -35,7 +35,7 @@
                             <constraint firstAttribute="width" constant="150" id="9Hv-mx-e9m"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
+                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                     </textField>
                 </subviews>
                 <constraints>
