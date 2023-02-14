@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="by8-77-SUy">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--日記-->
+        <scene sceneID="8km-jt-p5Q">
+            <objects>
+                <viewController id="by8-77-SUy" customClass="DiaryViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9UA-CI-xop">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NMR-Rv-0L7">
+                                <rect key="frame" x="20" y="155" width="353" height="643"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4XQ-L2-GUj">
+                                <rect key="frame" x="303" y="728" width="60" height="60"/>
+                                <color key="backgroundColor" name="AccentColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="2op-e5-MMf"/>
+                                    <constraint firstAttribute="height" constant="60" id="n9o-2y-UHj"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="+"/>
+                                <connections>
+                                    <action selector="inputDiaryButton:" destination="by8-77-SUy" eventType="touchUpInside" id="Z8q-qJ-p0c"/>
+                                </connections>
+                            </button>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ZbT-AH-T2c">
+                                <rect key="frame" x="0.0" y="79" width="393" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="by8-77-SUy" id="ren-Zr-Xw6"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Ybz-Ja-FBK"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="NMR-Rv-0L7" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" constant="20" id="1Nw-m7-9KE"/>
+                            <constraint firstItem="Ybz-Ja-FBK" firstAttribute="trailing" secondItem="4XQ-L2-GUj" secondAttribute="trailing" constant="30" id="AOO-JY-5xY"/>
+                            <constraint firstItem="Ybz-Ja-FBK" firstAttribute="trailing" secondItem="NMR-Rv-0L7" secondAttribute="trailing" constant="20" id="Apb-uG-gXY"/>
+                            <constraint firstItem="NMR-Rv-0L7" firstAttribute="top" secondItem="ZbT-AH-T2c" secondAttribute="bottom" constant="20" id="LeD-DP-Wsg"/>
+                            <constraint firstItem="Ybz-Ja-FBK" firstAttribute="bottom" secondItem="4XQ-L2-GUj" secondAttribute="bottom" constant="30" id="Zj4-cF-s4z"/>
+                            <constraint firstAttribute="trailing" secondItem="ZbT-AH-T2c" secondAttribute="trailing" id="fm4-FR-HOW"/>
+                            <constraint firstItem="ZbT-AH-T2c" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" id="q4y-y6-6EG"/>
+                            <constraint firstItem="ZbT-AH-T2c" firstAttribute="top" secondItem="Ybz-Ja-FBK" secondAttribute="top" constant="20" id="qUd-6u-TEz"/>
+                            <constraint firstItem="Ybz-Ja-FBK" firstAttribute="bottom" secondItem="NMR-Rv-0L7" secondAttribute="bottom" constant="20" id="yKP-XW-gmT"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="日記" id="Jb0-b9-YGq"/>
+                    <connections>
+                        <outlet property="diaryTableView" destination="NMR-Rv-0L7" id="xTT-ek-wbZ"/>
+                        <outlet property="inputDiaryButton" destination="4XQ-L2-GUj" id="LCz-qZ-pfo"/>
+                        <outlet property="searchBar" destination="ZbT-AH-T2c" id="N72-FZ-oYg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1ut-K9-19e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="458.77862595419845" y="350.7042253521127"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -8,8 +8,12 @@
 import Foundation
 import RealmSwift
 
-class MemberModel:Object{
-    @objc dynamic var id: String = UUID().uuidString
-    dynamic var payments: List<PaymentModel>!
-    dynamic var incomes: List<IncomeModel>!
+@objcMembers class Record: Object{
+    dynamic var id: String = UUID().uuidString
+    dynamic let payments: List<PaymentModel>! = nil
+    dynamic let incomes: List<IncomeModel>! = nil
+    dynamic let diary:DiaryModel! = nil
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

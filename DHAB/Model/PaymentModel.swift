@@ -11,5 +11,6 @@ import RealmSwift
 class PaymentModel: Object{
     @objc dynamic var date:Date = Date()
     @objc dynamic var price:Int = 0
-    @objc dynamic var expenceItem:String = ""
+    @objc dynamic var memo:String = ""
+    @objc dynamic var category:String = ""
 }

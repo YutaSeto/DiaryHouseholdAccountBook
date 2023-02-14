@@ -2,135 +2,28 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NmV-93-Oop">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--カレンダー-->
-        <scene sceneID="uVf-xK-Kjw">
-            <objects>
-                <viewController id="DaN-PZ-fk8" customClass="CalendarViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="SzG-jX-AJJ">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="cPs-Wl-Bp5"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="カレンダー" id="3aL-f9-ofv"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wbl-kJ-fS3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="459" y="-1012"/>
-        </scene>
-        <!--入力-->
-        <scene sceneID="x4k-D1-qcF">
-            <objects>
-                <viewController id="PqI-vN-2ou" customClass="InputViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="hjS-KI-uHS">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zgF-Pr-4U3">
-                                <rect key="frame" x="20" y="79" width="353" height="32"/>
-                                <segments>
-                                    <segment title="家計簿"/>
-                                    <segment title="日記"/>
-                                </segments>
-                                <color key="selectedSegmentTintColor" systemColor="systemYellowColor"/>
-                            </segmentedControl>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="WHE-Xr-z3Q"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="WHE-Xr-z3Q" firstAttribute="trailing" secondItem="zgF-Pr-4U3" secondAttribute="trailing" constant="20" id="5tC-jy-xcd"/>
-                            <constraint firstItem="zgF-Pr-4U3" firstAttribute="top" secondItem="WHE-Xr-z3Q" secondAttribute="top" constant="20" id="eph-l3-M0f"/>
-                            <constraint firstItem="zgF-Pr-4U3" firstAttribute="leading" secondItem="WHE-Xr-z3Q" secondAttribute="leading" constant="20" id="s9M-lZ-h0T"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="入力" id="bRp-GQ-DDW"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="D05-Uh-P2X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-274" y="-1000"/>
-        </scene>
-        <!--家計簿-->
-        <scene sceneID="2gj-Ff-IyR">
-            <objects>
-                <viewController id="4qR-Do-t7u" customClass="HouseholdAccountBookViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="KMa-iy-Jch">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="JRl-Cf-eiu"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="家計簿" id="FgF-MW-KVv"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7LX-83-8LM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="459" y="-308"/>
-        </scene>
-        <!--日記-->
-        <scene sceneID="YL7-Yh-S1C">
-            <objects>
-                <viewController id="7Jc-Og-Ww8" customClass="DiaryViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="a5G-37-Vt3">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="tUb-Sl-yqc"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="日記" id="5dh-1J-4eu"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ecg-wr-9W6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="459" y="365"/>
-        </scene>
-        <!--設定-->
-        <scene sceneID="qOt-K7-o2g">
-            <objects>
-                <viewController id="9RF-5U-ZlD" customClass="SettingViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="KiE-DU-oWr">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="lp3-C9-opl"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="設定" id="1vM-db-VQc"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="k2U-8j-QbX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-228" y="365"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="U4G-DK-pUF">
             <objects>
-                <tabBarController id="NmV-93-Oop" sceneMemberID="viewController">
+                <tabBarController id="NmV-93-Oop" customClass="TabBarController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="KvN-Rw-dwi"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zzS-oz-AB5">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="PqI-vN-2ou" kind="relationship" relationship="viewControllers" id="8pS-zt-y4t"/>
-                        <segue destination="DaN-PZ-fk8" kind="relationship" relationship="viewControllers" id="eKh-fQ-4qe"/>
-                        <segue destination="4qR-Do-t7u" kind="relationship" relationship="viewControllers" id="tjn-SA-6ZO"/>
-                        <segue destination="7Jc-Og-Ww8" kind="relationship" relationship="viewControllers" id="Fle-Fj-R5K"/>
-                        <segue destination="9RF-5U-ZlD" kind="relationship" relationship="viewControllers" id="Up2-vJ-tbp"/>
+                        <outlet property="tabMenuBar" destination="zzS-oz-AB5" id="5Mv-JU-CFW"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hGM-Vm-qF0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-273" y="-308"/>
+            <point key="canvasLocation" x="-1219" y="-308"/>
         </scene>
     </scenes>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>
