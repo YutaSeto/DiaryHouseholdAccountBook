@@ -13,6 +13,7 @@ import UIKit
 class CalendarViewController:UIViewController{
     var date:Date = Date()
     private var paymentModelList:[PaymentModel] = []
+    private var diaryModelList:[DiaryModel] = []
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
@@ -23,22 +24,32 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var householdAccountBookTableView: UITableView!
     
-    func setPaymentData(){
-        let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
-        paymentModelList = Array(result)
-    }
+
     
     override func viewDidLoad(){
         super.viewDidLoad()
         calendarView.dataSource = self
         calendarView.delegate = self
         setPaymentData()
+        setDiaryData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setPaymentData()
+        setDiaryData()
+    }
+    
+    func setPaymentData(){
+        let realm = try! Realm()
+        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
+        paymentModelList = Array(result)
+    }
+    
+    func setDiaryData(){
+        let realm = try! Realm()
+        let result = realm.objects(DiaryModel.self)
+        diaryModelList = Array(result)
     }
 }
 
@@ -54,11 +65,17 @@ class CalendarViewController:UIViewController{
     
 }
 
-extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate{
+extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance{
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateList = paymentModelList.map({$0.date.zeroclock})
         let isEqualDate = dateList.contains(date.zeroclock)
         return isEqualDate ? 1 : 0
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor?{
+        let dateList = diaryModelList.map({$0.date.zeroclock})
+        let isEqualDate = dateList.contains(date.zeroclock)
+        return isEqualDate ? UIColor.orange : .white
     }
 }
 
