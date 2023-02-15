@@ -88,6 +88,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var priceTextField: UITextField!
+    @IBOutlet weak var paymentCollectionView: UICollectionView!
     
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
@@ -95,7 +96,6 @@ class InputViewController:UIViewController{
     @IBAction func dayPassButton(_ sender: UIButton) {
         dayPass()
     }
-    @IBOutlet weak var paymentCollectionView: UICollectionView!
     
     @IBAction func addButton(_ sender: UIButton) {
         tapAddButton()

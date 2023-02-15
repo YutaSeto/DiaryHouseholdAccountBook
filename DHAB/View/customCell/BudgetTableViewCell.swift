@@ -11,6 +11,7 @@ class BudgetTableViewCell: UITableViewCell {
 
     @IBOutlet weak var budgetCategoryLabel: UILabel!
     @IBOutlet weak var budgetPriceLabel: UILabel!
+    @IBOutlet weak var memoLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

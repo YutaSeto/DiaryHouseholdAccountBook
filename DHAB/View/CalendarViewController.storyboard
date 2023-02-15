@@ -54,6 +54,9 @@
                                     <segment title="家計簿"/>
                                     <segment title="日記"/>
                                 </segments>
+                                <connections>
+                                    <action selector="segmentedControl:" destination="yy7-sQ-xHa" eventType="valueChanged" id="JRr-qk-Ox1"/>
+                                </connections>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujV-T4-dlh">
                                 <rect key="frame" x="146" y="289" width="18" height="21"/>
@@ -67,11 +70,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aya-VF-Jvv">
-                                <rect key="frame" x="0.0" y="362" width="393" height="456"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xMG-n1-35c"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -101,15 +99,33 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="カレンダー" id="rLI-lD-Jzf"/>
                     <connections>
-                        <outlet property="calendarView" destination="REY-mA-5Sv" id="EJM-c2-3QR"/>
+                        <outlet property="calendarView" destination="REY-mA-5Sv" id="iTd-Ap-WRt"/>
+                        <outlet property="diaryView" destination="TIg-NR-Nlx" id="vkE-cE-mwN"/>
+                        <outlet property="householdAccountBookTableView" destination="zUL-r6-iy1" id="A3l-8U-8lc"/>
+                        <outlet property="incomeLabel" destination="VhE-dt-iw7" id="X8d-DW-MPY"/>
+                        <outlet property="paymentLabel" destination="fUS-S5-QbJ" id="Jyb-1a-OK7"/>
+                        <outlet property="paymentView" destination="4lS-zk-Ukt" id="dgP-Y3-hUj"/>
+                        <outlet property="segmentedControl" destination="css-5S-DnE" id="g7t-NK-x6d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cK5-qv-65j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <view contentMode="scaleToFill" id="4lS-zk-Ukt">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zUL-r6-iy1">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </tableView>
+                    </subviews>
                     <viewLayoutGuide key="safeArea" id="yjP-TY-qCb"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="backgroundColor" systemColor="systemBrownColor"/>
+                    <constraints>
+                        <constraint firstItem="zUL-r6-iy1" firstAttribute="top" secondItem="4lS-zk-Ukt" secondAttribute="top" id="DoH-98-ydH"/>
+                        <constraint firstItem="yjP-TY-qCb" firstAttribute="bottom" secondItem="zUL-r6-iy1" secondAttribute="bottom" id="E0i-Pk-6eB"/>
+                        <constraint firstItem="yjP-TY-qCb" firstAttribute="trailing" secondItem="zUL-r6-iy1" secondAttribute="trailing" id="jjP-f2-DUT"/>
+                        <constraint firstItem="zUL-r6-iy1" firstAttribute="leading" secondItem="yjP-TY-qCb" secondAttribute="leading" id="kQh-kg-2lb"/>
+                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="TIg-NR-Nlx">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -124,6 +140,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBrownColor">
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

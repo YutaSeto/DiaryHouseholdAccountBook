@@ -35,9 +35,17 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uI1-hj-1bo">
+                        <rect key="frame" x="55" y="22" width="0.0" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Xlc-KT-DTH" firstAttribute="bottom" secondItem="5ts-jV-BMt" secondAttribute="bottom" id="9fU-88-XW5"/>
+                    <constraint firstItem="uI1-hj-1bo" firstAttribute="leading" secondItem="Pog-Os-Oc2" secondAttribute="trailing" constant="10" id="I5b-hh-UcL"/>
+                    <constraint firstItem="uI1-hj-1bo" firstAttribute="centerY" secondItem="Pog-Os-Oc2" secondAttribute="centerY" id="UWp-Ar-i6W"/>
                     <constraint firstItem="Pog-Os-Oc2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="VyO-wP-MN2"/>
                     <constraint firstAttribute="trailing" secondItem="Xlc-KT-DTH" secondAttribute="trailing" constant="10" id="XiD-Vc-vn5"/>
                     <constraint firstItem="Pog-Os-Oc2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Z0g-el-8ia"/>
@@ -49,7 +57,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="budgetCategoryLabel" destination="Pog-Os-Oc2" id="zGI-P6-ri8"/>
-                <outlet property="budgetPriceLabel" destination="5ts-jV-BMt" id="Bhg-N3-1tF"/>
+                <outlet property="budgetPriceLabel" destination="5ts-jV-BMt" id="FLP-eQ-kZ2"/>
+                <outlet property="memoLabel" destination="uI1-hj-1bo" id="aXv-Yy-M73"/>
             </connections>
             <point key="canvasLocation" x="36.641221374045799" y="20.422535211267608"/>
         </tableViewCell>
