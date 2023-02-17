@@ -34,12 +34,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xhI-sG-bq6">
-                                <rect key="frame" x="20" y="197.33333333333331" width="353" height="640.66666666666674"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1q-Ob-FDW">
-                                <rect key="frame" x="179" y="157" width="35" height="20.333333333333343"/>
+                                <rect key="frame" x="179.33333333333334" y="157" width="34.666666666666657" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -63,23 +59,47 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MiR-Ip-r7S">
                                 <rect key="frame" x="0.0" y="103" width="393" height="44"/>
                             </navigationBar>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="R3R-66-kYe">
+                                <rect key="frame" x="0.0" y="177.33333333333331" width="393" height="640.66666666666674"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="nI3-vJ-yQc">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="640.66666666666663"/>
+                                        <subviews>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xhI-sG-bq6">
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="281"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="3dC-mR-JTs"/>
+                                                </constraints>
+                                            </tableView>
+                                            <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kb8-k1-Syc">
+                                                <rect key="frame" x="0.0" y="281" width="393" height="359.66666666666674"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="4gw-5n-dch"/>
+                                                </constraints>
+                                            </tableView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="j1q-Ob-FDW" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="8ym-zQ-6Ex"/>
                             <constraint firstItem="A1Q-fs-JLs" firstAttribute="leading" secondItem="j1q-Ob-FDW" secondAttribute="trailing" constant="40" id="Am6-A5-PEb"/>
-                            <constraint firstItem="xhI-sG-bq6" firstAttribute="top" secondItem="j1q-Ob-FDW" secondAttribute="bottom" constant="20" id="E43-v4-oQd"/>
-                            <constraint firstItem="xhI-sG-bq6" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" constant="20" id="ObB-ss-NyB"/>
+                            <constraint firstItem="R3R-66-kYe" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Kz1-Q1-ICR"/>
                             <constraint firstItem="j1q-Ob-FDW" firstAttribute="leading" secondItem="OIl-i1-Ohr" secondAttribute="trailing" constant="40" id="RIZ-QX-t6S"/>
                             <constraint firstItem="j1q-Ob-FDW" firstAttribute="centerY" secondItem="OIl-i1-Ohr" secondAttribute="centerY" id="b2u-uY-rmm"/>
                             <constraint firstItem="MiR-Ip-r7S" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="dV9-vY-Ppk"/>
                             <constraint firstItem="A1Q-fs-JLs" firstAttribute="centerY" secondItem="OIl-i1-Ohr" secondAttribute="centerY" id="eDJ-Mq-3hP"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="xhI-sG-bq6" secondAttribute="trailing" constant="20" id="g0L-Qe-2Pd"/>
                             <constraint firstItem="MiR-Ip-r7S" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="gtu-XS-ktT"/>
                             <constraint firstItem="MiR-Ip-r7S" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="hBL-r8-jB7"/>
-                            <constraint firstItem="xhI-sG-bq6" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="kAY-Ki-9E7"/>
                             <constraint firstItem="j1q-Ob-FDW" firstAttribute="top" secondItem="MiR-Ip-r7S" secondAttribute="bottom" constant="10" id="lhC-my-sp0"/>
+                            <constraint firstItem="R3R-66-kYe" firstAttribute="top" secondItem="j1q-Ob-FDW" secondAttribute="bottom" id="rGU-ot-hoG"/>
+                            <constraint firstAttribute="trailing" secondItem="R3R-66-kYe" secondAttribute="trailing" id="tou-aN-aLv"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="R3R-66-kYe" secondAttribute="bottom" id="y5e-Ps-fLK"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Jwf-Et-RGy"/>
@@ -88,6 +108,7 @@
                         <outlet property="dateBackButton" destination="OIl-i1-Ohr" id="cMi-vC-6b0"/>
                         <outlet property="dateLabel" destination="j1q-Ob-FDW" id="r40-bV-KVB"/>
                         <outlet property="datePassButton" destination="A1Q-fs-JLs" id="Uf3-9I-Xa7"/>
+                        <outlet property="incomeBudgetTableView" destination="kb8-k1-Syc" id="PTn-h1-gRE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
