@@ -25,6 +25,10 @@ class CalendarViewController:UIViewController{
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
+    
+    @IBOutlet weak var subDateLabel: UILabel!
+    @IBOutlet weak var subPaymentLabel: UILabel!
+    @IBOutlet weak var subIncomeLabel: UILabel!
         
     @IBOutlet weak var paymentLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
@@ -46,6 +50,7 @@ class CalendarViewController:UIViewController{
         showPaymentView()
         setPaymentData()
         setDiaryData()
+        setSubLabel()
         paymentLabel.text = String(sumPayment(selectedDate))
     }
     
@@ -72,7 +77,7 @@ class CalendarViewController:UIViewController{
     
     func settingSubView(){
         paymentView.frame = CGRect(x: 0,
-                                   y: segmentedControl.frame.minY + segmentedControl.frame.height,
+                                   y: segmentedControl.frame.minY,
                                    width: self.view.frame.width,
                                    height: (self.view.frame.height - segmentedControl.frame.minY))
         diaryView.frame = CGRect(x: 0,
@@ -94,6 +99,17 @@ class CalendarViewController:UIViewController{
         let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
         let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
         return sum
+    }
+    
+    func sumDayPayment(_: Date) -> Int{
+        let sum = paymentModelList.filter{$0.date.zeroclock == selectedDate.zeroclock}.map{$0.price}.reduce(0){$0 + $1}
+        return sum
+    }
+    
+    func setSubLabel(){
+        subDateLabel.text = dayDateFormatter.string(from: selectedDate)
+        subPaymentLabel.text = String(sumDayPayment(selectedDate))
+        subIncomeLabel.text = String(0)
     }
     
     func setTableView(_: Date)-> [PaymentModel]{
@@ -160,10 +176,9 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         selectedDate = date
         paymentLabel.text = String(sumPayment(selectedDate))
+        setSubLabel()
         //ここでテーブルビューを新しくする処理
         householdAccountBookTableView.reloadData()
-        print(selectedDate)
-        print(setTableView(selectedDate))
     }
 }
 
