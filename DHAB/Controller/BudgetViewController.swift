@@ -31,6 +31,8 @@ class BudgetViewController: UIViewController{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var datePassButton: UIButton!
     
+    @IBOutlet weak var budgetTableViewHeight: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
@@ -49,6 +51,11 @@ class BudgetViewController: UIViewController{
         setNavigationBarButton()
         print(incomeBudgetTableViewDataSource)
         print(incomeBudgetList)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        budgetTableViewHeight.constant = CGFloat(budgetTableView.contentSize.height)
     }
     
     @IBAction func dateBackButton(_ sender: UIButton) {
@@ -195,6 +202,15 @@ class BudgetViewController: UIViewController{
 
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView.tag == 0{
+            return "支出"
+        }else if tableView.tag == 1{
+            return "収入"
+        }
+        return ""
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 0{
             return budgetTableViewDataSource.count
@@ -290,6 +306,8 @@ extension BudgetViewController:BudgetViewControllerDelegate{
         incomeBudgetTableViewDataSource = []
         setBudgetTableViewDataSourse()
         setIncomeBudgetTableViewDataSourse()
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
 }
 
@@ -301,5 +319,7 @@ extension BudgetViewController:BudgetConfigureViewControllerDelegate{
         incomeBudgetTableViewDataSource = []
         setBudgetTableViewDataSourse()
         setIncomeBudgetTableViewDataSourse()
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
 }

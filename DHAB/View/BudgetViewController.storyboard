@@ -69,7 +69,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="281"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="3dC-mR-JTs"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="750" constant="200" id="3dC-mR-JTs"/>
                                                 </constraints>
                                             </tableView>
                                             <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kb8-k1-Syc">
@@ -105,6 +105,7 @@
                     <navigationItem key="navigationItem" id="Jwf-Et-RGy"/>
                     <connections>
                         <outlet property="budgetTableView" destination="xhI-sG-bq6" id="uEJ-7v-yKk"/>
+                        <outlet property="budgetTableViewHeight" destination="3dC-mR-JTs" id="Wke-Jl-f4s"/>
                         <outlet property="dateBackButton" destination="OIl-i1-Ohr" id="cMi-vC-6b0"/>
                         <outlet property="dateLabel" destination="j1q-Ob-FDW" id="r40-bV-KVB"/>
                         <outlet property="datePassButton" destination="A1Q-fs-JLs" id="Uf3-9I-Xa7"/>
