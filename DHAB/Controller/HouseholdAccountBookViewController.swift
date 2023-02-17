@@ -135,9 +135,6 @@ class HouseholdAccountBookViewController:UIViewController{
 
     
     //支出画面の設定
-
-    
-
     
     private var paymentList:[PaymentModel] = []
     private var paymentBudgetList:[PaymentBudgetModel] = []
@@ -196,10 +193,7 @@ class HouseholdAccountBookViewController:UIViewController{
         
         categoryList.forEach{ expense in
             if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
-                
-//                dayCheckPayment2のcategoryとexpenseのnameが一致しているpriceを全て取得する
                 let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
-                
                 
                 let item = HouseholdAccountBookTableViewCellItem(
                     id: budget.id,
@@ -228,6 +222,9 @@ class HouseholdAccountBookViewController:UIViewController{
             paymentTableView.reloadData()
         }
     }
+    //収入画面の設定
+    
+    
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{

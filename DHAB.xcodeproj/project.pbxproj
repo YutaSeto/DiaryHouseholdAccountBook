@@ -29,6 +29,7 @@
 		237B860329704A68001E4639 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B860229704A68001E4639 /* CalendarViewController.swift */; };
 		237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B860429704A7E001E4639 /* HouseholdAccountBookViewController.swift */; };
 		237B860729704A8D001E4639 /* DiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B860629704A8D001E4639 /* DiaryViewController.swift */; };
+		238D4032299F802C00A011A4 /* IncomeCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D4031299F802C00A011A4 /* IncomeCategoryModel.swift */; };
 		239137F52970FF5500BF09F8 /* DiaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239137F32970FF5500BF09F8 /* DiaryTableViewCell.swift */; };
 		239137F62970FF5500BF09F8 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 239137F42970FF5500BF09F8 /* DiaryTableViewCell.xib */; };
 		23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ACC13F297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift */; };
@@ -74,6 +75,7 @@
 		237B860229704A68001E4639 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		237B860429704A7E001E4639 /* HouseholdAccountBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookViewController.swift; sourceTree = "<group>"; };
 		237B860629704A8D001E4639 /* DiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryViewController.swift; sourceTree = "<group>"; };
+		238D4031299F802C00A011A4 /* IncomeCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeCategoryModel.swift; sourceTree = "<group>"; };
 		239137F32970FF5500BF09F8 /* DiaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryTableViewCell.swift; sourceTree = "<group>"; };
 		239137F42970FF5500BF09F8 /* DiaryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiaryTableViewCell.xib; sourceTree = "<group>"; };
 		23ACC13F297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetConfigureTableViewCell.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				23EEE7D82972D7C000A52939 /* PaymentBudgetModel.swift */,
 				23EEE7DA2972D7D200A52939 /* IncomeBudgetModel.swift */,
 				23507F0D298E9AD70025EAE5 /* CategoryModel.swift */,
+				238D4031299F802C00A011A4 /* IncomeCategoryModel.swift */,
 				23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */,
 				23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */,
 			);
@@ -351,6 +354,7 @@
 			files = (
 				23507F10298E9BD00025EAE5 /* BudgetTableViewCellItem.swift in Sources */,
 				23EC22BB2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift in Sources */,
+				238D4032299F802C00A011A4 /* IncomeCategoryModel.swift in Sources */,
 				23EEE7D92972D7C000A52939 /* PaymentBudgetModel.swift in Sources */,
 				23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */,
 				237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */,
