@@ -51,11 +51,11 @@ class InputViewController:UIViewController{
     
     private func settingSubView(){
         householdAccountBookView.frame = CGRect(x: 0,
-                                                y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
+                                                y: viewChangeSegmentedControl.frame.minY,
                                                 width: self.view.frame.width,
                                                 height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
         diaryView.frame = CGRect(x: 0,
-                                 y: viewChangeSegmentedControl.frame.minY + viewChangeSegmentedControl.frame.height,
+                                 y: viewChangeSegmentedControl.frame.minY,
                                  width: self.view.frame.width,
                                  height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
     }

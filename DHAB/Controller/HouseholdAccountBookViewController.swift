@@ -117,7 +117,7 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func settingSubView(){
         paymentView.frame = CGRect(x: 0,
-                                   y: householdAccountBookSegmentedControl.frame.minY + householdAccountBookSegmentedControl.frame.height,
+                                   y: householdAccountBookSegmentedControl.frame.minY ,
                                    width: self.view.frame.width,
                                    height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
         incomeView.frame = CGRect(x: 0,
@@ -253,10 +253,16 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
         let item = paymentTableViewDataSource[indexPath.row]
+        cell.data = item
         cell.expenceItemLabel.text = item.name
         cell.budgetLabel.text = String(item.budgetPrice)
         cell.priceLabel.text = String(item.paymentPrice)
         cell.balanceLabel.text = String(item.budgetPrice - item.paymentPrice)
+        guard item.budgetPrice != 0 else {
+            cell.progressBar.setProgress(Float(0), animated: false)
+            return cell
+        }
+        cell.progressBar.setProgress(1 - Float(Float(item.budgetPrice - item.paymentPrice) / Float(item.budgetPrice)), animated: false)
         return cell
     }
 }

@@ -127,6 +127,7 @@
                 <outlet property="budgetLabel" destination="RCu-ak-NHr" id="F82-qy-8dS"/>
                 <outlet property="expenceItemLabel" destination="Y0l-1T-Lhb" id="yTE-yK-dmI"/>
                 <outlet property="priceLabel" destination="qLv-Qu-mJT" id="JY2-4z-SuD"/>
+                <outlet property="progressBar" destination="NHB-Rl-9K9" id="Ahm-pX-1f5"/>
             </connections>
             <point key="canvasLocation" x="42.748091603053432" y="33.802816901408455"/>
         </tableViewCell>
