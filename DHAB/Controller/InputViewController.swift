@@ -12,6 +12,7 @@ import RealmSwift
 protocol InputViewControllerDelegate{
     func updatePayment()
     func updateDiary()
+    func updateCalendar()
 }
 
 class InputViewController:UIViewController{
@@ -115,6 +116,8 @@ class InputViewController:UIViewController{
             realm.add(paymentModel)
         }
         inputViewControllerDelegate?.updatePayment()
+        inputViewControllerDelegate?.updateCalendar()
+        
         dismiss(animated: true)
     }
     

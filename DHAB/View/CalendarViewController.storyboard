@@ -100,6 +100,7 @@
                     <tabBarItem key="tabBarItem" title="カレンダー" id="rLI-lD-Jzf"/>
                     <connections>
                         <outlet property="calendarView" destination="REY-mA-5Sv" id="iTd-Ap-WRt"/>
+                        <outlet property="diaryTableView" destination="oEJ-FK-ufX" id="HNU-bg-iUZ"/>
                         <outlet property="diaryView" destination="TIg-NR-Nlx" id="vkE-cE-mwN"/>
                         <outlet property="householdAccountBookTableView" destination="zUL-r6-iy1" id="A3l-8U-8lc"/>
                         <outlet property="incomeLabel" destination="VhE-dt-iw7" id="X8d-DW-MPY"/>
@@ -117,7 +118,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zUL-r6-iy1">
-                            <rect key="frame" x="0.0" y="30" width="393" height="270"/>
+                            <rect key="frame" x="0.0" y="89" width="393" height="211"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日時ラベル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bvv-Bq-ylK">
@@ -171,10 +172,22 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="TIg-NR-Nlx">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="oEJ-FK-ufX">
+                            <rect key="frame" x="0.0" y="59" width="393" height="241"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </tableView>
+                    </subviews>
                     <viewLayoutGuide key="safeArea" id="e7O-Rt-d31"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="e7O-Rt-d31" firstAttribute="bottom" secondItem="oEJ-FK-ufX" secondAttribute="bottom" id="7Yf-Ns-FIQ"/>
+                        <constraint firstItem="e7O-Rt-d31" firstAttribute="trailing" secondItem="oEJ-FK-ufX" secondAttribute="trailing" id="8Jb-Sd-OD4"/>
+                        <constraint firstItem="oEJ-FK-ufX" firstAttribute="top" secondItem="e7O-Rt-d31" secondAttribute="top" id="Hod-7M-P9d"/>
+                        <constraint firstItem="oEJ-FK-ufX" firstAttribute="leading" secondItem="e7O-Rt-d31" secondAttribute="leading" id="RV5-cu-7Yb"/>
+                    </constraints>
                 </view>
             </objects>
             <point key="canvasLocation" x="458.77862595419845" y="-978.16901408450713"/>

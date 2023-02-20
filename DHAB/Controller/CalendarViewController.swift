@@ -10,15 +10,12 @@ import FSCalendar
 import RealmSwift
 import UIKit
 
-protocol CalendarViewDelegate{
-    
-}
-
 class CalendarViewController:UIViewController{
     var date:Date = Date()
     var selectedDate:Date = Date()
     private var paymentModelList:[PaymentModel] = []
     private var diaryModelList:[DiaryModel] = []
+    private var incomeModelList:[IncomeModel] = []
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
@@ -29,11 +26,11 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var subDateLabel: UILabel!
     @IBOutlet weak var subPaymentLabel: UILabel!
     @IBOutlet weak var subIncomeLabel: UILabel!
-        
     @IBOutlet weak var paymentLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var householdAccountBookTableView: UITableView!
+    @IBOutlet weak var diaryTableView: UITableView!
     @IBOutlet var paymentView: UIView!
     @IBOutlet var diaryView: UIView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -42,8 +39,11 @@ class CalendarViewController:UIViewController{
     override func viewDidLoad(){
         super.viewDidLoad()
         householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
+        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         calendarView.dataSource = self
         calendarView.delegate = self
+        diaryTableView.delegate = self
+        diaryTableView.dataSource = self
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
         settingSubView()
@@ -51,7 +51,8 @@ class CalendarViewController:UIViewController{
         setPaymentData()
         setDiaryData()
         setSubLabel()
-        paymentLabel.text = String(sumPayment(selectedDate))
+        setSum()
+        
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -87,7 +88,6 @@ class CalendarViewController:UIViewController{
     }
     
     func sumPayment(_:Date) -> Int{
-         //日付を取得、取得した日付の月首と月末を取得、paymentModelListを２つのフィルターをかける、mapとreduceで合計する
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: selectedDate)
         let day = calendar.date(from: comps)!
@@ -106,6 +106,25 @@ class CalendarViewController:UIViewController{
         return sum
     }
     
+    func sumIncome(_:Date) -> Int{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: selectedDate)
+        let day = calendar.date(from: comps)!
+        let addDay = DateComponents(day: 1)
+        let firstDay = calendar.date(byAdding: addDay, to: day)
+        let addMonth = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
+        let dayCheck = incomeModelList.filter({$0.date >= firstDay!})
+        let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
+        let sum = dayCheck2.map{$0.amount}.reduce(0){$0 + $1}
+        return sum
+    }
+    
+    func setSum(){
+        paymentLabel.text = String(sumPayment(selectedDate))
+        incomeLabel.text = String(sumIncome(selectedDate))
+    }
+    
     func setSubLabel(){
         subDateLabel.text = dayDateFormatter.string(from: selectedDate)
         subPaymentLabel.text = String(sumDayPayment(selectedDate))
@@ -113,11 +132,20 @@ class CalendarViewController:UIViewController{
     }
     
     func setTableView(_: Date)-> [PaymentModel]{
-        //空の配列を宣言、filterを使ってdateがselectedDateと同じ場合配列に追加、配列を返す
         var result:[PaymentModel] = []
         paymentModelList.forEach{payment in
             if payment.date.zeroclock == selectedDate.zeroclock{
                 result.append(payment)
+            }
+        }
+        return result
+    }
+    
+    func setDiaryTableView(_ : Date)-> [DiaryModel]{
+        var result:[DiaryModel] = []
+        diaryModelList.forEach{diary in
+            if diary.date.zeroclock == selectedDate.zeroclock{
+                result.append(diary)
             }
         }
         return result
@@ -139,24 +167,83 @@ class CalendarViewController:UIViewController{
         let realm = try! Realm()
         let result = realm.objects(DiaryModel.self)
         diaryModelList = Array(result)
+        diaryTableView.reloadData()
     }
     
+    func  setInputViewControllerDelegate() {
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return print("エラーが発生")}
+        inputViewController.inputViewControllerDelegate = self
+    }
 }
 
 
-    extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
+extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        setTableView(selectedDate).count
+        if tableView.tag == 0 {
+            return setTableView(selectedDate).count
+        }else if tableView.tag == 1{
+            return setDiaryTableView(selectedDate).count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = householdAccountBookTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        let item = setTableView(selectedDate)[indexPath.row]
-        cell.budgetCategoryLabel.text = item.category
-        cell.budgetPriceLabel.text = String(item.price)
-        cell.memoLabel.text = item.memo
-        return cell
+        if tableView.tag == 0{
+            let cell = householdAccountBookTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+            let item = setTableView(selectedDate)[indexPath.row]
+            cell.budgetCategoryLabel.text = item.category
+            cell.budgetPriceLabel.text = String(item.price)
+            cell.memoLabel.text = item.memo
+            return cell
+        }else if tableView.tag == 1{
+            let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
+            let item = setDiaryTableView(selectedDate)[indexPath.row]
+            cell.cellDateLabel.text = dayDateFormatter.string(from: item.date)
+            cell.cellTextLabel.text = item.title
+            cell.cellTitleLabel.text = item.title
+            return cell
+        }
+        return UITableViewCell()
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if tableView.tag == 0{
+            let targetItem = paymentModelList[indexPath.row]
+            let realm = try! Realm()
+            try! realm.write{
+                realm.delete(targetItem)
+            }
+            paymentModelList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            setSum()
+            setSubLabel()
+        }else if tableView.tag == 1{
+            let targetItem = diaryModelList[indexPath.row]
+            let realm = try! Realm()
+            try! realm.write{
+                realm.delete(targetItem)
+            }
+            diaryModelList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+}
+
+extension CalendarViewController:InputViewControllerDelegate{
+    func updatePayment() {
+        return
+    }
+    
+    func updateDiary() {
+        return
+    }
+    
+    func updateCalendar() {
+        setPaymentData()
+        print("アップデートカレンダーが実行されました")
+    }
+    
     
 }
 
@@ -177,8 +264,8 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         selectedDate = date
         paymentLabel.text = String(sumPayment(selectedDate))
         setSubLabel()
-        //ここでテーブルビューを新しくする処理
         householdAccountBookTableView.reloadData()
+        diaryTableView.reloadData()
     }
 }
 

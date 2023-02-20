@@ -9,7 +9,8 @@ import Foundation
 import RealmSwift
 import UIKit
 
-class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchBarDelegate{
+class DiaryViewController:UIViewController,UISearchBarDelegate{
+    
     
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
@@ -65,15 +66,20 @@ class DiaryViewController:UIViewController,InputViewControllerDelegate,UISearchB
         diaryList = Array(result)
         diaryTableView.reloadData()
     }
-    
+}
+
+extension DiaryViewController:InputViewControllerDelegate{
     func updatePayment() {
+        return
+    }
+    
+    func updateCalendar() {
         return
     }
     
     func updateDiary() {
         setDiaryData()
     }
-    
 }
 
 extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{

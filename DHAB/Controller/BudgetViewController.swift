@@ -23,6 +23,7 @@ class BudgetViewController: UIViewController{
     var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
+    var inputViewControllerDelegate:InputViewControllerDelegate?
     let realm = try! Realm()
     
     @IBOutlet weak var budgetTableView: UITableView!
@@ -49,8 +50,6 @@ class BudgetViewController: UIViewController{
         setBudgetTableViewDataSourse()
         setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
-        print(incomeBudgetTableViewDataSource)
-        print(incomeBudgetList)
     }
     
     override func viewWillLayoutSubviews() {

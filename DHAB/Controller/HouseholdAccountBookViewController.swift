@@ -24,16 +24,23 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewDidLoad() {
         paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        incomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         dayLabel.text = monthDateFormatter.string(from:date)
         addPaymentView()
         settingSubView()
         paymentTableView.delegate = self
         paymentTableView.dataSource = self
+        incomeTableView.delegate = self
+        incomeTableView.dataSource = self
         configureInputButton()
         setPaymentData()
+        setIncomeData()
         setPaymentBudgetData()
+        setIncomeBudgetData()
+        setIncomeCategoryData()
         setCategoryData()
         setPaymentTableViewDataSourse()
+        setIncomeTableViewDataSourse()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,11 +128,11 @@ class HouseholdAccountBookViewController:UIViewController{
                                    width: self.view.frame.width,
                                    height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
         incomeView.frame = CGRect(x: 0,
-                                  y: householdAccountBookSegmentedControl.frame.minY + householdAccountBookSegmentedControl.frame.height,
+                                  y: householdAccountBookSegmentedControl.frame.minY ,
                                   width: self.view.frame.width,
                                   height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
         savingView.frame = CGRect(x: 0,
-                                  y: householdAccountBookSegmentedControl.frame.minY + householdAccountBookSegmentedControl.frame.height,
+                                  y: householdAccountBookSegmentedControl.frame.minY ,
                                   width: self.view.frame.width,
                                   height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
     }
@@ -169,6 +176,7 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func configureInputButton(){
         inputButton.layer.cornerRadius = inputButton.bounds.width / 2
+        addIncomeButton.layer.cornerRadius = addIncomeButton.bounds.width / 2
     }
     
     func  tapInputButton(){
@@ -189,8 +197,6 @@ class HouseholdAccountBookViewController:UIViewController{
         
         let dayCheckPayment = paymentList.filter({$0.date >= firstDay})
         let dayCheckPayment2 = dayCheckPayment.filter{$0.date <= lastDay}
-
-        
         categoryList.forEach{ expense in
             if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
@@ -224,10 +230,87 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     //収入画面の設定
     
+    var incomeList:[IncomeModel] = []
+    var incomeBudgetList:[IncomeBudgetModel] = []
+    var incomeCategoryList:[IncomeCategoryModel] = []
+    var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
+    @IBOutlet weak var addIncomeButton: UIButton!
+    @IBOutlet weak var incomeTableView: UITableView!
+    @IBAction func addIncomeButton(_ sender: UIButton) {
+        tapAddIncomeButton()
+    }
     
+    func tapAddIncomeButton(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+        inputViewController.inputViewControllerDelegate = self
+        present(inputViewController,animated:true)
+    }
+    
+    func setIncomeData(){
+        let result = realm.objects(IncomeModel.self)
+        incomeList = Array(result)
+        incomeTableView.reloadData()
+    }
+    
+    func setIncomeCategoryData(){
+        let result = realm.objects(IncomeCategoryModel.self)
+        incomeCategoryList = Array(result)
+    }
+    
+    func setIncomeBudgetData(){
+        let result = realm.objects(IncomeBudgetModel.self)
+        incomeBudgetList = Array(result)
+    }
+    
+    func setIncomeTableViewDataSourse(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let firstDay = calendar.date(from: comps)!
+        let add = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        let dayCheckBudget = incomeBudgetList.filter({$0.budgetDate >= firstDay})
+        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+        
+        let dayCheckPayment = incomeList.filter({$0.date >= firstDay})
+        let dayCheckPayment2 = dayCheckPayment.filter{$0.date <= lastDay}
+        incomeCategoryList.forEach{ expense in
+            if let budget:IncomeBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+                let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.amount}.reduce(0){$0 + $1}
+                
+                let item = IncomeTableViewCellItem(
+                    id: budget.id,
+                    name: expense.name,
+                    incomePrice:sum,
+                    incomeBudget: budget.budgetPrice
+                )
+                incomeTableViewDataSource.append(item)
+            } else {
+                let data = IncomeBudgetModel()
+                data.id = UUID().uuidString
+                data.expenseID = expense.id
+                data.budgetDate = date
+                data.budgetPrice = 0
+                try! realm.write { realm.add(data)}
+                incomeBudgetList.append(data)
+                
+                let item = IncomeTableViewCellItem(
+                    id:data.id,
+                    name: expense.name,
+                    incomeBudget:data.budgetPrice
+                )
+                incomeTableViewDataSource.append(item)
+            }
+            incomeTableView.reloadData()
+        }
+    }
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
+    func updateCalendar() {
+        return
+    }
+    
     func updatePayment() {
         setPaymentData()
         setCategoryData()
@@ -244,23 +327,45 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
 extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categoryList.count
+        if tableView.tag == 0{
+            return categoryList.count
+        }else if tableView.tag == 1{
+            return incomeCategoryList.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
-        let item = paymentTableViewDataSource[indexPath.row]
-        cell.data = item
-        cell.expenceItemLabel.text = item.name
-        cell.budgetLabel.text = String(item.budgetPrice)
-        cell.priceLabel.text = String(item.paymentPrice)
-        cell.balanceLabel.text = String(item.budgetPrice - item.paymentPrice)
-        guard item.budgetPrice != 0 else {
-            cell.progressBar.setProgress(Float(0), animated: false)
+        if tableView.tag == 0{
+            let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
+            let item = paymentTableViewDataSource[indexPath.row]
+            cell.data = item
+            cell.expenceItemLabel.text = item.name
+            cell.budgetLabel.text = String(item.budgetPrice)
+            cell.priceLabel.text = String(item.paymentPrice)
+            cell.balanceLabel.text = String(item.budgetPrice - item.paymentPrice)
+            guard item.budgetPrice != 0 else {
+                cell.progressBar.setProgress(Float(0), animated: false)
+                return cell
+            }
+            cell.progressBar.setProgress(1 - Float(Float(item.budgetPrice - item.paymentPrice) / Float(item.budgetPrice)), animated: false)
+            return cell
+        }else if tableView.tag == 1{
+            let cell = incomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
+            let item = incomeTableViewDataSource[indexPath.row]
+            cell.incomeData = item
+            cell.expenceItemLabel.text = item.name
+            cell.budgetLabel.text = String(item.incomeBudget)
+            cell.priceLabel.text = String(item.incomePrice)
+            cell.balanceLabel.text = String(item.incomeBudget - item.incomePrice)
+            guard item.incomeBudget != 0 else {
+                cell.progressBar.setProgress(Float(0), animated: false)
+                return cell
+            }
+            cell.progressBar.setProgress(1 - Float(Float(item.incomeBudget - item.incomePrice) / Float(item.incomeBudget)), animated: false)
             return cell
         }
-        cell.progressBar.setProgress(1 - Float(Float(item.budgetPrice - item.paymentPrice) / Float(item.budgetPrice)), animated: false)
-        return cell
+        return UITableViewCell()
     }
 }
 

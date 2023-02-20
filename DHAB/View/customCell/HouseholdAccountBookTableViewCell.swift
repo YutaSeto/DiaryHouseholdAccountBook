@@ -20,6 +20,7 @@ class HouseholdAccountBookTableViewCell: UITableViewCell {
     @IBOutlet weak var progressBar: UIProgressView!
     var delegate:HouseholdAccountBookTableViewCellDelegate?
     var data:HouseholdAccountBookTableViewCellItem?
+    var incomeData:IncomeTableViewCellItem?
     
     override func awakeFromNib() {
         super.awakeFromNib()
