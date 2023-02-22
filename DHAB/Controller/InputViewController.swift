@@ -177,7 +177,7 @@ class InputViewController:UIViewController{
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var diaryDateLabel: UILabel!
-    @IBOutlet var addImageButton: UIView!
+    @IBOutlet weak var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
@@ -236,22 +236,24 @@ extension InputViewController:UIImagePickerControllerDelegate,UINavigationContro
     
     private func imagePickerConroller(_ Picker: UIImagePickerController,didFinishPickingMediaWithInfo info: [String: Any]){
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-          return imageArray.count
+            return imageArray.count
         }
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-          let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderViewCell
-          cell.image = imageArray[indexPath.item]
-          return cell
+            let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderViewCell
+            let contentImageView = cell.contentView.viewWithTag(0) as! UIImageView
+            cell.image = imageArray[indexPath.item]
+            contentImageView.image = imageArray[indexPath.item]
+            return cell
         }
         
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-          return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
+            return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
         }
         
         
         func scrollViewDidScroll(_ scrollView: UIScrollView) {
-          currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
+            currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
         }
         //画像選択時の処理
         let images = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage

@@ -53,6 +53,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as! InputViewController
         inputViewController.inputViewControllerDelegate = self
         present(inputViewController,animated:true)
+        inputViewController.viewChangeSegmentedControl.selectedSegmentIndex = 1
         inputViewController.addDiaryView()
     }
     

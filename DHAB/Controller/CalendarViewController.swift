@@ -200,7 +200,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
             let item = setDiaryTableView(selectedDate)[indexPath.row]
             cell.cellDateLabel.text = dayDateFormatter.string(from: item.date)
-            cell.cellTextLabel.text = item.title
+            cell.cellTextLabel.text = item.text
             cell.cellTitleLabel.text = item.title
             return cell
         }
