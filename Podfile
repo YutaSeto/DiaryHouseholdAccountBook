@@ -7,6 +7,7 @@ target 'DHAB' do
   pod 'RealmSwift'
   pod 'Charts'
   pod 'FSCalendar'
+  pod 'DKImagePickerController'
 
   # Pods for DHAB
 

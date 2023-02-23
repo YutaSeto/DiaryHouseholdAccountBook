@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import DKImagePickerController
 
 protocol InputViewControllerDelegate{
     func updatePayment()
@@ -36,8 +37,9 @@ class InputViewController:UIViewController{
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     
     //日記関連
-    var imageArray = [UIImage(named: "sample1")!]
+    var imageArray:[UIImage] = []
     var currentIndex = 0
+    var collectionViewDelegate:UICollectionViewDelegate?
     private var diaryModel = DiaryModel()
     private var diaryList:[DiaryModel] = []
     @IBOutlet weak var titleTextField: UITextField!
@@ -48,21 +50,24 @@ class InputViewController:UIViewController{
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        paymentCollectionView.delegate = self
+        paymentCollectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        imageCollectionView.delegate = self
+        imageCollectionView.dataSource = self
+        let nib = UINib(nibName: "SliderViewCell", bundle: nil)
+        imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
+        configureSliderCell()
         addSubView()
         addHouseholdAccountView()
         settingSubView()
         dateLabel.text = dateFormatter.string(from:date)
         diaryDateLabel.text = dateFormatter.string(from: date)
-        paymentCollectionView.delegate = self
-        paymentCollectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.dataSource = self
         settingCollectionView()
         setCategoryData()
         setUniqueCategory()
         resultLabel.text = ""
-        let nib = UINib(nibName: "SliderViewCell", bundle: nil)
-        collectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
     }
     
     func addSubView(){
@@ -197,8 +202,11 @@ class InputViewController:UIViewController{
         addDiary()
     }
     @IBAction func addImageButton(_ sender: UIButton) {
+        collectionViewDelegate = self
         let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
         picker.delegate = self
+        picker.mediaTypes = ["public.image"]
         present(picker, animated:true)
     }
     
@@ -220,51 +228,57 @@ class InputViewController:UIViewController{
 extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categoryList.count
+        if collectionView.tag == 0{
+            return categoryList.count
+        }else if collectionView.tag == 1{
+            return imageArray.count
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
-        contentLabel.text = uniqueCategory[indexPath.row]
-        
-        return cell
+        if collectionView.tag == 0{
+            let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+            let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
+            contentLabel.text = uniqueCategory[indexPath.row]
+            return cell
+        }else if collectionView.tag == 1{
+            let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath)
+            let contentImageView = cell.contentView.viewWithTag(1) as! UIImageView
+            let cellImage = imageArray[indexPath.item]
+            contentImageView.image = cellImage
+            return cell
+        }
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         resultLabel.text = uniqueCategory[indexPath.row]
     }
+    
+    //修正必要。大きさがアスペクト比を崩さずに、コレクションビューセルの縦の幅に合わせるよう
+    func configureSliderCell(){
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 80,height: 60)
+        imageCollectionView.collectionViewLayout = layout
+    }
 }
 
-
 extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout{
-    
-    private func imagePickerConroller(_ Picker: UIImagePickerController,didFinishPickingMediaWithInfo info: [String: Any]){
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return imageArray.count
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderViewCell
-            let contentImageView = cell.contentView.viewWithTag(0) as! UIImageView
-            cell.image = imageArray[indexPath.item]
-            contentImageView.image = imageArray[indexPath.item]
-            return cell
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
-        }
-        
-        
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
-        }
-        //画像選択時の処理
-        let images = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage
+   
+    func imagePickerController(_ picker:UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]){
+        imageArray.append(info[.originalImage] as! UIImage)
+        imageCollectionView.reloadData()
+        dismiss(animated:true)
     }
     
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
-        //キャンセル時の処理
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
     }
+    
 }

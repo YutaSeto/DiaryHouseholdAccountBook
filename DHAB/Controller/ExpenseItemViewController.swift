@@ -11,6 +11,7 @@ import RealmSwift
 
 protocol ExpenseItemViewControllerDelegate{
     func updateCategory()
+    func updateBudget()
 }
 
 class ExpenseItemViewController: UIViewController{
@@ -32,13 +33,13 @@ class ExpenseItemViewController: UIViewController{
         super.viewDidLoad()
         setCategoryData()
         setIncomeCategoryData()
-        settingSubView()
         expenseItemTableView.delegate = self
         expenseItemTableView.dataSource = self
         incomeTableView.delegate = self
         incomeTableView.dataSource = self
         addSubView()
         addPaymentView()
+        settingSubView()
         configureAddButton()
     }
     
@@ -265,5 +266,9 @@ extension ExpenseItemViewController:ExpenseItemViewControllerDelegate{
     func updateCategory() {
         setCategoryData()
         setIncomeCategoryData()
+    }
+    
+    func updateBudget() {
+        return
     }
 }

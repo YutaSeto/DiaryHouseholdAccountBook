@@ -49,11 +49,15 @@ class CalendarViewController:UIViewController{
         addSubView()
         showPaymentView()
         settingSubView()
-        setPaymentData()
-        setDiaryData()
         setSubLabel()
         setSum()
-        
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setSubLabel()
+        setSum()
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -160,11 +164,7 @@ class CalendarViewController:UIViewController{
         return result
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setPaymentData()
-        setDiaryData()
-    }
+
     
     func setPaymentData(){
         let realm = try! Realm()

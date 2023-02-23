@@ -150,12 +150,7 @@ class HouseholdAccountBookViewController:UIViewController{
         savingView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-
-    
-
-    
     //支出画面の設定
-    
     private var paymentList:[PaymentModel] = []
     private var paymentBudgetList:[PaymentBudgetModel] = []
     private var categoryList:[CategoryModel] = []
@@ -390,4 +385,20 @@ extension HouseholdAccountBookViewController:HouseholdAccountBookControllerDeleg
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
     }
+}
+
+extension HouseholdAccountBookViewController:ExpenseItemViewControllerDelegate{
+    func updateCategory() {
+        return
+    }
+    
+    func updateBudget() {
+        setPaymentData()
+        setCategoryData()
+        setPaymentBudgetData()
+        paymentTableViewDataSource = []
+        setPaymentTableViewDataSourse()
+    }
+    
+    
 }
