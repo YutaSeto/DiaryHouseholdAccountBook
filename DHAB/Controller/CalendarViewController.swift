@@ -46,8 +46,9 @@ class CalendarViewController:UIViewController{
         diaryTableView.dataSource = self
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
-        settingSubView()
+        addSubView()
         showPaymentView()
+        settingSubView()
         setPaymentData()
         setDiaryData()
         setSubLabel()
@@ -66,25 +67,33 @@ class CalendarViewController:UIViewController{
         }
     }
     
-    func showPaymentView(){
-        diaryView.removeFromSuperview()
+    func addSubView(){
         view.addSubview(paymentView)
-    }
-    
-    func showDiaryView(){
-        paymentView.removeFromSuperview()
         view.addSubview(diaryView)
     }
     
+    func showPaymentView(){
+        diaryView.isHidden = true
+        paymentView.isHidden = false
+    }
+    
+    func showDiaryView(){
+        paymentView.isHidden = true
+        diaryView.isHidden = false
+    }
+    
     func settingSubView(){
-        paymentView.frame = CGRect(x: 0,
-                                   y: segmentedControl.frame.minY,
-                                   width: self.view.frame.width,
-                                   height: (self.view.frame.height - segmentedControl.frame.minY))
-        diaryView.frame = CGRect(x: 0,
-                                  y: segmentedControl.frame.minY + segmentedControl.frame.height,
-                                  width: self.view.frame.width,
-                                  height: (self.view.frame.height - segmentedControl.frame.minY))
+        paymentView.translatesAutoresizingMaskIntoConstraints = false
+        paymentView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor,constant: 10).isActive = true
+        paymentView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        paymentView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        paymentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        diaryView.translatesAutoresizingMaskIntoConstraints = false
+        diaryView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor,constant: 10).isActive = true
+        diaryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     func sumPayment(_:Date) -> Int{

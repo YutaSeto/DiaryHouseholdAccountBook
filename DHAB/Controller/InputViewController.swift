@@ -20,9 +20,35 @@ class InputViewController:UIViewController{
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
+    @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
+    //家計簿記入画面関連
+    private var paymentModelList: [PaymentModel] = []
+    let realm = try! Realm()
+    var categoryList:[CategoryModel] = []
+    var uniqueCategory = [""]
+    public var date:Date = Date()
+    public var inputViewControllerDelegate:InputViewControllerDelegate?
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var priceTextField: UITextField!
+    @IBOutlet weak var paymentCollectionView: UICollectionView!
+    
+    //日記関連
+    var imageArray = [UIImage(named: "sample1")!]
+    var currentIndex = 0
+    private var diaryModel = DiaryModel()
+    private var diaryList:[DiaryModel] = []
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var diaryDateLabel: UILabel!
+    @IBOutlet weak var addImageButton: UIView!
+    @IBOutlet weak var diaryInputTextView: UITextView!
+    @IBOutlet weak var imageCollectionView: UICollectionView!
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        addSubView()
         addHouseholdAccountView()
         settingSubView()
         dateLabel.text = dateFormatter.string(from:date)
@@ -31,7 +57,6 @@ class InputViewController:UIViewController{
         paymentCollectionView.dataSource = self
         collectionView.delegate = self
         collectionView.dataSource = self
-        picker.delegate = self
         settingCollectionView()
         setCategoryData()
         setUniqueCategory()
@@ -40,29 +65,36 @@ class InputViewController:UIViewController{
         collectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
     }
     
+    func addSubView(){
+        view.addSubview(householdAccountBookView)
+        view.addSubview(diaryView)
+    }
+    
     private func addHouseholdAccountView(){
-        diaryView.removeFromSuperview()
-        self.view.addSubview(householdAccountBookView)
+        diaryView.isHidden = true
+        householdAccountBookView.isHidden = false
     }
     
     func addDiaryView(){
-        householdAccountBookView.removeFromSuperview()
-        self.view.addSubview(diaryView)
+        householdAccountBookView.isHidden = true
+        diaryView.isHidden = false
     }
     
     private func settingSubView(){
-        householdAccountBookView.frame = CGRect(x: 0,
-                                                y: viewChangeSegmentedControl.frame.minY,
-                                                width: self.view.frame.width,
-                                                height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
-        diaryView.frame = CGRect(x: 0,
-                                 y: viewChangeSegmentedControl.frame.minY,
-                                 width: self.view.frame.width,
-                                 height: (self.view.frame.height - viewChangeSegmentedControl.frame.minY))
+        householdAccountBookView.translatesAutoresizingMaskIntoConstraints = false
+        householdAccountBookView.topAnchor.constraint(equalTo: viewChangeSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        householdAccountBookView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        householdAccountBookView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        householdAccountBookView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        diaryView.translatesAutoresizingMaskIntoConstraints = false
+        diaryView.topAnchor.constraint(equalTo: viewChangeSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        diaryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     //segmentedControll関連
-    @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
     @IBAction func viewChangeSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
         case 0:
@@ -74,23 +106,7 @@ class InputViewController:UIViewController{
         }
     }
     
-
-    
-    //家計簿記入画面関連
-    private var paymentModelList: [PaymentModel] = []
-    let realm = try! Realm()
-    var categoryList:[CategoryModel] = []
-    var uniqueCategory = [""]
-    public var date:Date = Date()
-    public var inputViewControllerDelegate:InputViewControllerDelegate?
-    
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var resultLabel: UILabel!
-    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    @IBOutlet weak var priceTextField: UITextField!
-    @IBOutlet weak var paymentCollectionView: UICollectionView!
-    
+    //日付操作関連
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
     }
@@ -106,6 +122,7 @@ class InputViewController:UIViewController{
         tapContinueAddButton()
     }
     
+    //家計簿関連
     private func tapAddButton(){
         let realm = try! Realm()
         try! realm.write{
@@ -169,18 +186,6 @@ class InputViewController:UIViewController{
     }
     
     //日記記入関連の画面
-    var imageArray = [UIImage(named: "sample1")!]
-    var currentIndex = 0
-    let picker = UIImagePickerController()
-    private var diaryModel = DiaryModel()
-    private var diaryList:[DiaryModel] = []
-    
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var diaryDateLabel: UILabel!
-    @IBOutlet weak var addImageButton: UIView!
-    @IBOutlet weak var diaryInputTextView: UITextView!
-    @IBOutlet weak var imageCollectionView: UICollectionView!
-    
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
         dayBack()
     }
@@ -192,6 +197,8 @@ class InputViewController:UIViewController{
         addDiary()
     }
     @IBAction func addImageButton(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
         present(picker, animated:true)
     }
     
@@ -208,8 +215,6 @@ class InputViewController:UIViewController{
         inputViewControllerDelegate?.updateDiary()
         dismiss(animated: true)
     }
-    
-    
 }
 
 extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource{

@@ -26,6 +26,7 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         incomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         dayLabel.text = monthDateFormatter.string(from:date)
+        addSubView()
         addPaymentView()
         settingSubView()
         paymentTableView.delegate = self
@@ -105,36 +106,48 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet var incomeView: UIView!
     @IBOutlet var savingView: UIView!
     
+    func addSubView(){
+        view.addSubview(paymentView)
+        view.addSubview(incomeView)
+        view.addSubview(savingView)
+    }
+    
     func addPaymentView(){
-        incomeView.removeFromSuperview()
-        savingView.removeFromSuperview()
-        self.view.addSubview(paymentView)
+        savingView.isHidden = true
+        incomeView.isHidden = true
+        paymentView.isHidden = false
+        
     }
     func addIncomeView(){
-        paymentView.removeFromSuperview()
-        savingView.removeFromSuperview()
-        self.view.addSubview(incomeView)
+        savingView.isHidden = true
+        paymentView.isHidden = true
+        incomeView.isHidden = false
     }
     
     func addSavingView(){
-        paymentView.removeFromSuperview()
-        incomeView.removeFromSuperview()
-        self.view.addSubview(savingView)
+        incomeView.isHidden = true
+        paymentView.isHidden = true
+        savingView.isHidden = false
     }
     
     func settingSubView(){
-        paymentView.frame = CGRect(x: 0,
-                                   y: householdAccountBookSegmentedControl.frame.minY ,
-                                   width: self.view.frame.width,
-                                   height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
-        incomeView.frame = CGRect(x: 0,
-                                  y: householdAccountBookSegmentedControl.frame.minY ,
-                                  width: self.view.frame.width,
-                                  height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
-        savingView.frame = CGRect(x: 0,
-                                  y: householdAccountBookSegmentedControl.frame.minY ,
-                                  width: self.view.frame.width,
-                                  height: (self.view.frame.height - householdAccountBookSegmentedControl.frame.minY))
+        paymentView.translatesAutoresizingMaskIntoConstraints = false
+        paymentView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        paymentView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        paymentView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        paymentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        incomeView.translatesAutoresizingMaskIntoConstraints = false
+        incomeView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        incomeView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        incomeView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        incomeView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        savingView.translatesAutoresizingMaskIntoConstraints = false
+        savingView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        savingView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        savingView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        savingView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
 

@@ -37,6 +37,7 @@ class ExpenseItemViewController: UIViewController{
         expenseItemTableView.dataSource = self
         incomeTableView.delegate = self
         incomeTableView.dataSource = self
+        addSubView()
         addPaymentView()
         configureAddButton()
     }
@@ -65,24 +66,32 @@ class ExpenseItemViewController: UIViewController{
         addIncomeButton.layer.cornerRadius = addIncomeButton.bounds.width / 2
     }
     
+    func addSubView(){
+        view.addSubview(paymentView)
+        view.addSubview(incomeView)
+    }
+    
     func addPaymentView(){
-        incomeView.removeFromSuperview()
-        self.view.addSubview(paymentView)
+        incomeView.isHidden = true
+        paymentView.isHidden = false
     }
     func addIncomeView(){
-        paymentView.removeFromSuperview()
-        self.view.addSubview(incomeView)
+        incomeView.isHidden = false
+        paymentView.isHidden = true
     }
     
     func settingSubView(){
-        paymentView.frame = CGRect(x: 0,
-                                                y: segmentedControl.frame.minY,
-                                                width: self.view.frame.width,
-                                                height: (self.view.frame.height - segmentedControl.frame.minY))
-        incomeView.frame = CGRect(x: 0,
-                                 y: segmentedControl.frame.minY,
-                                 width: self.view.frame.width,
-                                 height: (self.view.frame.height - segmentedControl.frame.minY))
+        paymentView.translatesAutoresizingMaskIntoConstraints = false
+        paymentView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor,constant: 10).isActive = true
+        paymentView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        paymentView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        paymentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        incomeView.translatesAutoresizingMaskIntoConstraints = false
+        incomeView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor,constant: 10).isActive = true
+        incomeView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        incomeView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        incomeView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     @objc func tapAddPaymentButton(){
