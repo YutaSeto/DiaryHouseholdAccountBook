@@ -309,8 +309,8 @@ class HouseholdAccountBookViewController:UIViewController{
                 )
                 incomeTableViewDataSource.append(item)
             }
-            incomeTableView.reloadData()
         }
+        incomeTableView.reloadData()
     }
 }
 

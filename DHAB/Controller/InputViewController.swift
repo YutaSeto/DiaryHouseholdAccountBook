@@ -68,6 +68,7 @@ class InputViewController:UIViewController{
         setCategoryData()
         setUniqueCategory()
         resultLabel.text = ""
+        print(categoryList)
     }
     
     func addSubView(){
@@ -237,14 +238,25 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
+        if collectionView.tag == 0{
+            let sectionInsets = UIEdgeInsets(top: 10, left: 2, bottom: 2, right: 10)
+            let itemsPerRow: CGFloat = 4
+            let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+            let availableWidth = view.frame.width - paddingSpace
+            let widthPerItem = availableWidth / itemsPerRow
+            return CGSize(width: widthPerItem, height: 40)
+        }else if collectionView.tag == 1{
+            return CGSize(width: imageCollectionView.frame.width, height: imageCollectionView.frame.height)
+        }
+        return CGSize(width: 0, height: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView.tag == 0{
             let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
-            contentLabel.text = uniqueCategory[indexPath.row]
+            contentLabel.text = categoryList[indexPath.row].name
+            contentLabel.adjustsFontSizeToFitWidth = true
             return cell
         }else if collectionView.tag == 1{
             let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath)
@@ -257,7 +269,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        resultLabel.text = uniqueCategory[indexPath.row]
+        resultLabel.text = categoryList[indexPath.row].name
     }
     
     //修正必要。大きさがアスペクト比を崩さずに、コレクションビューセルの縦の幅に合わせるよう
