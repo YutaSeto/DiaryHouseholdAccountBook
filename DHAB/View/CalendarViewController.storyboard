@@ -181,7 +181,7 @@
                         </tableView>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="e7O-Rt-d31"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="backgroundColor" systemColor="systemPinkColor"/>
                     <constraints>
                         <constraint firstItem="e7O-Rt-d31" firstAttribute="bottom" secondItem="oEJ-FK-ufX" secondAttribute="bottom" id="7Yf-Ns-FIQ"/>
                         <constraint firstItem="e7O-Rt-d31" firstAttribute="trailing" secondItem="oEJ-FK-ufX" secondAttribute="trailing" id="8Jb-Sd-OD4"/>
@@ -199,6 +199,9 @@
         </systemColor>
         <systemColor name="systemBrownColor">
             <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

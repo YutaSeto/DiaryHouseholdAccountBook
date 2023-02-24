@@ -47,6 +47,8 @@ class CalendarViewController:UIViewController{
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
         addSubView()
+        setPaymentData()
+        setDiaryData()
         showPaymentView()
         settingSubView()
         setSubLabel()
@@ -177,12 +179,6 @@ class CalendarViewController:UIViewController{
         let result = realm.objects(DiaryModel.self)
         diaryModelList = Array(result)
         diaryTableView.reloadData()
-    }
-    
-    func  setInputViewControllerDelegate() {
-        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-        guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return print("エラーが発生")}
-        inputViewController.inputViewControllerDelegate = self
     }
 }
 
