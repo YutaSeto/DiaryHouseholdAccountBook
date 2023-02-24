@@ -186,6 +186,15 @@ class BudgetConfigureViewController: UIViewController{
 
 extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSource{
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView.tag == 0{
+            return "支出"
+        }else if tableView.tag == 1{
+            return "収入"
+        }
+        return ""
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 0{
             return budgetTableViewDataSource.count

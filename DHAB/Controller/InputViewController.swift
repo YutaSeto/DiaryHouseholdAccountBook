@@ -139,8 +139,7 @@ class InputViewController:UIViewController{
             realm.add(paymentModel)
         }
         inputViewControllerDelegate?.updatePayment()
-        inputViewControllerDelegate?.updateCalendar()
-        
+        RecognitionChange.shared.updateCalendar = true
         dismiss(animated: true)
     }
     
@@ -222,6 +221,7 @@ class InputViewController:UIViewController{
         titleTextField.text = ""
         diaryInputTextView.text = ""
         inputViewControllerDelegate?.updateDiary()
+        RecognitionChange.shared.updateCalendar = true
         dismiss(animated: true)
     }
 }

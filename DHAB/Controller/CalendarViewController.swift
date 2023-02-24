@@ -58,6 +58,15 @@ class CalendarViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if RecognitionChange.shared.updateCalendar == true{
+            setPaymentData()
+            setDiaryData()
+            calendarView.reloadData()
+            householdAccountBookTableView.reloadData()
+            diaryTableView.reloadData()
+            RecognitionChange.shared.updateCalendar = false
+        }
         setSubLabel()
         setSum()
     }
