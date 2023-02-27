@@ -16,4 +16,6 @@ class DiaryModel: Object{
     override static func primaryKey() -> String? {
         return "id"
     }
+    
+    let pictureList = List<PictureModel>()
 }

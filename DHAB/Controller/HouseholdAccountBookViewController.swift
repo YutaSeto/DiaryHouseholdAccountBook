@@ -25,6 +25,8 @@ class HouseholdAccountBookViewController:UIViewController{
     override func viewDidLoad() {
         paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         incomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        sumPaymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        sumIncomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         dayLabel.text = monthDateFormatter.string(from:date)
         addSubView()
         addPaymentView()
@@ -33,6 +35,10 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentTableView.dataSource = self
         incomeTableView.delegate = self
         incomeTableView.dataSource = self
+        sumPaymentTableView.delegate = self
+        sumPaymentTableView.dataSource = self
+        sumIncomeTableView.delegate = self
+        sumIncomeTableView.dataSource = self
         configureInputButton()
         setPaymentData()
         setIncomeData()
@@ -46,6 +52,22 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if RecognitionChange.shared.updateHouseholdAccountBook == true{
+            setPaymentData()
+            setCategoryData()
+            setPaymentBudgetData()
+            paymentTableViewDataSource = []
+            setPaymentTableViewDataSourse()
+            paymentTableView.reloadData()
+            incomeTableView.reloadData()
+            RecognitionChange.shared.updateHouseholdAccountBook = false
+        }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        sumPaymentTableViewHeight.constant = CGFloat(sumPaymentTableView.contentSize.height)
+        sumIncomeTableViewHeight.constant = CGFloat(sumIncomeTableView.contentSize.height)
     }
     
     @IBAction func householdAccountBookSegmentedControl(_ sender: UISegmentedControl) {
@@ -158,8 +180,12 @@ class HouseholdAccountBookViewController:UIViewController{
     let realm = try! Realm()
     var householdeAccountBookViewControllerDelegate:HouseholdAccountBookControllerDelegate?
     
+    @IBOutlet weak var sumPaymentTableView: UITableView!
     @IBOutlet weak var paymentTableView: UITableView!
     @IBOutlet weak var inputButton: UIButton!
+    
+    @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
+    
     @IBAction func inputButton(_ sender: Any) {
         tapInputButton()
     }
@@ -236,6 +262,34 @@ class HouseholdAccountBookViewController:UIViewController{
             paymentTableView.reloadData()
         }
     }
+    
+    func sumPayment(_:Date) -> Int{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let day = calendar.date(from: comps)!
+        let addDay = DateComponents(day: 1)
+        let firstDay = calendar.date(byAdding: addDay, to: day)
+        let addMonth = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
+        let dayCheck = paymentList.filter({$0.date >= firstDay!})
+        let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
+        let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
+        return sum
+    }
+    
+    func sumPaymentBudget(_:Date) -> Int{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let day = calendar.date(from: comps)!
+        let addDay = DateComponents(day: 1)
+        let firstDay = calendar.date(byAdding: addDay, to: day)
+        let addMonth = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
+        let dayCheck = paymentBudgetList.filter({$0.budgetDate >= firstDay!})
+        let dayCheck2 = dayCheck.filter({$0.budgetDate <= lastDay})
+        let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
+        return sum
+    }
     //収入画面の設定
     
     var incomeList:[IncomeModel] = []
@@ -244,6 +298,10 @@ class HouseholdAccountBookViewController:UIViewController{
     var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
     @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var incomeTableView: UITableView!
+    @IBOutlet weak var sumIncomeTableView: UITableView!
+    
+    @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
+    
     @IBAction func addIncomeButton(_ sender: UIButton) {
         tapAddIncomeButton()
     }
@@ -312,6 +370,34 @@ class HouseholdAccountBookViewController:UIViewController{
         }
         incomeTableView.reloadData()
     }
+    
+    func sumIncome(_:Date) -> Int{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let day = calendar.date(from: comps)!
+        let addDay = DateComponents(day: 1)
+        let firstDay = calendar.date(byAdding: addDay, to: day)
+        let addMonth = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
+        let dayCheck = incomeList.filter({$0.date >= firstDay!})
+        let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
+        let sum = dayCheck2.map{$0.amount}.reduce(0){$0 + $1}
+        return sum
+    }
+    
+    func sumIncomeBudget(_:Date) -> Int{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date)
+        let day = calendar.date(from: comps)!
+        let addDay = DateComponents(day: 1)
+        let firstDay = calendar.date(byAdding: addDay, to: day)
+        let addMonth = DateComponents(month: 1, day: -1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
+        let dayCheck = incomeBudgetList.filter({$0.budgetDate >= firstDay!})
+        let dayCheck2 = dayCheck.filter({$0.budgetDate <= lastDay})
+        let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
+        return sum
+    }
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
@@ -339,6 +425,10 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             return categoryList.count
         }else if tableView.tag == 1{
             return incomeCategoryList.count
+        }else if tableView.tag == 2{
+            return 1
+        }else if tableView.tag == 3{
+            return 1
         }
         return 0
     }
@@ -371,6 +461,30 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 return cell
             }
             cell.progressBar.setProgress(1 - Float(Float(item.incomeBudget - item.incomePrice) / Float(item.incomeBudget)), animated: false)
+            return cell
+        }else if tableView.tag == 2{
+            let cell = sumPaymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
+            cell.expenceItemLabel.text = "合計"
+            cell.budgetLabel.text = String(sumPaymentBudget(_:date))
+            cell.priceLabel.text = String(sumPayment(_:date))
+            cell.balanceLabel.text = String(sumPaymentBudget(date) - sumPayment(date))
+            guard sumPaymentBudget(date) != 0 else {
+                cell.progressBar.setProgress(Float(0), animated: false)
+                return cell
+            }
+            cell.progressBar.setProgress(1 - Float(Float(sumPaymentBudget(date) - sumPayment(date)) / Float(sumPaymentBudget(date))), animated: false)
+            return cell
+        }else if tableView.tag == 3{
+            let cell = sumIncomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
+            cell.expenceItemLabel.text = "合計"
+            cell.budgetLabel.text = String(sumIncomeBudget(_:date))
+            cell.priceLabel.text = String(sumIncome(_:date))
+            cell.balanceLabel.text = String(sumIncomeBudget(date) - sumIncome(date))
+            guard sumIncomeBudget(date) != 0 else {
+                cell.progressBar.setProgress(Float(0), animated: false)
+                return cell
+            }
+            cell.progressBar.setProgress(1 - Float(Float(sumIncomeBudget(date) - sumIncome(date)) / Float(sumIncomeBudget(date))), animated: false)
             return cell
         }
         return UITableViewCell()

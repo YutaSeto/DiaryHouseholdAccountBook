@@ -37,7 +37,8 @@ class InputViewController:UIViewController{
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     
     //日記関連
-    var imageArray:[UIImage] = []
+    var pictureModelList:[PictureModel] = []
+    var imageArray:[Data] = []
     var currentIndex = 0
     var collectionViewDelegate:UICollectionViewDelegate?
     private var diaryModel = DiaryModel()
@@ -68,7 +69,6 @@ class InputViewController:UIViewController{
         setCategoryData()
         setUniqueCategory()
         resultLabel.text = ""
-        print(categoryList)
     }
     
     func addSubView(){
@@ -216,6 +216,7 @@ class InputViewController:UIViewController{
             diaryModel.date = date
             diaryModel.title = titleTextField.text!
             diaryModel.text = diaryInputTextView.text
+            diaryModel.pictureList.append(objectsIn: pictureModelList)
             realm.add(diaryModel)
         }
         titleTextField.text = ""
@@ -262,21 +263,27 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath)
             let contentImageView = cell.contentView.viewWithTag(1) as! UIImageView
             let cellImage = imageArray[indexPath.item]
-            contentImageView.image = cellImage
+            contentImageView.image = UIImage(data:cellImage)!
             return cell
         }
         return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        resultLabel.text = categoryList[indexPath.row].name
+        if collectionView.tag == 0{
+            resultLabel.text = categoryList[indexPath.row].name
+            return
+        }else if collectionView.tag == 1{
+            return
+        }
+        return
     }
     
     //修正必要。大きさがアスペクト比を崩さずに、コレクションビューセルの縦の幅に合わせるよう
     func configureSliderCell(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 80,height: 60)
+        layout.itemSize = CGSize(width: 80,height: imageCollectionView.frame.height)
         imageCollectionView.collectionViewLayout = layout
     }
 }
@@ -284,7 +291,14 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
 extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout{
    
     func imagePickerController(_ picker:UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]){
-        imageArray.append(info[.originalImage] as! UIImage)
+        let realm = try! Realm()
+        try! realm.write{
+            let result = PictureModel()
+            result.imageData = (info[.originalImage] as! UIImage).pngData()!
+            result.createdAt = date
+            realm.add(result)
+        }
+        imageArray.append((info[.originalImage] as! UIImage).pngData()!)
         imageCollectionView.reloadData()
         dismiss(animated:true)
     }

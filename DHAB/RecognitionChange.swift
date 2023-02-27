@@ -12,6 +12,7 @@ import RealmSwift
 final public class RecognitionChange{
     
     var updateCalendar:Bool = false
+    var updateHouseholdAccountBook:Bool = false
     
     public static let shared = RecognitionChange()
     

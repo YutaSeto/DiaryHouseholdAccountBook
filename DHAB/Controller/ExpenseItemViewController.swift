@@ -97,6 +97,7 @@ class ExpenseItemViewController: UIViewController{
     
     @objc func tapAddPaymentButton(){
         categoryViewControllerDelegate = self
+        RecognitionChange.shared.updateHouseholdAccountBook = true
         let alert = UIAlertController(title: "カテゴリーを追加します", message: nil, preferredStyle: .alert)
         var textFieldOnAlert = UITextField()
         alert.addTextField{ textField in
@@ -127,6 +128,7 @@ class ExpenseItemViewController: UIViewController{
     
     @objc func tapAddIncomeButton(){
         categoryViewControllerDelegate = self
+        RecognitionChange.shared.updateHouseholdAccountBook = true
         let alert = UIAlertController(title: "カテゴリーを追加します", message: nil, preferredStyle: .alert)
         var textFieldOnAlert = UITextField()
         alert.addTextField{ textField in
@@ -197,6 +199,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.tag == 0{
             categoryViewControllerDelegate = self
+            RecognitionChange.shared.updateHouseholdAccountBook = true
             let alert = UIAlertController(title: "\(categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
             var textFieldOnAlert = UITextField()
             alert.addTextField{ textField in
@@ -218,6 +221,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             alert.addAction(add)
             self.present(alert,animated:true, completion: nil)
         }else if tableView.tag == 1{
+            RecognitionChange.shared.updateHouseholdAccountBook = true
             let alert = UIAlertController(title: "\(incomeCategoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
             var textFieldOnAlert = UITextField()
             alert.addTextField{ textField in
