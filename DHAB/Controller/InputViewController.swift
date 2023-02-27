@@ -28,7 +28,6 @@ class InputViewController:UIViewController{
     var categoryList:[CategoryModel] = []
     public var date:Date = Date()
     public var inputViewControllerDelegate:InputViewControllerDelegate?
-    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
@@ -36,6 +35,24 @@ class InputViewController:UIViewController{
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var continueAddButton: UIButton!
+    @IBOutlet weak var dateTextField: UITextField!
+    
+    var datePicker:UIDatePicker{
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.timeZone = .current
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.locale = Locale(identifier: "ja-JP")
+        return datePicker
+    }
+    
+    var toolbar: UIToolbar{
+        let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
+        let toolbar = UIToolbar(frame: toolbarRect)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapFinishButton))
+        toolbar.setItems([doneItem], animated: modalPresentationCapturesStatusBarAppearance)
+        return toolbar
+    }
     
     //日記関連
     var pictureModelList:[PictureModel] = []
@@ -63,10 +80,11 @@ class InputViewController:UIViewController{
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
         configureSliderCell()
+        configureDateTextField()
         addSubView()
         addHouseholdAccountView()
         settingSubView()
-        dateLabel.text = dateFormatter.string(from:date)
+        dateTextField.text = dateFormatter.string(from: date)
         diaryDateLabel.text = dateFormatter.string(from: date)
         settingCollectionView()
         setCategoryData()
@@ -133,6 +151,29 @@ class InputViewController:UIViewController{
         tapContinueAddButton()
     }
     
+    @objc func didTapFinishButton(){
+        if let targetDateText = dateTextField.text,
+           let targetDate = dateFormatter.date(from:targetDateText){
+            date = targetDate
+        }
+        view.endEditing(true)
+    }
+    
+    func configureDateTextField(){
+        let householdAccountBookDatePicker = datePicker
+        let targetDate = Date()
+        householdAccountBookDatePicker.date = targetDate
+        dateTextField.inputView = householdAccountBookDatePicker
+        dateTextField.text = dateFormatter.string(from: targetDate)
+        dateTextField.inputAccessoryView = toolbar
+        householdAccountBookDatePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
+    }
+    
+    @objc func didChangeDate(picker: UIDatePicker){
+        date = picker.date
+        dateTextField.text = dateFormatter.string(from: picker.date)
+    }
+    
     @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {
         if priceTextField.text != "" && resultLabel.text != ""{
             addButton.isEnabled = true
@@ -185,13 +226,13 @@ class InputViewController:UIViewController{
     
     func dayBack(){
         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
-        dateLabel.text = dateFormatter.string(from: date)
+        dateTextField.text = dateFormatter.string(from: date)
         diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-        dateLabel.text = dateFormatter.string(from: date)
+        dateTextField.text = dateFormatter.string(from: date)
         diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
