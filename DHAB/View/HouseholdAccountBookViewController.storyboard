@@ -39,7 +39,7 @@
                                 <segments>
                                     <segment title="支出"/>
                                     <segment title="収入"/>
-                                    <segment title="貯蓄"/>
+                                    <segment title="推移"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" systemColor="systemYellowColor"/>
                                 <connections>
@@ -103,7 +103,7 @@
                         <outlet property="householdAccountBookSegmentedControl" destination="o0T-En-LdB" id="nw4-4a-Jde"/>
                         <outlet property="incomeTableView" destination="iXe-kz-gYf" id="OE3-LP-BTW"/>
                         <outlet property="incomeView" destination="QJg-aq-W54" id="NVX-bS-K9D"/>
-                        <outlet property="inputButton" destination="fUD-Hh-8Gq" id="IrA-KM-XgL"/>
+                        <outlet property="inputButton" destination="jxc-v9-VWb" id="IDY-5y-n2W"/>
                         <outlet property="paymentTableView" destination="2l9-up-7Hb" id="pvO-id-Z8A"/>
                         <outlet property="paymentView" destination="opO-ja-Hb5" id="XA2-Rt-Bn0"/>
                         <outlet property="savingView" destination="CuD-Qs-UOb" id="Qjc-51-L7b"/>
@@ -134,19 +134,21 @@
                                 </tableView>
                             </subviews>
                         </stackView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="fUD-Hh-8Gq">
-                            <rect key="frame" x="244" y="434" width="60" height="60"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jxc-v9-VWb">
+                            <rect key="frame" x="263" y="444" width="60" height="60"/>
                             <color key="backgroundColor" name="AccentColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="60" id="4ix-Tn-bUg"/>
-                                <constraint firstAttribute="width" constant="60" id="Nxb-Ml-8M9"/>
+                                <constraint firstAttribute="width" constant="60" id="0ZJ-2l-RRM"/>
+                                <constraint firstAttribute="height" constant="60" id="Olh-jk-Pf0"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="QjA-Cg-8Iv"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="uuh-WQ-YZn"/>
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="＋"/>
                             <connections>
-                                <action selector="inputButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="wVh-iN-25t"/>
+                                <action selector="addIncomeButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="QZ6-jO-xU4"/>
+                                <action selector="inputButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="zK3-F6-ncg"/>
                             </connections>
                         </button>
                     </subviews>
@@ -156,6 +158,8 @@
                         <constraint firstItem="DbH-0i-N6X" firstAttribute="top" secondItem="8RV-EQ-dha" secondAttribute="top" id="GwY-mu-EJv"/>
                         <constraint firstItem="DbH-0i-N6X" firstAttribute="trailing" secondItem="8RV-EQ-dha" secondAttribute="trailing" id="LeY-z4-MAZ"/>
                         <constraint firstItem="8RV-EQ-dha" firstAttribute="bottom" secondItem="DbH-0i-N6X" secondAttribute="bottom" id="Vxq-Rt-i3g"/>
+                        <constraint firstItem="8RV-EQ-dha" firstAttribute="bottom" secondItem="jxc-v9-VWb" secondAttribute="bottom" constant="60" id="ZxU-mt-YwP"/>
+                        <constraint firstItem="8RV-EQ-dha" firstAttribute="trailing" secondItem="jxc-v9-VWb" secondAttribute="trailing" constant="30" id="kPx-gh-xye"/>
                         <constraint firstItem="DbH-0i-N6X" firstAttribute="leading" secondItem="8RV-EQ-dha" secondAttribute="leading" id="ngL-y7-SEJ"/>
                     </constraints>
                 </view>
@@ -163,20 +167,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="353" height="564"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnF-mD-5f2">
-                            <rect key="frame" x="263" y="443" width="60" height="60"/>
-                            <color key="backgroundColor" name="AccentColor"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="60" id="HjZ-ow-zNc"/>
-                                <constraint firstAttribute="width" constant="60" id="JfV-Zl-kop"/>
-                            </constraints>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="＋"/>
-                            <connections>
-                                <action selector="addIncomeButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="jzK-cQ-4c0"/>
-                            </connections>
-                        </button>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Jx-wa-XVd">
                             <rect key="frame" x="0.0" y="59" width="353" height="505"/>
                             <subviews>
@@ -193,6 +183,20 @@
                                 </tableView>
                             </subviews>
                         </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnF-mD-5f2">
+                            <rect key="frame" x="263" y="443" width="60" height="60"/>
+                            <color key="backgroundColor" name="AccentColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="60" id="HjZ-ow-zNc"/>
+                                <constraint firstAttribute="width" constant="60" id="JfV-Zl-kop"/>
+                            </constraints>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="＋"/>
+                            <connections>
+                                <action selector="addIncomeButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="jzK-cQ-4c0"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="PhN-1N-W8m"/>
                     <color key="backgroundColor" systemColor="linkColor"/>

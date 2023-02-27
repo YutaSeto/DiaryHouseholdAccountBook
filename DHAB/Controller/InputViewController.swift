@@ -26,7 +26,6 @@ class InputViewController:UIViewController{
     private var paymentModelList: [PaymentModel] = []
     let realm = try! Realm()
     var categoryList:[CategoryModel] = []
-    var uniqueCategory = [""]
     public var date:Date = Date()
     public var inputViewControllerDelegate:InputViewControllerDelegate?
     @IBOutlet weak var dateLabel: UILabel!
@@ -35,6 +34,8 @@ class InputViewController:UIViewController{
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var paymentCollectionView: UICollectionView!
+    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var continueAddButton: UIButton!
     
     //日記関連
     var pictureModelList:[PictureModel] = []
@@ -48,6 +49,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
+    @IBOutlet weak var addDiaryButton: UIButton!
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -57,6 +59,7 @@ class InputViewController:UIViewController{
         collectionView.dataSource = self
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
+        diaryInputTextView.delegate = self
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
         configureSliderCell()
@@ -67,8 +70,10 @@ class InputViewController:UIViewController{
         diaryDateLabel.text = dateFormatter.string(from: date)
         settingCollectionView()
         setCategoryData()
-        setUniqueCategory()
         resultLabel.text = ""
+        addButton.isEnabled = false
+        continueAddButton.isEnabled = false
+        addDiaryButton.isEnabled = false
     }
     
     func addSubView(){
@@ -128,7 +133,16 @@ class InputViewController:UIViewController{
         tapContinueAddButton()
     }
     
-    //家計簿関連
+    @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {
+        if priceTextField.text != "" && resultLabel.text != ""{
+            addButton.isEnabled = true
+            continueAddButton.isEnabled = true
+        }else{
+            addButton.isEnabled = false
+            continueAddButton.isEnabled = false
+        }
+    }
+    
     private func tapAddButton(){
         let realm = try! Realm()
         try! realm.write{
@@ -186,10 +200,6 @@ class InputViewController:UIViewController{
         categoryList = Array(result)
     }
     
-    func setUniqueCategory(){
-        uniqueCategory = Array(Set(categoryList.map({$0.name})))
-    }
-    
     //日記記入関連の画面
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
         dayBack()
@@ -209,6 +219,15 @@ class InputViewController:UIViewController{
         picker.mediaTypes = ["public.image"]
         present(picker, animated:true)
     }
+    
+    @IBAction func titleTextFieldActionDiaryButtonInactive(_ sender: Any) {
+        if titleTextField.text != "" && diaryInputTextView.text != ""{
+            addDiaryButton.isEnabled = true
+        }else{
+            addDiaryButton.isEnabled = false
+        }
+    }
+    
     
     private func addDiary(){
         let realm = try! Realm()
@@ -272,6 +291,10 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0{
             resultLabel.text = categoryList[indexPath.row].name
+            if priceTextField.text != ""{
+                addButton.isEnabled = true
+                continueAddButton.isEnabled = true
+            }
             return
         }else if collectionView.tag == 1{
             return
@@ -306,5 +329,14 @@ extension InputViewController:UIImagePickerControllerDelegate,UINavigationContro
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
     }
-    
+}
+
+extension InputViewController:UITextViewDelegate{
+    public func textViewDidChange(_ textView: UITextView) {
+        if diaryInputTextView.text != "" && titleTextField.text != ""{
+            addDiaryButton.isEnabled = true
+        }else{
+            addDiaryButton.isEnabled = false
+        }
+    }
 }

@@ -173,6 +173,7 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     //支出画面の設定
+    var sumPayment:HouseholdAccountBookTableViewCellItem = HouseholdAccountBookTableViewCellItem()
     private var paymentList:[PaymentModel] = []
     private var paymentBudgetList:[PaymentBudgetModel] = []
     private var categoryList:[CategoryModel] = []
@@ -289,6 +290,13 @@ class HouseholdAccountBookViewController:UIViewController{
         let dayCheck2 = dayCheck.filter({$0.budgetDate <= lastDay})
         let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
         return sum
+    }
+    
+    func setSumPaymentData(){
+        sumPayment.name = "合計"
+        sumPayment.paymentPrice = sumPayment(date)
+        sumPayment.budgetPrice = sumPaymentBudget(date)
+        
     }
     //収入画面の設定
     
@@ -411,6 +419,8 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
         setPaymentBudgetData()
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
+        setSumPaymentData()
+        sumPaymentTableView.reloadData()
     }
     
     func updateDiary() {
@@ -498,6 +508,8 @@ extension HouseholdAccountBookViewController:HouseholdAccountBookControllerDeleg
         setPaymentBudgetData()
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
+        setSumPaymentData()
+        sumPaymentTableView.reloadData()
     }
 }
 
@@ -513,6 +525,4 @@ extension HouseholdAccountBookViewController:ExpenseItemViewControllerDelegate{
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
     }
-    
-    
 }

@@ -40,9 +40,12 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="入力" id="EkT-bM-uvd"/>
                     <connections>
+                        <outlet property="addButton" destination="qMi-dv-ast" id="kB6-4y-rI3"/>
+                        <outlet property="addDiaryButton" destination="Csk-I7-mkc" id="zt6-UR-oUp"/>
                         <outlet property="addImageButton" destination="tga-kJ-rCq" id="DI2-Hf-cho"/>
                         <outlet property="collectionView" destination="bRy-IY-AL9" id="uMe-PO-WPN"/>
                         <outlet property="collectionViewFlowLayout" destination="mmh-WH-Cap" id="lXq-iq-2Wx"/>
+                        <outlet property="continueAddButton" destination="W2c-KJ-R3W" id="9bQ-qF-Mit"/>
                         <outlet property="dateLabel" destination="Jit-i5-rE4" id="Pph-OQ-tYH"/>
                         <outlet property="diaryDateLabel" destination="rvf-5A-BwN" id="ohm-NA-YbW"/>
                         <outlet property="diaryInputTextView" destination="7cH-uk-sXu" id="wa7-SX-gVZ"/>
@@ -65,6 +68,9 @@
                             <rect key="frame" x="20" y="280.33333333333331" width="348" height="34"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                            <connections>
+                                <action selector="textFieldActionAddButtonInactive:" destination="4SW-au-oaO" eventType="editingChanged" id="6ZS-e1-ohB"/>
+                            </connections>
                         </textField>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jit-i5-rE4">
                             <rect key="frame" x="176.66666666666666" y="20" width="34.666666666666657" height="20.333333333333329"/>
@@ -230,6 +236,9 @@
                             <rect key="frame" x="25" y="60.333333333333343" width="303" height="34"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <action selector="titleTextFieldActionDiaryButtonInactive:" destination="4SW-au-oaO" eventType="editingChanged" id="ra2-PO-2Mz"/>
+                            </connections>
                         </textField>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7cH-uk-sXu">
                             <rect key="frame" x="25" y="114.33333333333331" width="303" height="200"/>
