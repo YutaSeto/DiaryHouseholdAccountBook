@@ -15,7 +15,7 @@ protocol ExpenseItemViewControllerDelegate{
     func updatePayment()
 }
 
-protocol CategoryViewControllerDelegate: AnyObject{
+protocol CategoryViewControllerDelegate{
     func updateHouseholdAccountBook()
 }
 
@@ -25,7 +25,7 @@ class ExpenseItemViewController: UIViewController{
     var categoryList:[CategoryModel] = []
     var incomeCategoryList:[IncomeCategoryModel] = []
     var expenseItemViewControllerDelegate:ExpenseItemViewControllerDelegate?
-    weak var categoryViewControllerDelegate:CategoryViewControllerDelegate?
+    var categoryViewControllerDelegate:CategoryViewControllerDelegate?
     
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var addIncomeButton: UIButton!
@@ -118,6 +118,8 @@ class ExpenseItemViewController: UIViewController{
             try! realm.write{
                 categoryModel.name = textFieldOnAlert.text!
                 realm.add(categoryModel)
+                realm.cancelWrite() // 処理を止めて
+                realm.beginWrite() // また始める
                 self.expenseItemViewControllerDelegate?.updateCategory()
                 self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.expenseItemTableView.reloadData()

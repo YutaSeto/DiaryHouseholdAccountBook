@@ -40,6 +40,8 @@ class HouseholdAccountBookViewController:UIViewController{
         sumPaymentTableView.dataSource = self
         sumIncomeTableView.delegate = self
         sumIncomeTableView.dataSource = self
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
         configureInputButton()
         setPaymentData()
         setIncomeData()
@@ -69,11 +71,6 @@ class HouseholdAccountBookViewController:UIViewController{
         super.viewWillLayoutSubviews()
         sumPaymentTableViewHeight.constant = CGFloat(sumPaymentTableView.contentSize.height)
         sumIncomeTableViewHeight.constant = CGFloat(sumIncomeTableView.contentSize.height)
-    }
-    
-    @IBAction func menuButton(_ sender: UIBarButtonItem) {
-        let menuViewController = MenuViewController()
-        menuViewController.categoryViewControllerDelegate = self
     }
     
     
@@ -139,6 +136,7 @@ class HouseholdAccountBookViewController:UIViewController{
         view.addSubview(paymentView)
         view.addSubview(incomeView)
         view.addSubview(savingView)
+        view.addSubview(slideMenuView)
     }
     
     func addPaymentView(){
@@ -177,6 +175,12 @@ class HouseholdAccountBookViewController:UIViewController{
         savingView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         savingView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         savingView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//
+        slideMenuView.translatesAutoresizingMaskIntoConstraints = false
+        slideMenuView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        slideMenuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        slideMenuView.widthAnchor.constraint(equalToConstant: 240).isActive = true
+        slideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     //支出画面の設定
@@ -413,6 +417,58 @@ class HouseholdAccountBookViewController:UIViewController{
         let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
         return sum
     }
+    
+    //slideMenu画面関連
+    let menuList = ["カテゴリーの設定","予算の設定"]
+    var isExpanded:Bool = false
+    @IBOutlet var slideMenuView: UIView!
+    @IBOutlet weak var menuTableView: UITableView!
+    
+    @IBAction func menuButton(_ sender: UIBarButtonItem) {
+        showMenu(shouldExpand: isExpanded)
+    }
+    
+    func showMenu(shouldExpand:Bool){
+        if shouldExpand{
+            returnView()
+            isExpanded = false
+        }else{
+            UIView.animate(
+                withDuration: 0.5,
+                delay: 0,
+                usingSpringWithDamping: 1,
+                initialSpringVelocity: 0,
+                options: .curveEaseInOut,
+                animations: {
+                    self.slideMenuView.frame.origin.x = self.view.frame.width - self.slideMenuView.frame.width
+            }, completion: nil)
+            isExpanded = true
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        for touch in touches{
+            if touch.view?.tag == 4{
+                return
+            }else{
+                returnView()
+                isExpanded = true
+            }
+        }
+    }
+    
+    func returnView(){
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: .curveEaseIn,
+            animations:  {
+                self.slideMenuView.frame.origin.x = self.view.frame.width + self.slideMenuView.frame.width
+            },
+            completion: nil
+        )
+    }
 }
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
@@ -447,6 +503,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             return 1
         }else if tableView.tag == 3{
             return 1
+        }else if tableView.tag == 4{
+            return menuList.count
         }
         return 0
     }
@@ -504,8 +562,33 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             }
             cell.progressBar.setProgress(1 - Float(Float(sumIncomeBudget(date) - sumIncome(date)) / Float(sumIncomeBudget(date))), animated: false)
             return cell
+        }else if tableView.tag == 4{
+            let cell = menuTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell.textLabel!.text = menuList[indexPath.row]
+            return cell
         }
         return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.tag == 4{
+            switch indexPath.row{
+            case 0:
+                let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
+                let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
+                expenseItemViewController.categoryViewControllerDelegate = self
+                present(expenseItemViewController,animated: true)
+                returnView()
+            case 1:
+                let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
+                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                present(navigationController,animated: true)
+                returnView()
+            default:
+                return
+            }
+        }
+        return
     }
 }
 

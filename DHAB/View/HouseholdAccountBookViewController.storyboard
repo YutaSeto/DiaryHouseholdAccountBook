@@ -91,7 +91,6 @@
                         <barButtonItem key="rightBarButtonItem" title="menu" id="f7u-sG-UTE">
                             <connections>
                                 <action selector="menuButton:" destination="xpm-Tn-k0g" id="LYQ-So-QV3"/>
-                                <segue destination="Jzz-3W-G7C" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="nbR-dS-BWW"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -105,9 +104,11 @@
                         <outlet property="incomeView" destination="QJg-aq-W54" id="NVX-bS-K9D"/>
                         <outlet property="inputButton" destination="jxc-v9-VWb" id="IDY-5y-n2W"/>
                         <outlet property="menuButton" destination="f7u-sG-UTE" id="0K3-dO-iF5"/>
+                        <outlet property="menuTableView" destination="EOy-CV-OW9" id="00c-TM-WOd"/>
                         <outlet property="paymentTableView" destination="2l9-up-7Hb" id="pvO-id-Z8A"/>
                         <outlet property="paymentView" destination="opO-ja-Hb5" id="XA2-Rt-Bn0"/>
                         <outlet property="savingView" destination="CuD-Qs-UOb" id="Qjc-51-L7b"/>
+                        <outlet property="slideMenuView" destination="zdf-81-6h7" id="Fsj-4I-JOi"/>
                         <outlet property="sumIncomeTableView" destination="gsO-Ta-xCh" id="Mu5-XS-3qE"/>
                         <outlet property="sumIncomeTableViewHeight" destination="5bW-7B-nFA" id="ItI-BO-FKe"/>
                         <outlet property="sumPaymentTableView" destination="dRy-nZ-Lxz" id="AQI-pP-5tU"/>
@@ -216,61 +217,36 @@
                     <viewLayoutGuide key="safeArea" id="aJh-BJ-J6S"/>
                     <color key="backgroundColor" systemColor="systemOrangeColor"/>
                 </view>
+                <view tag="10" contentMode="scaleToFill" id="zdf-81-6h7">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="300"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" tag="4" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="EOy-CV-OW9">
+                            <rect key="frame" x="0.0" y="59" width="240" height="241"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <prototypes>
+                                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="RX9-Ca-Xs4">
+                                    <rect key="frame" x="0.0" y="50" width="240" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="RX9-Ca-Xs4" id="QiQ-fO-iOe">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </tableViewCellContentView>
+                                </tableViewCell>
+                            </prototypes>
+                        </tableView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="wNd-rK-nP2"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="wNd-rK-nP2" firstAttribute="bottom" secondItem="EOy-CV-OW9" secondAttribute="bottom" id="NVJ-S1-Nca"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="leading" secondItem="wNd-rK-nP2" secondAttribute="leading" id="W6K-5n-IcU"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="trailing" secondItem="wNd-rK-nP2" secondAttribute="trailing" id="XKT-vA-yoX"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="top" secondItem="wNd-rK-nP2" secondAttribute="top" id="eBm-N8-pry"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="1685" y="-308"/>
-        </scene>
-        <!--Menu View Controller-->
-        <scene sceneID="mrI-4w-8M9">
-            <objects>
-                <viewController modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="Jzz-3W-G7C" customClass="MenuViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" tag="1" contentMode="scaleToFill" id="WLa-lN-cLn">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJJ-Of-eDC">
-                                <rect key="frame" x="203" y="69" width="180" height="739"/>
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="V96-XG-skP">
-                                        <rect key="frame" x="0.0" y="0.0" width="180" height="739"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="SZJ-UG-kkH">
-                                                <rect key="frame" x="0.0" y="50" width="180" height="43.666667938232422"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SZJ-UG-kkH" id="XRa-fb-37t">
-                                                    <rect key="frame" x="0.0" y="0.0" width="180" height="43.666667938232422"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                </tableViewCellContentView>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="180" id="3ay-Oa-buF"/>
-                                    <constraint firstAttribute="trailing" secondItem="V96-XG-skP" secondAttribute="trailing" id="6l1-8B-k7J"/>
-                                    <constraint firstItem="V96-XG-skP" firstAttribute="top" secondItem="hJJ-Of-eDC" secondAttribute="top" id="SLg-K6-fza"/>
-                                    <constraint firstAttribute="bottom" secondItem="V96-XG-skP" secondAttribute="bottom" id="Sks-xH-JcK"/>
-                                    <constraint firstItem="V96-XG-skP" firstAttribute="leading" secondItem="hJJ-Of-eDC" secondAttribute="leading" id="WDF-zD-5Zw"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="lBs-5v-GyR"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.50361394557823125" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="lBs-5v-GyR" firstAttribute="bottom" secondItem="hJJ-Of-eDC" secondAttribute="bottom" constant="10" id="7Y5-rE-iaY"/>
-                            <constraint firstItem="hJJ-Of-eDC" firstAttribute="top" secondItem="lBs-5v-GyR" secondAttribute="top" constant="10" id="E6H-YQ-Xc4"/>
-                            <constraint firstItem="lBs-5v-GyR" firstAttribute="trailing" secondItem="hJJ-Of-eDC" secondAttribute="trailing" constant="10" id="G9O-Vr-0xZ"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="menuTableView" destination="V96-XG-skP" id="EsL-in-YLd"/>
-                        <outlet property="menuView" destination="hJJ-Of-eDC" id="uNu-pQ-GkL"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Kfp-5P-7xa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2405" y="-308"/>
         </scene>
     </scenes>
     <resources>
