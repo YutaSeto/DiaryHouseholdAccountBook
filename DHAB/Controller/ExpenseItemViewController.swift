@@ -17,6 +17,7 @@ protocol ExpenseItemViewControllerDelegate{
 
 protocol CategoryViewControllerDelegate{
     func updateHouseholdAccountBook()
+    func updateIncome()
 }
 
 class ExpenseItemViewController: UIViewController{
@@ -118,12 +119,10 @@ class ExpenseItemViewController: UIViewController{
             try! realm.write{
                 categoryModel.name = textFieldOnAlert.text!
                 realm.add(categoryModel)
-                realm.cancelWrite() // 処理を止めて
-                realm.beginWrite() // また始める
-                self.expenseItemViewControllerDelegate?.updateCategory()
-                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
-                self.expenseItemTableView.reloadData()
             }
+            self.expenseItemViewControllerDelegate?.updateCategory()
+            self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
+            self.expenseItemTableView.reloadData()
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
@@ -152,10 +151,10 @@ class ExpenseItemViewController: UIViewController{
             try! realm.write{
                 incomeCategoryModel.name = textFieldOnAlert.text!
                 realm.add(incomeCategoryModel)
-                self.expenseItemViewControllerDelegate?.updateCategory()
-                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
-                self.incomeTableView.reloadData()
             }
+            self.expenseItemViewControllerDelegate?.updateCategory()
+            self.categoryViewControllerDelegate?.updateIncome()
+            self.incomeTableView.reloadData()
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
@@ -179,8 +178,6 @@ class ExpenseItemViewController: UIViewController{
         incomeCategoryList = Array(result)
         incomeTableView.reloadData()
     }
-    
-
 }
 
 extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
@@ -222,9 +219,9 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let realm = try!Realm()
                 try! realm.write{
                     self.categoryList[indexPath.row].name = textFieldOnAlert.text!
-                    self.expenseItemViewControllerDelegate?.updateCategory()
-                    self.expenseItemViewControllerDelegate?.updatePayment()
                 }
+                self.expenseItemViewControllerDelegate?.updateCategory()
+                self.expenseItemViewControllerDelegate?.updatePayment()
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
                 return
@@ -245,8 +242,8 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let realm = try!Realm()
                 try! realm.write{
                     self.incomeCategoryList[indexPath.row].name = textFieldOnAlert.text!
-                    self.expenseItemViewControllerDelegate?.updateCategory()
                 }
+                self.expenseItemViewControllerDelegate?.updateCategory()
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
                 return

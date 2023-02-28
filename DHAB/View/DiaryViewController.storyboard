@@ -23,7 +23,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4XQ-L2-GUj">
-                                <rect key="frame" x="303" y="728" width="60" height="60"/>
+                                <rect key="frame" x="303" y="698" width="60" height="60"/>
                                 <color key="backgroundColor" name="AccentColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="2op-e5-MMf"/>
@@ -51,7 +51,7 @@
                             <constraint firstItem="Ybz-Ja-FBK" firstAttribute="trailing" secondItem="4XQ-L2-GUj" secondAttribute="trailing" constant="30" id="AOO-JY-5xY"/>
                             <constraint firstItem="Ybz-Ja-FBK" firstAttribute="trailing" secondItem="NMR-Rv-0L7" secondAttribute="trailing" constant="20" id="Apb-uG-gXY"/>
                             <constraint firstItem="NMR-Rv-0L7" firstAttribute="top" secondItem="ZbT-AH-T2c" secondAttribute="bottom" constant="20" id="LeD-DP-Wsg"/>
-                            <constraint firstItem="Ybz-Ja-FBK" firstAttribute="bottom" secondItem="4XQ-L2-GUj" secondAttribute="bottom" constant="30" id="Zj4-cF-s4z"/>
+                            <constraint firstItem="Ybz-Ja-FBK" firstAttribute="bottom" secondItem="4XQ-L2-GUj" secondAttribute="bottom" constant="60" id="Zj4-cF-s4z"/>
                             <constraint firstAttribute="trailing" secondItem="ZbT-AH-T2c" secondAttribute="trailing" id="fm4-FR-HOW"/>
                             <constraint firstItem="ZbT-AH-T2c" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" id="q4y-y6-6EG"/>
                             <constraint firstItem="ZbT-AH-T2c" firstAttribute="top" secondItem="Ybz-Ja-FBK" secondAttribute="top" constant="20" id="qUd-6u-TEz"/>

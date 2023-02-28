@@ -245,6 +245,10 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
 }
 
 extension CalendarViewController:InputViewControllerDelegate{
+    func updateIncome() {
+        return
+    }
+    
     func updatePayment() {
         return
     }

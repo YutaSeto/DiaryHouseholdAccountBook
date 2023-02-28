@@ -143,18 +143,27 @@ class HouseholdAccountBookViewController:UIViewController{
         savingView.isHidden = true
         incomeView.isHidden = true
         paymentView.isHidden = false
+        if isExpanded == true{
+            returnView()
+        }
         
     }
     func addIncomeView(){
         savingView.isHidden = true
         paymentView.isHidden = true
         incomeView.isHidden = false
+        if isExpanded == true{
+            returnView()
+        }
     }
     
     func addSavingView(){
         incomeView.isHidden = true
         paymentView.isHidden = true
         savingView.isHidden = false
+        if isExpanded == true{
+            returnView()
+        }
     }
     
     func settingSubView(){
@@ -434,7 +443,7 @@ class HouseholdAccountBookViewController:UIViewController{
             isExpanded = false
         }else{
             UIView.animate(
-                withDuration: 0.5,
+                withDuration: 0.3,
                 delay: 0,
                 usingSpringWithDamping: 1,
                 initialSpringVelocity: 0,
@@ -574,11 +583,21 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         if tableView.tag == 4{
             switch indexPath.row{
             case 0:
-                let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
-                let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
-                expenseItemViewController.categoryViewControllerDelegate = self
-                present(expenseItemViewController,animated: true)
-                returnView()
+                if householdAccountBookSegmentedControl.selectedSegmentIndex == 1{
+                    let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
+                    let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
+                    expenseItemViewController.categoryViewControllerDelegate = self
+                    present(expenseItemViewController,animated: true)
+                    expenseItemViewController.segmentedControl!.selectedSegmentIndex = 1
+                    expenseItemViewController.addIncomeView()
+                    returnView()
+                }else{
+                    let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
+                    let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
+                    expenseItemViewController.categoryViewControllerDelegate = self
+                    present(expenseItemViewController,animated: true)
+                    returnView()
+                }
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
                 let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
@@ -586,6 +605,10 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 returnView()
             default:
                 return
+            }
+        }else{
+            if isExpanded == true{
+                returnView()
             }
         }
         return
@@ -613,6 +636,13 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         setPaymentTableViewDataSourse()
         setSumPaymentData()
         sumPaymentTableView.reloadData()
-        print("予算が更新されました")
+    }
+    
+    func updateIncome() {
+        setIncomeData()
+        setIncomeBudgetData()
+        setIncomeCategoryData()
+        incomeTableViewDataSource = []
+        setIncomeTableViewDataSourse()
     }
 }

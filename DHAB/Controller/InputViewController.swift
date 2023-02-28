@@ -173,8 +173,6 @@ class InputViewController:UIViewController{
         dateTextField.text = dateFormatter.string(from: targetDate)
         dateTextField.inputAccessoryView = toolbar
         householdAccountBookDatePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
-        
-        let diaryDatePicker = datePicker
         householdAccountBookDatePicker.date = targetDate
         diaryDateTextField.inputView = householdAccountBookDatePicker
         diaryDateTextField.text = dateFormatter.string(from: targetDate)
@@ -242,13 +240,11 @@ class InputViewController:UIViewController{
     func dayBack(){
         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
         dateTextField.text = dateFormatter.string(from: date)
-//        diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
         dateTextField.text = dateFormatter.string(from: date)
-//        diaryDateLabel.text = dateFormatter.string(from: date)
     }
     
     func setCategoryData(){

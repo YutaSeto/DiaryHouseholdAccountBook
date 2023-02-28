@@ -70,6 +70,10 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
 }
 
 extension DiaryViewController:InputViewControllerDelegate{
+    func updateIncome() {
+        return
+    }
+    
     func updatePayment() {
         return
     }
