@@ -12,6 +12,11 @@ import RealmSwift
 protocol ExpenseItemViewControllerDelegate{
     func updateCategory()
     func updateBudget()
+    func updatePayment()
+}
+
+protocol CategoryViewControllerDelegate: AnyObject{
+    func updateHouseholdAccountBook()
 }
 
 class ExpenseItemViewController: UIViewController{
@@ -19,7 +24,8 @@ class ExpenseItemViewController: UIViewController{
     let realm = try! Realm()
     var categoryList:[CategoryModel] = []
     var incomeCategoryList:[IncomeCategoryModel] = []
-    var categoryViewControllerDelegate:ExpenseItemViewControllerDelegate?
+    var expenseItemViewControllerDelegate:ExpenseItemViewControllerDelegate?
+    weak var categoryViewControllerDelegate:CategoryViewControllerDelegate?
     
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var addIncomeButton: UIButton!
@@ -41,6 +47,7 @@ class ExpenseItemViewController: UIViewController{
         addPaymentView()
         settingSubView()
         configureAddButton()
+        categoryViewControllerDelegate?.updateHouseholdAccountBook()
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -96,7 +103,7 @@ class ExpenseItemViewController: UIViewController{
     }
     
     @objc func tapAddPaymentButton(){
-        categoryViewControllerDelegate = self
+        expenseItemViewControllerDelegate = self
         RecognitionChange.shared.updateHouseholdAccountBook = true
         let alert = UIAlertController(title: "カテゴリーを追加します", message: nil, preferredStyle: .alert)
         var textFieldOnAlert = UITextField()
@@ -111,7 +118,8 @@ class ExpenseItemViewController: UIViewController{
             try! realm.write{
                 categoryModel.name = textFieldOnAlert.text!
                 realm.add(categoryModel)
-                self.categoryViewControllerDelegate?.updateCategory()
+                self.expenseItemViewControllerDelegate?.updateCategory()
+                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.expenseItemTableView.reloadData()
             }
         })
@@ -127,7 +135,7 @@ class ExpenseItemViewController: UIViewController{
     }
     
     @objc func tapAddIncomeButton(){
-        categoryViewControllerDelegate = self
+        expenseItemViewControllerDelegate = self
         RecognitionChange.shared.updateHouseholdAccountBook = true
         let alert = UIAlertController(title: "カテゴリーを追加します", message: nil, preferredStyle: .alert)
         var textFieldOnAlert = UITextField()
@@ -142,7 +150,8 @@ class ExpenseItemViewController: UIViewController{
             try! realm.write{
                 incomeCategoryModel.name = textFieldOnAlert.text!
                 realm.add(incomeCategoryModel)
-                self.categoryViewControllerDelegate?.updateCategory()
+                self.expenseItemViewControllerDelegate?.updateCategory()
+                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.incomeTableView.reloadData()
             }
         })
@@ -198,7 +207,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.tag == 0{
-            categoryViewControllerDelegate = self
+            expenseItemViewControllerDelegate = self
             RecognitionChange.shared.updateHouseholdAccountBook = true
             let alert = UIAlertController(title: "\(categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
             var textFieldOnAlert = UITextField()
@@ -211,7 +220,8 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let realm = try!Realm()
                 try! realm.write{
                     self.categoryList[indexPath.row].name = textFieldOnAlert.text!
-                    self.categoryViewControllerDelegate?.updateCategory()
+                    self.expenseItemViewControllerDelegate?.updateCategory()
+                    self.expenseItemViewControllerDelegate?.updatePayment()
                 }
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -233,7 +243,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let realm = try!Realm()
                 try! realm.write{
                     self.incomeCategoryList[indexPath.row].name = textFieldOnAlert.text!
-                    self.categoryViewControllerDelegate?.updateCategory()
+                    self.expenseItemViewControllerDelegate?.updateCategory()
                 }
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -273,6 +283,10 @@ extension ExpenseItemViewController:ExpenseItemViewControllerDelegate{
     }
     
     func updateBudget() {
+        return
+    }
+    
+    func updatePayment() {
         return
     }
 }

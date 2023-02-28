@@ -21,7 +21,8 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var dayBackButton: UIButton!
     @IBOutlet weak var dayPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
-    
+    @IBOutlet weak var menuButton: UIBarButtonItem!
+        
     override func viewDidLoad() {
         paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         incomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
@@ -69,6 +70,12 @@ class HouseholdAccountBookViewController:UIViewController{
         sumPaymentTableViewHeight.constant = CGFloat(sumPaymentTableView.contentSize.height)
         sumIncomeTableViewHeight.constant = CGFloat(sumIncomeTableView.contentSize.height)
     }
+    
+    @IBAction func menuButton(_ sender: UIBarButtonItem) {
+        let menuViewController = MenuViewController()
+        menuViewController.categoryViewControllerDelegate = self
+    }
+    
     
     @IBAction func householdAccountBookSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
@@ -420,6 +427,7 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
         setSumPaymentData()
+        paymentTableView.reloadData()
         sumPaymentTableView.reloadData()
     }
     
@@ -513,16 +521,15 @@ extension HouseholdAccountBookViewController:HouseholdAccountBookControllerDeleg
     }
 }
 
-extension HouseholdAccountBookViewController:ExpenseItemViewControllerDelegate{
-    func updateCategory() {
-        return
-    }
-    
-    func updateBudget() {
+extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
+    func updateHouseholdAccountBook() {
         setPaymentData()
         setCategoryData()
         setPaymentBudgetData()
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
+        setSumPaymentData()
+        sumPaymentTableView.reloadData()
+        print("予算が更新されました")
     }
 }

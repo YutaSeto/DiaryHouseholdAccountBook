@@ -10,6 +10,7 @@ import UIKit
 class MenuViewController: UIViewController {
     
     let menuList = ["カテゴリーの設定","予算の設定"]
+    var categoryViewControllerDelegate:CategoryViewControllerDelegate?
     
     @IBOutlet weak var menuTableView: UITableView!
     @IBOutlet weak var menuView: UIView!
@@ -75,6 +76,8 @@ extension MenuViewController: UITableViewDelegate,UITableViewDataSource{
         case 0:
             let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
             let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController")
+            let categoryViewController = ExpenseItemViewController()
+            categoryViewController.categoryViewControllerDelegate = categoryViewControllerDelegate
             present(expenseItemViewController,animated: true)
             returnView()
         case 1:

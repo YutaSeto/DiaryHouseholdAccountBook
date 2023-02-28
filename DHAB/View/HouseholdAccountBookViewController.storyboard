@@ -90,7 +90,7 @@
                     <navigationItem key="navigationItem" id="o3O-nN-tS7">
                         <barButtonItem key="rightBarButtonItem" title="menu" id="f7u-sG-UTE">
                             <connections>
-                                <action selector="menuButton:" destination="xpm-Tn-k0g" id="D3S-RY-iDy"/>
+                                <action selector="menuButton:" destination="xpm-Tn-k0g" id="LYQ-So-QV3"/>
                                 <segue destination="Jzz-3W-G7C" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="nbR-dS-BWW"/>
                             </connections>
                         </barButtonItem>
@@ -104,6 +104,7 @@
                         <outlet property="incomeTableView" destination="iXe-kz-gYf" id="OE3-LP-BTW"/>
                         <outlet property="incomeView" destination="QJg-aq-W54" id="NVX-bS-K9D"/>
                         <outlet property="inputButton" destination="jxc-v9-VWb" id="IDY-5y-n2W"/>
+                        <outlet property="menuButton" destination="f7u-sG-UTE" id="0K3-dO-iF5"/>
                         <outlet property="paymentTableView" destination="2l9-up-7Hb" id="pvO-id-Z8A"/>
                         <outlet property="paymentView" destination="opO-ja-Hb5" id="XA2-Rt-Bn0"/>
                         <outlet property="savingView" destination="CuD-Qs-UOb" id="Qjc-51-L7b"/>
@@ -122,14 +123,14 @@
                             <rect key="frame" x="0.0" y="59" width="353" height="505"/>
                             <subviews>
                                 <tableView clipsSubviews="YES" tag="2" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dRy-nZ-Lxz">
-                                    <rect key="frame" x="0.0" y="0.0" width="353" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="353" height="80"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="80" id="1Mg-K5-mem"/>
                                     </constraints>
                                 </tableView>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-up-7Hb">
-                                    <rect key="frame" x="0.0" y="50" width="353" height="455"/>
+                                    <rect key="frame" x="0.0" y="80" width="353" height="425"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 </tableView>
                             </subviews>
