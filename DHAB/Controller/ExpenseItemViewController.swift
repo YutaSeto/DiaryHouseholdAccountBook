@@ -220,6 +220,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 try! realm.write{
                     self.categoryList[indexPath.row].name = textFieldOnAlert.text!
                 }
+                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.expenseItemViewControllerDelegate?.updateCategory()
                 self.expenseItemViewControllerDelegate?.updatePayment()
             })
@@ -243,6 +244,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 try! realm.write{
                     self.incomeCategoryList[indexPath.row].name = textFieldOnAlert.text!
                 }
+                self.categoryViewControllerDelegate?.updateIncome()
                 self.expenseItemViewControllerDelegate?.updateCategory()
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -262,6 +264,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 realm.delete(targetItem)
             }
             categoryList.remove(at: indexPath.row)
+            categoryViewControllerDelegate?.updateHouseholdAccountBook()
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }else if tableView.tag == 1{
             let targetItem = incomeCategoryList[indexPath.row]
@@ -270,6 +273,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 realm.delete(targetItem)
             }
             incomeCategoryList.remove(at: indexPath.row)
+            categoryViewControllerDelegate?.updateIncome()
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }

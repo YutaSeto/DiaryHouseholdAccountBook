@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7cL-QX-Ga4">
-                                <rect key="frame" x="20" y="79" width="353" height="32"/>
+                                <rect key="frame" x="20" y="99" width="353" height="32"/>
                                 <segments>
                                     <segment title="家計簿"/>
                                     <segment title="日記"/>
@@ -33,7 +33,7 @@
                         <viewLayoutGuide key="safeArea" id="hrv-Mi-Hfp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="7cL-QX-Ga4" firstAttribute="top" secondItem="hrv-Mi-Hfp" secondAttribute="top" constant="20" id="4xc-p7-nsj"/>
+                            <constraint firstItem="7cL-QX-Ga4" firstAttribute="top" secondItem="hrv-Mi-Hfp" secondAttribute="top" constant="40" id="4xc-p7-nsj"/>
                             <constraint firstItem="hrv-Mi-Hfp" firstAttribute="trailing" secondItem="7cL-QX-Ga4" secondAttribute="trailing" constant="20" id="R9O-pH-qxZ"/>
                             <constraint firstItem="7cL-QX-Ga4" firstAttribute="leading" secondItem="hrv-Mi-Hfp" secondAttribute="leading" constant="20" id="bwh-5R-BZQ"/>
                         </constraints>
