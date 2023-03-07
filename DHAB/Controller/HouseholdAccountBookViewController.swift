@@ -12,6 +12,7 @@ import Charts
 
 protocol HouseholdAccountBookControllerDelegate{
     func updateList()
+    func updateIncome()
 }
 
 class HouseholdAccountBookViewController:UIViewController{
@@ -22,12 +23,84 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var dayPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
     @IBOutlet weak var menuButton: UIBarButtonItem!
-        
+    
+    //subView関連
+    var isMonth = true
+    @IBOutlet var paymentView: UIView!
+    @IBOutlet var incomeView: UIView!
+    @IBOutlet var savingView: UIView!
+    
+    //支出画面の設定
+    var sumPayment:HouseholdAccountBookTableViewCellItem = HouseholdAccountBookTableViewCellItem()
+    private var paymentList:[PaymentModel] = []
+    private var paymentBudgetList:[PaymentBudgetModel] = []
+    private var categoryList:[CategoryModel] = []
+    private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
+    var householdeAccountBookViewControllerDelegate:HouseholdAccountBookControllerDelegate?
+    
+    @IBOutlet weak var sumPaymentTableView: UITableView!
+    @IBOutlet weak var paymentTableView: UITableView!
+    @IBOutlet weak var inputButton: UIButton!
+    
+    @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
+    
+    //収入画面関連
+    var sumIncome:IncomeTableViewCellItem = IncomeTableViewCellItem()
+    var incomeList:[IncomeModel] = []
+    var incomeBudgetList:[IncomeBudgetModel] = []
+    var incomeCategoryList:[IncomeCategoryModel] = []
+    var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
+    @IBOutlet weak var addIncomeButton: UIButton!
+    @IBOutlet weak var incomeTableView: UITableView!
+    @IBOutlet weak var sumIncomeTableView: UITableView!
+    @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
+    
+    //slideMenu画面関連
+    let menuList = ["カテゴリーの設定","予算の設定"]
+    var isExpanded:Bool = false
+    @IBOutlet var slideMenuView: UIView!
+    @IBOutlet weak var menuTableView: UITableView!
+    
+    //推移画面関連
+    @IBOutlet weak var resultTableView: UITableView!
+    var sumPaymentList:[Int] = [0,0,0,0,0,0,0,0,0,0,0,0]
+    var sumIncomeList:[Int] = [0,0,0,0,0,0,0,0,0,0,0,0]
+    
+    
+    func setMonthSumPayment(){
+        for i in 0 ..< 12{
+            let calendar = Calendar(identifier: .gregorian)
+            let comps = calendar.dateComponents([.year], from: date)
+            let day = calendar.date(from: comps)!
+            let addIMonth = DateComponents(month: i)
+            let add2Month = DateComponents(month: i + 1)
+            let firstDay = calendar.date(byAdding: addIMonth, to: day)?.zeroclock
+            let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
+            let dayCheckSumPayment = paymentList.filter({$0.date >= firstDay!})
+            let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
+            sumPaymentList[i] = dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1}
+        }
+        resultTableView.reloadData()
+    }
+    
+    func setMonthSumIncome(){
+        for i in 0 ..< 12{
+            let calendar = Calendar(identifier: .gregorian)
+            let comps = calendar.dateComponents([.year], from: date)
+            let day = calendar.date(from: comps)!
+            let addIMonth = DateComponents(month: i)
+            let add2Month = DateComponents(month: i + 1)
+            let firstDay = calendar.date(byAdding: addIMonth, to: day)?.zeroclock
+            let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
+            let dayCheckSumPayment = incomeList.filter({$0.date >= firstDay!})
+            let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
+            sumIncomeList[i] = dayCheckSumPayment2.map{$0.amount}.reduce(0){$0 + $1}
+        }
+        resultTableView.reloadData()
+    }
+    
     override func viewDidLoad() {
-        paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        incomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        sumPaymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        sumIncomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        setNib()
         dayLabel.text = monthDateFormatter.string(from:date)
         addSubView()
         addPaymentView()
@@ -42,6 +115,8 @@ class HouseholdAccountBookViewController:UIViewController{
         sumIncomeTableView.dataSource = self
         menuTableView.delegate = self
         menuTableView.dataSource = self
+        resultTableView.delegate = self
+        resultTableView.dataSource = self
         configureInputButton()
         setPaymentData()
         setIncomeData()
@@ -51,6 +126,8 @@ class HouseholdAccountBookViewController:UIViewController{
         setCategoryData()
         setPaymentTableViewDataSourse()
         setIncomeTableViewDataSourse()
+        setMonthSumPayment()
+        setMonthSumIncome()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,15 +150,26 @@ class HouseholdAccountBookViewController:UIViewController{
         sumIncomeTableViewHeight.constant = CGFloat(sumIncomeTableView.contentSize.height)
     }
     
+    func setNib(){
+            paymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+            incomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+            sumPaymentTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+            sumIncomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+            resultTableView.register(UINib(nibName: "ResultTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+    }
+    
     
     @IBAction func householdAccountBookSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
         case 0:
             addPaymentView()
+            isMonth = true
         case 1:
             addIncomeView()
+            isMonth = true
         case 2:
             addSavingView()
+            isMonth = false
         default:
             return
         }
@@ -97,25 +185,50 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func dayBack(){
         householdeAccountBookViewControllerDelegate = self
-        date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
-        dayLabel.text = monthDateFormatter.string(from: date)
+        if isMonth{
+            date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
+            dayLabel.text = monthDateFormatter.string(from: date)
+        }else{
+            date = Calendar.current.date(byAdding: .year, value: -1, to: date)!
+            dayLabel.text = yearDateFormatter.string(from: date)
+        }
+        setMonthSumPayment()
+        setMonthSumIncome()
         self.householdeAccountBookViewControllerDelegate?.updateList()
+        self.householdeAccountBookViewControllerDelegate?.updateIncome()
         paymentTableView.reloadData()
+        incomeTableView.reloadData()
     }
     
     func dayPass(){
         householdeAccountBookViewControllerDelegate = self
-        date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
-        dayLabel.text = monthDateFormatter.string(from: date)
+        if isMonth{
+            date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
+            dayLabel.text = monthDateFormatter.string(from: date)
+        }else{
+            date = Calendar.current.date(byAdding: .year, value: 1, to: date)!
+            dayLabel.text = yearDateFormatter.string(from: date)
+        }
+        setMonthSumPayment()
+        setMonthSumIncome()
         self.householdeAccountBookViewControllerDelegate?.updateList()
+        self.householdeAccountBookViewControllerDelegate?.updateIncome()
         paymentTableView.reloadData()
+        incomeTableView.reloadData()
     }
     
+    private var yearDateFormatter: DateFormatter{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy年"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
+        dateFormatter.locale = Locale(identifier: "ja-JP")
+        return dateFormatter
+    }
     
     private var monthDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .none
         dateFormatter.dateFormat = "yy年MM月"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
@@ -123,15 +236,12 @@ class HouseholdAccountBookViewController:UIViewController{
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月dd日"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
     
     //subView関連
-    @IBOutlet var paymentView: UIView!
-    @IBOutlet var incomeView: UIView!
-    @IBOutlet var savingView: UIView!
-    
     func addSubView(){
         view.addSubview(paymentView)
         view.addSubview(incomeView)
@@ -143,27 +253,20 @@ class HouseholdAccountBookViewController:UIViewController{
         savingView.isHidden = true
         incomeView.isHidden = true
         paymentView.isHidden = false
-        if isExpanded == true{
-            returnView()
-        }
-        
+        dayLabel.text = monthDateFormatter.string(from: date)
     }
     func addIncomeView(){
         savingView.isHidden = true
         paymentView.isHidden = true
         incomeView.isHidden = false
-        if isExpanded == true{
-            returnView()
-        }
+        dayLabel.text = monthDateFormatter.string(from: date)
     }
     
     func addSavingView(){
         incomeView.isHidden = true
         paymentView.isHidden = true
         savingView.isHidden = false
-        if isExpanded == true{
-            returnView()
-        }
+        dayLabel.text = yearDateFormatter.string(from: date)
     }
     
     func settingSubView(){
@@ -188,42 +291,31 @@ class HouseholdAccountBookViewController:UIViewController{
         slideMenuView.translatesAutoresizingMaskIntoConstraints = false
         slideMenuView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         slideMenuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        slideMenuView.widthAnchor.constraint(equalToConstant: 240).isActive = true
+        slideMenuView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         slideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    //支出画面の設定
-    var sumPayment:HouseholdAccountBookTableViewCellItem = HouseholdAccountBookTableViewCellItem()
-    private var paymentList:[PaymentModel] = []
-    private var paymentBudgetList:[PaymentBudgetModel] = []
-    private var categoryList:[CategoryModel] = []
-    private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
-    let realm = try! Realm()
-    var householdeAccountBookViewControllerDelegate:HouseholdAccountBookControllerDelegate?
-    
-    @IBOutlet weak var sumPaymentTableView: UITableView!
-    @IBOutlet weak var paymentTableView: UITableView!
-    @IBOutlet weak var inputButton: UIButton!
-    
-    @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
-    
+    //支出画面関連
     @IBAction func inputButton(_ sender: Any) {
         tapInputButton()
     }
     
     func setCategoryData(){
+        let realm = try! Realm()
         let result = realm.objects(CategoryModel.self)
         categoryList = Array(result)
         paymentTableView.reloadData()
     }
     
     func setPaymentBudgetData(){
+        let realm = try! Realm()
         let result = realm.objects(PaymentBudgetModel.self)
         paymentBudgetList = Array(result)
         paymentTableView.reloadData()
     }
     
     func setPaymentData(){
+        let realm = try! Realm()
         let result = realm.objects(PaymentModel.self)
         paymentList = Array(result)
         paymentTableView.reloadData()
@@ -244,14 +336,14 @@ class HouseholdAccountBookViewController:UIViewController{
     func setPaymentTableViewDataSourse(){
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-        let add = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let add = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!.zeroclock
         let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
-        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate < lastDay})
         
         let dayCheckPayment = paymentList.filter({$0.date >= firstDay})
-        let dayCheckPayment2 = dayCheckPayment.filter{$0.date <= lastDay}
+        let dayCheckPayment2 = dayCheckPayment.filter{$0.date < lastDay}
         categoryList.forEach{ expense in
             if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
@@ -269,6 +361,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 data.expenseID = expense.id
                 data.budgetDate = date
                 data.budgetPrice = 0
+                let realm = try! Realm()
                 try! realm.write { realm.add(data)}
                 paymentBudgetList.append(data)
                 
@@ -287,13 +380,11 @@ class HouseholdAccountBookViewController:UIViewController{
     func sumPayment(_:Date) -> Int{
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        let day = calendar.date(from: comps)!
-        let addDay = DateComponents(day: 1)
-        let firstDay = calendar.date(byAdding: addDay, to: day)
-        let addMonth = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
-        let dayCheck = paymentList.filter({$0.date >= firstDay!})
-        let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
+        let dayCheck = paymentList.filter({$0.date >= firstDay})
+        let dayCheck2 = dayCheck.filter({$0.date < lastDay})
         let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
@@ -301,13 +392,11 @@ class HouseholdAccountBookViewController:UIViewController{
     func sumPaymentBudget(_:Date) -> Int{
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        let day = calendar.date(from: comps)!
-        let addDay = DateComponents(day: 1)
-        let firstDay = calendar.date(byAdding: addDay, to: day)
-        let addMonth = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
-        let dayCheck = paymentBudgetList.filter({$0.budgetDate >= firstDay!})
-        let dayCheck2 = dayCheck.filter({$0.budgetDate <= lastDay})
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
+        let dayCheck = paymentBudgetList.filter({$0.budgetDate >= firstDay})
+        let dayCheck2 = dayCheck.filter({$0.budgetDate < lastDay})
         let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
         return sum
     }
@@ -316,20 +405,19 @@ class HouseholdAccountBookViewController:UIViewController{
         sumPayment.name = "合計"
         sumPayment.paymentPrice = sumPayment(date)
         sumPayment.budgetPrice = sumPaymentBudget(date)
-        
     }
-    //収入画面の設定
     
-    var incomeList:[IncomeModel] = []
-    var incomeBudgetList:[IncomeBudgetModel] = []
-    var incomeCategoryList:[IncomeCategoryModel] = []
-    var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
-    @IBOutlet weak var addIncomeButton: UIButton!
-    @IBOutlet weak var incomeTableView: UITableView!
-    @IBOutlet weak var sumIncomeTableView: UITableView!
+    func getComma(_ num: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        formatter.groupingSize = 3
+        let number = "\(formatter.string(from: NSNumber(value: num)) ?? "")"
+        return number
+    }
     
-    @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
     
+    //収入画面関連
     @IBAction func addIncomeButton(_ sender: UIButton) {
         tapAddIncomeButton()
     }
@@ -342,32 +430,41 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     func setIncomeData(){
+        let realm = try! Realm()
         let result = realm.objects(IncomeModel.self)
         incomeList = Array(result)
         incomeTableView.reloadData()
     }
     
     func setIncomeCategoryData(){
+        let realm = try! Realm()
         let result = realm.objects(IncomeCategoryModel.self)
         incomeCategoryList = Array(result)
     }
     
     func setIncomeBudgetData(){
+        let realm = try! Realm()
         let result = realm.objects(IncomeBudgetModel.self)
         incomeBudgetList = Array(result)
+    }
+    
+    func setSumIncomeData(){
+        sumIncome.name = "合計"
+        sumIncome.incomePrice = sumPayment(date)
+        sumIncome.incomeBudget = sumPaymentBudget(date)
     }
     
     func setIncomeTableViewDataSourse(){
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-        let add = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let add = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: add, to: firstDay)!.zeroclock
         let dayCheckBudget = incomeBudgetList.filter({$0.budgetDate >= firstDay})
-        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
+        let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate < lastDay})
         
         let dayCheckPayment = incomeList.filter({$0.date >= firstDay})
-        let dayCheckPayment2 = dayCheckPayment.filter{$0.date <= lastDay}
+        let dayCheckPayment2 = dayCheckPayment.filter{$0.date < lastDay}
         incomeCategoryList.forEach{ expense in
             if let budget:IncomeBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.amount}.reduce(0){$0 + $1}
@@ -385,6 +482,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 data.expenseID = expense.id
                 data.budgetDate = date
                 data.budgetPrice = 0
+                let realm = try! Realm()
                 try! realm.write { realm.add(data)}
                 incomeBudgetList.append(data)
                 
@@ -402,13 +500,11 @@ class HouseholdAccountBookViewController:UIViewController{
     func sumIncome(_:Date) -> Int{
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        let day = calendar.date(from: comps)!
-        let addDay = DateComponents(day: 1)
-        let firstDay = calendar.date(byAdding: addDay, to: day)
-        let addMonth = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
-        let dayCheck = incomeList.filter({$0.date >= firstDay!})
-        let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
+        let dayCheck = incomeList.filter({$0.date >= firstDay})
+        let dayCheck2 = dayCheck.filter({$0.date < lastDay})
         let sum = dayCheck2.map{$0.amount}.reduce(0){$0 + $1}
         return sum
     }
@@ -416,23 +512,18 @@ class HouseholdAccountBookViewController:UIViewController{
     func sumIncomeBudget(_:Date) -> Int{
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: date)
-        let day = calendar.date(from: comps)!
-        let addDay = DateComponents(day: 1)
-        let firstDay = calendar.date(byAdding: addDay, to: day)
-        let addMonth = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay!)!
-        let dayCheck = incomeBudgetList.filter({$0.budgetDate >= firstDay!})
-        let dayCheck2 = dayCheck.filter({$0.budgetDate <= lastDay})
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
+        let dayCheck = incomeBudgetList.filter({$0.budgetDate >= firstDay})
+        let dayCheck2 = dayCheck.filter({$0.budgetDate < lastDay})
         let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
         return sum
     }
     
-    //slideMenu画面関連
-    let menuList = ["カテゴリーの設定","予算の設定"]
-    var isExpanded:Bool = false
-    @IBOutlet var slideMenuView: UIView!
-    @IBOutlet weak var menuTableView: UITableView!
+
     
+    //slidemenu関連
     @IBAction func menuButton(_ sender: UIBarButtonItem) {
         showMenu(shouldExpand: isExpanded)
     }
@@ -492,6 +583,8 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
         setSumPaymentData()
+        setMonthSumPayment()
+        
         paymentTableView.reloadData()
         sumPaymentTableView.reloadData()
     }
@@ -514,6 +607,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             return 1
         }else if tableView.tag == 4{
             return menuList.count
+        }else if tableView.tag == 5{
+            return 12
         }
         return 0
     }
@@ -524,9 +619,9 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             let item = paymentTableViewDataSource[indexPath.row]
             cell.data = item
             cell.expenceItemLabel.text = item.name
-            cell.budgetLabel.text = String(item.budgetPrice)
-            cell.priceLabel.text = String(item.paymentPrice)
-            cell.balanceLabel.text = String(item.budgetPrice - item.paymentPrice)
+            cell.budgetLabel.text = getComma(item.budgetPrice)
+            cell.priceLabel.text = getComma(item.paymentPrice)
+            cell.balanceLabel.text = getComma(item.budgetPrice - item.paymentPrice)
             guard item.budgetPrice != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
@@ -538,9 +633,9 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             let item = incomeTableViewDataSource[indexPath.row]
             cell.incomeData = item
             cell.expenceItemLabel.text = item.name
-            cell.budgetLabel.text = String(item.incomeBudget)
-            cell.priceLabel.text = String(item.incomePrice)
-            cell.balanceLabel.text = String(item.incomeBudget - item.incomePrice)
+            cell.budgetLabel.text = getComma(item.incomeBudget)
+            cell.priceLabel.text = getComma(item.incomePrice)
+            cell.balanceLabel.text = getComma(item.incomeBudget - item.incomePrice)
             guard item.incomeBudget != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
@@ -550,9 +645,9 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         }else if tableView.tag == 2{
             let cell = sumPaymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
-            cell.budgetLabel.text = String(sumPaymentBudget(_:date))
-            cell.priceLabel.text = String(sumPayment(_:date))
-            cell.balanceLabel.text = String(sumPaymentBudget(date) - sumPayment(date))
+            cell.budgetLabel.text = getComma(sumPaymentBudget(_:date))
+            cell.priceLabel.text = getComma(sumPayment(_:date))
+            cell.balanceLabel.text = getComma(sumPaymentBudget(date) - sumPayment(date))
             guard sumPaymentBudget(date) != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
@@ -574,6 +669,13 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         }else if tableView.tag == 4{
             let cell = menuTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel!.text = menuList[indexPath.row]
+            return cell
+        }else if tableView.tag == 5{
+            let cell = resultTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
+            cell.dateLabel.text = "\(String(indexPath.row + 1))月"
+            cell.paymentLabel.text = String(sumPaymentList[indexPath.row])
+            cell.incomeLabel.text = String(sumIncomeList[indexPath.row])
+            cell.resultLabel.text = String(sumIncomeList[indexPath.row] - sumPaymentList[indexPath.row])
             return cell
         }
         return UITableViewCell()
@@ -601,6 +703,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
                 let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                
+//                navigationController.budgetViewControllerDelegate = self
                 present(navigationController,animated: true)
                 returnView()
             default:
@@ -635,7 +739,7 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         paymentTableViewDataSource = []
         setPaymentTableViewDataSourse()
         setSumPaymentData()
-        sumPaymentTableView.reloadData()
+        sumIncomeTableView.reloadData()
     }
     
     func updateIncome() {
@@ -644,5 +748,7 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         setIncomeCategoryData()
         incomeTableViewDataSource = []
         setIncomeTableViewDataSourse()
+        setSumIncomeData()
+        setMonthSumIncome()
     }
 }

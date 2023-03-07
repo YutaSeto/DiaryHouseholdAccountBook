@@ -11,7 +11,7 @@ import UIKit
 public extension Date{
     var calendar:Calendar{
         var calendar = Calendar(identifier:  .gregorian)
-        calendar.timeZone = .current
+        calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
         calendar.locale = Locale(identifier: "ja-JP")
         return calendar
     }
@@ -28,6 +28,6 @@ public extension Date{
     }
     
     var zeroclock: Date{
-        return fixed(hour: 0, minute: 0, second: 0)
+        return fixed(hour: 9, minute: 0, second: 0)
     }
 }

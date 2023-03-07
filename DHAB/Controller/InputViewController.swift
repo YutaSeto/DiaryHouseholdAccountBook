@@ -14,6 +14,7 @@ protocol InputViewControllerDelegate{
     func updatePayment()
     func updateDiary()
     func updateCalendar()
+    func updateIncome()
 }
 
 class InputViewController:UIViewController{
@@ -23,6 +24,8 @@ class InputViewController:UIViewController{
     @IBOutlet var diaryView: UIView!
     @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
     //家計簿記入画面関連
+    var payment:PaymentModel? = nil
+    var income:IncomeModel? = nil
     private var paymentModelList: [PaymentModel] = []
     let realm = try! Realm()
     var categoryList:[CategoryModel] = []
@@ -40,7 +43,7 @@ class InputViewController:UIViewController{
     var datePicker:UIDatePicker{
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
-        datePicker.timeZone = .current
+        datePicker.timeZone = TimeZone(identifier: "Asia/tokyo")
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.locale = Locale(identifier: "ja-JP")
         return datePicker
@@ -55,6 +58,7 @@ class InputViewController:UIViewController{
     }
     
     //日記関連
+    var diary:DiaryModel?
     var pictureModelList:[PictureModel] = []
     var imageArray:[Data] = []
     var currentIndex = 0
@@ -82,6 +86,7 @@ class InputViewController:UIViewController{
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
         configureSliderCell()
+        configureTextfield()
         configureDateTextField()
         addSubView()
         addHouseholdAccountView()
@@ -91,9 +96,45 @@ class InputViewController:UIViewController{
         settingCollectionView()
         setCategoryData()
         resultLabel.text = ""
-        addButton.isEnabled = false
-        continueAddButton.isEnabled = false
-        addDiaryButton.isEnabled = false
+        configureAddButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setPaymentOrIncomeData()
+    }
+    
+    func setPaymentData(data:PaymentModel){
+        payment = data
+        priceTextField.text = String(payment!.price)
+        resultLabel.text = payment?.category
+        date = payment!.date
+    }
+    
+    func setIncomeData(data:IncomeModel){
+        income = data
+        priceTextField.text = String(income!.amount)
+        resultLabel.text = income?.category
+        date = income!.date
+    }
+    
+    func setPaymentOrIncomeData(){
+        if payment != nil{
+            resultLabel.text = payment?.category
+            priceTextField.text = String(payment!.price)
+            date = payment!.date
+            resultLabel.text = payment?.category
+        }else if income != nil{
+            resultLabel.text = income?.category
+            date = income!.date
+            priceTextField.text = String(income!.amount)
+        }
+    }
+    
+    func setDiary(data:DiaryModel){
+        diary = data
+        titleTextField.text = diary!.text
+        diaryInputTextView.text = diary!.text
+        date = diary!.date
     }
     
     func addSubView(){
@@ -156,11 +197,11 @@ class InputViewController:UIViewController{
     @objc func didTapFinishButton(){
         if let targetDateText = dateTextField.text,
            let targetDate = dateFormatter.date(from:targetDateText){
-            date = targetDate
+            date = targetDate.zeroclock
         }
         if let targetDateText = diaryDateTextField.text,
            let targetDate = dateFormatter.date(from: targetDateText){
-            date = targetDate
+            date = targetDate.zeroclock
         }
         view.endEditing(true)
     }
@@ -188,7 +229,10 @@ class InputViewController:UIViewController{
     }
     
     @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {
-        if priceTextField.text != "" && resultLabel.text != ""{
+        if payment != nil || income != nil{
+            addButton.isEnabled = true
+            continueAddButton.isEnabled = true
+        }else if priceTextField.text != "" && resultLabel.text != ""{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
         }else{
@@ -197,44 +241,116 @@ class InputViewController:UIViewController{
         }
     }
     
-    private func tapAddButton(){
-        let realm = try! Realm()
-        try! realm.write{
-            let paymentModel = PaymentModel()
-            paymentModel.date = date
-            paymentModel.price = Int(priceTextField.text!) ?? 0
-            paymentModel.category = resultLabel.text!
-            realm.add(paymentModel)
+    func configureAddButton(){
+        if payment != nil || income != nil{
+            addButton.isEnabled = true
+            continueAddButton.isEnabled = true
+        }else if diary != nil{
+            addDiaryButton.isEnabled = true
+        }else{
+            addButton.isEnabled = false
+            continueAddButton.isEnabled = false
+            addDiaryButton.isEnabled = false
         }
-        inputViewControllerDelegate?.updatePayment()
-        RecognitionChange.shared.updateCalendar = true
-        dismiss(animated: true)
+    }
+    
+    private func tapAddButton(){
+        if payment == nil && income == nil{
+            let realm = try! Realm()
+            try! realm.write{
+                let paymentModel = PaymentModel()
+                paymentModel.date = date
+                paymentModel.price = Int(priceTextField.text!) ?? 0
+                paymentModel.category = resultLabel.text!
+                realm.add(paymentModel)
+                print(dateFormatter.string(from:paymentModel.date.zeroclock))
+            }
+            inputViewControllerDelegate?.updatePayment()
+            RecognitionChange.shared.updateCalendar = true
+            dismiss(animated: true)
+        }else if payment != nil{ //paymetTableViewを選択した場合
+//            if resultLabel.text == {  正しく支出を修正した場合
+                let realm = try! Realm()
+                try! realm.write{
+                    payment?.date = date
+                    payment?.price = Int(priceTextField.text!) ?? 0
+                    payment?.category = resultLabel.text!
+                }
+                inputViewControllerDelegate?.updatePayment()
+            inputViewControllerDelegate?.updateCalendar()
+                RecognitionChange.shared.updateCalendar = true
+                dismiss(animated: true)
+//            }else if resultLabel.text == { //支出選択から収入に変更した場合
+            
+//            }
+            //正しく収入を修正した場合
+        }else if income != nil{
+            let realm = try! Realm()
+            try! realm.write{
+                income?.date = date
+                income?.amount = Int(priceTextField.text!) ?? 0
+                income?.category = resultLabel.text!
+            }
+            inputViewControllerDelegate?.updateIncome()
+            RecognitionChange.shared.updateCalendar = true
+            dismiss(animated: true)
+            //誤って支出に修正した場合
+//            else if resultLabel.text =={
+//
+//            }
+        }
     }
     
     private func tapContinueAddButton(){
         let realm = try! Realm()
-        try! realm.write{
-            let paymentModel = PaymentModel()
-            paymentModel.date = date
-            paymentModel.price = Int(priceTextField.text!) ?? 0
-            paymentModel.category = resultLabel.text!
-            realm.add(paymentModel)
+        if payment == nil && income == nil{
+            try! realm.write{
+                let paymentModel = PaymentModel()
+                paymentModel.date = date.zeroclock
+                paymentModel.price = Int(priceTextField.text!) ?? 0
+                paymentModel.category = resultLabel.text!
+                realm.add(paymentModel)
+            }
+            inputViewControllerDelegate?.updatePayment()
+            resultLabel.text = ""
+            priceTextField.text = ""
+        }else if payment != nil{
+            let realm = try! Realm()
+            try! realm.write{
+                payment?.date = date.zeroclock
+                payment?.price = Int(priceTextField.text!) ?? 0
+                payment?.category = resultLabel.text!
+            }
+            inputViewControllerDelegate?.updatePayment()
+            RecognitionChange.shared.updateCalendar = true
+            payment = nil
+        }else if income != nil{
+            let realm = try! Realm()
+            try! realm.write{
+                income?.date = date.zeroclock
+                income?.amount = Int(priceTextField.text!) ?? 0
+                income?.category = resultLabel.text!
+            }
+            inputViewControllerDelegate?.updateIncome()
+            RecognitionChange.shared.updateCalendar = true
+            income = nil
         }
-        inputViewControllerDelegate?.updatePayment()
-        resultLabel.text = ""
-        priceTextField.text = ""
     }
     
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日"
+        dateFormatter.dateFormat = "yy年MM月dd日hh時mm分"
         dateFormatter.locale = Locale(identifier: "ja-JP")
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
         return dateFormatter
     }
     
+    func configureTextfield(){
+        priceTextField.textAlignment = NSTextAlignment.right
+    }
     
     func settingCollectionView(){
-        collectionViewFlowLayout.estimatedItemSize = CGSize(width: collectionView.frame.width / 3,height: collectionView.frame.height / 3)
+        collectionViewFlowLayout.estimatedItemSize = CGSize(width: collectionView.frame.width / 4,height: collectionView.frame.height / 3)
     }
     
     func dayBack(){
@@ -282,19 +398,35 @@ class InputViewController:UIViewController{
     
     
     private func addDiary(){
-        let realm = try! Realm()
-        try! realm.write{
-            diaryModel.date = date
-            diaryModel.title = titleTextField.text!
-            diaryModel.text = diaryInputTextView.text
-            diaryModel.pictureList.append(objectsIn: pictureModelList)
-            realm.add(diaryModel)
+        if diary == nil{
+            let realm = try! Realm()
+            try! realm.write{
+                diaryModel.date = date.zeroclock
+                diaryModel.title = titleTextField.text!
+                diaryModel.text = diaryInputTextView.text
+                diaryModel.pictureList.append(objectsIn: pictureModelList)
+                realm.add(diaryModel)
+            }
+            titleTextField.text = ""
+            diaryInputTextView.text = ""
+            inputViewControllerDelegate?.updateDiary()
+            RecognitionChange.shared.updateCalendar = true
+            dismiss(animated: true)
+        }else{
+            let realm = try! Realm()
+            try! realm.write{
+                diary!.date = date.zeroclock
+                diary!.title = titleTextField.text!
+                diary!.text = diaryInputTextView.text
+                diary!.pictureList.append(objectsIn: pictureModelList)
+            }
+            titleTextField.text = ""
+            diaryInputTextView.text = ""
+            inputViewControllerDelegate?.updateDiary()
+            RecognitionChange.shared.updateCalendar = true
+            diary = nil
+            dismiss(animated: true)
         }
-        titleTextField.text = ""
-        diaryInputTextView.text = ""
-        inputViewControllerDelegate?.updateDiary()
-        RecognitionChange.shared.updateCalendar = true
-        dismiss(animated: true)
     }
 }
 
@@ -370,7 +502,7 @@ extension InputViewController:UIImagePickerControllerDelegate,UINavigationContro
         try! realm.write{
             let result = PictureModel()
             result.imageData = (info[.originalImage] as! UIImage).pngData()!
-            result.createdAt = date
+            result.createdAt = date.zeroclock
             realm.add(result)
         }
         imageArray.append((info[.originalImage] as! UIImage).pngData()!)

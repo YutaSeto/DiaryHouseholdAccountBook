@@ -107,6 +107,7 @@
                         <outlet property="menuTableView" destination="EOy-CV-OW9" id="00c-TM-WOd"/>
                         <outlet property="paymentTableView" destination="2l9-up-7Hb" id="pvO-id-Z8A"/>
                         <outlet property="paymentView" destination="opO-ja-Hb5" id="XA2-Rt-Bn0"/>
+                        <outlet property="resultTableView" destination="rDx-Lm-2P4" id="hg5-wx-g8C"/>
                         <outlet property="savingView" destination="CuD-Qs-UOb" id="Qjc-51-L7b"/>
                         <outlet property="slideMenuView" destination="zdf-81-6h7" id="Fsj-4I-JOi"/>
                         <outlet property="sumIncomeTableView" destination="gsO-Ta-xCh" id="Mu5-XS-3qE"/>
@@ -138,7 +139,7 @@
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jxc-v9-VWb">
                             <rect key="frame" x="263" y="444" width="60" height="60"/>
-                            <color key="backgroundColor" name="AccentColor"/>
+                            <color key="backgroundColor" red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="60" id="0ZJ-2l-RRM"/>
                                 <constraint firstAttribute="height" constant="60" id="Olh-jk-Pf0"/>
@@ -214,8 +215,20 @@
                 <view contentMode="scaleToFill" id="CuD-Qs-UOb">
                     <rect key="frame" x="0.0" y="0.0" width="353" height="564"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" tag="5" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rDx-Lm-2P4">
+                            <rect key="frame" x="0.0" y="59" width="353" height="505"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </tableView>
+                    </subviews>
                     <viewLayoutGuide key="safeArea" id="aJh-BJ-J6S"/>
                     <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                    <constraints>
+                        <constraint firstItem="rDx-Lm-2P4" firstAttribute="top" secondItem="aJh-BJ-J6S" secondAttribute="top" id="Oiq-VW-esV"/>
+                        <constraint firstItem="rDx-Lm-2P4" firstAttribute="leading" secondItem="aJh-BJ-J6S" secondAttribute="leading" id="RnK-e8-A9m"/>
+                        <constraint firstItem="aJh-BJ-J6S" firstAttribute="trailing" secondItem="rDx-Lm-2P4" secondAttribute="trailing" id="sUt-E2-bQH"/>
+                        <constraint firstItem="aJh-BJ-J6S" firstAttribute="bottom" secondItem="rDx-Lm-2P4" secondAttribute="bottom" id="zkW-i7-Ul7"/>
+                    </constraints>
                 </view>
                 <view tag="10" contentMode="scaleToFill" id="zdf-81-6h7">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="300"/>

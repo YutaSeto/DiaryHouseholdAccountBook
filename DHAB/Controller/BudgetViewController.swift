@@ -70,7 +70,7 @@ class BudgetViewController: UIViewController{
         let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
         navigationController?.pushViewController(budgetConfigureViewController, animated: true)
         budgetConfigureViewController.delegate = self
-        budgetConfigureViewController.date = date
+        budgetConfigureViewController.date = date.zeroclock
     }
     
     func setNavigationBarButton(){
@@ -98,6 +98,7 @@ class BudgetViewController: UIViewController{
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yy年MM月"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
@@ -145,7 +146,7 @@ class BudgetViewController: UIViewController{
                 let budget = PaymentBudgetModel()
                 budget.id = UUID().uuidString
                 budget.expenseID = expense.id
-                budget.budgetDate = date
+                budget.budgetDate = date.zeroclock
                 budget.budgetPrice = 0
                 try! realm.write { realm.add(budget)}
                 paymentBudgetList.append(budget)
@@ -182,7 +183,7 @@ class BudgetViewController: UIViewController{
                 let budget = IncomeBudgetModel()
                 budget.id = UUID().uuidString
                 budget.expenseID = expense.id
-                budget.budgetDate = date
+                budget.budgetDate = date.zeroclock
                 budget.budgetPrice = 0
                 try! realm.write { realm.add(budget)}
                 incomeBudgetList.append(budget)
@@ -246,10 +247,13 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             var textFieldOnAlert = UITextField()
             alert.addTextField{textField in
                 textFieldOnAlert = textField
-                textField.placeholder = "0"
+                textField.placeholder = String(self.budgetTableViewDataSource[indexPath.row].price)
+                textField.textAlignment = NSTextAlignment.right
             }
+            
             let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let dataSource = self.budgetTableViewDataSource[indexPath.row]
+            
                 if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
                     let realm = try!Realm()
                     try! realm.write{
@@ -274,7 +278,8 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             var textFieldOnAlert = UITextField()
             alert.addTextField{textField in
                 textFieldOnAlert = textField
-                textField.placeholder = "0"
+                textField.placeholder = String(self.incomeBudgetTableViewDataSource[indexPath.row].price)
+                textField.textAlignment = NSTextAlignment.right
             }
             let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let dataSource = self.incomeBudgetTableViewDataSource[indexPath.row]
