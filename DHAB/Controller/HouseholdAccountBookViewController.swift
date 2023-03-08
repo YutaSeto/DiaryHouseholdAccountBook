@@ -15,7 +15,7 @@ protocol HouseholdAccountBookControllerDelegate{
     func updateIncome()
 }
 
-class HouseholdAccountBookViewController:UIViewController{
+class HouseholdAccountBookViewController:UIViewController {
     
     private var date = Date()
     @IBOutlet weak var dayLabel: UILabel!
@@ -701,11 +701,14 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     returnView()
                 }
             case 1:
+                // メニュー > 予算
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                let budgetViewController = storyboard.instantiateViewController(withIdentifier: "BudgetViewController") as! BudgetViewController
+                budgetViewController.budgetViewControllerDelegate = self
                 
-//                navigationController.budgetViewControllerDelegate = self
-                present(navigationController,animated: true)
+                let nav = UINavigationController(rootViewController: budgetViewController)
+                present(nav,animated: true)
+                
                 returnView()
             default:
                 return
@@ -750,5 +753,11 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         setIncomeTableViewDataSourse()
         setSumIncomeData()
         setMonthSumIncome()
+    }
+}
+
+extension HouseholdAccountBookViewController: BudgetViewControllerDelegate {
+    func budgetViewControllerDidChangeBudget() {
+        print("hkr updateList")
     }
 }

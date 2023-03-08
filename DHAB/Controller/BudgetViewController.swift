@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 protocol BudgetViewControllerDelegate{
-    func updateList()
+    func budgetViewControllerDidChangeBudget()
 }
 
 class BudgetViewController: UIViewController{
@@ -80,18 +80,18 @@ class BudgetViewController: UIViewController{
     }
     
     func dayBack(){
-        budgetViewControllerDelegate = self
+//        budgetViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
         dateLabel.text = dateFormatter.string(from: date)
-        self.budgetViewControllerDelegate?.updateList()
+        self.budgetViewControllerDelegate?.budgetViewControllerDidChangeBudget()
         budgetTableView.reloadData()
     }
     
     func dayPass(){
-        budgetViewControllerDelegate = self
+//        budgetViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
         dateLabel.text = dateFormatter.string(from: date)
-        self.budgetViewControllerDelegate?.updateList()
+        self.budgetViewControllerDelegate?.budgetViewControllerDidChangeBudget()
         budgetTableView.reloadData()
     }
     
@@ -198,6 +198,17 @@ class BudgetViewController: UIViewController{
             incomeBudgetTableView.reloadData()
         }
     }
+    
+    func updateList() {
+        setPaymentBudgetData()
+        setCategoryData()
+        budgetTableViewDataSource = []
+        incomeBudgetTableViewDataSource = []
+        setBudgetTableViewDataSourse()
+        setIncomeBudgetTableViewDataSourse()
+        view.layoutIfNeeded()
+        view.updateConstraints()
+    }
 }
 
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
@@ -240,7 +251,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.tag == 0{
             _ = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            budgetViewControllerDelegate = self
+//            budgetViewControllerDelegate = self
             
             let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
             
@@ -260,7 +271,8 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                         budget.budgetPrice = Int(textFieldOnAlert.text!)!
                     }
                 }
-                self.budgetViewControllerDelegate?.updateList()
+                
+                self.budgetViewControllerDelegate?.budgetViewControllerDidChangeBudget()
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -272,7 +284,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             self.present(alert,animated: true, completion: nil)
         }else if tableView.tag == 1{
             _ = incomeBudgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            budgetViewControllerDelegate = self
+//            budgetViewControllerDelegate = self
             let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
             
             var textFieldOnAlert = UITextField()
@@ -289,7 +301,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                         budget.budgetPrice = Int(textFieldOnAlert.text!)!
                     }
                 }
-                self.budgetViewControllerDelegate?.updateList()
+                
+                self.updateList()
+                self.budgetViewControllerDelegate?.budgetViewControllerDidChangeBudget()
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -302,18 +316,18 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     }
 }
 
-extension BudgetViewController:BudgetViewControllerDelegate{
-    func updateList(){
-        setPaymentBudgetData()
-        setCategoryData()
-        budgetTableViewDataSource = []
-        incomeBudgetTableViewDataSource = []
-        setBudgetTableViewDataSourse()
-        setIncomeBudgetTableViewDataSourse()
-        view.layoutIfNeeded()
-        view.updateConstraints()
-    }
-}
+//extension BudgetViewController: BudgetViewControllerDelegate {
+//    func updateList(){
+//        setPaymentBudgetData()
+//        setCategoryData()
+//        budgetTableViewDataSource = []
+//        incomeBudgetTableViewDataSource = []
+//        setBudgetTableViewDataSourse()
+//        setIncomeBudgetTableViewDataSourse()
+//        view.layoutIfNeeded()
+//        view.updateConstraints()
+//    }
+//}
 
 extension BudgetViewController:BudgetConfigureViewControllerDelegate{
     func updateBudget(){
