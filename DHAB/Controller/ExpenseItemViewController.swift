@@ -194,7 +194,10 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView.tag == 0{
             let cell = expenseItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel!.text = categoryList[indexPath.row].name
+            
+            let title = categoryList[indexPath.row].name
+            
+            cell.textLabel!.text = title
             return cell
         }else if tableView.tag == 1{
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -257,16 +260,19 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if tableView.tag == 0{
+        if tableView.tag == 0 {
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
             let targetItem = categoryList[indexPath.row]
+            categoryList.remove(at: indexPath.row)
+            
             let realm = try! Realm()
             try! realm.write{
                 realm.delete(targetItem)
             }
-            categoryList.remove(at: indexPath.row)
+            
             categoryViewControllerDelegate?.updateHouseholdAccountBook()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-        }else if tableView.tag == 1{
+        } else if tableView.tag == 1 {
             let targetItem = incomeCategoryList[indexPath.row]
             let realm = try! Realm()
             try! realm.write{
