@@ -11,7 +11,7 @@ import UIKit
 public extension Date{
     var calendar:Calendar{
         var calendar = Calendar(identifier:  .gregorian)
-        calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
+        calendar.timeZone = .current
         calendar.locale = Locale(identifier: "ja-JP")
         return calendar
     }

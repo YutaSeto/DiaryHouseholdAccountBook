@@ -276,13 +276,13 @@ class InputViewController:UIViewController{
                     payment?.price = Int(priceTextField.text!) ?? 0
                     payment?.category = resultLabel.text!
                 }
-                inputViewControllerDelegate?.updatePayment()
+            inputViewControllerDelegate?.updatePayment()
             inputViewControllerDelegate?.updateCalendar()
-                RecognitionChange.shared.updateCalendar = true
-                dismiss(animated: true)
-//            }else if resultLabel.text == { //支出選択から収入に変更した場合
+            RecognitionChange.shared.updateCalendar = true
+            dismiss(animated: true)
+            //            }else if resultLabel.text == { //支出選択から収入に変更した場合
             
-//            }
+            //            }
             //正しく収入を修正した場合
         }else if income != nil{
             let realm = try! Realm()
@@ -312,6 +312,7 @@ class InputViewController:UIViewController{
                 realm.add(paymentModel)
             }
             inputViewControllerDelegate?.updatePayment()
+            RecognitionChange.shared.updateCalendar = true
             resultLabel.text = ""
             priceTextField.text = ""
         }else if payment != nil{
@@ -339,7 +340,7 @@ class InputViewController:UIViewController{
     
     private var dateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日hh時mm分"
+        dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.locale = Locale(identifier: "ja-JP")
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
         return dateFormatter
@@ -356,11 +357,13 @@ class InputViewController:UIViewController{
     func dayBack(){
         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
         dateTextField.text = dateFormatter.string(from: date)
+        diaryDateTextField.text = dateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
         dateTextField.text = dateFormatter.string(from: date)
+        diaryDateTextField.text = dateFormatter.string(from: date)
     }
     
     func setCategoryData(){

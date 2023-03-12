@@ -13,12 +13,15 @@ import UIKit
 class CalendarViewController:UIViewController{
     var date:Date = Date()
     var selectedDate:Date = Date()
-    private var paymentModelList:[PaymentModel] = []
+    var sumPayment:Int = 0
+    private var monthPaymentModelList:[PaymentModel] = []
+    private var displayPaymentList:[PaymentModel] = []
+    
     private var diaryModelList:[DiaryModel] = []
     private var incomeModelList:[IncomeModel] = []
     private var dayDateFormatter: DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日hh時mm分"
+        dateFormatter.dateFormat = "yy年MM月dd日"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
@@ -48,12 +51,14 @@ class CalendarViewController:UIViewController{
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
         addSubView()
-        setPaymentData()
+        setTableView(selectedDate)
         setDiaryData()
         showPaymentView()
         settingSubView()
         setSubLabel()
         setSum()
+        setMonthPaymentModelList()
+        paymentLabel.text = String(setMonthPayment())
     }
     
     
@@ -61,7 +66,6 @@ class CalendarViewController:UIViewController{
         super.viewWillAppear(animated)
         
         if RecognitionChange.shared.updateCalendar == true{
-            setPaymentData()
             setDiaryData()
             calendarView.reloadData()
             householdAccountBookTableView.reloadData()
@@ -121,20 +125,34 @@ class CalendarViewController:UIViewController{
         return number
     }
     
+    func setMonthPaymentModelList(){
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: selectedDate)
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
+        
+        let realm = try! Realm()
+        let paymentList:[PaymentModel] = realm.objects(PaymentModel.self).filter{($0.date >= firstDay)}
+        let paymentList2:[PaymentModel] = paymentList.filter{($0.date <= lastDay!)}
+        monthPaymentModelList = paymentList2
+    }
+    
     func sumPayment(_:Date) -> Int{
         let calendar = Calendar(identifier: .gregorian)
         let comps = calendar.dateComponents([.year, .month], from: selectedDate)
         let firstDay = calendar.date(from: comps)!.zeroclock
         let addMonth = DateComponents(month: 1)
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
-        let dayCheck = paymentModelList.filter({$0.date >= (firstDay)})
-        let dayCheck2 = dayCheck.filter({$0.date <= lastDay!})
+        let dayCheck = displayPaymentList.filter({$0.date >= (firstDay)})
+        let dayCheck2 = dayCheck.filter({$0.date <= lastDay!.zeroclock})
+        print(dayCheck2)
         let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
     
     func sumDayPayment(_: Date) -> Int{
-        let sum = paymentModelList.filter{$0.date.zeroclock == selectedDate.zeroclock}.map{$0.price}.reduce(0){$0 + $1}
+        let sum = displayPaymentList.filter{$0.date.zeroclock == selectedDate.zeroclock}.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
     
@@ -147,8 +165,6 @@ class CalendarViewController:UIViewController{
         let dayCheck = incomeModelList.filter({$0.date >= firstDay})
         let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
         let sum = dayCheck2.map{$0.amount}.reduce(0){$0 + $1}
-        print(firstDay)
-        print(lastDay)
         return sum
     }
     
@@ -163,14 +179,33 @@ class CalendarViewController:UIViewController{
         subIncomeLabel.text = String(0)
     }
     
-    func setTableView(_: Date)-> [PaymentModel]{
+    func setMonthPayment()-> Int{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: selectedDate)
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
+        
+        var sum:Int = 0
+        let realm = try! Realm()
+        let paymentList = realm.objects(PaymentModel.self).filter{($0.date >= firstDay)}
+        let paymentList2 = paymentList.filter{($0.date <= lastDay!)}
+        paymentList2.forEach{payment in
+            sum += payment.price
+        }
+        return sum
+    }
+    
+    func setTableView(_: Date){
+        let realm = try! Realm()
         var result:[PaymentModel] = []
-        paymentModelList.forEach{payment in
+        let paymentList = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
+        paymentList.forEach{payment in
             if payment.date.zeroclock == selectedDate.zeroclock{
                 result.append(payment)
             }
         }
-        return result
+        displayPaymentList = result
     }
     
     func setIncomeTableView(_: Date) -> [IncomeModel]{
@@ -193,14 +228,6 @@ class CalendarViewController:UIViewController{
         return result
     }
     
-
-    
-    func setPaymentData(){
-        let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
-        paymentModelList = Array(result)
-    }
-    
     func setDiaryData(){
         let realm = try! Realm()
         let result = realm.objects(DiaryModel.self)
@@ -213,7 +240,7 @@ class CalendarViewController:UIViewController{
 extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 0 {
-            return setTableView(selectedDate).count
+            return displayPaymentList.count
         }else if tableView.tag == 1{
             return setDiaryTableView(selectedDate).count
         }
@@ -223,7 +250,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView.tag == 0{
             let cell = householdAccountBookTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            let item = setTableView(selectedDate)[indexPath.row]
+            let item = displayPaymentList[indexPath.row]
             cell.budgetCategoryLabel.text = item.category
             cell.budgetPriceLabel.text = getComma(item.price)
             cell.memoLabel.text = item.memo
@@ -241,26 +268,27 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if tableView.tag == 0{
-            let targetItem = setTableView(selectedDate)[indexPath.row]
+            let targetItem = displayPaymentList[indexPath.row]
             let realm = try! Realm()
-            try! realm.write{
-                realm.delete(targetItem)
-            }
             if !targetItem.isInvalidated{
-                paymentModelList.remove(at: indexPath.row)
+                displayPaymentList.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 setSum()
                 setSubLabel()
                 calendarView.reloadData()
+                
+                try! realm.write{
+                    realm.delete(targetItem)
+                }
             }
         }else if tableView.tag == 1{
             let targetItem = diaryModelList[indexPath.row]
+            diaryModelList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
             let realm = try! Realm()
             try! realm.write{
                 realm.delete(targetItem)
             }
-            diaryModelList.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
             calendarView.reloadData()
         }
     }
@@ -270,8 +298,8 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
             guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
             inputViewController.inputViewControllerDelegate = self
-            inputViewController.payment? = setTableView(selectedDate)[indexPath.row]
-            inputViewController.setPaymentData(data: setTableView(selectedDate)[indexPath.row])
+            inputViewController.payment? = displayPaymentList[indexPath.row]
+            inputViewController.setPaymentData(data: displayPaymentList[indexPath.row])
             present(inputViewController,animated:true)
         }else if tableView.tag == 1{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
@@ -282,15 +310,14 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             present(inputViewController,animated:true)
             inputViewController.viewChangeSegmentedControl!.selectedSegmentIndex = 1
             inputViewController.addDiaryView()
+        }else if tableView.tag == 2{
+            let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+            guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+            inputViewController.inputViewControllerDelegate = self
+            inputViewController.income? = setIncomeTableView(selectedDate)[indexPath.row]
+            inputViewController.setIncomeData(data: setIncomeTableView(selectedDate)[indexPath.row])
+            present(inputViewController,animated:true)
         }
-//        }else if tableView.tag == 2{
-//            let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-//            guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
-//            inputViewController.inputViewControllerDelegate = self
-//            inputViewController.income? = setIncomeTableView(selectedDate)[indexPath.row]
-//            inputViewController.setIncomeData(data: setIncomeTableView(selectedDate)[indexPath.row])
-//            present(inputViewController,animated:true)
-//        }
     }
 }
 
@@ -310,10 +337,8 @@ extension CalendarViewController:InputViewControllerDelegate{
     }
     
     func updateCalendar() {
-        setPaymentData()
         calendarView.reloadData()
         householdAccountBookTableView.reloadData()
-//        incomeTableView.reloadData()
     }
     
     
@@ -321,7 +346,7 @@ extension CalendarViewController:InputViewControllerDelegate{
 
 extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance{
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        let dateList = paymentModelList.map({$0.date.zeroclock})
+        let dateList = monthPaymentModelList.map({$0.date.zeroclock})
         let isEqualDate = dateList.contains(date.zeroclock)
         return isEqualDate ? 1 : 0
     }
@@ -334,7 +359,8 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         selectedDate = date
-        paymentLabel.text = String(sumPayment(selectedDate))
+        setTableView(selectedDate)
+        paymentLabel.text = String(setMonthPayment())
         setSubLabel()
         householdAccountBookTableView.reloadData()
         diaryTableView.reloadData()

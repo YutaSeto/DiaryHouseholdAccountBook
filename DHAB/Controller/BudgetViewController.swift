@@ -15,7 +15,7 @@ protocol BudgetViewControllerDelegate{
 
 class BudgetViewController: UIViewController{
     
-    private var date = Date()
+    var date = Date()
     var categoryList:[CategoryModel] = []
     var incomeCategoryList:[IncomeCategoryModel] = []
     var paymentBudgetList:[PaymentBudgetModel] = []

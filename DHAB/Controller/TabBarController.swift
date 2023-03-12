@@ -14,6 +14,11 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureBackgroundColor()
+    }
+    
+    func configureBackgroundColor(){
+        UITabBar.appearance().backgroundColor = UIColor.lightGray
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -50,9 +50,9 @@
 		23EEE7D92972D7C000A52939 /* PaymentBudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7D82972D7C000A52939 /* PaymentBudgetModel.swift */; };
 		23EEE7DB2972D7D200A52939 /* IncomeBudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7DA2972D7D200A52939 /* IncomeBudgetModel.swift */; };
 		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
-		EDCA5EFE29B1C6C900980AC7 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFD29B1C6C900980AC7 /* NavigationViewController.swift */; };
 		EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */; };
 		EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */; };
+		EDCA5F0429B6D07600980AC7 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5F0329B6D07600980AC7 /* NavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,9 +103,9 @@
 		94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
 		C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
-		EDCA5EFD29B1C6C900980AC7 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
 		EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResultTableViewCell.xib; sourceTree = "<group>"; };
+		EDCA5F0329B6D07600980AC7 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,7 +218,7 @@
 				237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */,
 				23C1600C29795E0F0026EAF9 /* BudgetConfigureViewController.swift */,
 				237AFB6F297506A20060ECD0 /* ExpenseItemViewController.swift */,
-				EDCA5EFD29B1C6C900980AC7 /* NavigationViewController.swift */,
+				EDCA5F0329B6D07600980AC7 /* NavigationController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -381,7 +381,6 @@
 				23C1600D29795E0F0026EAF9 /* BudgetConfigureViewController.swift in Sources */,
 				239137F52970FF5500BF09F8 /* DiaryTableViewCell.swift in Sources */,
 				23507F0E298E9AD70025EAE5 /* CategoryModel.swift in Sources */,
-				EDCA5EFE29B1C6C900980AC7 /* NavigationViewController.swift in Sources */,
 				237B85FA29704956001E4639 /* DiaryModel.swift in Sources */,
 				237B85F829704941001E4639 /* IncomeModel.swift in Sources */,
 				237B860729704A8D001E4639 /* DiaryViewController.swift in Sources */,
@@ -391,6 +390,7 @@
 				237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */,
 				237B85FF29704A49001E4639 /* TabBarController.swift in Sources */,
 				23A0B28C29A84CA1000956CF /* RecognitionChange.swift in Sources */,
+				EDCA5F0429B6D07600980AC7 /* NavigationController.swift in Sources */,
 				237AFB70297506A20060ECD0 /* ExpenseItemViewController.swift in Sources */,
 				23A0B28E29A8617A000956CF /* PicutureModel.swift in Sources */,
 				23EEE7DB2972D7D200A52939 /* IncomeBudgetModel.swift in Sources */,
