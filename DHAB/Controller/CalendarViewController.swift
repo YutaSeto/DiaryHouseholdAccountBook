@@ -19,13 +19,7 @@ class CalendarViewController:UIViewController{
     
     private var diaryModelList:[DiaryModel] = []
     private var incomeModelList:[IncomeModel] = []
-    private var dayDateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日"
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
+    let util = Util()
     
     @IBOutlet weak var subDateLabel: UILabel!
     @IBOutlet weak var subPaymentLabel: UILabel!
@@ -174,7 +168,7 @@ class CalendarViewController:UIViewController{
     }
     
     func setSubLabel(){
-        subDateLabel.text = dayDateFormatter.string(from: selectedDate)
+        subDateLabel.text = util.dayDateFormatter.string(from: selectedDate)
         subPaymentLabel.text = String(sumDayPayment(selectedDate))
         subIncomeLabel.text = String(0)
     }
@@ -258,7 +252,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
         }else if tableView.tag == 1{
             let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
             let item = setDiaryTableView(selectedDate)[indexPath.row]
-            cell.cellDateLabel.text = dayDateFormatter.string(from: item.date)
+            cell.cellDateLabel.text = util.dayDateFormatter.string(from: item.date)
             cell.cellTextLabel.text = item.text
             cell.cellTitleLabel.text = item.title
             return cell

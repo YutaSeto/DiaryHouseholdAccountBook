@@ -15,6 +15,7 @@ protocol BudgetViewControllerDelegate{
 
 class BudgetViewController: UIViewController{
     
+    var util = Util()
     var date = Date()
     var categoryList:[CategoryModel] = []
     var incomeCategoryList:[IncomeCategoryModel] = []
@@ -38,7 +39,7 @@ class BudgetViewController: UIViewController{
         super.viewDidLoad()
         budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         incomeBudgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = util.monthDateFormatter.string(from: date)
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
         incomeBudgetTableView.delegate = self
@@ -82,7 +83,7 @@ class BudgetViewController: UIViewController{
     func dayBack(){
         budgetViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = util.monthDateFormatter.string(from: date)
         self.budgetViewControllerDelegate?.updateList()
         budgetTableView.reloadData()
     }
@@ -90,18 +91,18 @@ class BudgetViewController: UIViewController{
     func dayPass(){
         budgetViewControllerDelegate = self
         date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = util.monthDateFormatter.string(from: date)
         self.budgetViewControllerDelegate?.updateList()
         budgetTableView.reloadData()
     }
     
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
+//    private var dateFormatter: DateFormatter{
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yy年MM月"
+//        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
+//        dateFormatter.locale = Locale(identifier: "ja-JP")
+//        return dateFormatter
+//    }
     
     func setCategoryData(){
         let result = realm.objects(CategoryModel.self)

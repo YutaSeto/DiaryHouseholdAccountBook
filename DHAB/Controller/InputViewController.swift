@@ -27,6 +27,7 @@ class InputViewController:UIViewController{
     var payment:PaymentModel? = nil
     var income:IncomeModel? = nil
     private var paymentModelList: [PaymentModel] = []
+    let util = Util()
     let realm = try! Realm()
     var categoryList:[CategoryModel] = []
     public var date:Date = Date()
@@ -91,8 +92,8 @@ class InputViewController:UIViewController{
         addSubView()
         addHouseholdAccountView()
         settingSubView()
-        dateTextField.text = dateFormatter.string(from: date)
-        diaryDateTextField.text = dateFormatter.string(from: date)
+        dateTextField.text = util.monthDateFormatter.string(from: date)
+        diaryDateTextField.text = util.monthDateFormatter.string(from: date)
         settingCollectionView()
         setCategoryData()
         resultLabel.text = ""
@@ -196,11 +197,11 @@ class InputViewController:UIViewController{
     
     @objc func didTapFinishButton(){
         if let targetDateText = dateTextField.text,
-           let targetDate = dateFormatter.date(from:targetDateText){
+           let targetDate = util.monthDateFormatter.date(from:targetDateText){
             date = targetDate.zeroclock
         }
         if let targetDateText = diaryDateTextField.text,
-           let targetDate = dateFormatter.date(from: targetDateText){
+           let targetDate = util.monthDateFormatter.date(from: targetDateText){
             date = targetDate.zeroclock
         }
         view.endEditing(true)
@@ -211,12 +212,12 @@ class InputViewController:UIViewController{
         let targetDate = Date()
         householdAccountBookDatePicker.date = targetDate
         dateTextField.inputView = householdAccountBookDatePicker
-        dateTextField.text = dateFormatter.string(from: targetDate)
+        dateTextField.text = util.monthDateFormatter.string(from: targetDate)
         dateTextField.inputAccessoryView = toolbar
         householdAccountBookDatePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
         householdAccountBookDatePicker.date = targetDate
         diaryDateTextField.inputView = householdAccountBookDatePicker
-        diaryDateTextField.text = dateFormatter.string(from: targetDate)
+        diaryDateTextField.text = util.monthDateFormatter.string(from: targetDate)
         diaryDateTextField.inputAccessoryView = toolbar
         householdAccountBookDatePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
         
@@ -224,8 +225,8 @@ class InputViewController:UIViewController{
     
     @objc func didChangeDate(picker: UIDatePicker){
         date = picker.date
-        dateTextField.text = dateFormatter.string(from: picker.date)
-        diaryDateTextField.text = dateFormatter.string(from: picker.date)
+        dateTextField.text = util.monthDateFormatter.string(from: picker.date)
+        diaryDateTextField.text = util.monthDateFormatter.string(from: picker.date)
     }
     
     @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {
@@ -263,7 +264,6 @@ class InputViewController:UIViewController{
                 paymentModel.price = Int(priceTextField.text!) ?? 0
                 paymentModel.category = resultLabel.text!
                 realm.add(paymentModel)
-                print(dateFormatter.string(from:paymentModel.date.zeroclock))
             }
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
@@ -338,14 +338,6 @@ class InputViewController:UIViewController{
         }
     }
     
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日"
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
-        return dateFormatter
-    }
-    
     func configureTextfield(){
         priceTextField.textAlignment = NSTextAlignment.right
     }
@@ -356,14 +348,14 @@ class InputViewController:UIViewController{
     
     func dayBack(){
         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
-        dateTextField.text = dateFormatter.string(from: date)
-        diaryDateTextField.text = dateFormatter.string(from: date)
+        dateTextField.text = util.monthDateFormatter.string(from: date)
+        diaryDateTextField.text = util.monthDateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-        dateTextField.text = dateFormatter.string(from: date)
-        diaryDateTextField.text = dateFormatter.string(from: date)
+        dateTextField.text = util.monthDateFormatter.string(from: date)
+        diaryDateTextField.text = util.monthDateFormatter.string(from: date)
     }
     
     func setCategoryData(){

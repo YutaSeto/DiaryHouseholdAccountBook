@@ -15,6 +15,7 @@ protocol BudgetConfigureViewControllerDelegate{
 
 class BudgetConfigureViewController: UIViewController{
     
+    let util = Util()
     let realm = try! Realm()
     var date: Date = Date()
     var delegate:BudgetConfigureViewControllerDelegate?
@@ -44,7 +45,7 @@ class BudgetConfigureViewController: UIViewController{
         setIncomeBudgetData()
         setBudgetTableViewDataSourse()
         setIncomeBudgetTableViewDataSourse()
-        dateLabel.text = dateFormatter.string(from:date)
+        dateLabel.text = util.monthDateFormatter.string(from:date)
     }
     
     override func viewWillLayoutSubviews() {
@@ -79,14 +80,6 @@ class BudgetConfigureViewController: UIViewController{
         navigationController?.popToViewController(navigationController!.viewControllers[0], animated: true)
     }
 
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
-    
     func setPaymentBudgetData(){
         let result = realm.objects(PaymentBudgetModel.self)
         paymentBudgetList = Array(result)

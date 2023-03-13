@@ -11,7 +11,7 @@ import UIKit
 
 class DiaryViewController:UIViewController,UISearchBarDelegate{
     
-    
+    let util = Util()
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -91,19 +91,11 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         diaryList.count
     }
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .none
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-        dateFormatter.dateFormat = "yy年MM月dd日"
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
         let diaryModel: DiaryModel = diaryList[indexPath.row]
-        cell.cellDateLabel.text = dateFormatter.string(from:diaryModel.date)
+        cell.cellDateLabel.text = util.dayDateFormatter.string(from:diaryModel.date)
         cell.cellTitleLabel.text = diaryModel.title
         cell.cellTextLabel.text = diaryModel.text
         return cell

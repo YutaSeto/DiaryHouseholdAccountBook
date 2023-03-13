@@ -23,6 +23,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var dayPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
     @IBOutlet weak var menuButton: UIBarButtonItem!
+    let util = Util()
     
     //subView関連
     var isMonth = true
@@ -41,6 +42,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var sumPaymentTableView: UITableView!
     @IBOutlet weak var paymentTableView: UITableView!
     @IBOutlet weak var inputButton: UIButton!
+    @IBOutlet weak var paymentPieGraphView: PieChartView!
     
     @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
     
@@ -75,24 +77,11 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewDidLoad() {
         setNib()
-        dayLabel.text = monthDateFormatter.string(from:date)
+        dayLabel.text = util.monthDateFormatter.string(from:date)
         addSubView()
         addPaymentView()
         settingSubView()
-        paymentTableView.delegate = self
-        paymentTableView.dataSource = self
-        incomeTableView.delegate = self
-        incomeTableView.dataSource = self
-        sumPaymentTableView.delegate = self
-        sumPaymentTableView.dataSource = self
-        sumIncomeTableView.delegate = self
-        sumIncomeTableView.dataSource = self
-        menuTableView.delegate = self
-        menuTableView.dataSource = self
-        resultTableView.delegate = self
-        resultTableView.dataSource = self
-        resultSumTableView.delegate = self
-        resultSumTableView.dataSource = self
+        setDelegateAndDataSource()
         configureInputButton()
         setPaymentData()
         setIncomeData()
@@ -106,9 +95,13 @@ class HouseholdAccountBookViewController:UIViewController{
         setMonthSumIncome()
         tableViewScroll()
 
-        let data = setData()
+        let barGraphData = setData()
         setChartView()
-        chartView.data = data
+        chartView.data = barGraphData
+        
+        let paymentPieGraphData = setPaymentPieGraphData()
+        setPaymentPieGraphView()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -145,6 +138,23 @@ class HouseholdAccountBookViewController:UIViewController{
         sumIncomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         resultTableView.register(UINib(nibName: "ResultTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         resultSumTableView.register(UINib(nibName: "ResultTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+    }
+    
+    func setDelegateAndDataSource(){
+        paymentTableView.delegate = self
+        paymentTableView.dataSource = self
+        incomeTableView.delegate = self
+        incomeTableView.dataSource = self
+        sumPaymentTableView.delegate = self
+        sumPaymentTableView.dataSource = self
+        sumIncomeTableView.delegate = self
+        sumIncomeTableView.dataSource = self
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
+        resultTableView.delegate = self
+        resultTableView.dataSource = self
+        resultSumTableView.delegate = self
+        resultSumTableView.dataSource = self
     }
     
     
@@ -187,10 +197,10 @@ class HouseholdAccountBookViewController:UIViewController{
         householdeAccountBookViewControllerDelegate = self
         if isMonth{
             date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
-            dayLabel.text = monthDateFormatter.string(from: date)
+            dayLabel.text = util.monthDateFormatter.string(from: date)
         }else{
             date = Calendar.current.date(byAdding: .year, value: -1, to: date)!
-            dayLabel.text = yearDateFormatter.string(from: date)
+            dayLabel.text = util.yearDateFormatter.string(from: date)
         }
         resetSumYearPaymentAndIncome()
         setMonthSumPayment()
@@ -206,10 +216,10 @@ class HouseholdAccountBookViewController:UIViewController{
         householdeAccountBookViewControllerDelegate = self
         if isMonth{
             date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
-            dayLabel.text = monthDateFormatter.string(from: date)
+            dayLabel.text = util.monthDateFormatter.string(from: date)
         }else{
             date = Calendar.current.date(byAdding: .year, value: 1, to: date)!
-            dayLabel.text = yearDateFormatter.string(from: date)
+            dayLabel.text = util.yearDateFormatter.string(from: date)
         }
         resetSumYearPaymentAndIncome()
         setMonthSumPayment()
@@ -219,30 +229,6 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentTableView.reloadData()
         incomeTableView.reloadData()
         resultSumTableView.reloadData()
-    }
-    
-    private var yearDateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年"
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
-    
-    private var monthDateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
-    
-    private var dayDateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日"
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
     }
     
     //subView関連
@@ -257,20 +243,20 @@ class HouseholdAccountBookViewController:UIViewController{
         savingView.isHidden = true
         incomeView.isHidden = true
         paymentView.isHidden = false
-        dayLabel.text = monthDateFormatter.string(from: date)
+        dayLabel.text = util.monthDateFormatter.string(from: date)
     }
     func addIncomeView(){
         savingView.isHidden = true
         paymentView.isHidden = true
         incomeView.isHidden = false
-        dayLabel.text = monthDateFormatter.string(from: date)
+        dayLabel.text = util.monthDateFormatter.string(from: date)
     }
     
     func addSavingView(){
         incomeView.isHidden = true
         paymentView.isHidden = true
         savingView.isHidden = false
-        dayLabel.text = yearDateFormatter.string(from: date)
+        dayLabel.text = util.yearDateFormatter.string(from: date)
     }
     
     func settingSubView(){
@@ -323,6 +309,14 @@ class HouseholdAccountBookViewController:UIViewController{
         let result = realm.objects(PaymentModel.self)
         paymentList = Array(result)
         paymentTableView.reloadData()
+    }
+    
+    func setPaymentPieGraphView(){
+        return
+    }
+    
+    func setPaymentPieGraphData(){
+        return
     }
     
     func configureInputButton(){
@@ -813,7 +807,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 }
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! NavigationController
+                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController")
 //                let budgetViewControllerDelegate = navigationController.topViewController.budgetViewControllerDelegate
                 present(navigationController,animated: true)
                 returnView0Second()

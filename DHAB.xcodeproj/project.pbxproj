@@ -52,7 +52,7 @@
 		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
 		EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */; };
 		EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */; };
-		EDCA5F0429B6D07600980AC7 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5F0329B6D07600980AC7 /* NavigationController.swift */; };
+		EDE9354629BE0FAA006109C7 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE9354529BE0FAA006109C7 /* Util.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,7 +105,7 @@
 		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
 		EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
 		EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResultTableViewCell.xib; sourceTree = "<group>"; };
-		EDCA5F0329B6D07600980AC7 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		EDE9354529BE0FAA006109C7 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +187,7 @@
 				238D4031299F802C00A011A4 /* IncomeCategoryModel.swift */,
 				23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */,
 				23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */,
+				EDE9354529BE0FAA006109C7 /* Util.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -218,7 +219,6 @@
 				237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */,
 				23C1600C29795E0F0026EAF9 /* BudgetConfigureViewController.swift */,
 				237AFB6F297506A20060ECD0 /* ExpenseItemViewController.swift */,
-				EDCA5F0329B6D07600980AC7 /* NavigationController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -375,6 +375,7 @@
 				23A0B29229AA4522000956CF /* extension + Date.swift in Sources */,
 				23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */,
 				237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */,
+				EDE9354629BE0FAA006109C7 /* Util.swift in Sources */,
 				23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */,
 				EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */,
 				237B85F62970492B001E4639 /* PaymentModel.swift in Sources */,
@@ -390,7 +391,6 @@
 				237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */,
 				237B85FF29704A49001E4639 /* TabBarController.swift in Sources */,
 				23A0B28C29A84CA1000956CF /* RecognitionChange.swift in Sources */,
-				EDCA5F0429B6D07600980AC7 /* NavigationController.swift in Sources */,
 				237AFB70297506A20060ECD0 /* ExpenseItemViewController.swift in Sources */,
 				23A0B28E29A8617A000956CF /* PicutureModel.swift in Sources */,
 				23EEE7DB2972D7D200A52939 /* IncomeBudgetModel.swift in Sources */,
