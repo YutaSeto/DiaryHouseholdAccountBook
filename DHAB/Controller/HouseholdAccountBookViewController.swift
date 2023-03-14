@@ -179,21 +179,23 @@ class HouseholdAccountBookViewController:UIViewController{
     
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
-//         チャートの表示設定を行う
-        let newData = setData()
-        setChartView()
-        chartView.data = newData
+        
+        chartView.data = setData()
         chartView.notifyDataSetChanged()
+        
+        paymentPieGraphView.data = setPaymentPieGraphData()
+        paymentPieGraphView.notifyDataSetChanged()
     }
     
     @IBAction func dayPassButton(_ sender: UIButton) {
         dayPass()
         
-//         チャートの表示設定を行う
-        let newData = setData()
-        setChartView()
-        chartView.data = newData
+        
+        chartView.data = setData()
         chartView.notifyDataSetChanged()
+        
+        paymentPieGraphView.data = setPaymentPieGraphData()
+        paymentPieGraphView.notifyDataSetChanged()
     }
     
     func dayBack(){
@@ -286,14 +288,12 @@ class HouseholdAccountBookViewController:UIViewController{
         slideMenuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         slideMenuView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         slideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        incomePieGraphView.translatesAutoresizingMaskIntoConstraints = false
-        incomePieGraphView.topAnchor.constraint(equalTo: incomeView.topAnchor).isActive = true
-        incomePieGraphView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        incomePieGraphView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        incomePieGraphView.bottomAnchor.constraint(equalTo: sumIncomeTableView.topAnchor,constant:5).isActive = true
-        slideMenuView.heightAnchor.constraint(equalToConstant: 120).isActive = true
-        
+
+//        incomePieGraphView.translatesAutoresizingMaskIntoConstraints = false
+//        incomePieGraphView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+//        incomePieGraphView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        incomePieGraphView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//        incomePieGraphView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
     }
     
@@ -327,7 +327,7 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentPieGraphView.highlightPerTapEnabled = false
         paymentPieGraphView.legend.enabled = false
         paymentPieGraphView.drawHoleEnabled = false
-        paymentPieGraphView.noDataText = "データがありません"
+        paymentPieGraphView.noDataTextColor = .black
     }
     
     private func setPaymentPieGraphData() -> PieChartData {
@@ -567,7 +567,6 @@ class HouseholdAccountBookViewController:UIViewController{
         for i in 0 ..< incomeTableViewDataSource.count{
             dataEntries.append(PieChartDataEntry(value: Double(incomeTableViewDataSource[i].incomePrice), label: incomeTableViewDataSource[i].name))
         }
-        
         
         // データセットを作成する
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
