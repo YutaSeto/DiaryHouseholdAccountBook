@@ -13,4 +13,5 @@ class PaymentModel: Object{
     @objc dynamic var price:Int = 0
     @objc dynamic var memo:String = ""
     @objc dynamic var category:String = ""
+    @objc dynamic var id:String = UUID().uuidString
 }

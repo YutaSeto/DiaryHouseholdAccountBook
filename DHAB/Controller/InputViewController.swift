@@ -67,7 +67,6 @@ class InputViewController:UIViewController{
     private var diaryModel = DiaryModel()
     private var diaryList:[DiaryModel] = []
     @IBOutlet weak var titleTextField: UITextField!
-//    @IBOutlet weak var diaryDateLabel: UILabel!
     @IBOutlet weak var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
@@ -348,14 +347,14 @@ class InputViewController:UIViewController{
     
     func dayBack(){
         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
-        dateTextField.text = util.monthDateFormatter.string(from: date)
-        diaryDateTextField.text = util.monthDateFormatter.string(from: date)
+        dateTextField.text = util.dayDateFormatter.string(from: date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: date)
     }
     
     func dayPass(){
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-        dateTextField.text = util.monthDateFormatter.string(from: date)
-        diaryDateTextField.text = util.monthDateFormatter.string(from: date)
+        dateTextField.text = util.dayDateFormatter.string(from: date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: date)
     }
     
     func setCategoryData(){

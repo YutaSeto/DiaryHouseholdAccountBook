@@ -118,7 +118,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zUL-r6-iy1">
-                            <rect key="frame" x="0.0" y="30" width="393" height="270"/>
+                            <rect key="frame" x="0.0" y="89" width="393" height="211"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日時ラベル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bvv-Bq-ylK">
@@ -153,7 +153,7 @@
                         </label>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="yjP-TY-qCb"/>
-                    <color key="backgroundColor" systemColor="systemBrownColor"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="zUL-r6-iy1" firstAttribute="top" secondItem="yjP-TY-qCb" secondAttribute="top" constant="30" id="4ZQ-w5-hf7"/>
                         <constraint firstItem="yjP-TY-qCb" firstAttribute="bottom" secondItem="zUL-r6-iy1" secondAttribute="bottom" id="E0i-Pk-6eB"/>
@@ -176,12 +176,12 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="oEJ-FK-ufX">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                            <rect key="frame" x="0.0" y="59" width="393" height="241"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="e7O-Rt-d31"/>
-                    <color key="backgroundColor" systemColor="systemPinkColor"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="e7O-Rt-d31" firstAttribute="bottom" secondItem="oEJ-FK-ufX" secondAttribute="bottom" id="7Yf-Ns-FIQ"/>
                         <constraint firstItem="e7O-Rt-d31" firstAttribute="trailing" secondItem="oEJ-FK-ufX" secondAttribute="trailing" id="8Jb-Sd-OD4"/>
@@ -196,12 +196,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

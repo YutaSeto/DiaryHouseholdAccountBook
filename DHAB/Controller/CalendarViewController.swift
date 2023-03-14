@@ -16,7 +16,6 @@ class CalendarViewController:UIViewController{
     var sumPayment:Int = 0
     private var monthPaymentModelList:[PaymentModel] = []
     private var displayPaymentList:[PaymentModel] = []
-    
     private var diaryModelList:[DiaryModel] = []
     private var incomeModelList:[IncomeModel] = []
     let util = Util()
@@ -61,6 +60,8 @@ class CalendarViewController:UIViewController{
         
         if RecognitionChange.shared.updateCalendar == true{
             setDiaryData()
+            setTableView(selectedDate)
+            setMonthPaymentModelList()
             calendarView.reloadData()
             householdAccountBookTableView.reloadData()
             diaryTableView.reloadData()
@@ -140,7 +141,6 @@ class CalendarViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
         let dayCheck = displayPaymentList.filter({$0.date >= (firstDay)})
         let dayCheck2 = dayCheck.filter({$0.date <= lastDay!.zeroclock})
-        print(dayCheck2)
         let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
@@ -267,6 +267,11 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             if !targetItem.isInvalidated{
                 displayPaymentList.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+                
+                //idが一致しているmonthPaymentModelListの同じインデックス番号を削除
+                let index = monthPaymentModelList.firstIndex(where: {$0.id == targetItem.id})
+                monthPaymentModelList.remove(at: index!)
+                
                 setSum()
                 setSubLabel()
                 calendarView.reloadData()
@@ -274,6 +279,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                 try! realm.write{
                     realm.delete(targetItem)
                 }
+                RecognitionChange.shared.deletePayment = true
             }
         }else if tableView.tag == 1{
             let targetItem = diaryModelList[indexPath.row]
@@ -331,6 +337,8 @@ extension CalendarViewController:InputViewControllerDelegate{
     }
     
     func updateCalendar() {
+        setTableView(selectedDate)
+        setSubLabel()
         calendarView.reloadData()
         householdAccountBookTableView.reloadData()
     }
@@ -354,6 +362,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         selectedDate = date
         setTableView(selectedDate)
+        setMonthPaymentModelList()
         paymentLabel.text = String(setMonthPayment())
         setSubLabel()
         householdAccountBookTableView.reloadData()

@@ -227,7 +227,6 @@ extension BudgetConfigureViewController: BudgetConfigureTableViewCellDelegate{
         guard let data = incomeData else {return}
         if let index = incomeBudgetTableViewDataSource.firstIndex(where: {$0.id == data.id}){
             incomeBudgetTableViewDataSource[index].price = incomeData!.price
-            print(incomeBudgetTableViewDataSource[index])
         }
     }
     
@@ -235,7 +234,6 @@ extension BudgetConfigureViewController: BudgetConfigureTableViewCellDelegate{
         guard let data = data else {return}
         if let index = budgetTableViewDataSource.firstIndex(where: {$0.id == data.id}){
             budgetTableViewDataSource[index].price = data.price
-            print(budgetTableViewDataSource[index])
         }
     }
     

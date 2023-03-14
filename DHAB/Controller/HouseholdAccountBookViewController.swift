@@ -119,6 +119,14 @@ class HouseholdAccountBookViewController:UIViewController{
             incomeTableView.reloadData()
             RecognitionChange.shared.updateHouseholdAccountBook = false
         }
+        
+        if RecognitionChange.shared.deletePayment == true{
+            setPaymentData()
+            paymentTableViewDataSource = []
+            setPaymentTableViewDataSourse()
+            paymentTableView.reloadData()
+            RecognitionChange.shared.deletePayment = false
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -650,7 +658,6 @@ class HouseholdAccountBookViewController:UIViewController{
             sumPaymentList[i] = Double(Int(dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1}))
             sumYearPayment += Int(sumPaymentList[i])
         }
-        print(sumYearPayment)
         resultTableView.reloadData()
         resultSumTableView.reloadData()
     }
@@ -721,8 +728,6 @@ class HouseholdAccountBookViewController:UIViewController{
         setPaymentTableViewDataSourse()
         setSumPaymentData()
         sumPaymentTableView.reloadData()
-        
-        print("あああああああああああああ")
     }
 }
         
@@ -848,7 +853,6 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             cell.paymentLabel.text = String(sumYearPayment)
             cell.incomeLabel.text = String(sumYearIncome)
             cell.resultLabel.text = String(sumYearIncome - sumYearPayment)
-            print(sumYearPayment)
             return cell
         }
         return UITableViewCell()
