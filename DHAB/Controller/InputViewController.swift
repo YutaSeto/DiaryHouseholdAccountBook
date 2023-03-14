@@ -211,7 +211,7 @@ class InputViewController:UIViewController{
         let targetDate = Date()
         householdAccountBookDatePicker.date = targetDate
         dateTextField.inputView = householdAccountBookDatePicker
-        dateTextField.text = util.monthDateFormatter.string(from: targetDate)
+        dateTextField.text = util.dayDateFormatter.string(from: targetDate)
         dateTextField.inputAccessoryView = toolbar
         householdAccountBookDatePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
         householdAccountBookDatePicker.date = targetDate
@@ -224,8 +224,8 @@ class InputViewController:UIViewController{
     
     @objc func didChangeDate(picker: UIDatePicker){
         date = picker.date
-        dateTextField.text = util.monthDateFormatter.string(from: picker.date)
-        diaryDateTextField.text = util.monthDateFormatter.string(from: picker.date)
+        dateTextField.text = util.dayDateFormatter.string(from: picker.date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: picker.date)
     }
     
     @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {

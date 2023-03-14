@@ -10,11 +10,6 @@ import RealmSwift
 import UIKit
 import Charts
 
-protocol HouseholdAccountBookControllerDelegate{
-    func updateList()
-    func updateIncome()
-}
-
 class HouseholdAccountBookViewController:UIViewController{
     
     private var date = Date()
@@ -37,7 +32,6 @@ class HouseholdAccountBookViewController:UIViewController{
     private var paymentBudgetList:[PaymentBudgetModel] = []
     private var categoryList:[CategoryModel] = []
     private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
-    var householdeAccountBookViewControllerDelegate:HouseholdAccountBookControllerDelegate?
     
     @IBOutlet weak var sumPaymentTableView: UITableView!
     @IBOutlet weak var paymentTableView: UITableView!
@@ -99,10 +93,12 @@ class HouseholdAccountBookViewController:UIViewController{
         setChartView()
         chartView.data = setData()
         
-        
-        setPaymentPieGraphView()
-        paymentPieGraphView.data = setPaymentPieGraphData()
-        
+        if sumPayment(date) == 0{
+            return
+        }else{
+            setPaymentPieGraphView()
+            paymentPieGraphView.data = setPaymentPieGraphData()
+        }
         setIncomePieGraphView()
         incomePieGraphView.data = setIncomePieGraphData()
     }
@@ -122,9 +118,12 @@ class HouseholdAccountBookViewController:UIViewController{
         
         if RecognitionChange.shared.deletePayment == true{
             setPaymentData()
+            setSumPaymentData()
             paymentTableViewDataSource = []
             setPaymentTableViewDataSourse()
+            setMonthSumPayment()
             paymentTableView.reloadData()
+            sumPaymentTableView.reloadData()
             RecognitionChange.shared.deletePayment = false
         }
     }
@@ -188,22 +187,43 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
         
-        chartView.data = setData()
-        chartView.notifyDataSetChanged()
+        if sumYearPayment == 0{
+            chartView.data = nil
+            chartView.notifyDataSetChanged()
+        }else{
+            chartView.data = setData()
+            chartView.notifyDataSetChanged()
+        }
         
-        paymentPieGraphView.data = setPaymentPieGraphData()
-        paymentPieGraphView.notifyDataSetChanged()
+        if sumPayment(date) == 0{
+            paymentPieGraphView.data = nil
+            paymentPieGraphView.notifyDataSetChanged()
+            return
+        }else{
+            setPaymentPieGraphView()
+            paymentPieGraphView.data = setPaymentPieGraphData()
+        }
     }
     
     @IBAction func dayPassButton(_ sender: UIButton) {
         dayPass()
         
+        if sumYearPayment == 0{
+            chartView.data = nil
+            chartView.notifyDataSetChanged()
+        }else{
+            chartView.data = setData()
+            chartView.notifyDataSetChanged()
+        }
         
-        chartView.data = setData()
-        chartView.notifyDataSetChanged()
-        
-        paymentPieGraphView.data = setPaymentPieGraphData()
-        paymentPieGraphView.notifyDataSetChanged()
+        if sumPayment(date) == 0{
+            paymentPieGraphView.data = nil
+            paymentPieGraphView.notifyDataSetChanged()
+            return
+        }else{
+            setPaymentPieGraphView()
+            paymentPieGraphView.data = setPaymentPieGraphData()
+        }
     }
     
     func dayBack(){
@@ -294,13 +314,6 @@ class HouseholdAccountBookViewController:UIViewController{
         slideMenuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         slideMenuView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         slideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-//        incomePieGraphView.translatesAutoresizingMaskIntoConstraints = false
-//        incomePieGraphView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
-//        incomePieGraphView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        incomePieGraphView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-//        incomePieGraphView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
     }
     
     //支出画面関連
@@ -352,7 +365,6 @@ class HouseholdAccountBookViewController:UIViewController{
         // チャートデータを作成する
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
-        
         return data
     }
     
@@ -561,7 +573,6 @@ class HouseholdAccountBookViewController:UIViewController{
         incomePieGraphView.highlightPerTapEnabled = false
         incomePieGraphView.legend.enabled = false
         incomePieGraphView.drawHoleEnabled = false
-        incomePieGraphView.noDataText = "データがありません"
     }
     
     private func setIncomePieGraphData() -> PieChartData {
@@ -691,7 +702,6 @@ class HouseholdAccountBookViewController:UIViewController{
         chartView.legend.enabled = false
         chartView.xAxis.granularityEnabled = true
         chartView.xAxis.granularity = 1.0
-        chartView.noDataText = "データがありません"
     }
     
     // チャートのデータを設定するメソッド

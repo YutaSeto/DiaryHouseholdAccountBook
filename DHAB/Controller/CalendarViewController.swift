@@ -342,8 +342,6 @@ extension CalendarViewController:InputViewControllerDelegate{
         calendarView.reloadData()
         householdAccountBookTableView.reloadData()
     }
-    
-    
 }
 
 extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance{
