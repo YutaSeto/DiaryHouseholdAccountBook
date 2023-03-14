@@ -56,6 +56,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var incomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var incomePieGraphView: PieChartView!
     
     //slideMenu画面関連
     let menuList = ["カテゴリーの設定","予算の設定"]
@@ -68,7 +69,6 @@ class HouseholdAccountBookViewController:UIViewController{
     var sumYearPayment: Int = 0
     var sumIncomeList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
     var sumYearIncome: Int = 0
-    var colors: [UIColor] = []
     @IBOutlet weak var chartView: BarChartView!
     @IBOutlet weak var resultTableView: UITableView!
     @IBOutlet weak var resultSumTableView: UITableView!
@@ -95,13 +95,16 @@ class HouseholdAccountBookViewController:UIViewController{
         setMonthSumIncome()
         tableViewScroll()
 
-        let barGraphData = setData()
+        
         setChartView()
-        chartView.data = barGraphData
+        chartView.data = setData()
         
-        let paymentPieGraphData = setPaymentPieGraphData()
+        
         setPaymentPieGraphView()
+        paymentPieGraphView.data = setPaymentPieGraphData()
         
+        setIncomePieGraphView()
+        incomePieGraphView.data = setIncomePieGraphData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -283,6 +286,15 @@ class HouseholdAccountBookViewController:UIViewController{
         slideMenuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         slideMenuView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         slideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        incomePieGraphView.translatesAutoresizingMaskIntoConstraints = false
+        incomePieGraphView.topAnchor.constraint(equalTo: incomeView.topAnchor).isActive = true
+        incomePieGraphView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        incomePieGraphView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        incomePieGraphView.bottomAnchor.constraint(equalTo: sumIncomeTableView.topAnchor,constant:5).isActive = true
+        slideMenuView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        
+        
     }
     
     //支出画面関連
@@ -312,12 +324,32 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     func setPaymentPieGraphView(){
-        return
+        paymentPieGraphView.highlightPerTapEnabled = false
+        paymentPieGraphView.legend.enabled = false
+        paymentPieGraphView.drawHoleEnabled = false
+        paymentPieGraphView.noDataText = "データがありません"
     }
     
-    func setPaymentPieGraphData(){
-        return
+    private func setPaymentPieGraphData() -> PieChartData {
+        // データの配列を作成する
+        var dataEntries:[PieChartDataEntry] = []
+        
+        //こうすると項目の数が有限になってしまう
+        let colors:[UIColor] = [.red, .blue, .green, .yellow, .gray, .brown, .cyan, .purple, .orange]
+        for i in 0 ..< paymentTableViewDataSource.count{
+            dataEntries.append(PieChartDataEntry(value: Double(paymentTableViewDataSource[i].paymentPrice), label: paymentTableViewDataSource[i].name))
+        }
+        
+        // データセットを作成する
+        let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
+        dataSet.colors = colors
+        // チャートデータを作成する
+        let data = PieChartData(dataSets: [dataSet])
+        dataSet.drawValuesEnabled = false
+        
+        return data
     }
+    
     
     func configureInputButton(){
         inputButton.layer.cornerRadius = inputButton.bounds.width / 2
@@ -519,7 +551,33 @@ class HouseholdAccountBookViewController:UIViewController{
         return sum
     }
     
+    func setIncomePieGraphView(){
+        incomePieGraphView.highlightPerTapEnabled = false
+        incomePieGraphView.legend.enabled = false
+        incomePieGraphView.drawHoleEnabled = false
+        incomePieGraphView.noDataText = "データがありません"
+    }
     
+    private func setIncomePieGraphData() -> PieChartData {
+        // データの配列を作成する
+        var dataEntries:[PieChartDataEntry] = []
+        
+        //こうすると項目の数が有限になる
+        let colors:[UIColor] = [.red, .blue, .green, .yellow, .gray, .brown, .cyan, .purple, .orange]
+        for i in 0 ..< incomeTableViewDataSource.count{
+            dataEntries.append(PieChartDataEntry(value: Double(incomeTableViewDataSource[i].incomePrice), label: incomeTableViewDataSource[i].name))
+        }
+        
+        
+        // データセットを作成する
+        let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
+        dataSet.colors = colors
+        // チャートデータを作成する
+        let data = PieChartData(dataSets: [dataSet])
+        dataSet.drawValuesEnabled = false
+        
+        return data
+    }
     
     //slidemenu関連
     @IBAction func menuButton(_ sender: UIBarButtonItem) {
@@ -636,6 +694,7 @@ class HouseholdAccountBookViewController:UIViewController{
     private func setData() -> BarChartData {
         // データの配列を作成する
         
+        var colors: [UIColor] = []
         var dataEntries:[BarChartDataEntry] = []
         for i in 0 ..< 12{
             dataEntries.append(BarChartDataEntry(x: Double(i), y: sumIncomeList[i] - sumPaymentList[i]))

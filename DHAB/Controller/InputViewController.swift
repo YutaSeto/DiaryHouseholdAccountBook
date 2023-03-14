@@ -92,8 +92,8 @@ class InputViewController:UIViewController{
         addSubView()
         addHouseholdAccountView()
         settingSubView()
-        dateTextField.text = util.monthDateFormatter.string(from: date)
-        diaryDateTextField.text = util.monthDateFormatter.string(from: date)
+        dateTextField.text = util.dayDateFormatter.string(from: date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: date)
         settingCollectionView()
         setCategoryData()
         resultLabel.text = ""
