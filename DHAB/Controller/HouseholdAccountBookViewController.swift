@@ -199,7 +199,6 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     func dayBack(){
-        householdeAccountBookViewControllerDelegate = self
         if isMonth{
             date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
             dayLabel.text = util.monthDateFormatter.string(from: date)
@@ -210,15 +209,14 @@ class HouseholdAccountBookViewController:UIViewController{
         resetSumYearPaymentAndIncome()
         setMonthSumPayment()
         setMonthSumIncome()
-        self.householdeAccountBookViewControllerDelegate?.updateList()
-        self.householdeAccountBookViewControllerDelegate?.updateIncome()
+        updateList()
+        updateIncome()
         paymentTableView.reloadData()
         incomeTableView.reloadData()
         resultSumTableView.reloadData()
     }
     
     func dayPass(){
-        householdeAccountBookViewControllerDelegate = self
         if isMonth{
             date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
             dayLabel.text = util.monthDateFormatter.string(from: date)
@@ -229,8 +227,8 @@ class HouseholdAccountBookViewController:UIViewController{
         resetSumYearPaymentAndIncome()
         setMonthSumPayment()
         setMonthSumIncome()
-        self.householdeAccountBookViewControllerDelegate?.updateList()
-        self.householdeAccountBookViewControllerDelegate?.updateIncome()
+        updateList()
+        updateIncome()
         paymentTableView.reloadData()
         incomeTableView.reloadData()
         resultSumTableView.reloadData()
@@ -714,6 +712,18 @@ class HouseholdAccountBookViewController:UIViewController{
         
         return data
     }
+    
+    func updateList() {
+        setPaymentData()
+        setCategoryData()
+        setPaymentBudgetData()
+        paymentTableViewDataSource = []
+        setPaymentTableViewDataSourse()
+        setSumPaymentData()
+        sumPaymentTableView.reloadData()
+        
+        print("あああああああああああああ")
+    }
 }
         
 
@@ -743,6 +753,8 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
     func updateDiary() {
         return
     }
+    
+    
 }
 
 extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewDataSource{
@@ -865,8 +877,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 }
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController")
-//                let budgetViewControllerDelegate = navigationController.topViewController.budgetViewControllerDelegate
+                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                let budgetViewController = storyboard.instantiateViewController(withIdentifier: "BudgetViewController") as! BudgetViewController
+                
+                budgetViewController.budgetViewControllerDelegate = self
+                navigationController.pushViewController(budgetViewController, animated: true)
+                
                 present(navigationController,animated: true)
                 returnView0Second()
             default:
@@ -881,17 +897,6 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     }
 }
 
-extension HouseholdAccountBookViewController:HouseholdAccountBookControllerDelegate{
-    func updateList() {
-        setPaymentData()
-        setCategoryData()
-        setPaymentBudgetData()
-        paymentTableViewDataSource = []
-        setPaymentTableViewDataSourse()
-        setSumPaymentData()
-        sumPaymentTableView.reloadData()
-    }
-}
 
 extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
     func updateHouseholdAccountBook() {
@@ -914,4 +919,8 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         setMonthSumIncome()
         resultSumTableView.reloadData()
     }
+}
+
+extension HouseholdAccountBookViewController:BudgetViewControllerDelegate{
+    
 }
