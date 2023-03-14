@@ -9,12 +9,14 @@ import UIKit
 
 protocol BudgetConfigureTableViewCellDelegate{
     func tableViewCell(didChngeText text: String, data:BudgetTableViewCellItem? )
+    func tableViewCell(didChangeTextIncome text: String,incomeData:IncomeBudgetTableViewCellItem?)
 }
 
 
 class BudgetConfigureTableViewCell: UITableViewCell {
     
     var data:BudgetTableViewCellItem?
+    var incomeData:IncomeBudgetTableViewCellItem?
     var price:Int = 0
     var delegate:BudgetConfigureTableViewCellDelegate?
     @IBOutlet weak var categoryLabel: UILabel!
@@ -32,10 +34,11 @@ class BudgetConfigureTableViewCell: UITableViewCell {
     
     @objc func textFieldDidChange(_ textField:UITextField){
         guard let text = textField.text else{return}
-        
         if let price = Int(text){
             data?.price = price
+            incomeData?.price = price
         }
         delegate?.tableViewCell(didChngeText: text, data: data)
+        delegate?.tableViewCell(didChangeTextIncome: text, incomeData: incomeData)
     }
 }
