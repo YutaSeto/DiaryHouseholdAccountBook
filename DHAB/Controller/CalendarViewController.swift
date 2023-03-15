@@ -13,7 +13,9 @@ import UIKit
 class CalendarViewController:UIViewController{
     var date:Date = Date()
     var selectedDate:Date = Date()
+    var displayDate:Date = Date()
     var sumPayment:Int = 0
+    var isButtonPush:Bool = false
     private var monthPaymentModelList:[PaymentModel] = []
     private var displayPaymentList:[PaymentModel] = []
     private var diaryModelList:[DiaryModel] = []
@@ -31,7 +33,9 @@ class CalendarViewController:UIViewController{
     @IBOutlet var paymentView: UIView!
     @IBOutlet var diaryView: UIView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    
+    @IBOutlet weak var monthBackButton: UIButton!
+    @IBOutlet weak var monthPassButton: UIButton!
+    @IBOutlet weak var dateLabel: UILabel!
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -43,15 +47,16 @@ class CalendarViewController:UIViewController{
         diaryTableView.dataSource = self
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
+        configureButtonZIndex()
         addSubView()
         setTableView(selectedDate)
         setDiaryData()
         showPaymentView()
         settingSubView()
         setSubLabel()
-        setSum()
         setMonthPaymentModelList()
-        paymentLabel.text = String(setMonthPayment())
+        setSum()
+        dateLabel.text = util.monthDateFormatter.string(from: date)
     }
     
     
@@ -68,7 +73,42 @@ class CalendarViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = false
         }
         setSubLabel()
+        setMonthPaymentModelList()
+    }
+    
+    @IBAction func monthBackButton(_ sender: UIButton) {
+        isButtonPush = true
+        let currentPage = calendarView.currentPage
+        let prevMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentPage)!
+        calendarView.setCurrentPage(prevMonth, animated: true)
+        selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate)!
+        dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
+        calendarView.select(selectedDate)
+        setTableView(selectedDate)
+        setSubLabel()
+        setMonthPaymentModelList()
+        paymentLabel.text = String(setMonthPayment())
+        isButtonPush = false
+    }
+    
+    @IBAction func monthPassButton(_ sender: UIButton) {
+        isButtonPush = true
+        let currentPage = calendarView.currentPage
+        let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentPage)!
+        calendarView.setCurrentPage(nextMonth, animated: true)
+        selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate)!
+        dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
+        calendarView.select(selectedDate)
+        setTableView(selectedDate)
+        setSubLabel()
         setSum()
+        paymentLabel.text = String(setMonthPayment())
+        isButtonPush = false
+    }
+    
+    func configureButtonZIndex(){
+        monthBackButton.layer.zPosition = calendarView.layer.zPosition + 1
+        monthPassButton.layer.zPosition = calendarView.layer.zPosition + 1
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -167,6 +207,10 @@ class CalendarViewController:UIViewController{
         incomeLabel.text = getComma(sumIncome(selectedDate))
     }
     
+//    func setDateLabel(){
+//        dateLabel.text = calendarView.current.date
+//    }
+    
     func setSubLabel(){
         subDateLabel.text = util.dayDateFormatter.string(from: selectedDate)
         subPaymentLabel.text = String(sumDayPayment(selectedDate))
@@ -228,6 +272,8 @@ class CalendarViewController:UIViewController{
         diaryModelList = Array(result)
         diaryTableView.reloadData()
     }
+    
+
 }
 
 
@@ -358,13 +404,34 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if monthPosition == .previous || monthPosition == .next {
+            calendar.setCurrentPage(date, animated: true)
+        }
         selectedDate = date
         setTableView(selectedDate)
         setMonthPaymentModelList()
         paymentLabel.text = String(setMonthPayment())
         setSubLabel()
+        dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         householdAccountBookTableView.reloadData()
         diaryTableView.reloadData()
+    }
+    
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        if isButtonPush == false{
+            displayDate = calendar.currentPage.zeroclock
+            dateLabel.text = util.monthDateFormatter.string(from: displayDate)
+            selectedDate = displayDate
+            
+            dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
+            calendarView.select(selectedDate)
+            setTableView(selectedDate)
+            setSubLabel()
+            setMonthPaymentModelList()
+            paymentLabel.text = String(setMonthPayment())
+        }else{
+            return
+        }
     }
 }
 

@@ -187,43 +187,16 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
         
-        if sumYearPayment == 0{
-            chartView.data = nil
-            chartView.notifyDataSetChanged()
-        }else{
-            chartView.data = setData()
-            chartView.notifyDataSetChanged()
-        }
-        
-        if sumPayment(date) == 0{
-            paymentPieGraphView.data = nil
-            paymentPieGraphView.notifyDataSetChanged()
-            return
-        }else{
-            setPaymentPieGraphView()
-            paymentPieGraphView.data = setPaymentPieGraphData()
-        }
+        updateChartView()
+        updatePaymentPieGraph()
     }
     
     @IBAction func dayPassButton(_ sender: UIButton) {
         dayPass()
         
-        if sumYearPayment == 0{
-            chartView.data = nil
-            chartView.notifyDataSetChanged()
-        }else{
-            chartView.data = setData()
-            chartView.notifyDataSetChanged()
-        }
-        
-        if sumPayment(date) == 0{
-            paymentPieGraphView.data = nil
-            paymentPieGraphView.notifyDataSetChanged()
-            return
-        }else{
-            setPaymentPieGraphView()
-            paymentPieGraphView.data = setPaymentPieGraphData()
-        }
+        updateChartView()
+        updatePaymentPieGraph()
+
     }
     
     func dayBack(){
@@ -366,6 +339,17 @@ class HouseholdAccountBookViewController:UIViewController{
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
         return data
+    }
+    
+    private func updatePaymentPieGraph(){
+        if sumPayment(date) == 0{
+            paymentPieGraphView.data = nil
+            paymentPieGraphView.notifyDataSetChanged()
+            return
+        }else{
+            setPaymentPieGraphView()
+            paymentPieGraphView.data = setPaymentPieGraphData()
+        }
     }
     
     
@@ -702,6 +686,16 @@ class HouseholdAccountBookViewController:UIViewController{
         chartView.legend.enabled = false
         chartView.xAxis.granularityEnabled = true
         chartView.xAxis.granularity = 1.0
+    }
+    
+    private func updateChartView(){
+        if sumYearPayment == 0{
+            chartView.data = nil
+            chartView.notifyDataSetChanged()
+        }else{
+            chartView.data = setData()
+            chartView.notifyDataSetChanged()
+        }
     }
     
     // チャートのデータを設定するメソッド

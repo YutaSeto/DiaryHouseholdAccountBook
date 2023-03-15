@@ -19,7 +19,7 @@ class Util:UIViewController{
     
     public var monthDateFormatter:DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
+        dateFormatter.dateFormat = "yy年M月"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
@@ -27,7 +27,7 @@ class Util:UIViewController{
     
     public var dayDateFormatter:DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月dd日"
+        dateFormatter.dateFormat = "yy年M月dd日"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
