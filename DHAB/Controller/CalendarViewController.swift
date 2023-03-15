@@ -433,5 +433,26 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             return
         }
     }
+    
+
+
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        
+        let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
+        let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
+        let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
+        //      祝日かどうかを判定する処理を追加する必要あり
+        if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
+            return UIColor.blue
+        }else if weekday == 1 && date >= startOfMonth && date <= endOfMonth{ // 日曜日または祝日
+            return UIColor.red
+        }else if date >= startOfMonth && date <= endOfMonth{
+            return appearance.titleDefaultColor
+        }else{
+            return UIColor.lightGray
+        }
+    }
 }
 
