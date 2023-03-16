@@ -80,7 +80,6 @@ class CalendarViewController:UIViewController{
         isButtonPush = true
         let currentPage = calendarView.currentPage
         let prevMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentPage)!
-        calendarView.setCurrentPage(prevMonth, animated: true)
         selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate)!
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         calendarView.select(selectedDate)
@@ -88,6 +87,7 @@ class CalendarViewController:UIViewController{
         setSubLabel()
         setMonthPaymentModelList()
         paymentLabel.text = String(setMonthPayment())
+        calendarView.setCurrentPage(prevMonth, animated: true)
         isButtonPush = false
     }
     
@@ -95,14 +95,14 @@ class CalendarViewController:UIViewController{
         isButtonPush = true
         let currentPage = calendarView.currentPage
         let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentPage)!
-        calendarView.setCurrentPage(nextMonth, animated: true)
         selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate)!
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         calendarView.select(selectedDate)
         setTableView(selectedDate)
         setSubLabel()
-        setSum()
+        setMonthPaymentModelList()
         paymentLabel.text = String(setMonthPayment())
+        calendarView.setCurrentPage(nextMonth, animated: true)
         isButtonPush = false
     }
     
@@ -203,13 +203,9 @@ class CalendarViewController:UIViewController{
     }
     
     func setSum(){
-        paymentLabel.text = getComma(sumPayment(selectedDate))
+        paymentLabel.text = getComma(setMonthPayment())
         incomeLabel.text = getComma(sumIncome(selectedDate))
     }
-    
-//    func setDateLabel(){
-//        dateLabel.text = calendarView.current.date
-//    }
     
     func setSubLabel(){
         subDateLabel.text = util.dayDateFormatter.string(from: selectedDate)
@@ -272,8 +268,6 @@ class CalendarViewController:UIViewController{
         diaryModelList = Array(result)
         diaryTableView.reloadData()
     }
-    
-
 }
 
 
@@ -404,9 +398,9 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        if monthPosition == .previous || monthPosition == .next {
-            calendar.setCurrentPage(date, animated: true)
-        }
+//        if monthPosition == .previous || monthPosition == .next {
+//            calendar.setCurrentPage(date, animated: true)
+//        }
         selectedDate = date
         setTableView(selectedDate)
         setMonthPaymentModelList()
@@ -429,6 +423,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             setSubLabel()
             setMonthPaymentModelList()
             paymentLabel.text = String(setMonthPayment())
+            calendarView.reloadData()
         }else{
             return
         }
@@ -440,11 +435,40 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: date)
         
+        
+        //毎月の1日の曜日を取得
+        let year = calendar.dateComponents([.year], from: selectedDate)
+        let intYear = year.year!
+        let month = calendar.dateComponents([.month], from: selectedDate)
+        let intMonth = month.month!
+        
+        let holiday:[Date] = [
+            calendar.date(from: DateComponents(year:intYear,month:1,day:1))!.zeroclock,//元旦
+            calendar.date(from: DateComponents(year:intYear,month:1, weekday:2, weekdayOrdinal: 2))!.zeroclock,//成人の日
+            calendar.date(from:DateComponents(year:intYear, month:2, day:11))!.zeroclock,//建国記念日
+            calendar.date(from:DateComponents(year:intYear, month:2, day:23))!.zeroclock,//天皇誕生日
+            calendar.date(from:DateComponents(year:intYear, month:3, day:20))!.zeroclock,//春分の日
+            calendar.date(from:DateComponents(year:intYear, month:4, day:29))!.zeroclock,//昭和の日
+            calendar.date(from:DateComponents(year:intYear, month:5, day:3))!.zeroclock,//憲法記念日
+            calendar.date(from:DateComponents(year:intYear, month:5, day:4))!.zeroclock,//みどりの日
+            calendar.date(from:DateComponents(year:intYear, month:5, day:5))!.zeroclock,//こどもの日
+            calendar.date(from: DateComponents(year:intYear,month:7, weekday:2, weekdayOrdinal: 3))!.zeroclock,//海の日
+            calendar.date(from:DateComponents(year:intYear, month:8, day:11))!.zeroclock,//山の日
+            calendar.date(from: DateComponents(year:intYear,month:9, weekday:2, weekdayOrdinal: 3))!.zeroclock,//敬老の日
+            calendar.date(from:DateComponents(year:intYear, month:9, day:22))!.zeroclock,//秋分の日
+            calendar.date(from: DateComponents(year:intYear,month:10, weekday:2, weekdayOrdinal: 2))!.zeroclock,//体育の日
+            calendar.date(from:DateComponents(year:intYear, month:5, day:3))!.zeroclock,//文化の日
+            calendar.date(from:DateComponents(year:intYear, month:5, day:3))!.zeroclock,//勤労感謝の日
+        ]
+        
         let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
         let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
         //      祝日かどうかを判定する処理を追加する必要あり
-        if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
+        print(date.zeroclock)
+        if holiday.contains(date.zeroclock) && date >= startOfMonth && date <= endOfMonth{
+            return UIColor.red
+        }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
             return UIColor.blue
         }else if weekday == 1 && date >= startOfMonth && date <= endOfMonth{ // 日曜日または祝日
             return UIColor.red
