@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		233E500729C2C55E00F35DB8 /* InputCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233E500529C2C55E00F35DB8 /* InputCollectionViewCell.swift */; };
+		233E500829C2C55E00F35DB8 /* InputCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */; };
 		23507F0E298E9AD70025EAE5 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0D298E9AD70025EAE5 /* CategoryModel.swift */; };
 		23507F10298E9BD00025EAE5 /* BudgetTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */; };
 		23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */; };
@@ -56,6 +58,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		233E500529C2C55E00F35DB8 /* InputCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCollectionViewCell.swift; sourceTree = "<group>"; };
+		233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputCollectionViewCell.xib; sourceTree = "<group>"; };
 		23507F0D298E9AD70025EAE5 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTableViewCellItem.swift; sourceTree = "<group>"; };
 		23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookTableViewCellItem.swift; sourceTree = "<group>"; };
@@ -135,6 +139,8 @@
 				23ACC1452988AC5500ABA10D /* SliderViewCell.xib */,
 				EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */,
 				EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */,
+				233E500529C2C55E00F35DB8 /* InputCollectionViewCell.swift */,
+				233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */,
 			);
 			path = customCell;
 			sourceTree = "<group>";
@@ -313,6 +319,7 @@
 				EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */,
 				23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */,
 				23ACC1472988AC5500ABA10D /* SliderViewCell.xib in Resources */,
+				233E500829C2C55E00F35DB8 /* InputCollectionViewCell.xib in Resources */,
 				23EEE7CF2972CF2700A52939 /* InputViewController.storyboard in Resources */,
 				23EEE7D32972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard in Resources */,
 				23EC22BC2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.xib in Resources */,
@@ -375,6 +382,7 @@
 				23A0B29229AA4522000956CF /* extension + Date.swift in Sources */,
 				23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */,
 				237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */,
+				233E500729C2C55E00F35DB8 /* InputCollectionViewCell.swift in Sources */,
 				EDE9354629BE0FAA006109C7 /* Util.swift in Sources */,
 				23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */,
 				EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */,

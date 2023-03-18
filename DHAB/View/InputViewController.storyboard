@@ -88,29 +88,7 @@
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </collectionViewFlowLayout>
-                            <cells>
-                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="D2T-ZQ-KTM">
-                                    <rect key="frame" x="0.0" y="0.0" width="110" height="47"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="OHe-Uz-64a">
-                                        <rect key="frame" x="0.0" y="0.0" width="110" height="47"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="aKW-xK-BJo">
-                                                <rect key="frame" x="34.333333333333329" y="13.333333333333334" width="41.333333333333329" height="20.333333333333329"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="aKW-xK-BJo" firstAttribute="centerX" secondItem="OHe-Uz-64a" secondAttribute="centerX" id="K53-bB-dXn"/>
-                                            <constraint firstItem="aKW-xK-BJo" firstAttribute="centerY" secondItem="OHe-Uz-64a" secondAttribute="centerY" id="wKo-2H-KPs"/>
-                                        </constraints>
-                                    </collectionViewCellContentView>
-                                    <size key="customSize" width="110" height="47"/>
-                                </collectionViewCell>
-                            </cells>
+                            <cells/>
                         </collectionView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aaE-36-xv7">
                             <rect key="frame" x="173.33333333333334" y="372.66666666666669" width="41.333333333333343" height="20.333333333333314"/>

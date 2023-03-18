@@ -26,6 +26,7 @@ class InputViewController:UIViewController{
     //家計簿記入画面関連
     var payment:PaymentModel? = nil
     var income:IncomeModel? = nil
+    var selectedIndexPath: IndexPath?
     private var paymentModelList: [PaymentModel] = []
     let util = Util()
     let realm = try! Realm()
@@ -84,7 +85,9 @@ class InputViewController:UIViewController{
         imageCollectionView.dataSource = self
         diaryInputTextView.delegate = self
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
+        let collectionViewNib = UINib(nibName: "InputCollectionViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
+        collectionView.register(collectionViewNib, forCellWithReuseIdentifier: "customCell")
         configureSliderCell()
         configureTextfield()
         configureDateTextField()
@@ -451,10 +454,8 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView.tag == 0{
-            let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-            let contentLabel = cell.contentView.viewWithTag(1) as! UILabel
-            contentLabel.text = categoryList[indexPath.row].name
-            contentLabel.adjustsFontSizeToFitWidth = true
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
+            cell.categoryLabel.text = categoryList[indexPath.row].name
             return cell
         }else if collectionView.tag == 1{
             let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath)
@@ -468,7 +469,19 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0{
+            let cell = collectionView.cellForItem(at: indexPath)
+            cell?.backgroundColor = .lightGray
             resultLabel.text = categoryList[indexPath.row].name
+            if selectedIndexPath != nil{
+                if indexPath != selectedIndexPath{
+                    collectionView.cellForItem(at:selectedIndexPath!)?.backgroundColor = .white
+                    selectedIndexPath = indexPath
+                }
+            }else{
+                selectedIndexPath = indexPath
+            }
+            
+            
             if priceTextField.text != ""{
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true

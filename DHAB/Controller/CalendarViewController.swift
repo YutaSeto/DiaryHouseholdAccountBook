@@ -423,6 +423,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             setSubLabel()
             setMonthPaymentModelList()
             paymentLabel.text = String(setMonthPayment())
+            householdAccountBookTableView.reloadData()
             calendarView.reloadData()
         }else{
             return
@@ -457,8 +458,8 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             calendar.date(from: DateComponents(year:intYear,month:9, weekday:2, weekdayOrdinal: 3))!.zeroclock,//敬老の日
             calendar.date(from:DateComponents(year:intYear, month:9, day:22))!.zeroclock,//秋分の日
             calendar.date(from: DateComponents(year:intYear,month:10, weekday:2, weekdayOrdinal: 2))!.zeroclock,//体育の日
-            calendar.date(from:DateComponents(year:intYear, month:5, day:3))!.zeroclock,//文化の日
-            calendar.date(from:DateComponents(year:intYear, month:5, day:3))!.zeroclock,//勤労感謝の日
+            calendar.date(from:DateComponents(year:intYear, month:11, day:3))!.zeroclock,//文化の日
+            calendar.date(from:DateComponents(year:intYear, month:11, day:23))!.zeroclock,//勤労感謝の日
         ]
         
         let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
@@ -466,7 +467,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
         //      祝日かどうかを判定する処理を追加する必要あり
         print(date.zeroclock)
-        if holiday.contains(date.zeroclock) && date >= startOfMonth && date <= endOfMonth{
+        if holiday.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
             return UIColor.red
         }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
             return UIColor.blue
