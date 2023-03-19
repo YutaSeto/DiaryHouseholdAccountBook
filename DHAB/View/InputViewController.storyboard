@@ -43,7 +43,6 @@
                         <outlet property="addButton" destination="qMi-dv-ast" id="kB6-4y-rI3"/>
                         <outlet property="addDiaryButton" destination="Csk-I7-mkc" id="zt6-UR-oUp"/>
                         <outlet property="addImageButton" destination="tga-kJ-rCq" id="DI2-Hf-cho"/>
-                        <outlet property="collectionView" destination="bRy-IY-AL9" id="uMe-PO-WPN"/>
                         <outlet property="collectionViewFlowLayout" destination="mmh-WH-Cap" id="lXq-iq-2Wx"/>
                         <outlet property="continueAddButton" destination="W2c-KJ-R3W" id="9bQ-qF-Mit"/>
                         <outlet property="dateTextField" destination="7Re-CN-JLV" id="uW2-mH-ufm"/>
@@ -52,6 +51,7 @@
                         <outlet property="diaryView" destination="rad-1v-mEU" id="qOC-Q4-tBb"/>
                         <outlet property="householdAccountBookView" destination="nU6-bC-CYB" id="flk-oI-nA4"/>
                         <outlet property="imageCollectionView" destination="tga-kJ-rCq" id="gR9-K1-jya"/>
+                        <outlet property="incomeCollectionView" destination="H5p-6n-LAP" id="jfM-kU-aTL"/>
                         <outlet property="paymentCollectionView" destination="bRy-IY-AL9" id="J6Y-VM-sgz"/>
                         <outlet property="priceTextField" destination="E78-I1-bxO" id="aTu-Sl-tug"/>
                         <outlet property="resultLabel" destination="aaE-36-xv7" id="UtI-jV-amf"/>
@@ -65,7 +65,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="E78-I1-bxO">
-                            <rect key="frame" x="20" y="274.33333333333331" width="348" height="34"/>
+                            <rect key="frame" x="20" y="254.33333333333337" width="348" height="34"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             <connections>
@@ -77,10 +77,10 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         </datePicker>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bRy-IY-AL9">
-                            <rect key="frame" x="20" y="54.333333333333343" width="348" height="200"/>
+                            <rect key="frame" x="20" y="54.333333333333343" width="348" height="100"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="200" id="na0-sr-oKF"/>
+                                <constraint firstAttribute="height" constant="100" id="na0-sr-oKF"/>
                             </constraints>
                             <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mmh-WH-Cap">
                                 <size key="itemSize" width="110" height="47"/>
@@ -91,13 +91,13 @@
                             <cells/>
                         </collectionView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aaE-36-xv7">
-                            <rect key="frame" x="173.33333333333334" y="372.66666666666669" width="41.333333333333343" height="20.333333333333314"/>
+                            <rect key="frame" x="173.33333333333334" y="352.66666666666669" width="41.333333333333343" height="20.333333333333314"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WMF-zU-FFi">
-                            <rect key="frame" x="20" y="318.33333333333331" width="348" height="34.333333333333314"/>
+                            <rect key="frame" x="20" y="298.33333333333331" width="348" height="34.333333333333314"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMi-dv-ast">
                                     <rect key="frame" x="0.0" y="0.0" width="152.66666666666666" height="34.333333333333336"/>
@@ -159,20 +159,37 @@
                                 <constraint firstItem="7Re-CN-JLV" firstAttribute="centerX" secondItem="jZe-Af-nLz" secondAttribute="centerX" id="LEd-Y3-eME"/>
                             </constraints>
                         </stackView>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="H5p-6n-LAP">
+                            <rect key="frame" x="20" y="164.33333333333334" width="348" height="80"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="MSW-7L-g9c"/>
+                            </constraints>
+                            <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="bew-qd-HKX">
+                                <size key="itemSize" width="128" height="61"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                            <cells/>
+                        </collectionView>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="8x6-Vu-sdN"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="jZe-Af-nLz" firstAttribute="leading" secondItem="bRy-IY-AL9" secondAttribute="leading" id="9if-Rk-rY0"/>
+                        <constraint firstItem="H5p-6n-LAP" firstAttribute="leading" secondItem="bRy-IY-AL9" secondAttribute="leading" id="HtJ-QO-Mqh"/>
+                        <constraint firstItem="bRy-IY-AL9" firstAttribute="top" secondItem="jZe-Af-nLz" secondAttribute="bottom" constant="10" id="LhU-EZ-KfV"/>
                         <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" constant="20" id="Mru-rG-S8h"/>
                         <constraint firstItem="E78-I1-bxO" firstAttribute="leading" secondItem="bRy-IY-AL9" secondAttribute="leading" id="WRJ-sR-dHU"/>
+                        <constraint firstItem="E78-I1-bxO" firstAttribute="top" secondItem="H5p-6n-LAP" secondAttribute="bottom" constant="10" id="XHc-Ou-JI6"/>
                         <constraint firstItem="WMF-zU-FFi" firstAttribute="leading" secondItem="E78-I1-bxO" secondAttribute="leading" id="aR5-pm-6M0"/>
+                        <constraint firstItem="H5p-6n-LAP" firstAttribute="top" secondItem="bRy-IY-AL9" secondAttribute="bottom" constant="10" id="cTu-oE-mVz"/>
                         <constraint firstItem="WMF-zU-FFi" firstAttribute="trailing" secondItem="E78-I1-bxO" secondAttribute="trailing" id="eIk-U1-HWV"/>
                         <constraint firstItem="WMF-zU-FFi" firstAttribute="top" secondItem="E78-I1-bxO" secondAttribute="bottom" constant="10" id="fhN-Kg-GU2"/>
                         <constraint firstItem="aaE-36-xv7" firstAttribute="top" secondItem="WMF-zU-FFi" secondAttribute="bottom" constant="20" id="j5b-FU-Wu8"/>
                         <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="E78-I1-bxO" secondAttribute="trailing" constant="20" id="l26-Wx-ZYZ"/>
-                        <constraint firstItem="bRy-IY-AL9" firstAttribute="top" secondItem="jZe-Af-nLz" secondAttribute="bottom" constant="10" id="pqh-qa-fOM"/>
-                        <constraint firstItem="E78-I1-bxO" firstAttribute="top" secondItem="bRy-IY-AL9" secondAttribute="bottom" constant="20" id="rEg-Jb-87B"/>
+                        <constraint firstItem="H5p-6n-LAP" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" id="opl-9E-IaH"/>
                         <constraint firstItem="jZe-Af-nLz" firstAttribute="top" secondItem="nU6-bC-CYB" secondAttribute="top" constant="10" id="ru7-Rh-U0H"/>
                         <constraint firstItem="jZe-Af-nLz" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" id="tqm-mR-16R"/>
                         <constraint firstItem="bRy-IY-AL9" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="uev-ox-F6a"/>

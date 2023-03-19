@@ -8,10 +8,11 @@
 import Foundation
 import RealmSwift
 
-class PaymentModel: Object{
+class JournalModel: Object{
     @objc dynamic var date:Date = Date()
     @objc dynamic var price:Int = 0
     @objc dynamic var memo:String = ""
+    @objc dynamic var isPayment:Bool = true
     @objc dynamic var category:String = ""
     @objc dynamic var id:String = UUID().uuidString
 }

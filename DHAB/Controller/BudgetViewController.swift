@@ -18,9 +18,9 @@ class BudgetViewController: UIViewController{
     var util = Util()
     var date = Date()
     var categoryList:[CategoryModel] = []
-    var incomeCategoryList:[IncomeCategoryModel] = []
-    var paymentBudgetList:[PaymentBudgetModel] = []
-    var incomeBudgetList:[IncomeBudgetModel] = []
+    var incomeCategoryList:[CategoryModel] = []
+    var paymentBudgetList:[BudgetModel] = []
+    var incomeBudgetList:[BudgetModel] = []
     var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
@@ -32,7 +32,6 @@ class BudgetViewController: UIViewController{
     @IBOutlet weak var dateBackButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var datePassButton: UIButton!
-    
     @IBOutlet weak var budgetTableViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
@@ -94,33 +93,25 @@ class BudgetViewController: UIViewController{
         budgetTableView.reloadData()
     }
     
-//    private var dateFormatter: DateFormatter{
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yy年MM月"
-//        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
-//        dateFormatter.locale = Locale(identifier: "ja-JP")
-//        return dateFormatter
-//    }
-    
     func setCategoryData(){
-        let result = realm.objects(CategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
         categoryList = Array(result)
         budgetTableView.reloadData()
     }
     
     func setIncomeCategoryData(){
-        let result = realm.objects(IncomeCategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
         incomeCategoryList = Array(result)
     }
     
     func setPaymentBudgetData(){
-        let result = realm.objects(PaymentBudgetModel.self)
+        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == true}
         paymentBudgetList = Array(result)
         budgetTableView.reloadData()
     }
     
     func setIncomeBudgetData(){
-        let result = realm.objects(IncomeBudgetModel.self)
+        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == false}
         incomeBudgetList = Array(result)
         incomeBudgetTableView.reloadData()
     }
@@ -134,7 +125,7 @@ class BudgetViewController: UIViewController{
         categoryList.forEach{ expense in
             let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
             let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+            if let budget:BudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let item = BudgetTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
@@ -142,10 +133,11 @@ class BudgetViewController: UIViewController{
                 )
                 budgetTableViewDataSource.append(item)
             } else {
-                let budget = PaymentBudgetModel()
+                let budget = BudgetModel()
                 budget.id = UUID().uuidString
                 budget.expenseID = expense.id
                 budget.budgetDate = date.zeroclock
+                budget.isPayment = true
                 budget.budgetPrice = 0
                 try! realm.write { realm.add(budget)}
                 paymentBudgetList.append(budget)
@@ -157,9 +149,8 @@ class BudgetViewController: UIViewController{
                 )
                 budgetTableViewDataSource.append(item)
             }
-            
-            budgetTableView.reloadData()
         }
+        budgetTableView.reloadData()
     }
     
     func setIncomeBudgetTableViewDataSourse(){
@@ -171,7 +162,7 @@ class BudgetViewController: UIViewController{
         incomeCategoryList.forEach{ expense in
             let dayCheckBudget = incomeBudgetList.filter({$0.budgetDate >= firstDay})
             let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:IncomeBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+            if let budget:BudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).filter({$0.isPayment == false}).first{
                 let item = IncomeBudgetTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
@@ -179,10 +170,11 @@ class BudgetViewController: UIViewController{
                 )
                 incomeBudgetTableViewDataSource.append(item)
             } else {
-                let budget = IncomeBudgetModel()
+                let budget = BudgetModel()
                 budget.id = UUID().uuidString
                 budget.expenseID = expense.id
                 budget.budgetDate = date.zeroclock
+                budget.isPayment = false
                 budget.budgetPrice = 0
                 try! realm.write { realm.add(budget)}
                 incomeBudgetList.append(budget)
@@ -194,8 +186,8 @@ class BudgetViewController: UIViewController{
                 )
                 incomeBudgetTableViewDataSource.append(item)
             }
-            incomeBudgetTableView.reloadData()
         }
+        incomeBudgetTableView.reloadData()
     }
     
     func updateList(){
@@ -262,14 +254,15 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             
             let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
                 let dataSource = self.budgetTableViewDataSource[indexPath.row]
-            
                 if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
                     let realm = try!Realm()
                     try! realm.write{
                         budget.budgetPrice = Int(textFieldOnAlert.text!)!
                     }
                 }
+                
                 self.budgetViewControllerDelegate!.updateList()
+                self.updateList()
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -298,6 +291,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     }
                 }
                 self.budgetViewControllerDelegate?.updateList()
+                self.updateList()
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in

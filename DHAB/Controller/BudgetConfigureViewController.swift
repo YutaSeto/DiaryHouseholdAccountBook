@@ -20,9 +20,9 @@ class BudgetConfigureViewController: UIViewController{
     var date: Date = Date()
     var delegate:BudgetConfigureViewControllerDelegate?
     var categoryList:[CategoryModel] = []
-    var incomeCategoryList:[IncomeCategoryModel] = []
-    var paymentBudgetList:[PaymentBudgetModel] = []
-    var incomeBudgetList:[IncomeBudgetModel] = []
+    var incomeCategoryList:[CategoryModel] = []
+    var paymentBudgetList:[BudgetModel] = []
+    var incomeBudgetList:[BudgetModel] = []
     var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
     
@@ -81,25 +81,25 @@ class BudgetConfigureViewController: UIViewController{
     }
 
     func setPaymentBudgetData(){
-        let result = realm.objects(PaymentBudgetModel.self)
+        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == true}
         paymentBudgetList = Array(result)
         budgetConfigureTableView.reloadData()
     }
     
     func setIncomeBudgetData(){
-        let result = realm.objects(IncomeBudgetModel.self)
+        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == false}
         incomeBudgetList = Array(result)
         incomeBudgetConfigureTableView.reloadData()
     }
     
     func setCategoryData(){
-        let result = realm.objects(CategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
         categoryList = Array(result)
         budgetConfigureTableView.reloadData()
     }
     
     func setIncomeCategoryData(){
-        let result = realm.objects(IncomeCategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
         incomeCategoryList = Array(result)
     }
     
@@ -113,7 +113,7 @@ class BudgetConfigureViewController: UIViewController{
             let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
             let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
             
-            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+            if let budget:BudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let item = BudgetTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
@@ -121,7 +121,7 @@ class BudgetConfigureViewController: UIViewController{
                 )
                 budgetTableViewDataSource.append(item)
             } else {
-                let budget = PaymentBudgetModel()
+                let budget = BudgetModel()
                 budget.id = UUID().uuidString
                 budget.expenseID = expense.id
                 budget.budgetDate = date
@@ -150,7 +150,7 @@ class BudgetConfigureViewController: UIViewController{
         incomeCategoryList.forEach{ expense in
             let dayCheckBudget = incomeBudgetList.filter({$0.budgetDate >= firstDay})
             let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:IncomeBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+            if let budget:BudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let item = IncomeBudgetTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
@@ -158,7 +158,7 @@ class BudgetConfigureViewController: UIViewController{
                 )
                 incomeBudgetTableViewDataSource.append(item)
             } else {
-                let budget = IncomeBudgetModel()
+                let budget = BudgetModel()
                 budget.id = UUID().uuidString
                 budget.expenseID = expense.id
                 budget.budgetDate = date

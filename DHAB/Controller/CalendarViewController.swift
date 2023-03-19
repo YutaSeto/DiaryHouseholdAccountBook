@@ -16,10 +16,10 @@ class CalendarViewController:UIViewController{
     var displayDate:Date = Date()
     var sumPayment:Int = 0
     var isButtonPush:Bool = false
-    private var monthPaymentModelList:[PaymentModel] = []
-    private var displayPaymentList:[PaymentModel] = []
+    private var monthPaymentModelList:[JournalModel] = []
+    private var displayPaymentList:[JournalModel] = []
     private var diaryModelList:[DiaryModel] = []
-    private var incomeModelList:[IncomeModel] = []
+    private var incomeModelList:[JournalModel] = []
     let util = Util()
     
     @IBOutlet weak var subDateLabel: UILabel!
@@ -168,8 +168,8 @@ class CalendarViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
         
         let realm = try! Realm()
-        let paymentList:[PaymentModel] = realm.objects(PaymentModel.self).filter{($0.date >= firstDay)}
-        let paymentList2:[PaymentModel] = paymentList.filter{($0.date <= lastDay!)}
+        let paymentList:[JournalModel] = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}
+        let paymentList2:[JournalModel] = paymentList.filter{($0.date <= lastDay!)}
         monthPaymentModelList = paymentList2
     }
     
@@ -198,7 +198,7 @@ class CalendarViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
         let dayCheck = incomeModelList.filter({$0.date >= firstDay})
         let dayCheck2 = dayCheck.filter({$0.date <= lastDay})
-        let sum = dayCheck2.map{$0.amount}.reduce(0){$0 + $1}
+        let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
     
@@ -222,7 +222,7 @@ class CalendarViewController:UIViewController{
         
         var sum:Int = 0
         let realm = try! Realm()
-        let paymentList = realm.objects(PaymentModel.self).filter{($0.date >= firstDay)}
+        let paymentList = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}
         let paymentList2 = paymentList.filter{($0.date <= lastDay!)}
         paymentList2.forEach{payment in
             sum += payment.price
@@ -232,8 +232,8 @@ class CalendarViewController:UIViewController{
     
     func setTableView(_: Date){
         let realm = try! Realm()
-        var result:[PaymentModel] = []
-        let paymentList = realm.objects(PaymentModel.self).sorted(byKeyPath: "date",ascending: false)
+        var result:[JournalModel] = []
+        let paymentList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false)
         paymentList.forEach{payment in
             if payment.date.zeroclock == selectedDate.zeroclock{
                 result.append(payment)
@@ -242,8 +242,8 @@ class CalendarViewController:UIViewController{
         displayPaymentList = result
     }
     
-    func setIncomeTableView(_: Date) -> [IncomeModel]{
-        var result:[IncomeModel] = []
+    func setIncomeTableView(_: Date) -> [JournalModel]{
+        var result:[JournalModel] = []
         incomeModelList.forEach{income in
             if income.date.zeroclock == selectedDate.zeroclock{
                 result.append(income)
@@ -436,37 +436,32 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: date)
         
-        
-        //毎月の1日の曜日を取得
         let year = calendar.dateComponents([.year], from: selectedDate)
         let intYear = year.year!
-        let month = calendar.dateComponents([.month], from: selectedDate)
-        let intMonth = month.month!
         
         let holiday:[Date] = [
-            calendar.date(from: DateComponents(year:intYear,month:1,day:1))!.zeroclock,//元旦
-            calendar.date(from: DateComponents(year:intYear,month:1, weekday:2, weekdayOrdinal: 2))!.zeroclock,//成人の日
-            calendar.date(from:DateComponents(year:intYear, month:2, day:11))!.zeroclock,//建国記念日
-            calendar.date(from:DateComponents(year:intYear, month:2, day:23))!.zeroclock,//天皇誕生日
-            calendar.date(from:DateComponents(year:intYear, month:3, day:20))!.zeroclock,//春分の日
-            calendar.date(from:DateComponents(year:intYear, month:4, day:29))!.zeroclock,//昭和の日
-            calendar.date(from:DateComponents(year:intYear, month:5, day:3))!.zeroclock,//憲法記念日
-            calendar.date(from:DateComponents(year:intYear, month:5, day:4))!.zeroclock,//みどりの日
-            calendar.date(from:DateComponents(year:intYear, month:5, day:5))!.zeroclock,//こどもの日
-            calendar.date(from: DateComponents(year:intYear,month:7, weekday:2, weekdayOrdinal: 3))!.zeroclock,//海の日
-            calendar.date(from:DateComponents(year:intYear, month:8, day:11))!.zeroclock,//山の日
-            calendar.date(from: DateComponents(year:intYear,month:9, weekday:2, weekdayOrdinal: 3))!.zeroclock,//敬老の日
-            calendar.date(from:DateComponents(year:intYear, month:9, day:22))!.zeroclock,//秋分の日
-            calendar.date(from: DateComponents(year:intYear,month:10, weekday:2, weekdayOrdinal: 2))!.zeroclock,//体育の日
-            calendar.date(from:DateComponents(year:intYear, month:11, day:3))!.zeroclock,//文化の日
-            calendar.date(from:DateComponents(year:intYear, month:11, day:23))!.zeroclock,//勤労感謝の日
+            calendar.date(from:DateComponents(year:intYear,month:1,day:1))!.zeroclock,//元旦
+            calendar.date(from:DateComponents(year:intYear,month:1, weekday:2, weekdayOrdinal: 2))!.zeroclock,//成人の日
+            calendar.date(from:DateComponents(year:intYear,month:2, day:11))!.zeroclock,//建国記念日
+            calendar.date(from:DateComponents(year:intYear,month:2, day:23))!.zeroclock,//天皇誕生日
+            calendar.date(from:DateComponents(year:intYear,month:3, day:20))!.zeroclock,//春分の日
+            calendar.date(from:DateComponents(year:intYear,month:4, day:29))!.zeroclock,//昭和の日
+            calendar.date(from:DateComponents(year:intYear,month:5, day:3))!.zeroclock,//憲法記念日
+            calendar.date(from:DateComponents(year:intYear,month:5, day:4))!.zeroclock,//みどりの日
+            calendar.date(from:DateComponents(year:intYear,month:5, day:5))!.zeroclock,//こどもの日
+            calendar.date(from:DateComponents(year:intYear,month:7, weekday:2, weekdayOrdinal: 3))!.zeroclock,//海の日
+            calendar.date(from:DateComponents(year:intYear,month:8, day:11))!.zeroclock,//山の日
+            calendar.date(from:DateComponents(year:intYear,month:9, weekday:2, weekdayOrdinal: 3))!.zeroclock,//敬老の日
+            calendar.date(from:DateComponents(year:intYear,month:9, day:22))!.zeroclock,//秋分の日
+            calendar.date(from:DateComponents(year:intYear,month:10, weekday:2, weekdayOrdinal: 2))!.zeroclock,//体育の日
+            calendar.date(from:DateComponents(year:intYear,month:11, day:3))!.zeroclock,//文化の日
+            calendar.date(from:DateComponents(year:intYear,month:11, day:23))!.zeroclock,//勤労感謝の日
         ]
         
         let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
         let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
-        //      祝日かどうかを判定する処理を追加する必要あり
-        print(date.zeroclock)
+        
         if holiday.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
             return UIColor.red
         }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
@@ -480,4 +475,3 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         }
     }
 }
-

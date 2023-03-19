@@ -24,7 +24,7 @@ class ExpenseItemViewController: UIViewController{
     
     let realm = try! Realm()
     var categoryList:[CategoryModel] = []
-    var incomeCategoryList:[IncomeCategoryModel] = []
+    var incomeCategoryList:[CategoryModel] = []
     var expenseItemViewControllerDelegate:ExpenseItemViewControllerDelegate?
     var categoryViewControllerDelegate:CategoryViewControllerDelegate?
     
@@ -146,10 +146,11 @@ class ExpenseItemViewController: UIViewController{
         }
         
         let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
-            let incomeCategoryModel = IncomeCategoryModel()
+            let incomeCategoryModel = CategoryModel()
             let realm = try!Realm()
             try! realm.write{
                 incomeCategoryModel.name = textFieldOnAlert.text!
+                incomeCategoryModel.isPayment = false
                 realm.add(incomeCategoryModel)
             }
             self.expenseItemViewControllerDelegate?.updateCategory()
@@ -168,13 +169,13 @@ class ExpenseItemViewController: UIViewController{
     }
     
     func setCategoryData(){
-        let result = realm.objects(CategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
         categoryList = Array(result)
         expenseItemTableView.reloadData()
     }
     
     func setIncomeCategoryData(){
-        let result = realm.objects(IncomeCategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
         incomeCategoryList = Array(result)
         incomeTableView.reloadData()
     }

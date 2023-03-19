@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HouseholdAccountBookTableViewCellDelegate{
-    func progressBar(didChangeNumber number:Int, data: PaymentBudgetModel )
+    func progressBar(didChangeNumber number:Int, data: BudgetModel )
 }
 
 class HouseholdAccountBookTableViewCell: UITableViewCell {

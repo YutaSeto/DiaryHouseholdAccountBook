@@ -28,8 +28,8 @@ class HouseholdAccountBookViewController:UIViewController{
     
     //支出画面の設定
     var sumPayment:HouseholdAccountBookTableViewCellItem = HouseholdAccountBookTableViewCellItem()
-    private var paymentList:[PaymentModel] = []
-    private var paymentBudgetList:[PaymentBudgetModel] = []
+    private var paymentList:[JournalModel] = []
+    private var paymentBudgetList:[BudgetModel] = []
     private var categoryList:[CategoryModel] = []
     private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
     
@@ -42,9 +42,9 @@ class HouseholdAccountBookViewController:UIViewController{
     
     //収入画面関連
     var sumIncome:IncomeTableViewCellItem = IncomeTableViewCellItem()
-    var incomeList:[IncomeModel] = []
-    var incomeBudgetList:[IncomeBudgetModel] = []
-    var incomeCategoryList:[IncomeCategoryModel] = []
+    var incomeList:[JournalModel] = []
+    var incomeBudgetList:[BudgetModel] = []
+    var incomeCategoryList:[CategoryModel] = []
     var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
     @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var incomeTableView: UITableView!
@@ -296,21 +296,21 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func setCategoryData(){
         let realm = try! Realm()
-        let result = realm.objects(CategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
         categoryList = Array(result)
         paymentTableView.reloadData()
     }
     
     func setPaymentBudgetData(){
         let realm = try! Realm()
-        let result = realm.objects(PaymentBudgetModel.self)
+        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == true}
         paymentBudgetList = Array(result)
         paymentTableView.reloadData()
     }
     
     func setPaymentData(){
         let realm = try! Realm()
-        let result = realm.objects(PaymentModel.self)
+        let result = realm.objects(JournalModel.self).filter{$0.isPayment == true}
         paymentList = Array(result)
         paymentTableView.reloadData()
     }
@@ -377,7 +377,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let dayCheckPayment = paymentList.filter({$0.date >= firstDay})
         let dayCheckPayment2 = dayCheckPayment.filter{$0.date < lastDay}
         categoryList.forEach{ expense in
-            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+            if let budget:BudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
                 let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
                 
                 let item = HouseholdAccountBookTableViewCellItem(
@@ -388,7 +388,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 )
                 paymentTableViewDataSource.append(item)
             } else {
-                let data = PaymentBudgetModel()
+                let data = BudgetModel()
                 data.id = UUID().uuidString
                 data.expenseID = expense.id
                 data.budgetDate = date
@@ -463,20 +463,20 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func setIncomeData(){
         let realm = try! Realm()
-        let result = realm.objects(IncomeModel.self)
+        let result = realm.objects(JournalModel.self).filter{$0.isPayment == false}
         incomeList = Array(result)
         incomeTableView.reloadData()
     }
     
     func setIncomeCategoryData(){
         let realm = try! Realm()
-        let result = realm.objects(IncomeCategoryModel.self)
+        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
         incomeCategoryList = Array(result)
     }
     
     func setIncomeBudgetData(){
         let realm = try! Realm()
-        let result = realm.objects(IncomeBudgetModel.self)
+        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == false}
         incomeBudgetList = Array(result)
     }
     
@@ -498,8 +498,8 @@ class HouseholdAccountBookViewController:UIViewController{
         let dayCheckPayment = incomeList.filter({$0.date >= firstDay})
         let dayCheckPayment2 = dayCheckPayment.filter{$0.date < lastDay}
         incomeCategoryList.forEach{ expense in
-            if let budget:IncomeBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
-                let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.amount}.reduce(0){$0 + $1}
+            if let budget:BudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+                let sum = dayCheckPayment2.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
                 
                 let item = IncomeTableViewCellItem(
                     id: budget.id,
@@ -509,7 +509,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 )
                 incomeTableViewDataSource.append(item)
             } else {
-                let data = IncomeBudgetModel()
+                let data = BudgetModel()
                 data.id = UUID().uuidString
                 data.expenseID = expense.id
                 data.budgetDate = date
@@ -537,7 +537,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
         let dayCheck = incomeList.filter({$0.date >= firstDay})
         let dayCheck2 = dayCheck.filter({$0.date < lastDay})
-        let sum = dayCheck2.map{$0.amount}.reduce(0){$0 + $1}
+        let sum = dayCheck2.filter{$0.isPayment == false}.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
     
@@ -549,7 +549,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
         let dayCheck = incomeBudgetList.filter({$0.budgetDate >= firstDay})
         let dayCheck2 = dayCheck.filter({$0.budgetDate < lastDay})
-        let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
+        let sum = dayCheck2.filter{$0.isPayment == false}.map{$0.budgetPrice}.reduce(0){$0 + $1}
         return sum
     }
     
@@ -673,7 +673,7 @@ class HouseholdAccountBookViewController:UIViewController{
             let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
             let dayCheckSumPayment = incomeList.filter({$0.date >= firstDay!})
             let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
-            sumIncomeList[i] = Double(dayCheckSumPayment2.map{$0.amount}.reduce(0){$0 + $1})
+            sumIncomeList[i] = Double(dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1})
             sumYearIncome += Int(sumIncomeList[i])
         }
         resultTableView.reloadData()
@@ -893,6 +893,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 
                 present(navigationController,animated: true)
                 returnView0Second()
+                isExpanded = false
             default:
                 return
             }
