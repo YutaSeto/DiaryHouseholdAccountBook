@@ -70,6 +70,18 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
 }
 
 extension DiaryViewController:InputViewControllerDelegate{
+    func changeFromPaymentToIncome() {
+        return
+    }
+    
+    func changeFromIncomeToPayment() {
+        return
+    }
+    
+    func didReceiveNotification() {
+        return
+    }
+    
     func updateIncome() {
         return
     }

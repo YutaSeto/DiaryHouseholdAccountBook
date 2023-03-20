@@ -15,9 +15,14 @@ protocol InputViewControllerDelegate{
     func updateDiary()
     func updateCalendar()
     func updateIncome()
+    func didReceiveNotification()
+    func changeFromPaymentToIncome()
+    func changeFromIncomeToPayment()
 }
 
 class InputViewController:UIViewController{
+    
+    
     
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
@@ -28,13 +33,14 @@ class InputViewController:UIViewController{
     var income:JournalModel? = nil
     var selectedIndexPath: IndexPath?
     var selectedIncomeIndexPath: IndexPath?
-    private var paymentModelList: [JournalModel] = []
+    var isPayment:Bool = true
     let util = Util()
     let realm = try! Realm()
     var categoryList:[CategoryModel] = []
     var incomeCategoryList:[CategoryModel] = []
     public var date:Date = Date()
     public var inputViewControllerDelegate:InputViewControllerDelegate?
+    public var inputViewControllerDelegate2:InputViewControllerDelegate?
     @IBOutlet weak var incomeCollectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
@@ -104,37 +110,40 @@ class InputViewController:UIViewController{
         setIncomeCategoryData()
         resultLabel.text = ""
         configureAddButton()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setPaymentOrIncomeData()
+        print(payment)
+        print(income)
     }
     
+    
+    //遷移先のボタンの色を変更することができていない。cellがnilになるのはどうしてか。
     func setPaymentData(data:JournalModel){
         payment = data
         priceTextField.text = String(payment!.price)
         resultLabel.text = payment?.category
+        isPayment = true
         date = payment!.date
+        
+//        
+//        func getCell(at index: Int) -> UICollectionViewCell?{
+//            let newIndexPath:IndexPath = IndexPath(item: index, section: 0)
+//            return paymentCollectionView.cellForItem(at: newIndexPath)
+//        }
+//        
+//        let index = categoryList.map({$0.name}).firstIndex(of: payment!.category)!
+//        getCell(at: index)?.backgroundColor = UIColor.lightGray
+//        print(getCell(at: index))
     }
     
     func setIncomeData(data:JournalModel){
         income = data
         priceTextField.text = String(income!.price)
         resultLabel.text = income?.category
+        isPayment = false
         date = income!.date
-    }
-    
-    func setPaymentOrIncomeData(){
-        if payment != nil{
-            resultLabel.text = payment?.category
-            priceTextField.text = String(payment!.price)
-            date = payment!.date
-            resultLabel.text = payment?.category
-        }else if income != nil{
-            resultLabel.text = income?.category
-            date = income!.date
-            priceTextField.text = String(income!.price)
-        }
     }
     
     func setDiary(data:DiaryModel){
@@ -195,10 +204,14 @@ class InputViewController:UIViewController{
     
     @IBAction func addButton(_ sender: UIButton) {
         tapAddButton()
+        inputViewControllerDelegate2?.didReceiveNotification()
     }
     
     @IBAction func continueAddButton(_ sender: UIButton) {
         tapContinueAddButton()
+        inputViewControllerDelegate2?.didReceiveNotification()
+        payment = nil
+        income = nil
     }
     
     @objc func didTapFinishButton(){
@@ -269,41 +282,46 @@ class InputViewController:UIViewController{
                 journalModel.date = date
                 journalModel.price = Int(priceTextField.text!) ?? 0
                 journalModel.category = resultLabel.text!
+                journalModel.isPayment = isPayment
                 realm.add(journalModel)
             }
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             dismiss(animated: true)
         }else if payment != nil{ //paymetTableViewを選択した場合
-//            if resultLabel.text == {  正しく支出を修正した場合
-                let realm = try! Realm()
-                try! realm.write{
-                    payment?.date = date
-                    payment?.price = Int(priceTextField.text!) ?? 0
-                    payment?.category = resultLabel.text!
-                }
+            let realm = try! Realm()
+            try! realm.write{
+                payment?.date = date
+                payment?.isPayment = isPayment
+                payment?.price = Int(priceTextField.text!) ?? 0
+                payment?.category = resultLabel.text!
+            }
+            if isPayment == false{
+                inputViewControllerDelegate?.changeFromPaymentToIncome()
+            }
             inputViewControllerDelegate?.updatePayment()
             inputViewControllerDelegate?.updateCalendar()
             RecognitionChange.shared.updateCalendar = true
+            payment = nil
+            income = nil
             dismiss(animated: true)
-            //            }else if resultLabel.text == { //支出選択から収入に変更した場合
-            
-            //            }
-            //正しく収入を修正した場合
         }else if income != nil{
             let realm = try! Realm()
             try! realm.write{
                 income?.date = date
+                income?.isPayment = isPayment
                 income?.price = Int(priceTextField.text!) ?? 0
                 income?.category = resultLabel.text!
             }
+            if isPayment == true{
+                inputViewControllerDelegate?.changeFromIncomeToPayment()
+            }
             inputViewControllerDelegate?.updateIncome()
+            inputViewControllerDelegate?.updateCalendar()
             RecognitionChange.shared.updateCalendar = true
+            payment = nil
+            income = nil
             dismiss(animated: true)
-            //誤って支出に修正した場合
-//            else if resultLabel.text =={
-//
-//            }
         }
     }
     
@@ -314,6 +332,7 @@ class InputViewController:UIViewController{
                 let journalModel = JournalModel()
                 journalModel.date = date.zeroclock
                 journalModel.price = Int(priceTextField.text!) ?? 0
+                journalModel.isPayment = isPayment
                 journalModel.category = resultLabel.text!
                 realm.add(journalModel)
             }
@@ -321,24 +340,27 @@ class InputViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = true
             resultLabel.text = ""
             priceTextField.text = ""
-        }else if payment != nil{
+        }else if payment != nil && income == nil{
             let realm = try! Realm()
             try! realm.write{
                 payment?.date = date.zeroclock
+                payment?.isPayment = isPayment
                 payment?.price = Int(priceTextField.text!) ?? 0
                 payment?.category = resultLabel.text!
             }
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             payment = nil
-        }else if income != nil{
+        }else if income != nil && payment == nil {
             let realm = try! Realm()
             try! realm.write{
                 income?.date = date.zeroclock
+                income?.isPayment = isPayment
                 income?.price = Int(priceTextField.text!) ?? 0
                 income?.category = resultLabel.text!
             }
-            inputViewControllerDelegate?.updateIncome()
+            
+            inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             income = nil
         }
@@ -514,6 +536,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
+            isPayment = true
             guard selectedIncomeIndexPath != nil else{return}
             incomeCollectionView.cellForItem(at: selectedIncomeIndexPath!)?.backgroundColor = .white
             selectedIncomeIndexPath = nil
@@ -532,11 +555,11 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             }else{
                 selectedIncomeIndexPath = indexPath
             }
-            
             if priceTextField.text != ""{
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
+            isPayment = false
             guard selectedIndexPath != nil else{return}
             paymentCollectionView.cellForItem(at: selectedIndexPath!)?.backgroundColor = .white
             selectedIndexPath = nil

@@ -12,9 +12,12 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     @IBOutlet weak var tabMenuBar: UITabBar!
     
+    var inputViewControllerDelegateClosure:InputViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBackgroundColor()
+        inputViewControllerDelegateClosure = self
     }
     
     func configureBackgroundColor(){
@@ -24,9 +27,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         super.viewDidLoad()
-
         initTab()
-        
     }
     
     func initTab(){
@@ -51,5 +52,38 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
         }
         
         setViewControllers(controllers, animated: false)
+    }
+}
+
+extension TabBarController:InputViewControllerDelegate{
+    func changeFromPaymentToIncome() {
+        return
+    }
+    
+    func changeFromIncomeToPayment() {
+        return
+    }
+    
+    func didReceiveNotification() {
+        return
+    }
+    
+    func updatePayment() {
+        return
+    }
+    func updateDiary() {
+        return
+    }
+    
+    func updateCalendar() {
+        return
+    }
+    
+    func updateIncome() {
+        return
+    }
+    
+    func inputViewController(_ viewController: InputViewController, didUpdateData data: String) {
+        return
     }
 }

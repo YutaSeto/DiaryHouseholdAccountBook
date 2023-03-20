@@ -12,6 +12,11 @@ import Charts
 
 class HouseholdAccountBookViewController:UIViewController{
     
+    //クロージャー
+    var inputViewControllerClosureDelegate:InputViewControllerDelegate?
+    var completionHandler:((String?) -> Void)?
+    
+    
     private var date = Date()
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var dayBackButton: UIButton!
@@ -88,7 +93,6 @@ class HouseholdAccountBookViewController:UIViewController{
         setMonthSumPayment()
         setMonthSumIncome()
         tableViewScroll()
-
         
         setChartView()
         chartView.data = setData()
@@ -237,8 +241,8 @@ class HouseholdAccountBookViewController:UIViewController{
     
     //subView関連
     func addSubView(){
-        view.addSubview(paymentView)
         view.addSubview(incomeView)
+        view.addSubview(paymentView)
         view.addSubview(savingView)
         view.addSubview(slideMenuView)
     }
@@ -450,6 +454,7 @@ class HouseholdAccountBookViewController:UIViewController{
     
     
     //収入画面関連
+    
     @IBAction func addIncomeButton(_ sender: UIButton) {
         tapAddIncomeButton()
     }
@@ -737,6 +742,18 @@ class HouseholdAccountBookViewController:UIViewController{
         
 
 extension HouseholdAccountBookViewController:InputViewControllerDelegate{
+    func changeFromPaymentToIncome() {
+        return()
+    }
+    
+    func changeFromIncomeToPayment() {
+        return
+    }
+    
+    func didReceiveNotification() {
+        return
+    }
+    
     func updateCalendar() {
         return
     }
@@ -898,6 +915,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 return
             }
         }else{
+            print("aaaaa")
             if isExpanded == true{
                 returnView()
             }

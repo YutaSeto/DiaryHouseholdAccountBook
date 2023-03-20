@@ -165,7 +165,6 @@
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="＋"/>
                             <connections>
-                                <action selector="addIncomeButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="QZ6-jO-xU4"/>
                                 <action selector="inputButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="zK3-F6-ncg"/>
                             </connections>
                         </button>
@@ -180,7 +179,7 @@
                         <constraint firstItem="DbH-0i-N6X" firstAttribute="leading" secondItem="8RV-EQ-dha" secondAttribute="leading" id="ngL-y7-SEJ"/>
                     </constraints>
                 </view>
-                <view userInteractionEnabled="NO" contentMode="scaleToFill" id="QJg-aq-W54">
+                <view contentMode="scaleToFill" id="QJg-aq-W54">
                     <rect key="frame" x="0.0" y="0.0" width="361" height="564"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -209,7 +208,7 @@
                             </subviews>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnF-mD-5f2">
-                            <rect key="frame" x="271" y="443" width="60" height="60"/>
+                            <rect key="frame" x="271" y="444" width="60" height="60"/>
                             <color key="backgroundColor" red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="60" id="HjZ-ow-zNc"/>
@@ -219,13 +218,13 @@
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="＋"/>
                             <connections>
-                                <action selector="addIncomeButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="jzK-cQ-4c0"/>
+                                <action selector="addIncomeButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="AeE-0g-lvb"/>
                             </connections>
                         </button>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="PhN-1N-W8m"/>
                     <constraints>
-                        <constraint firstItem="PhN-1N-W8m" firstAttribute="bottom" secondItem="KnF-mD-5f2" secondAttribute="bottom" constant="61" id="8de-2S-g4O"/>
+                        <constraint firstItem="PhN-1N-W8m" firstAttribute="bottom" secondItem="KnF-mD-5f2" secondAttribute="bottom" constant="60" id="8de-2S-g4O"/>
                         <constraint firstItem="6Jx-wa-XVd" firstAttribute="trailing" secondItem="PhN-1N-W8m" secondAttribute="trailing" id="OhQ-G6-uZ3"/>
                         <constraint firstItem="6Jx-wa-XVd" firstAttribute="bottom" secondItem="PhN-1N-W8m" secondAttribute="bottom" id="TL7-AH-Ewg"/>
                         <constraint firstItem="6Jx-wa-XVd" firstAttribute="leading" secondItem="PhN-1N-W8m" secondAttribute="leading" id="UFf-mH-jKq"/>
@@ -242,7 +241,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WN0-1e-N5K" customClass="BarChartView" customModule="Charts">
-                            <rect key="frame" x="0.0" y="0.0" width="353" height="120"/>
+                            <rect key="frame" x="0.0" y="59" width="353" height="120"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="120" id="VmP-wQ-9dF"/>
@@ -275,7 +274,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <tableView clipsSubviews="YES" tag="4" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="EOy-CV-OW9">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="300"/>
+                            <rect key="frame" x="0.0" y="59" width="240" height="241"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <prototypes>
                                 <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="RX9-Ca-Xs4">
