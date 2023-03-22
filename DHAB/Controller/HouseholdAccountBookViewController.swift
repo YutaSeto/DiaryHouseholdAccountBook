@@ -901,8 +901,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             let cell = resultTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "\(String(indexPath.row + 1))月"
-            cell.paymentLabel.text = String(sumPaymentList[indexPath.row])
-            cell.incomeLabel.text = String(sumIncomeList[indexPath.row])
+            cell.paymentLabel.text = String(Int(sumPaymentList[indexPath.row]))
+            cell.incomeLabel.text = String(Int(sumIncomeList[indexPath.row]))
             cell.resultLabel.text = String(Int(sumIncomeList[indexPath.row] - sumPaymentList[indexPath.row]))
             return cell
         }else if tableView.tag == 6{
@@ -963,6 +963,27 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
 
 
 extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
+    func deletePayment() {
+        setPaymentData()
+        setIncomeData()
+        setSumPaymentData()
+        setSumIncomeData()
+        paymentTableViewDataSource = []
+        incomeTableViewDataSource = []
+        setPaymentTableViewDataSourse()
+        setIncomeTableViewDataSourse()
+        setMonthSumPayment()
+        setMonthSumIncome()
+        paymentTableView.reloadData()
+        sumPaymentTableView.reloadData()
+        incomeTableView.reloadData()
+        sumIncomeTableView.reloadData()
+    }
+    
+    func deleteIncome() {
+        return
+    }
+    
     func updateHouseholdAccountBook() {
         setPaymentData()
         setCategoryData()

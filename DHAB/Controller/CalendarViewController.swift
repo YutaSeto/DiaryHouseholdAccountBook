@@ -380,6 +380,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             let targetItem = diaryModelList[indexPath.row]
             diaryModelList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            
             let realm = try! Realm()
             try! realm.write{
                 realm.delete(targetItem)
