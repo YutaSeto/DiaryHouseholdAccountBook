@@ -22,8 +22,6 @@ protocol InputViewControllerDelegate{
 
 class InputViewController:UIViewController{
     
-    
-    
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
@@ -108,34 +106,35 @@ class InputViewController:UIViewController{
         settingCollectionView()
         setCategoryData()
         setIncomeCategoryData()
-        resultLabel.text = ""
         configureAddButton()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print(payment)
-        print(income)
+        super.viewWillAppear(animated)
+        configureAddButton()
     }
-    
     
     //遷移先のボタンの色を変更することができていない。cellがnilになるのはどうしてか。
     func setPaymentData(data:JournalModel){
         payment = data
-        priceTextField.text = String(payment!.price)
-        resultLabel.text = payment?.category
+        priceTextField.text = String(data.price)
+        resultLabel.text = data.category
         isPayment = true
-        date = payment!.date
+        date = data.date
+        setCategoryData()
+        paymentCollectionView.dataSource = self
+        paymentCollectionView.delegate = self
+        paymentCollectionView.reloadData()
         
-//        
-//        func getCell(at index: Int) -> UICollectionViewCell?{
-//            let newIndexPath:IndexPath = IndexPath(item: index, section: 0)
-//            return paymentCollectionView.cellForItem(at: newIndexPath)
-//        }
-//        
-//        let index = categoryList.map({$0.name}).firstIndex(of: payment!.category)!
-//        getCell(at: index)?.backgroundColor = UIColor.lightGray
-//        print(getCell(at: index))
+        if let selectedItem = paymentCollectionView.indexPathsForSelectedItems?.first{
+            paymentCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
+        }
+        
+        
+        let index:Int = categoryList.firstIndex(where: {$0.name == payment!.category})!
+        let indexPath:IndexPath = IndexPath(item: index, section: 0)
+        paymentCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .right)
+        collectionView(paymentCollectionView, didSelectItemAt: indexPath)
     }
     
     func setIncomeData(data:JournalModel){
@@ -210,8 +209,15 @@ class InputViewController:UIViewController{
     @IBAction func continueAddButton(_ sender: UIButton) {
         tapContinueAddButton()
         inputViewControllerDelegate2?.didReceiveNotification()
+        if let selectedItem = paymentCollectionView.indexPathsForSelectedItems?.first{
+            paymentCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
+        }
+        if let selectedItem = incomeCollectionView.indexPathsForSelectedItems?.first{
+            incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
+        }
         payment = nil
         income = nil
+        
     }
     
     @objc func didTapFinishButton(){
@@ -340,6 +346,8 @@ class InputViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = true
             resultLabel.text = ""
             priceTextField.text = ""
+            addButton.isEnabled = true
+            continueAddButton.isEnabled = true
         }else if payment != nil && income == nil{
             let realm = try! Realm()
             try! realm.write{
@@ -351,6 +359,10 @@ class InputViewController:UIViewController{
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             payment = nil
+            resultLabel.text = ""
+            priceTextField.text = ""
+            addButton.isEnabled = true
+            continueAddButton.isEnabled = true
         }else if income != nil && payment == nil {
             let realm = try! Realm()
             try! realm.write{
@@ -359,10 +371,13 @@ class InputViewController:UIViewController{
                 income?.price = Int(priceTextField.text!) ?? 0
                 income?.category = resultLabel.text!
             }
-            
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             income = nil
+            resultLabel.text = ""
+            priceTextField.text = ""
+            addButton.isEnabled = true
+            continueAddButton.isEnabled = true
         }
     }
     
@@ -560,6 +575,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                 continueAddButton.isEnabled = true
             }
             isPayment = false
+            cell?.backgroundColor = .lightGray
             guard selectedIndexPath != nil else{return}
             paymentCollectionView.cellForItem(at: selectedIndexPath!)?.backgroundColor = .white
             selectedIndexPath = nil
