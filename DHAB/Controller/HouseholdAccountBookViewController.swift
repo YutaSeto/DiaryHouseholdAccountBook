@@ -397,6 +397,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 )
                 paymentTableViewDataSource.append(item)
             } else {
+                let sumPayment = dayCheckPayment.filter{$0.category == expense.name}.map{$0.price}.reduce(0, {$0 + $1})
                 let data = BudgetModel()
                 data.id = UUID().uuidString
                 data.expenseID = expense.id
@@ -409,6 +410,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 let item = HouseholdAccountBookTableViewCellItem(
                     id:data.id,
                     name: expense.name,
+                    paymentPrice: sumPayment,
                     budgetPrice: data.budgetPrice
                 )
                 paymentTableViewDataSource.append(item)
@@ -506,9 +508,9 @@ class HouseholdAccountBookViewController:UIViewController{
         
         let dayCheckIncome = incomeList.filter({$0.date >= firstDay}).filter{$0.date < lastDay}
         incomeCategoryList.forEach{ expense in
-            if let budget:BudgetModel = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
+            if let budget:BudgetModel = dayCheckBudget.filter({$0.expenseID == expense.id}).first{ //予算に入力がある時
                 let sum = dayCheckIncome.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
-                
+
                 let item = IncomeTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
@@ -516,7 +518,8 @@ class HouseholdAccountBookViewController:UIViewController{
                     incomeBudget: budget.budgetPrice
                 )
                 incomeTableViewDataSource.append(item)
-            } else {
+            }else{ //予算が入力されていなくて、priceに入力がない時
+                let sumPrice = dayCheckIncome.filter{$0.category == expense.name}.map{$0.price}.reduce(0, {$0 + $1})
                 let data = BudgetModel()
                 data.id = UUID().uuidString
                 data.expenseID = expense.id
@@ -525,15 +528,19 @@ class HouseholdAccountBookViewController:UIViewController{
                 let realm = try! Realm()
                 try! realm.write { realm.add(data)}
                 incomeBudgetList.append(data)
-                
+
                 let item = IncomeTableViewCellItem(
                     id:data.id,
                     name: expense.name,
+                    incomePrice: sumPrice,
                     incomeBudget:data.budgetPrice
                 )
                 incomeTableViewDataSource.append(item)
             }
         }
+        //カテゴリーの数だけデータを返す。これは正しい
+        //budgetではなくてpriceでデータを集約する。ケースはpriceが0の時、
+        
         incomeTableView.reloadData()
     }
     
