@@ -560,7 +560,6 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             return
         }else if collectionView.tag == 2{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
-            cell?.backgroundColor = .lightGray
             resultLabel.text = incomeCategoryList[indexPath.row].name
             if selectedIncomeIndexPath != nil{
                 if indexPath != selectedIncomeIndexPath{

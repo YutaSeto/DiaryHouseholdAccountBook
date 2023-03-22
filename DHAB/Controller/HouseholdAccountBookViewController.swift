@@ -599,7 +599,7 @@ class HouseholdAccountBookViewController:UIViewController{
             return
         }else{
             setIncomePieGraphView()
-            incomePieGraphView.data = setPaymentPieGraphData()
+            incomePieGraphView.data = setIncomePieGraphData()
         }
     }
     
@@ -801,11 +801,9 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
         setMonthSumPayment()
         setMonthSumIncome()
         
-        setChartView()
-        chartView.data = setData()
-        
-        setIncomePieGraphView()
-        incomePieGraphView.data = setIncomePieGraphData()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
         
         incomeTableView.reloadData()
         sumIncomeTableView.reloadData()

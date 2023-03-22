@@ -224,6 +224,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.expenseItemViewControllerDelegate?.updateCategory()
                 self.expenseItemViewControllerDelegate?.updatePayment()
+                self.expenseItemTableView.reloadData()
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
                 return
@@ -247,6 +248,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 }
                 self.categoryViewControllerDelegate?.updateIncome()
                 self.expenseItemViewControllerDelegate?.updateCategory()
+                self.expenseItemTableView.reloadData()
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
                 return
