@@ -181,25 +181,25 @@ class BudgetConfigureViewController: UIViewController{
 extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView.tag == 0{
+        if tableView === budgetConfigureTableView{
             return "支出"
-        }else if tableView.tag == 1{
+        }else if tableView === incomeBudgetConfigureTableView{
             return "収入"
         }
         return ""
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 0{
+        if tableView === budgetConfigureTableView{
             return budgetTableViewDataSource.count
-        }else if tableView.tag == 1{
+        }else if tableView === incomeBudgetConfigureTableView{
             return incomeBudgetTableViewDataSource.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView.tag == 0{
+        if tableView === budgetConfigureTableView{
             let cell = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
             var item = budgetTableViewDataSource[indexPath.row]
             cell.data = item
@@ -208,7 +208,7 @@ extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSourc
             item.price = cell.price
             cell.delegate = self
             return cell
-        }else if tableView.tag == 1{
+        }else if tableView === incomeBudgetConfigureTableView{
             let cell = incomeBudgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
             var item = incomeBudgetTableViewDataSource[indexPath.row]
             cell.incomeData = item

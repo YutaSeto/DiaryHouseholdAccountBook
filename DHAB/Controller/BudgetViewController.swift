@@ -205,31 +205,31 @@ class BudgetViewController: UIViewController{
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView.tag == 0{
+        if tableView === budgetTableView{
             return "支出"
-        }else if tableView.tag == 1{
+        }else if tableView === incomeBudgetTableView{
             return "収入"
         }
         return ""
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 0{
+        if tableView === budgetTableView{
             return budgetTableViewDataSource.count
-        }else if tableView.tag == 1{
+        }else if tableView === incomeBudgetTableView{
             return incomeBudgetTableViewDataSource.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView.tag == 0{
+        if tableView === budgetTableView{
             let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
             let item = budgetTableViewDataSource[indexPath.row]
             cell.budgetCategoryLabel.text = item.name
             cell.budgetPriceLabel.text = String(item.price)
             return cell
-        }else if tableView.tag == 1{
+        }else if tableView === incomeBudgetTableView{
             let cell = incomeBudgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
             let item = incomeBudgetTableViewDataSource[indexPath.row]
             cell.budgetCategoryLabel.text = item.name
@@ -240,7 +240,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.tag == 0{
+        if tableView === budgetTableView{
             _ = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
             
             let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
@@ -272,7 +272,8 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             alert.addAction(cancel)
             alert.addAction(edit)
             self.present(alert,animated: true, completion: nil)
-        }else if tableView.tag == 1{
+            tableView.deselectRow(at: indexPath, animated: true)
+        }else if tableView === incomeBudgetTableView{
             _ = incomeBudgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
             let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
             
@@ -300,6 +301,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             alert.addAction(cancel)
             alert.addAction(edit)
             self.present(alert,animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 }

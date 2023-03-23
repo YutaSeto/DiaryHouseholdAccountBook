@@ -9,6 +9,7 @@ import UIKit
 
 class InputCollectionViewCell: UICollectionViewCell {
 
+    var journal:JournalModel?
     @IBOutlet weak var categoryLabel: UILabel!
     
     override func awakeFromNib() {
@@ -17,5 +18,12 @@ class InputCollectionViewCell: UICollectionViewCell {
         self.layer.borderWidth = 1.0
         self.layer.borderColor = UIColor.lightGray.cgColor // 枠線の色
     }
-
+    
+    func toggleSelection(){
+        if categoryLabel.text == journal?.category{
+            self.contentView.backgroundColor = .lightGray
+            journal = nil
+        }
+    }
+    
 }

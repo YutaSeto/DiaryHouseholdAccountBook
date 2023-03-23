@@ -22,6 +22,8 @@ protocol InputViewControllerDelegate{
 
 class InputViewController:UIViewController{
     
+    var zoomImageView = UIImageView()
+    
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
@@ -107,11 +109,27 @@ class InputViewController:UIViewController{
         setCategoryData()
         setIncomeCategoryData()
         configureAddButton()
+        
+        zoomImageView.frame = view.frame
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        zoomImageView.addGestureRecognizer(pinchGesture)
+        view.addSubview(zoomImageView)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureAddButton()
+    }
+    
+    @objc func handlePinchGesture(_ gesture: UIPinchGestureRecognizer){
+        if gesture.state == .changed{
+            let scale = gesture.scale
+            zoomImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }else if gesture.state == .ended{
+            let scale = gesture.scale
+            zoomImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }
     }
     
     //遷移先のボタンの色を変更することができていない。cellがnilになるのはどうしてか。
@@ -476,53 +494,116 @@ class InputViewController:UIViewController{
             dismiss(animated: true)
         }
     }
+    
+    func fixImageOrientation(_ image: UIImage) -> UIImage {
+        if image.imageOrientation == .up {
+            return image
+        }
+
+        var transform = CGAffineTransform.identity
+
+        switch image.imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: image.size.height)
+            transform = transform.rotated(by: CGFloat.pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: 0)
+            transform = transform.rotated(by: CGFloat.pi / 2)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: image.size.height)
+            transform = transform.rotated(by: -CGFloat.pi / 2)
+        case .up, .upMirrored:
+            break
+        @unknown default:
+            break
+        }
+
+        switch image.imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            transform = transform.translatedBy(x: image.size.height, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case .up, .down, .left, .right:
+            break
+        @unknown default:
+            break
+        }
+
+        let ctx = CGContext(data: nil, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: (image.cgImage?.bitsPerComponent)!, bytesPerRow: 0, space: (image.cgImage?.colorSpace!)!, bitmapInfo: (image.cgImage?.bitmapInfo.rawValue)!)
+
+        ctx?.concatenate(transform)
+
+        switch image.imageOrientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            ctx?.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width))
+        default:
+            ctx?.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+        }
+
+        if let cgImage = ctx?.makeImage() {
+            return UIImage(cgImage: cgImage)
+        } else {
+            return image
+        }
+    }
 }
 
 extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag == 0{
+        if collectionView === paymentCollectionView{
             return categoryList.count
-        }else if collectionView.tag == 1{
+        }else if collectionView === imageCollectionView{
             return imageArray.count
-        }else if collectionView.tag == 2{
+        }else if collectionView === incomeCollectionView{
             return incomeCategoryList.count
         }
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView.tag == 0{
+        if collectionView === paymentCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
             cell.categoryLabel.text = categoryList[indexPath.row].name
+            if payment != nil{
+                cell.journal = payment!
+                cell.toggleSelection()
+            }
             return cell
-        }else if collectionView.tag == 1{
-            let cell:UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath)
-            let contentImageView = cell.contentView.viewWithTag(1) as! UIImageView
-            let cellImage = UIImage(data: imageArray[indexPath.item])!
-            contentImageView.image = cellImage
+        }else if collectionView === imageCollectionView{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath) as! SliderViewCell
+            let cellImage = fixImageOrientation(UIImage(data: imageArray[indexPath.item])!)
+            cell.imageView.image = cellImage
+            cell.imageView.contentMode = .scaleAspectFit
             return cell
-        }else if collectionView.tag == 2{
+        }else if collectionView === incomeCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
             cell.categoryLabel.text = incomeCategoryList[indexPath.row].name
+
+            if income != nil{
+                cell.journal = income!
+                cell.toggleSelection()
+            }
             return cell
         }
         return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView.tag == 0{
+        if collectionView === paymentCollectionView{
             let sectionInsets = UIEdgeInsets(top: 5, left: 2, bottom: 2, right: 5)
             let itemsPerRow: CGFloat = 4
             let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
             let availableWidth = view.frame.width - paddingSpace
             let widthPerItem = availableWidth / itemsPerRow
             return CGSize(width: widthPerItem, height: 40)
-        }else if collectionView.tag == 1{
+        }else if collectionView === imageCollectionView{
             let cellWidth = collectionView.frame.width / 5
             let cellHeight = cellWidth
             return CGSize(width: cellWidth, height: cellHeight)
-        }else if collectionView.tag == 2{
+        }else if collectionView === incomeCollectionView{
             let sectionInsets = UIEdgeInsets(top: 5, left: 2, bottom: 2, right: 5)
             let itemsPerRow: CGFloat = 4
             let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
@@ -535,7 +616,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView.tag == 0{
+        if collectionView === paymentCollectionView{
             let cell = collectionView.cellForItem(at: indexPath)
             cell?.backgroundColor = .lightGray
             resultLabel.text = categoryList[indexPath.row].name
@@ -556,9 +637,33 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             incomeCollectionView.cellForItem(at: selectedIncomeIndexPath!)?.backgroundColor = .white
             selectedIncomeIndexPath = nil
             return
-        }else if collectionView.tag == 1{
-            return
-        }else if collectionView.tag == 2{
+        }else if collectionView === imageCollectionView{
+            let selectedImage = UIImage(data: imageArray[indexPath.item])
+            zoomImageView.image = selectedImage
+            zoomImageView.contentMode = .scaleAspectFit
+            zoomImageView.isUserInteractionEnabled = true
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissZoomImageView(_:)))
+            zoomImageView.addGestureRecognizer(tapGesture)
+            
+            let zoomView = UIView(frame: UIScreen.main.bounds)
+            zoomView.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+            zoomView.addSubview(zoomImageView)
+            zoomView.isUserInteractionEnabled = true
+            UIApplication.shared.keyWindow?.addSubview(zoomView)
+            
+            zoomImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                zoomImageView.centerXAnchor.constraint(equalTo: zoomView.centerXAnchor),
+                zoomImageView.centerYAnchor.constraint(equalTo: zoomView.centerYAnchor),
+                zoomImageView.widthAnchor.constraint(equalTo: zoomView.widthAnchor),
+                zoomImageView.heightAnchor.constraint(equalTo: zoomView.heightAnchor)
+            ])
+            zoomView.alpha = 0
+            UIView.animate(withDuration: 0.3) {
+                zoomView.alpha = 1
+            }
+        }else if collectionView === incomeCollectionView{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
             resultLabel.text = incomeCategoryList[indexPath.row].name
             if selectedIncomeIndexPath != nil{
@@ -581,15 +686,29 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             return
         }
     }
+    
+    @objc func dismissZoomImageView(_ sender: UITapGestureRecognizer) {
+        guard let zoomView = sender.view else { return }
+        UIView.animate(withDuration: 0.3, animations: {
+            zoomView.alpha = 0
+        }) { _ in
+            zoomView.removeFromSuperview()
+        }
+    }
 }
 
 extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout{
    
     func imagePickerController(_ picker:UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]){
+        
+        let image = (info[.originalImage] as! UIImage)
+        let fixedImage = fixImageOrientation(image)
+        let imageData = fixedImage.jpegData(compressionQuality: 0.5)
+        
         let realm = try! Realm()
         try! realm.write{
             let result = PictureModel()
-            result.imageData = (info[.originalImage] as! UIImage).pngData()!
+            result.imageData = imageData!
             result.createdAt = date.zeroclock
             realm.add(result)
         }

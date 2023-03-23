@@ -822,26 +822,26 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
 extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 0{
+        if tableView === paymentTableView{
             return categoryList.count
-        }else if tableView.tag == 1{
+        }else if tableView === incomeTableView{
             return incomeCategoryList.count
-        }else if tableView.tag == 2{
+        }else if tableView === sumPaymentTableView{
             return 1
-        }else if tableView.tag == 3{
+        }else if tableView === sumIncomeTableView{
             return 1
-        }else if tableView.tag == 4{
+        }else if tableView === menuTableView{
             return menuList.count
-        }else if tableView.tag == 5{
+        }else if tableView === resultTableView{
             return 12
-        }else if tableView.tag == 6{
+        }else if tableView === resultSumTableView{
             return 1
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView.tag == 0{
+        if tableView === paymentTableView{
             let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             let item = paymentTableViewDataSource[indexPath.row]
             cell.data = item
@@ -855,7 +855,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             }
             cell.progressBar.setProgress(1 - Float(Float(item.budgetPrice - item.paymentPrice) / Float(item.budgetPrice)), animated: false)
             return cell
-        }else if tableView.tag == 1{
+        }else if tableView === incomeTableView{
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             let item = incomeTableViewDataSource[indexPath.row]
             cell.incomeData = item
@@ -869,7 +869,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             }
             cell.progressBar.setProgress(1 - Float(Float(item.incomeBudget - item.incomePrice) / Float(item.incomeBudget)), animated: false)
             return cell
-        }else if tableView.tag == 2{
+        }else if tableView === sumPaymentTableView{
             let cell = sumPaymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
             cell.budgetLabel.text = getComma(sumPaymentBudget(_:date))
@@ -881,7 +881,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             }
             cell.progressBar.setProgress(1 - Float(Float(sumPaymentBudget(date) - sumPayment(date)) / Float(sumPaymentBudget(date))), animated: false)
             return cell
-        }else if tableView.tag == 3{
+        }else if tableView === sumIncomeTableView{
             let cell = sumIncomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
             cell.budgetLabel.text = String(sumIncomeBudget(_:date))
@@ -893,11 +893,11 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             }
             cell.progressBar.setProgress(1 - Float(Float(sumIncomeBudget(date) - sumIncome(date)) / Float(sumIncomeBudget(date))), animated: false)
             return cell
-        }else if tableView.tag == 4{
+        }else if tableView === menuTableView{
             let cell = menuTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel!.text = menuList[indexPath.row]
             return cell
-        }else if tableView.tag == 5{
+        }else if tableView === resultTableView{
             let cell = resultTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "\(String(indexPath.row + 1))月"
@@ -905,7 +905,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             cell.incomeLabel.text = String(Int(sumIncomeList[indexPath.row]))
             cell.resultLabel.text = String(Int(sumIncomeList[indexPath.row] - sumPaymentList[indexPath.row]))
             return cell
-        }else if tableView.tag == 6{
+        }else if tableView === resultSumTableView{
             let cell = resultSumTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "累計"
@@ -918,7 +918,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.tag == 4{
+        if tableView === menuTableView{
             switch indexPath.row{
             case 0:
                 if householdAccountBookSegmentedControl.selectedSegmentIndex == 1{

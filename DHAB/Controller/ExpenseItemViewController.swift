@@ -188,20 +188,20 @@ class ExpenseItemViewController: UIViewController{
 extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 0{
+        if tableView === expenseItemTableView{
             return categoryList.count
-        }else if tableView.tag == 1{
+        }else if tableView === incomeTableView{
             return incomeCategoryList.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView.tag == 0{
+        if tableView === expenseItemTableView{
             let cell = expenseItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel!.text = categoryList[indexPath.row].name
             return cell
-        }else if tableView.tag == 1{
+        }else if tableView === incomeTableView{
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel!.text = incomeCategoryList[indexPath.row].name
             return cell
@@ -210,7 +210,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.tag == 0{
+        if tableView === expenseItemTableView{
             expenseItemViewControllerDelegate = self
             RecognitionChange.shared.updateHouseholdAccountBook = true
             let alert = UIAlertController(title: "\(categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
@@ -237,7 +237,8 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             alert.addAction(cancel)
             alert.addAction(add)
             self.present(alert,animated:true, completion: nil)
-        }else if tableView.tag == 1{
+            tableView.deselectRow(at: indexPath, animated: true)
+        }else if tableView === incomeTableView{
             RecognitionChange.shared.updateHouseholdAccountBook = true
             let alert = UIAlertController(title: "\(incomeCategoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
             var textFieldOnAlert = UITextField()
@@ -263,11 +264,12 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             alert.addAction(cancel)
             alert.addAction(add)
             self.present(alert,animated:true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if tableView.tag == 0{
+        if tableView === expenseItemTableView{
             let alert = UIAlertController(title: "関連する支出・収入・予算の履歴が\n全て削除されます。\nよろしいでしょうか", message: nil, preferredStyle: .alert)
             
             let warning = UIAlertAction(title:"理解した上で削除する",style: .default, handler:{(action) -> Void in
@@ -278,11 +280,11 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 
                 self.categoryList.remove(at: indexPath.row)
                 self.expenseItemTableView.deleteRows(at: [indexPath], with: .automatic)
-                try! realm.write{
-                    realm.delete(targetItem)
-                    realm.delete(targetJornal)
-                    realm.delete(targetBudget)
-                }
+//                try! realm.write{
+//                    realm.delete(targetItem)
+//                    realm.delete(targetJornal)
+//                    realm.delete(targetBudget)
+//                }
                 self.setCategoryData()
                 self.expenseItemTableView.reloadData()
                 self.categoryViewControllerDelegate?.deletePayment()
@@ -298,7 +300,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             self.present(alert,animated:true, completion: nil)
             
             
-        }else if tableView.tag == 1{
+        }else if tableView === incomeTableView{
             let targetItem = incomeCategoryList[indexPath.row]
             let realm = try! Realm()
             try! realm.write{

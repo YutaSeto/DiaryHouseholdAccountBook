@@ -1,4 +1,5 @@
 PODS:
+  - CalculateCalendarLogic (0.6.1)
   - Charts (4.1.0):
     - Charts/Core (= 4.1.0)
   - Charts/Core (4.1.0):
@@ -66,6 +67,7 @@ PODS:
   - SwiftyGif (5.4.4)
 
 DEPENDENCIES:
+  - CalculateCalendarLogic
   - Charts
   - DKImagePickerController
   - FSCalendar
@@ -73,6 +75,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CalculateCalendarLogic
     - Charts
     - CropViewController
     - DKCamera
@@ -86,6 +89,7 @@ SPEC REPOS:
     - SwiftyGif
 
 SPEC CHECKSUMS:
+  CalculateCalendarLogic: e4f7c7fe17f68b1d30fb51560acc634b4629a622
   Charts: 354f86803d11d9c35de280587fef50d1af063978
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
@@ -98,6 +102,6 @@ SPEC CHECKSUMS:
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
 
-PODFILE CHECKSUM: 0b0c01b1c8bdd5c17aad627273277dc14c8f0cc1
+PODFILE CHECKSUM: 299b5c358090ca57a4a316431ba56ccf54434e30
 
 COCOAPODS: 1.12.0

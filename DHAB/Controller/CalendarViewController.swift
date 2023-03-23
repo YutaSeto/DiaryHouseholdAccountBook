@@ -9,8 +9,11 @@ import Foundation
 import FSCalendar
 import RealmSwift
 import UIKit
+import CalculateCalendarLogic
 
 class CalendarViewController:UIViewController{
+    
+    let holiday = CalculateCalendarLogic()
     
     var date:Date = Date()
     var selectedDate:Date = Date()
@@ -320,32 +323,32 @@ class CalendarViewController:UIViewController{
 
 extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 0 {
+        if tableView === householdAccountBookTableView {
             return displayPaymentList.count
-        }else if tableView.tag == 1{
+        }else if tableView === diaryTableView{
             return setDiaryTableView(selectedDate).count
-        }else if tableView.tag == 3{
+        }else if tableView === incomeTableView{
             return displayIncomeList.count
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView.tag == 0{
+        if tableView === householdAccountBookTableView{
             let cell = householdAccountBookTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
             let item = displayPaymentList[indexPath.row]
             cell.budgetCategoryLabel.text = item.category
             cell.budgetPriceLabel.text = getComma(item.price)
             cell.memoLabel.text = item.memo
             return cell
-        }else if tableView.tag == 1{
+        }else if tableView === diaryTableView{
             let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
             let item = setDiaryTableView(selectedDate)[indexPath.row]
             cell.cellDateLabel.text = util.dayDateFormatter.string(from: item.date)
             cell.cellTextLabel.text = item.text
             cell.cellTitleLabel.text = item.title
             return cell
-        }else if tableView.tag == 3{
+        }else if tableView === incomeTableView{
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
             let item = displayIncomeList[indexPath.row]
             cell.budgetCategoryLabel.text = item.category
@@ -357,7 +360,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if tableView.tag == 0{
+        if tableView === householdAccountBookTableView{
             let targetItem = displayPaymentList[indexPath.row]
             let realm = try! Realm()
             if !targetItem.isInvalidated{
@@ -376,7 +379,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                 }
                 RecognitionChange.shared.deletePayment = true
             }
-        }else if tableView.tag == 1{
+        }else if tableView === diaryTableView{
             let targetItem = diaryModelList[indexPath.row]
             diaryModelList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -386,7 +389,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                 realm.delete(targetItem)
             }
             calendarView.reloadData()
-        }else if tableView.tag == 3{
+        }else if tableView === incomeTableView{
             let targetItem = displayIncomeList[indexPath.row]
             let realm = try! Realm()
             if !targetItem.isInvalidated{
@@ -410,17 +413,20 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.tag == 0{
+        if tableView === householdAccountBookTableView{
             deleteIndexPath = indexPath
             payment = displayPaymentList[indexPath.row]
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+            let inputCollectionViewCell = InputCollectionViewCell()
             guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
             inputViewController.inputViewControllerDelegate = self
             inputViewController.payment? = displayPaymentList[indexPath.row]
             inputViewController.isPayment = true
             inputViewController.setPaymentData(data: displayPaymentList[indexPath.row])
+            inputCollectionViewCell.journal = payment
             present(inputViewController,animated:true)
-        }else if tableView.tag == 1{
+            tableView.deselectRow(at: indexPath, animated: true)
+        }else if tableView === diaryTableView{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
             guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
             inputViewController.inputViewControllerDelegate = self
@@ -429,7 +435,8 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             present(inputViewController,animated:true)
             inputViewController.viewChangeSegmentedControl!.selectedSegmentIndex = 1
             inputViewController.addDiaryView()
-        }else if tableView.tag == 3{
+            tableView.deselectRow(at: indexPath, animated: true)
+        }else if tableView === incomeTableView{
             deleteIndexPath = indexPath
             income = displayIncomeList[indexPath.row]
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
@@ -439,6 +446,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             inputViewController.isPayment = false
             inputViewController.setIncomeData(data: displayIncomeList[indexPath.row])
             present(inputViewController,animated:true)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 }
@@ -530,9 +538,6 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-//        if monthPosition == .previous || monthPosition == .next {
-//            calendar.setCurrentPage(date, animated: true)
-//        }
         selectedDate = date
         setTableView(selectedDate)
         setIncomeTableView(selectedDate)
@@ -576,33 +581,29 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: date)
         
-        let year = calendar.dateComponents([.year], from: selectedDate)
+        let year = calendar.dateComponents([.year], from: date)
         let intYear = year.year!
         
-        let holiday:[Date] = [
-            calendar.date(from:DateComponents(year:intYear,month:1,day:1))!.zeroclock,//元旦
-            calendar.date(from:DateComponents(year:intYear,month:1, weekday:2, weekdayOrdinal: 2))!.zeroclock,//成人の日
-            calendar.date(from:DateComponents(year:intYear,month:2, day:11))!.zeroclock,//建国記念日
-            calendar.date(from:DateComponents(year:intYear,month:2, day:23))!.zeroclock,//天皇誕生日
-            calendar.date(from:DateComponents(year:intYear,month:3, day:20))!.zeroclock,//春分の日
-            calendar.date(from:DateComponents(year:intYear,month:4, day:29))!.zeroclock,//昭和の日
-            calendar.date(from:DateComponents(year:intYear,month:5, day:3))!.zeroclock,//憲法記念日
-            calendar.date(from:DateComponents(year:intYear,month:5, day:4))!.zeroclock,//みどりの日
-            calendar.date(from:DateComponents(year:intYear,month:5, day:5))!.zeroclock,//こどもの日
-            calendar.date(from:DateComponents(year:intYear,month:7, weekday:2, weekdayOrdinal: 3))!.zeroclock,//海の日
-            calendar.date(from:DateComponents(year:intYear,month:8, day:11))!.zeroclock,//山の日
-            calendar.date(from:DateComponents(year:intYear,month:9, weekday:2, weekdayOrdinal: 3))!.zeroclock,//敬老の日
-            calendar.date(from:DateComponents(year:intYear,month:9, day:22))!.zeroclock,//秋分の日
-            calendar.date(from:DateComponents(year:intYear,month:10, weekday:2, weekdayOrdinal: 2))!.zeroclock,//体育の日
-            calendar.date(from:DateComponents(year:intYear,month:11, day:3))!.zeroclock,//文化の日
-            calendar.date(from:DateComponents(year:intYear,month:11, day:23))!.zeroclock,//勤労感謝の日
-        ]
+        let month = calendar.dateComponents([.month], from: date)
+        let intMonth = month.month!
+        
+        let day = calendar.dateComponents([.day], from: date)
+        let intDay = day.day!
+        
+        var holidayArray:[Date] = []
+        func judgeHoliday(year:Int,month:Int,day:Int){
+            let result = holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
+            if result == true{
+                holidayArray.append(calendar.date(from:DateComponents(year:intYear,month:intMonth,day: intDay))!.zeroclock)
+            }
+        }
+        judgeHoliday(year: intYear, month: intMonth, day: intDay)
         
         let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
         let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
         
-        if holiday.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
+        if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
             return UIColor.red
         }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
             return UIColor.blue

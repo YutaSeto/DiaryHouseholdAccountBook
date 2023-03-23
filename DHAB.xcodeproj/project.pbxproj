@@ -162,6 +162,7 @@
 			children = (
 				23A0B28B29A84CA1000956CF /* RecognitionChange.swift */,
 				23A0B29129AA4522000956CF /* extension + Date.swift */,
+				23CBECC029CBE87500A5E777 /* Entity */,
 				237B85F22970472F001E4639 /* Model */,
 				237B85F32970473B001E4639 /* View */,
 				237B85F429704744001E4639 /* Controller */,
@@ -175,15 +176,6 @@
 		237B85F22970472F001E4639 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				237B85DE2970471A001E4639 /* AppDelegate.swift */,
-				237B85E02970471A001E4639 /* SceneDelegate.swift */,
-				237B85F52970492B001E4639 /* JournalModel.swift */,
-				237B85F929704956001E4639 /* DiaryModel.swift */,
-				23A0B28D29A8617A000956CF /* PicutureModel.swift */,
-				23EEE7D82972D7C000A52939 /* BudgetModel.swift */,
-				23507F0D298E9AD70025EAE5 /* CategoryModel.swift */,
-				23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */,
-				23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */,
 				EDE9354529BE0FAA006109C7 /* Util.swift */,
 			);
 			path = Model;
@@ -218,6 +210,22 @@
 				237AFB6F297506A20060ECD0 /* ExpenseItemViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		23CBECC029CBE87500A5E777 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				237B85DE2970471A001E4639 /* AppDelegate.swift */,
+				237B85E02970471A001E4639 /* SceneDelegate.swift */,
+				237B85F52970492B001E4639 /* JournalModel.swift */,
+				237B85F929704956001E4639 /* DiaryModel.swift */,
+				23A0B28D29A8617A000956CF /* PicutureModel.swift */,
+				23EEE7D82972D7C000A52939 /* BudgetModel.swift */,
+				23507F0D298E9AD70025EAE5 /* CategoryModel.swift */,
+				23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */,
+				23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */,
+			);
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		D2158A32236C05243A74B6CD /* Frameworks */ = {

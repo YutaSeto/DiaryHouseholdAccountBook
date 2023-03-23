@@ -8,6 +8,7 @@ target 'DHAB' do
   pod 'Charts'
   pod 'FSCalendar'
   pod 'DKImagePickerController'
+  pod 'CalculateCalendarLogic'
 
   # Pods for DHAB
 
