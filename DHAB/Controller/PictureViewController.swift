@@ -45,7 +45,7 @@ class PictureViewController:UIViewController{
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
     }
     
     

@@ -43,14 +43,12 @@ class InputViewController:UIViewController{
     public var inputViewControllerDelegate2:InputViewControllerDelegate?
     @IBOutlet weak var incomeCollectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
-    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    @IBOutlet weak var incomeCollectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var continueAddButton: UIButton!
     @IBOutlet weak var dateTextField: UITextField!
-    
+    @IBOutlet weak var memoTextField: UITextField!
     
     var datePicker:UIDatePicker{
         let datePicker = UIDatePicker()
@@ -167,6 +165,9 @@ class InputViewController:UIViewController{
         isPayment = journal!.isPayment
         date = data.date
         setCategoryData()
+        if data.memo != ""{
+            memoTextField.text = data.memo
+        }
         paymentCollectionView.dataSource = self
         paymentCollectionView.delegate = self
         paymentCollectionView.reloadData()
@@ -179,6 +180,9 @@ class InputViewController:UIViewController{
         resultLabel.text = journal?.category
         isPayment = false
         date = journal!.date
+        if data.memo != ""{
+            memoTextField.text = data.memo
+        }
     }
     
     func setDiary(data:DiaryModel){
@@ -221,15 +225,31 @@ class InputViewController:UIViewController{
     private func settingCollectionViewAutoLayout(){
         paymentCollectionView.translatesAutoresizingMaskIntoConstraints = false
         paymentCollectionView.topAnchor.constraint(equalTo: dateTextField.bottomAnchor,constant: 10).isActive = true
-        paymentCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        paymentCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        paymentCollectionView.heightAnchor.constraint(equalToConstant: paymentCollectionView.contentSize.height).isActive = true
+        paymentCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        paymentCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        let numberOfItems = categoryList.count
+        let itemHeight: CGFloat = 38.0
+        let space: CGFloat = 5
         
+        func returnRows(items:Int) -> Int{
+            if items <= 4{
+                return 1
+            }else if items <= 8{
+                return 2
+            }else if items <= 12{
+                return 3
+            }
+            return 1
+        }
+        let paymentCollectionHeight = CGFloat((returnRows(items: numberOfItems) * Int(itemHeight)) + Int(returnRows(items: numberOfItems) - 2) * Int(space))
+        let incomeNumberOfItems = incomeCategoryList.count
+        paymentCollectionView.heightAnchor.constraint(equalToConstant: paymentCollectionHeight).isActive = true
         incomeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         incomeCollectionView.topAnchor.constraint(equalTo: paymentCollectionView.bottomAnchor,constant: 10).isActive = true
-        incomeCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        incomeCollectionView.heightAnchor.constraint(equalToConstant: incomeCollectionView.contentSize.height).isActive = true
+        incomeCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 10).isActive = true
+        let incomeCollectionHeight = CGFloat((returnRows(items: incomeNumberOfItems) * Int(itemHeight)) + Int(returnRows(items: incomeNumberOfItems) - 1) * Int(space))
+        incomeCollectionView.heightAnchor.constraint(equalToConstant: incomeCollectionHeight).isActive = true
     }
     
     //segmentedControll関連
@@ -339,6 +359,7 @@ class InputViewController:UIViewController{
                 journalModel.price = Int(priceTextField.text!) ?? 0
                 journalModel.category = resultLabel.text!
                 journalModel.isPayment = isPayment
+                journalModel.memo = memoTextField.text!
                 realm.add(journalModel)
             }
             inputViewControllerDelegate?.updatePayment()
@@ -351,6 +372,7 @@ class InputViewController:UIViewController{
                 journal?.isPayment = isPayment
                 journal?.price = Int(priceTextField.text!) ?? 0
                 journal?.category = resultLabel.text!
+                journal?.memo = memoTextField.text!
             }
             if isPayment == false{
                 inputViewControllerDelegate?.changeFromPaymentToIncome()
@@ -372,6 +394,7 @@ class InputViewController:UIViewController{
                 journalModel.price = Int(priceTextField.text!) ?? 0
                 journalModel.isPayment = isPayment
                 journalModel.category = resultLabel.text!
+                journalModel.memo = memoTextField.text!
                 realm.add(journalModel)
             }
             inputViewControllerDelegate?.updatePayment()
@@ -387,6 +410,7 @@ class InputViewController:UIViewController{
                 journal?.isPayment = isPayment
                 journal?.price = Int(priceTextField.text!) ?? 0
                 journal?.category = resultLabel.text!
+                journal?.memo = memoTextField.text!
             }
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
@@ -399,18 +423,17 @@ class InputViewController:UIViewController{
     }
     
     func configureTextfield(){
+        priceTextField.placeholder = "金額を記入してください"
         priceTextField.textAlignment = NSTextAlignment.right
+        memoTextField.placeholder = "店名や商品名など"
+        memoTextField.textAlignment = NSTextAlignment.right
     }
     
     func settingCollectionView(){
         
-        collectionViewFlowLayout.estimatedItemSize = CGSize(width: paymentCollectionView.frame.width / 4,height: paymentCollectionView.frame.height / 3)
-        collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         paymentCollectionView.layer.borderWidth = 1.0
         paymentCollectionView.layer.borderColor = UIColor.lightGray.cgColor
         paymentCollectionView.layer.cornerRadius = 5.0
-        incomeCollectionViewFlowLayout.estimatedItemSize = CGSize(width: incomeCollectionView.frame.width / 4,height: incomeCollectionView.frame.height / 3)
-        incomeCollectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         incomeCollectionView.layer.borderWidth = 1.0
         incomeCollectionView.layer.borderColor = UIColor.lightGray.cgColor
         incomeCollectionView.layer.cornerRadius = 5.0
@@ -616,11 +639,11 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 5)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10.0
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

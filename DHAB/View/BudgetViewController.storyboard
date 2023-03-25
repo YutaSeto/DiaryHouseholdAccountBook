@@ -51,7 +51,7 @@
                                 </connections>
                             </button>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MiR-Ip-r7S">
-                                <rect key="frame" x="0.0" y="102.99999999999999" width="393" height="182.66666666666663"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="182.66666666666663"/>
                             </navigationBar>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="R3R-66-kYe">
                                 <rect key="frame" x="0.0" y="316" width="393" height="502"/>
@@ -120,7 +120,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dch-2f-QpN">
-                                <rect key="frame" x="179.66666666666666" y="69" width="34" height="28"/>
+                                <rect key="frame" x="179.66666666666666" y="59" width="34" height="38"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -173,8 +173,8 @@
                         <constraints>
                             <constraint firstItem="3TZ-uz-FNA" firstAttribute="leading" secondItem="mtw-PD-I0R" secondAttribute="leading" constant="20" id="20n-IO-fpT"/>
                             <constraint firstItem="Qqm-hZ-Cxm" firstAttribute="top" secondItem="Dch-2f-QpN" secondAttribute="bottom" id="6mB-qu-GFs"/>
+                            <constraint firstItem="Dch-2f-QpN" firstAttribute="top" secondItem="mtw-PD-I0R" secondAttribute="top" id="9qE-5i-GGY"/>
                             <constraint firstItem="Dch-2f-QpN" firstAttribute="centerX" secondItem="f5D-9n-wRz" secondAttribute="centerX" id="Jut-OU-mi4"/>
-                            <constraint firstItem="Dch-2f-QpN" firstAttribute="top" secondItem="mtw-PD-I0R" secondAttribute="top" constant="10" id="QDp-H5-9Tn"/>
                             <constraint firstItem="mtw-PD-I0R" firstAttribute="trailing" secondItem="DfG-cJ-Rnh" secondAttribute="trailing" constant="20" id="f7f-y6-Lxt"/>
                             <constraint firstItem="3TZ-uz-FNA" firstAttribute="centerY" secondItem="DfG-cJ-Rnh" secondAttribute="centerY" id="jE2-JB-yxx"/>
                             <constraint firstItem="DfG-cJ-Rnh" firstAttribute="top" secondItem="Qqm-hZ-Cxm" secondAttribute="bottom" constant="10" id="yaS-Sc-4Nj"/>

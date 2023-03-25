@@ -77,6 +77,9 @@ class BudgetViewController: UIViewController{
         let buttonActionSelector:Selector = #selector(tapConfigureButton)
         let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add,target: self,action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
+        
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.hidesBackButton = true
     }
     
     func dayBack(){
