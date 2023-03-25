@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5jm-he-SfR">
-                                <rect key="frame" x="0.0" y="59" width="393" height="32"/>
+                                <rect key="frame" x="0.0" y="79" width="393" height="32"/>
                                 <segments>
                                     <segment title="支出"/>
                                     <segment title="収入"/>
@@ -33,8 +33,8 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="5jm-he-SfR" secondAttribute="trailing" id="1Ui-U6-DZS"/>
-                            <constraint firstItem="5jm-he-SfR" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="YQQ-0B-Idm"/>
                             <constraint firstItem="5jm-he-SfR" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="xat-xP-cc9"/>
+                            <constraint firstItem="5jm-he-SfR" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="20" id="yro-SV-YdL"/>
                         </constraints>
                     </view>
                     <connections>

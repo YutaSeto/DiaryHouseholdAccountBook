@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
@@ -20,16 +21,96 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
         inputViewControllerDelegateClosure = self
     }
     
-    func configureBackgroundColor(){
-        UITabBar.appearance().backgroundColor = UIColor.lightGray
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let userDefaults = UserDefaults.standard
+        if !userDefaults.bool(forKey: "hasLaunchedBefore"){
+            userDefaults.set(true, forKey: "hasLaunchedBefore")
+            let realm = try! Realm()
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "食費"
+                category.isPayment = true
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "日用品"
+                category.isPayment = true
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "交通費"
+                category.isPayment = true
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "光熱費"
+                category.isPayment = true
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "交際費"
+                category.isPayment = true
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "その他"
+                category.isPayment = true
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "給料"
+                category.isPayment = false
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "賞与"
+                category.isPayment = false
+                realm.add(category)
+            }
+
+            try! realm.write{
+                let category = CategoryModel()
+                category.id = NSUUID().uuidString
+                category.name = "その他"
+                category.isPayment = false
+                realm.add(category)
+            }
+        }
     }
-    
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         super.viewDidLoad()
         initTab()
+    }
+    
+    
+    func configureBackgroundColor(){
+        UITabBar.appearance().backgroundColor = UIColor.lightGray
     }
     
     func initTab(){

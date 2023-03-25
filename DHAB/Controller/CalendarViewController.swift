@@ -32,6 +32,8 @@ class CalendarViewController:UIViewController{
     private var incomeModelList:[JournalModel] = []
     let util = Util()
     
+    private var displayJournalList:[JournalModel] = []
+    
     @IBOutlet weak var subDateLabel: UILabel!
     @IBOutlet weak var subPaymentLabel: UILabel!
     @IBOutlet weak var subIncomeLabel: UILabel!
@@ -39,7 +41,6 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var householdAccountBookTableView: UITableView!
-    @IBOutlet weak var incomeTableView: UITableView!
     @IBOutlet weak var diaryTableView: UITableView!
     @IBOutlet var paymentView: UIView!
     @IBOutlet var diaryView: UIView!
@@ -49,10 +50,10 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var paymentTableViewFlowLayout: NSLayoutConstraint!
     
+    @IBOutlet weak var stackView: UIStackView!
     override func viewDidLoad(){
         super.viewDidLoad()
         householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
-        incomeTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         calendarView.dataSource = self
         calendarView.delegate = self
@@ -60,12 +61,12 @@ class CalendarViewController:UIViewController{
         diaryTableView.dataSource = self
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
-        incomeTableView.dataSource = self
-        incomeTableView.delegate = self
         configureButtonZIndex()
         addSubView()
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setDiaryData()
         showPaymentView()
         settingSubView()
@@ -74,6 +75,7 @@ class CalendarViewController:UIViewController{
         setSubLabel()
         setSum()
         dateLabel.text = util.monthDateFormatter.string(from: date)
+        configureTableViewSize()
     }
     
     
@@ -83,12 +85,15 @@ class CalendarViewController:UIViewController{
         if RecognitionChange.shared.updateCalendar == true{
             setDiaryData()
             setTableView(selectedDate)
+            setDisplayJournalList(selectedDate)
             setMonthPaymentModelList()
             paymentLabel.text = getComma(setMonthPayment())
             incomeLabel.text = getComma(setMonthIncome())
             calendarView.reloadData()
             householdAccountBookTableView.reloadData()
             diaryTableView.reloadData()
+            view.layoutIfNeeded()
+            view.updateConstraints()
             RecognitionChange.shared.updateCalendar = false
         }
         setSubLabel()
@@ -101,7 +106,6 @@ class CalendarViewController:UIViewController{
         paymentTableViewFlowLayout.constant = CGFloat(householdAccountBookTableView.contentSize.height)
     }
     
-    
     @IBAction func monthBackButton(_ sender: UIButton) {
         isButtonPush = true
         let currentPage = calendarView.currentPage
@@ -110,6 +114,7 @@ class CalendarViewController:UIViewController{
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         calendarView.select(selectedDate)
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setSubLabel()
         setMonthPaymentModelList()
         paymentLabel.text = getComma(setMonthPayment())
@@ -126,6 +131,7 @@ class CalendarViewController:UIViewController{
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         calendarView.select(selectedDate)
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setSubLabel()
         setMonthPaymentModelList()
         paymentLabel.text = getComma(setMonthPayment())
@@ -138,7 +144,7 @@ class CalendarViewController:UIViewController{
         monthBackButton.layer.zPosition = calendarView.layer.zPosition + 1
         monthPassButton.layer.zPosition = calendarView.layer.zPosition + 1
     }
-    
+
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
         case 0:
@@ -177,6 +183,19 @@ class CalendarViewController:UIViewController{
         diaryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    func configureTableViewSize(){
+//        householdAccountBookTableView.translatesAutoresizingMaskIntoConstraints = false
+//        householdAccountBookTableView.topAnchor.constraint(equalTo: stackView.topAnchor).isActive = true
+//        householdAccountBookTableView.leftAnchor.constraint(equalTo: stackView.leftAnchor).isActive = true
+//        householdAccountBookTableView.rightAnchor.constraint(equalTo: stackView.rightAnchor).isActive = true
+//        householdAccountBookTableView.heightAnchor.constraint(equalToConstant: householdAccountBookTableView.contentSize.height).isActive = true
+//        incomeTableView.translatesAutoresizingMaskIntoConstraints = false
+//        incomeTableView.topAnchor.constraint(equalTo: householdAccountBookTableView.topAnchor).isActive = true
+//        incomeTableView.leftAnchor.constraint(equalTo: stackView.leftAnchor).isActive = true
+//        incomeTableView.rightAnchor.constraint(equalTo: stackView.rightAnchor).isActive = true
+//        incomeTableView.heightAnchor.constraint(equalToConstant: incomeTableView.contentSize.height).isActive = true
     }
     
     func getComma(_ num: Int) -> String {
@@ -290,6 +309,18 @@ class CalendarViewController:UIViewController{
         displayPaymentList = result
     }
     
+    func setDisplayJournalList(_: Date){
+        let realm = try! Realm()
+        var result:[JournalModel] = []
+        let journalList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false)
+        journalList.forEach{journal in
+            if journal.date.zeroclock == selectedDate.zeroclock{
+                result.append(journal)
+            }
+        }
+        displayJournalList = result
+    }
+    
     func setIncomeTableView(_: Date){
         let realm = try! Realm()
         var result:[JournalModel] = []
@@ -324,11 +355,9 @@ class CalendarViewController:UIViewController{
 extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === householdAccountBookTableView {
-            return displayPaymentList.count
+            return displayJournalList.count
         }else if tableView === diaryTableView{
             return setDiaryTableView(selectedDate).count
-        }else if tableView === incomeTableView{
-            return displayIncomeList.count
         }
         return 0
     }
@@ -336,7 +365,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView === householdAccountBookTableView{
             let cell = householdAccountBookTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            let item = displayPaymentList[indexPath.row]
+            let item = displayJournalList[indexPath.row]
             cell.budgetCategoryLabel.text = item.category
             cell.budgetPriceLabel.text = getComma(item.price)
             cell.memoLabel.text = item.memo
@@ -347,13 +376,6 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             cell.cellDateLabel.text = util.dayDateFormatter.string(from: item.date)
             cell.cellTextLabel.text = item.text
             cell.cellTitleLabel.text = item.title
-            return cell
-        }else if tableView === incomeTableView{
-            let cell = incomeTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            let item = displayIncomeList[indexPath.row]
-            cell.budgetCategoryLabel.text = item.category
-            cell.budgetPriceLabel.text = getComma(item.price)
-            cell.memoLabel.text = item.memo
             return cell
         }
         return UITableViewCell()
@@ -389,99 +411,87 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                 realm.delete(targetItem)
             }
             calendarView.reloadData()
-        }else if tableView === incomeTableView{
-            let targetItem = displayIncomeList[indexPath.row]
-            let realm = try! Realm()
-            if !targetItem.isInvalidated{
-                displayIncomeList.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-                
-                //idが一致しているmonthPaymentModelListの同じインデックス番号を削除
-                let index:Int = monthIncomeModelList.firstIndex(where: {$0.id == targetItem.id})!
-                monthIncomeModelList.remove(at: index)
-                
-                setSum()
-                setSubLabel()
-                calendarView.reloadData()
-                
-                try! realm.write{
-                    realm.delete(targetItem)
-                }
-                RecognitionChange.shared.deletePayment = true
-            }
+            RecognitionChange.shared.deleteDiary = true
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView === householdAccountBookTableView{
             deleteIndexPath = indexPath
-            payment = displayPaymentList[indexPath.row]
+            let journal = displayJournalList[indexPath.row]
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
             let inputCollectionViewCell = InputCollectionViewCell()
-            guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+            guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+            let navigationController = UINavigationController(rootViewController: inputViewController)
             inputViewController.inputViewControllerDelegate = self
-            inputViewController.payment? = displayPaymentList[indexPath.row]
-            inputViewController.isPayment = true
-            inputViewController.setPaymentData(data: displayPaymentList[indexPath.row])
-            inputCollectionViewCell.journal = payment
-            present(inputViewController,animated:true)
-            tableView.deselectRow(at: indexPath, animated: true)
+            inputViewController.journal? = displayJournalList[indexPath.row]
+            if journal.isPayment == false{
+                inputViewController.isPayment = false
+                inputViewController.setPaymentData(data: displayJournalList[indexPath.row])
+                inputCollectionViewCell.journal = journal
+                present(navigationController,animated:true)
+                tableView.deselectRow(at: indexPath, animated: true)
+            }else if journal.isPayment == true{
+                inputViewController.setPaymentData(data: displayJournalList[indexPath.row])
+                inputCollectionViewCell.journal = journal
+                present(navigationController,animated:true)
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         }else if tableView === diaryTableView{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-            guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+            guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+            let navigationController = UINavigationController(rootViewController: inputViewController)
             inputViewController.inputViewControllerDelegate = self
             inputViewController.diary? = setDiaryTableView(selectedDate)[indexPath.row]
             inputViewController.setDiary(data: setDiaryTableView(selectedDate)[indexPath.row])
-            present(inputViewController,animated:true)
-            inputViewController.viewChangeSegmentedControl!.selectedSegmentIndex = 1
+            present(navigationController,animated:true)
             inputViewController.addDiaryView()
+            inputViewController.isDiary = true
             tableView.deselectRow(at: indexPath, animated: true)
-        }else if tableView === incomeTableView{
-            deleteIndexPath = indexPath
-            income = displayIncomeList[indexPath.row]
-            let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-            guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
-            inputViewController.inputViewControllerDelegate = self
-            inputViewController.income? = displayPaymentList[indexPath.row]
-            inputViewController.isPayment = false
-            inputViewController.setIncomeData(data: displayIncomeList[indexPath.row])
-            present(inputViewController,animated:true)
-            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if tableView === householdAccountBookTableView{
+            let item = displayJournalList[indexPath.row]
+            let cell = cell as? BudgetTableViewCell
+            if item.isPayment == true{
+                cell!.backgroundColor = .red
+            }else{
+                cell!.backgroundColor = .blue
+            }
         }
     }
 }
 
 extension CalendarViewController:InputViewControllerDelegate{
     func changeFromPaymentToIncome() {
-        //displayPaymentListをdelete,displayIncomeListをappend
-        //削除
         displayPaymentList.remove(at: deleteIndexPath.row)
         householdAccountBookTableView.deleteRows(at: [deleteIndexPath], with: .automatic)
         let index:Int = monthPaymentModelList.firstIndex(where: {$0.id == payment!.id})!
         monthPaymentModelList.remove(at: index)
 
         displayIncomeList.append(payment!)
-        incomeTableView.insertRows(at:[IndexPath(row: displayIncomeList.count - 1, section: 0)], with: .automatic)
-        
-        //monthIncomeModelListに追加
         monthIncomeModelList.append(payment!)
         
         householdAccountBookTableView.reloadData()
-        incomeTableView.reloadData()
+        view.layoutIfNeeded()
+        view.updateConstraints()
         payment = nil
         income = nil
     }
     
     func changeFromIncomeToPayment() {
         displayIncomeList.remove(at: deleteIndexPath.row)
-        incomeTableView.deleteRows(at: [deleteIndexPath], with: .automatic)
         let index:Int = monthIncomeModelList.firstIndex(where: {$0.id == income!.id})!
         monthIncomeModelList.remove(at: index)
         displayPaymentList.append(income!)
         householdAccountBookTableView.insertRows(at: [IndexPath(row: displayPaymentList.count - 1, section: 0)], with: .automatic)
         monthPaymentModelList.append(income!)
         householdAccountBookTableView.reloadData()
-        incomeTableView.reloadData()
+        
+        view.layoutIfNeeded()
+        view.updateConstraints()
         payment = nil
         income = nil
     }
@@ -492,18 +502,24 @@ extension CalendarViewController:InputViewControllerDelegate{
     
     func updateIncome() {
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
         setSubLabel()
         householdAccountBookTableView.reloadData()
-        incomeTableView.reloadData()
+        
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
     
     func updatePayment() {
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
         setSubLabel()
         householdAccountBookTableView.reloadData()
-        incomeTableView.reloadData()
+        
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
     
     func updateDiary() {
@@ -514,21 +530,29 @@ extension CalendarViewController:InputViewControllerDelegate{
     
     func updateCalendar() {
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
         paymentLabel.text = getComma(sumPayment(selectedDate))
         incomeLabel.text = getComma(sumIncome(selectedDate))
         setSubLabel()
         calendarView.reloadData()
         householdAccountBookTableView.reloadData()
-        incomeTableView.reloadData()
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
 }
 
 extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance{
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateList = monthPaymentModelList.map({$0.date.zeroclock})
+        let dateList2 = monthIncomeModelList.map({$0.date.zeroclock})
         let isEqualDate = dateList.contains(date.zeroclock)
-        return isEqualDate ? 1 : 0
+        let isEqualDate2 = dateList2.contains(date.zeroclock)
+        var isJudge:Bool = true
+        if isEqualDate == false && isEqualDate2 == false{
+            isJudge = false
+        }
+        return isJudge ? 1 : 0
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor?{
@@ -540,6 +564,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         selectedDate = date
         setTableView(selectedDate)
+        setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
         setMonthPaymentModelList()
         setMonthIncomeModelList()
@@ -548,8 +573,10 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         setSubLabel()
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         householdAccountBookTableView.reloadData()
-        incomeTableView.reloadData()
         diaryTableView.reloadData()
+        
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
@@ -561,6 +588,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
             calendarView.select(selectedDate)
             setTableView(selectedDate)
+            setDisplayJournalList(selectedDate)
             setIncomeTableView(selectedDate)
             setSubLabel()
             setMonthPaymentModelList()
@@ -568,15 +596,14 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             paymentLabel.text = getComma(setMonthPayment())
             incomeLabel.text = getComma(setMonthIncome())
             householdAccountBookTableView.reloadData()
-            incomeTableView.reloadData()
+            view.layoutIfNeeded()
+            view.updateConstraints()
             calendarView.reloadData()
         }else{
             return
         }
     }
     
-
-
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: date)

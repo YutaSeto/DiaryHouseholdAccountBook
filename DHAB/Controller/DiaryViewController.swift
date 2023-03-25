@@ -15,6 +15,13 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
     
+    //日記関連
+    private var diaryList: [DiaryModel] = []
+    private var result: Results<DiaryModel>?
+    
+    @IBOutlet weak var inputDiaryButton: UIButton!
+    @IBOutlet weak var diaryTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
@@ -23,6 +30,14 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         diaryTableView.dataSource = self
         searchBar.delegate = self
         configureTapDiaryInputButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if RecognitionChange.shared.deleteDiary == true{
+            setDiaryData()
+            diaryTableView.reloadData()
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -38,12 +53,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         diaryTableView.reloadData()
     }
     
-    //日記関連
-    private var diaryList: [DiaryModel] = []
-    private var result: Results<DiaryModel>?
-    
-    @IBOutlet weak var inputDiaryButton: UIButton!
-    @IBOutlet weak var diaryTableView: UITableView!
+
     @IBAction func inputDiaryButton(_ sender: UIButton) {
         tapInputDiaryButton()
     }
@@ -51,10 +61,10 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     func tapInputDiaryButton(){
         let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
         let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as! InputViewController
+        let navigationController = UINavigationController(rootViewController: inputViewController)
         inputViewController.inputViewControllerDelegate = self
-        present(inputViewController,animated:true)
-        inputViewController.viewChangeSegmentedControl.selectedSegmentIndex = 1
-        inputViewController.addDiaryView()
+        present(navigationController,animated:true)
+        inputViewController.isDiary = true
     }
     
     func configureTapDiaryInputButton(){
@@ -111,5 +121,24 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         cell.cellTitleLabel.text = diaryModel.title
         cell.cellTextLabel.text = diaryModel.text
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "DiaryViewController", bundle: nil)
+        guard let lookDiaryViewController = storyboard.instantiateViewController(withIdentifier: "LookDiaryViewController") as? LookDiaryViewController else{return}
+        self.navigationController?.pushViewController(lookDiaryViewController, animated: true)
+        lookDiaryViewController.diary = diaryList[indexPath.row]
+//        lookDiaryViewController.configureTextView()
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let targetItem = diaryList[indexPath.row]
+        diaryList.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        let realm = try! Realm()
+        try! realm.write{
+            realm.delete(targetItem)
+        }
     }
 }

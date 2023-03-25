@@ -14,5 +14,5 @@ class DiaryModel: Object{
     @objc dynamic var title: String = ""
     @objc dynamic var text: String = ""
     
-    let pictureList = List<PictureModel>()
+    var pictureList = List<Data>()
 }

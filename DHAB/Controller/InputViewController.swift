@@ -28,9 +28,9 @@ class InputViewController:UIViewController{
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
     @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var segmentedControlHeight: NSLayoutConstraint!
     //家計簿記入画面関連
-    var payment:JournalModel? = nil
-    var income:JournalModel? = nil
+    var journal:JournalModel? = nil
     var selectedIndexPath: IndexPath?
     var selectedIncomeIndexPath: IndexPath?
     var isPayment:Bool = true
@@ -44,6 +44,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var incomeCollectionView: UICollectionView!
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var incomeCollectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
@@ -69,8 +70,9 @@ class InputViewController:UIViewController{
     }
     
     //日記関連
+    var isDiary:Bool = false
     var diary:DiaryModel?
-    var pictureModelList:[PictureModel] = []
+    var selectedIndex:Int?
     var imageArray:[Data] = []
     var currentIndex = 0
     var collectionViewDelegate:UICollectionViewDelegate?
@@ -85,6 +87,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var diaryDateTextField: UITextField!
     
     override func viewDidLoad(){
+        
         super.viewDidLoad()
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
@@ -109,17 +112,42 @@ class InputViewController:UIViewController{
         setCategoryData()
         setIncomeCategoryData()
         configureAddButton()
-        
+        setNavigationBarButton()
         zoomImageView.frame = view.frame
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         zoomImageView.addGestureRecognizer(pinchGesture)
         view.addSubview(zoomImageView)
-        
+        print("aaaaa")
+        print(paymentCollectionView.contentSize.height)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureAddButton()
+        
+        if isDiary == true{
+            viewChangeSegmentedControl.selectedSegmentIndex = 1
+            addDiaryView()
+        }
+        
+        if diary != nil || journal != nil{
+            viewChangeSegmentedControl.isHidden = true
+            segmentedControlHeight.constant = 0
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        settingCollectionViewAutoLayout()
+    }
+    
+    func setNavigationBarButton(){
+        let buttonActionSelector: Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: buttonActionSelector)
+        navigationItem.leftBarButtonItem = leftBarButton
+    }
+
+    @objc func tapBackButton(){
+        dismiss(animated: true)
     }
     
     @objc func handlePinchGesture(_ gesture: UIPinchGestureRecognizer){
@@ -132,35 +160,25 @@ class InputViewController:UIViewController{
         }
     }
     
-    //遷移先のボタンの色を変更することができていない。cellがnilになるのはどうしてか。
     func setPaymentData(data:JournalModel){
-        payment = data
+        journal = data
         priceTextField.text = String(data.price)
         resultLabel.text = data.category
-        isPayment = true
+        isPayment = journal!.isPayment
         date = data.date
         setCategoryData()
         paymentCollectionView.dataSource = self
         paymentCollectionView.delegate = self
         paymentCollectionView.reloadData()
         
-        if let selectedItem = paymentCollectionView.indexPathsForSelectedItems?.first{
-            paymentCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
-        }
-        
-        
-        let index:Int = categoryList.firstIndex(where: {$0.name == payment!.category})!
-        let indexPath:IndexPath = IndexPath(item: index, section: 0)
-        paymentCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .right)
-        collectionView(paymentCollectionView, didSelectItemAt: indexPath)
     }
     
     func setIncomeData(data:JournalModel){
-        income = data
-        priceTextField.text = String(income!.price)
-        resultLabel.text = income?.category
+        journal = data
+        priceTextField.text = String(journal!.price)
+        resultLabel.text = journal?.category
         isPayment = false
-        date = income!.date
+        date = journal!.date
     }
     
     func setDiary(data:DiaryModel){
@@ -168,6 +186,7 @@ class InputViewController:UIViewController{
         titleTextField.text = diary!.text
         diaryInputTextView.text = diary!.text
         date = diary!.date
+        imageArray = Array(data.pictureList)
     }
     
     func addSubView(){
@@ -197,6 +216,20 @@ class InputViewController:UIViewController{
         diaryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    private func settingCollectionViewAutoLayout(){
+        paymentCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        paymentCollectionView.topAnchor.constraint(equalTo: dateTextField.bottomAnchor,constant: 10).isActive = true
+        paymentCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        paymentCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        paymentCollectionView.heightAnchor.constraint(equalToConstant: paymentCollectionView.contentSize.height).isActive = true
+        
+        incomeCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        incomeCollectionView.topAnchor.constraint(equalTo: paymentCollectionView.bottomAnchor,constant: 10).isActive = true
+        incomeCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        incomeCollectionView.heightAnchor.constraint(equalToConstant: incomeCollectionView.contentSize.height).isActive = true
     }
     
     //segmentedControll関連
@@ -233,8 +266,7 @@ class InputViewController:UIViewController{
         if let selectedItem = incomeCollectionView.indexPathsForSelectedItems?.first{
             incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
-        payment = nil
-        income = nil
+        journal = nil
         
     }
     
@@ -273,7 +305,7 @@ class InputViewController:UIViewController{
     }
     
     @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {
-        if payment != nil || income != nil{
+        if journal != nil{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
         }else if priceTextField.text != "" && resultLabel.text != ""{
@@ -286,7 +318,7 @@ class InputViewController:UIViewController{
     }
     
     func configureAddButton(){
-        if payment != nil || income != nil{
+        if journal != nil{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
         }else if diary != nil{
@@ -299,7 +331,7 @@ class InputViewController:UIViewController{
     }
     
     private func tapAddButton(){
-        if payment == nil && income == nil{
+        if journal == nil{
             let realm = try! Realm()
             try! realm.write{
                 let journalModel = JournalModel()
@@ -312,13 +344,13 @@ class InputViewController:UIViewController{
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             dismiss(animated: true)
-        }else if payment != nil{ //paymetTableViewを選択した場合
+        }else if journal != nil{ //paymetTableViewを選択した場合
             let realm = try! Realm()
             try! realm.write{
-                payment?.date = date
-                payment?.isPayment = isPayment
-                payment?.price = Int(priceTextField.text!) ?? 0
-                payment?.category = resultLabel.text!
+                journal?.date = date
+                journal?.isPayment = isPayment
+                journal?.price = Int(priceTextField.text!) ?? 0
+                journal?.category = resultLabel.text!
             }
             if isPayment == false{
                 inputViewControllerDelegate?.changeFromPaymentToIncome()
@@ -326,32 +358,14 @@ class InputViewController:UIViewController{
             inputViewControllerDelegate?.updatePayment()
             inputViewControllerDelegate?.updateCalendar()
             RecognitionChange.shared.updateCalendar = true
-            payment = nil
-            income = nil
-            dismiss(animated: true)
-        }else if income != nil{
-            let realm = try! Realm()
-            try! realm.write{
-                income?.date = date
-                income?.isPayment = isPayment
-                income?.price = Int(priceTextField.text!) ?? 0
-                income?.category = resultLabel.text!
-            }
-            if isPayment == true{
-                inputViewControllerDelegate?.changeFromIncomeToPayment()
-            }
-            inputViewControllerDelegate?.updateIncome()
-            inputViewControllerDelegate?.updateCalendar()
-            RecognitionChange.shared.updateCalendar = true
-            payment = nil
-            income = nil
+            journal = nil
             dismiss(animated: true)
         }
     }
     
     private func tapContinueAddButton(){
         let realm = try! Realm()
-        if payment == nil && income == nil{
+        if journal == nil{
             try! realm.write{
                 let journalModel = JournalModel()
                 journalModel.date = date.zeroclock
@@ -366,32 +380,17 @@ class InputViewController:UIViewController{
             priceTextField.text = ""
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
-        }else if payment != nil && income == nil{
+        }else if journal != nil{
             let realm = try! Realm()
             try! realm.write{
-                payment?.date = date.zeroclock
-                payment?.isPayment = isPayment
-                payment?.price = Int(priceTextField.text!) ?? 0
-                payment?.category = resultLabel.text!
+                journal?.date = date.zeroclock
+                journal?.isPayment = isPayment
+                journal?.price = Int(priceTextField.text!) ?? 0
+                journal?.category = resultLabel.text!
             }
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
-            payment = nil
-            resultLabel.text = ""
-            priceTextField.text = ""
-            addButton.isEnabled = true
-            continueAddButton.isEnabled = true
-        }else if income != nil && payment == nil {
-            let realm = try! Realm()
-            try! realm.write{
-                income?.date = date.zeroclock
-                income?.isPayment = isPayment
-                income?.price = Int(priceTextField.text!) ?? 0
-                income?.category = resultLabel.text!
-            }
-            inputViewControllerDelegate?.updatePayment()
-            RecognitionChange.shared.updateCalendar = true
-            income = nil
+            journal = nil
             resultLabel.text = ""
             priceTextField.text = ""
             addButton.isEnabled = true
@@ -409,7 +408,12 @@ class InputViewController:UIViewController{
         collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         paymentCollectionView.layer.borderWidth = 1.0
         paymentCollectionView.layer.borderColor = UIColor.lightGray.cgColor
-        paymentCollectionView.layer.cornerRadius = 1.0
+        paymentCollectionView.layer.cornerRadius = 5.0
+        incomeCollectionViewFlowLayout.estimatedItemSize = CGSize(width: incomeCollectionView.frame.width / 4,height: incomeCollectionView.frame.height / 3)
+        incomeCollectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        incomeCollectionView.layer.borderWidth = 1.0
+        incomeCollectionView.layer.borderColor = UIColor.lightGray.cgColor
+        incomeCollectionView.layer.cornerRadius = 5.0
     }
     
     func dayBack(){
@@ -470,7 +474,7 @@ class InputViewController:UIViewController{
                 diaryModel.date = date.zeroclock
                 diaryModel.title = titleTextField.text!
                 diaryModel.text = diaryInputTextView.text
-                diaryModel.pictureList.append(objectsIn: pictureModelList)
+                diaryModel.pictureList.append(objectsIn: imageArray)
                 realm.add(diaryModel)
             }
             titleTextField.text = ""
@@ -481,10 +485,11 @@ class InputViewController:UIViewController{
         }else{
             let realm = try! Realm()
             try! realm.write{
+                diary!.pictureList.removeAll()
                 diary!.date = date.zeroclock
                 diary!.title = titleTextField.text!
                 diary!.text = diaryInputTextView.text
-                diary!.pictureList.append(objectsIn: pictureModelList)
+                diary!.pictureList.append(objectsIn: imageArray)
             }
             titleTextField.text = ""
             diaryInputTextView.text = ""
@@ -550,7 +555,7 @@ class InputViewController:UIViewController{
     }
 }
 
-extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource{
+extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView === paymentCollectionView{
@@ -567,8 +572,8 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
         if collectionView === paymentCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
             cell.categoryLabel.text = categoryList[indexPath.row].name
-            if payment != nil{
-                cell.journal = payment!
+            if journal != nil{
+                cell.journal = journal!
                 cell.toggleSelection()
             }
             return cell
@@ -582,8 +587,8 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
             cell.categoryLabel.text = incomeCategoryList[indexPath.row].name
 
-            if income != nil{
-                cell.journal = income!
+            if journal != nil{
+                cell.journal = journal!
                 cell.toggleSelection()
             }
             return cell
@@ -593,27 +598,30 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView === paymentCollectionView{
-            let sectionInsets = UIEdgeInsets(top: 5, left: 2, bottom: 2, right: 5)
-            let itemsPerRow: CGFloat = 4
-            let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-            let availableWidth = view.frame.width - paddingSpace
-            let widthPerItem = availableWidth / itemsPerRow
-            return CGSize(width: widthPerItem, height: 40)
+            let cellWidth = paymentCollectionView.bounds.width / 4 - 20
+            let labelHeight:CGFloat = 18.0
+            let cellHeight = labelHeight + 10
+            return CGSize(width: cellWidth, height: cellHeight)
         }else if collectionView === imageCollectionView{
             let cellWidth = collectionView.frame.width / 5
             let cellHeight = cellWidth
             return CGSize(width: cellWidth, height: cellHeight)
         }else if collectionView === incomeCollectionView{
-            let sectionInsets = UIEdgeInsets(top: 5, left: 2, bottom: 2, right: 5)
-            let itemsPerRow: CGFloat = 4
-            let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-            let availableWidth = view.frame.width - paddingSpace
-            let widthPerItem = availableWidth / itemsPerRow
-            return CGSize(width: widthPerItem, height: 40)
+            let cellWidth = incomeCollectionView.bounds.width / 4 - 20
+            let labelHeight:CGFloat = 18.0
+            let cellHeight = labelHeight + 10
+            return CGSize(width: cellWidth, height: cellHeight)
         }
         return CGSize(width: 0, height: 0)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10.0
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView === paymentCollectionView{
@@ -638,31 +646,14 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             selectedIncomeIndexPath = nil
             return
         }else if collectionView === imageCollectionView{
-            let selectedImage = UIImage(data: imageArray[indexPath.item])
-            zoomImageView.image = selectedImage
-            zoomImageView.contentMode = .scaleAspectFit
-            zoomImageView.isUserInteractionEnabled = true
+            let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+            guard let pictureViewController = storyboard.instantiateViewController(withIdentifier: "PictureViewController") as? PictureViewController else{return}
+            self.navigationController?.pushViewController(pictureViewController, animated: true)
             
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissZoomImageView(_:)))
-            zoomImageView.addGestureRecognizer(tapGesture)
-            
-            let zoomView = UIView(frame: UIScreen.main.bounds)
-            zoomView.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-            zoomView.addSubview(zoomImageView)
-            zoomView.isUserInteractionEnabled = true
-            UIApplication.shared.keyWindow?.addSubview(zoomView)
-            
-            zoomImageView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                zoomImageView.centerXAnchor.constraint(equalTo: zoomView.centerXAnchor),
-                zoomImageView.centerYAnchor.constraint(equalTo: zoomView.centerYAnchor),
-                zoomImageView.widthAnchor.constraint(equalTo: zoomView.widthAnchor),
-                zoomImageView.heightAnchor.constraint(equalTo: zoomView.heightAnchor)
-            ])
-            zoomView.alpha = 0
-            UIView.animate(withDuration: 0.3) {
-                zoomView.alpha = 1
-            }
+            let selectedImage = imageArray[indexPath.item]
+            selectedIndex = indexPath.item
+            pictureViewController.inputViewControllerImage = selectedImage
+            pictureViewController.pictureViewControllerDelegate = self
         }else if collectionView === incomeCollectionView{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
             resultLabel.text = incomeCategoryList[indexPath.row].name
@@ -697,22 +688,14 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     }
 }
 
-extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout{
+extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate{
    
     func imagePickerController(_ picker:UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]){
         
         let image = (info[.originalImage] as! UIImage)
-        let fixedImage = fixImageOrientation(image)
-        let imageData = fixedImage.jpegData(compressionQuality: 0.5)
-        
-        let realm = try! Realm()
-        try! realm.write{
-            let result = PictureModel()
-            result.imageData = imageData!
-            result.createdAt = date.zeroclock
-            realm.add(result)
-        }
-        imageArray.append((info[.originalImage] as! UIImage).pngData()!)
+        let imageData = image.jpegData(compressionQuality: 0.5)
+
+        imageArray.append(imageData!)
         imageCollectionView.reloadData()
         dismiss(animated:true)
     }
@@ -729,5 +712,13 @@ extension InputViewController:UITextViewDelegate{
         }else{
             addDiaryButton.isEnabled = false
         }
+    }
+}
+
+extension InputViewController:PictureViewControllerDelegate{
+    func deletePicuture() {
+        imageArray.remove(at: selectedIndex!)
+        print(imageArray.count)
+        imageCollectionView.reloadData()
     }
 }

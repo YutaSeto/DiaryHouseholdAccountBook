@@ -104,6 +104,9 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("aaaaaa")
+        print(paymentBudgetList)
+        print(categoryList)
         if RecognitionChange.shared.updateHouseholdAccountBook == true{
             setPaymentData()
             setIncomeData()
@@ -333,6 +336,7 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentPieGraphView.highlightPerTapEnabled = false
         paymentPieGraphView.legend.enabled = false
         paymentPieGraphView.drawHoleEnabled = false
+        paymentPieGraphView.rotationEnabled = false
         paymentPieGraphView.noDataTextColor = .black
     }
     
@@ -348,6 +352,7 @@ class HouseholdAccountBookViewController:UIViewController{
         
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
         dataSet.colors = colors
+        dataSet.sliceSpace = 0.0
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
         return data
@@ -371,9 +376,10 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func  tapInputButton(){
         let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-        guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+        let navigationController = UINavigationController(rootViewController: inputViewController)
         inputViewController.inputViewControllerDelegate = self
-        present(inputViewController,animated:true)
+        self.present(navigationController,animated:true)
     }
     
     func setPaymentTableViewDataSourse(){
@@ -382,7 +388,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let firstDay = calendar.date(from: comps)!.zeroclock
         let add = DateComponents(month: 1)
         let lastDay = calendar.date(byAdding: add, to: firstDay)!.zeroclock
-        let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay}).filter{$0.budgetDate > lastDay}
+        let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay}).filter{$0.budgetDate < lastDay}
         
         let dayCheckPayment = paymentList.filter({$0.date >= firstDay}).filter{$0.date < lastDay}
         categoryList.forEach{ expense in
@@ -468,9 +474,10 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func tapAddIncomeButton(){
         let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-        guard let inputViewController = storyboard.instantiateInitialViewController() as? InputViewController else {return}
+        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+        let navigationController = UINavigationController(rootViewController: inputViewController)
         inputViewController.inputViewControllerDelegate = self
-        present(inputViewController,animated:true)
+        self.present(navigationController,animated:true)
     }
     
     func setIncomeData(){
@@ -572,6 +579,7 @@ class HouseholdAccountBookViewController:UIViewController{
         incomePieGraphView.highlightPerTapEnabled = false
         incomePieGraphView.legend.enabled = false
         incomePieGraphView.drawHoleEnabled = false
+        incomePieGraphView.rotationEnabled = false
         incomePieGraphView.noDataTextColor = .black
     }
     

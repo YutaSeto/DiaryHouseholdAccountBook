@@ -9,6 +9,7 @@ import UIKit
 
 class BudgetTableViewCell: UITableViewCell {
 
+    var journal:JournalModel?
     @IBOutlet weak var budgetCategoryLabel: UILabel!
     @IBOutlet weak var budgetPriceLabel: UILabel!
     @IBOutlet weak var memoLabel: UILabel!
@@ -20,6 +21,7 @@ class BudgetTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        
 
         // Configure the view for the selected state
     }

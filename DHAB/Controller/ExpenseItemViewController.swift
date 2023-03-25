@@ -302,13 +302,14 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             
         }else if tableView === incomeTableView{
             let targetItem = incomeCategoryList[indexPath.row]
+            incomeCategoryList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
             let realm = try! Realm()
             try! realm.write{
                 realm.delete(targetItem)
             }
-            incomeCategoryList.remove(at: indexPath.row)
+            tableView.reloadData()
             categoryViewControllerDelegate?.updateIncome()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 }
