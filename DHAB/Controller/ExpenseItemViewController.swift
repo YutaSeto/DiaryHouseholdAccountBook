@@ -115,16 +115,25 @@ class ExpenseItemViewController: UIViewController{
             textField.placeholder = "カテゴリーの名前を入力してください"
         }
         
-        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
-            let categoryModel = CategoryModel()
-            let realm = try!Realm()
-            try! realm.write{
-                categoryModel.name = textFieldOnAlert.text!
-                realm.add(categoryModel)
+        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) in
+            guard let text = textFieldOnAlert.text else {return}
+            do{
+                let categoryModel = try CategoryModel(name: text,isPayment: true)
+                let realm = try Realm()
+                try realm.write{
+                    realm.add(categoryModel)
+                }
+                self.expenseItemViewControllerDelegate?.updateCategory()
+                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
+                self.expenseItemTableView.reloadData()
+                
+            }catch CategoryModel.ValidationError.invalidNameLength{
+                print("文字数が8文字を超えています")
+                return
+            }catch{
+                print("エラーが発生しました")
+                return
             }
-            self.expenseItemViewControllerDelegate?.updateCategory()
-            self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
-            self.expenseItemTableView.reloadData()
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
@@ -147,18 +156,23 @@ class ExpenseItemViewController: UIViewController{
             textField.placeholder = "カテゴリーの名前を入力してください"
         }
         
-        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
-            if textFieldOnAlert.text != ""{
-                let incomeCategoryModel = CategoryModel()
-                let realm = try!Realm()
-                try! realm.write{
-                    incomeCategoryModel.name = textFieldOnAlert.text!
-                    incomeCategoryModel.isPayment = false
-                    realm.add(incomeCategoryModel)
+        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) in
+            guard let text = textFieldOnAlert.text else {return}
+            do{
+                let categoryModel = try CategoryModel(name: text, isPayment: false)
+                let realm = try Realm()
+                try realm.write{
+                    realm.add(categoryModel)
                 }
                 self.expenseItemViewControllerDelegate?.updateCategory()
                 self.categoryViewControllerDelegate?.updateIncome()
                 self.incomeTableView.reloadData()
+            } catch CategoryModel.ValidationError.invalidNameLength{
+                print("8文字を超えています")
+                return
+            } catch{
+                print("予期せぬエラーが発生")
+                return
             }
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -208,7 +222,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
         }
         return UITableViewCell()
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView === expenseItemTableView{
             expenseItemViewControllerDelegate = self
@@ -219,16 +233,23 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 textFieldOnAlert = textField
                 textField.placeholder = "新しいカテゴリーの名前を入力してください"
             }
-            let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) -> Void in
-                if textFieldOnAlert.text != ""{
+            let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) in
+                do{
+                    guard let text = textFieldOnAlert.text else{return}
+                    let categoryModel = try CategoryModel(name: text, isPayment: true)
                     let realm = try!Realm()
                     try! realm.write{
-                        self.categoryList[indexPath.row].name = textFieldOnAlert.text!
+                        self.categoryList[indexPath.row] = categoryModel
                     }
                     self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                     self.expenseItemViewControllerDelegate?.updateCategory()
                     self.expenseItemViewControllerDelegate?.updatePayment()
                     self.expenseItemTableView.reloadData()
+                    print(self.categoryList[indexPath.row])
+                }catch CategoryModel.ValidationError.invalidNameLength{
+                    print("8文字を超えています")
+                }catch{
+                    print("予期せぬエラーが発生しています")
                 }
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -247,15 +268,21 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 textField.placeholder = "新しいカテゴリーの名前を入力してください"
             }
             
-            let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) -> Void in
-                if textFieldOnAlert.text != ""{
-                    let realm = try!Realm()
-                    try! realm.write{
-                        self.incomeCategoryList[indexPath.row].name = textFieldOnAlert.text!
-                    }
-                    self.categoryViewControllerDelegate?.updateIncome()
-                    self.expenseItemViewControllerDelegate?.updateCategory()
-                    self.incomeTableView.reloadData()
+            let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) in
+                guard let text = textFieldOnAlert.text else {return}
+                do{
+                    let categoryModel = try CategoryModel(name: text, isPayment: false)
+                        let realm = try Realm()
+                        try realm.write{
+                            self.incomeCategoryList[indexPath.row] = categoryModel
+                        }
+                        self.categoryViewControllerDelegate?.updateIncome()
+                        self.expenseItemViewControllerDelegate?.updateCategory()
+                        self.incomeTableView.reloadData()
+                }catch CategoryModel.ValidationError.invalidNameLength{
+                    print("8文字を超えています")
+                }catch{
+                    print("予期せぬエラーが発生")
                 }
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
