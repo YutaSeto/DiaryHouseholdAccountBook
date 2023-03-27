@@ -46,6 +46,7 @@ class BudgetConfigureViewController: UIViewController{
         setBudgetTableViewDataSourse()
         setIncomeBudgetTableViewDataSourse()
         dateLabel.text = util.monthDateFormatter.string(from:date)
+        configureNavigationBarButton()
     }
     
     override func viewWillLayoutSubviews() {
@@ -74,6 +75,17 @@ class BudgetConfigureViewController: UIViewController{
             }
         }
         delegate?.updateBudget()
+    }
+    
+    @objc func tapBackButton(){
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func configureNavigationBarButton(){
+        let buttonActionSelector:Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"arrow.uturn.backward"), style: .plain
+                                            ,target: self,action: buttonActionSelector)
+        navigationItem.leftBarButtonItem = leftBarButton
     }
     
     @IBAction func cancelButton(_ sender: UIButton) {

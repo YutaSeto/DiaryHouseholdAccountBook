@@ -73,13 +73,19 @@ class BudgetViewController: UIViewController{
         budgetConfigureViewController.date = date.zeroclock
     }
     
+    @objc func tapBackButton(){
+        dismiss(animated: true)
+    }
+    
     func setNavigationBarButton(){
         let buttonActionSelector:Selector = #selector(tapConfigureButton)
-        let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add,target: self,action: buttonActionSelector)
+        let rightBarButton = UIBarButtonItem(title: "一括編集", style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
         
-        navigationItem.leftBarButtonItem = nil
-        navigationItem.hidesBackButton = true
+        let buttonActionSelector2:Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"xmark"), style: .plain,target: self,action: buttonActionSelector2)
+        navigationItem.leftBarButtonItem = leftBarButton
+        
     }
     
     func dayBack(){

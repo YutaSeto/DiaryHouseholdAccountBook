@@ -15,13 +15,14 @@ class CategoryModel: Object{
     
     convenience init(name: String, isPayment: Bool) throws {
         self.init()
+        let realm = try! Realm()
         
-        let paymentCategoriesCount = realm!.objects(CategoryModel.self).filter{$0.isPayment == true}.count
+        let paymentCategoriesCount = realm.objects(CategoryModel.self).filter{$0.isPayment == true}.count
         guard paymentCategoriesCount <= 12 else {
             throw ValidationError.invalidTooManyCategories
         }
         
-        let incomeCategoriesCount = realm!.objects(CategoryModel.self).filter{$0.isPayment == false}.count
+        let incomeCategoriesCount = realm.objects(CategoryModel.self).filter{$0.isPayment == false}.count
         guard incomeCategoriesCount <= 12 else {
             throw ValidationError.invalidTooManyCategories
         }

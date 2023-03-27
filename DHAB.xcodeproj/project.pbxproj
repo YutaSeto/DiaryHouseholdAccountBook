@@ -38,7 +38,6 @@
 		23ACC142297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23ACC140297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib */; };
 		23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ACC1442988AC5500ABA10D /* SliderViewCell.swift */; };
 		23ACC1472988AC5500ABA10D /* SliderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23ACC1452988AC5500ABA10D /* SliderViewCell.xib */; };
-		23AF149229781F0F00844E9A /* MenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23AF149129781F0F00844E9A /* MenuViewController.storyboard */; };
 		23C1600D29795E0F0026EAF9 /* BudgetConfigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C1600C29795E0F0026EAF9 /* BudgetConfigureViewController.swift */; };
 		23CBECC229CD4E3000A5E777 /* PictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CBECC129CD4E3000A5E777 /* PictureViewController.swift */; };
 		23CBECC429CD726F00A5E777 /* LookDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */; };
@@ -89,7 +88,6 @@
 		23ACC140297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BudgetConfigureTableViewCell.xib; sourceTree = "<group>"; };
 		23ACC1442988AC5500ABA10D /* SliderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderViewCell.swift; sourceTree = "<group>"; };
 		23ACC1452988AC5500ABA10D /* SliderViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SliderViewCell.xib; sourceTree = "<group>"; };
-		23AF149129781F0F00844E9A /* MenuViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MenuViewController.storyboard; sourceTree = "<group>"; };
 		23C1600C29795E0F0026EAF9 /* BudgetConfigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetConfigureViewController.swift; sourceTree = "<group>"; };
 		23CBECC129CD4E3000A5E777 /* PictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureViewController.swift; sourceTree = "<group>"; };
 		23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookDiaryViewController.swift; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */,
 				237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */,
 				237AFB6D297506930060ECD0 /* ExpenseItemViewController.storyboard */,
-				23AF149129781F0F00844E9A /* MenuViewController.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -316,7 +313,6 @@
 				23EEE7D12972CF4000A52939 /* CalendarViewController.storyboard in Resources */,
 				23ACC142297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib in Resources */,
 				237AFB6C2975027B0060ECD0 /* BudgetTableViewCell.xib in Resources */,
-				23AF149229781F0F00844E9A /* MenuViewController.storyboard in Resources */,
 				237AFB652974ECAC0060ECD0 /* BudgetViewController.storyboard in Resources */,
 				EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */,
 				23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */,

@@ -50,7 +50,7 @@ class LookDiaryViewController:UIViewController{
     
     func setNavigationBarButton(){
         let buttonActionSelector: Selector = #selector(tapBackButton)
-        let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: buttonActionSelector)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
     }
 

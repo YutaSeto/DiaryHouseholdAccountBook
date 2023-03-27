@@ -58,6 +58,18 @@ class ExpenseItemViewController: UIViewController{
         settingSubView()
         configureAddButton()
         categoryViewControllerDelegate?.updateHouseholdAccountBook()
+        setNavigationBarButton()
+    }
+    
+    @objc func tapBackButton(){
+        dismiss(animated: true)
+    }
+    
+    func setNavigationBarButton(){
+        let buttonActionSelector:Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"xmark"), style: .plain,target: self,action: buttonActionSelector)
+        navigationItem.leftBarButtonItem = leftBarButton
+        
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -312,7 +324,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let targetItem = self.categoryList[indexPath.row]
                 let realm = try! Realm()
                 let targetJornal = Array(realm.objects(JournalModel.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
-                var targetBudget = Array(realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
+                let targetBudget = Array(realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
                 
                 self.categoryList.remove(at: indexPath.row)
                 self.expenseItemTableView.deleteRows(at: [indexPath], with: .automatic)
@@ -342,8 +354,8 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             
         }else if tableView === incomeTableView{
             let targetItem = incomeCategoryList[indexPath.row]
-            let targetJornal = Array(realm.objects(JournalModel.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
-            var targetBudget = Array(realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
+            let targetJornal = Array(realm.objects(JournalModel.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == false}) //消すべきジャーナル一覧
+            let targetBudget = Array(realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == false}) //消すべき予算一覧
             incomeCategoryList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJornal,budget: targetBudget)

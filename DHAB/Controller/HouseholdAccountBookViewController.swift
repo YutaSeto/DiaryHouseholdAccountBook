@@ -932,22 +932,26 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             case 0:
                 if householdAccountBookSegmentedControl.selectedSegmentIndex == 1{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
+                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
                     expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
                     expenseItemViewController.deleteCategoryDelegateForHouseholdAccountBook = self
-                    present(expenseItemViewController,animated: true)
+                    navigationController.pushViewController(expenseItemViewController, animated: true)
+                    present(navigationController,animated: true)
                     expenseItemViewController.segmentedControl!.selectedSegmentIndex = 1
                     expenseItemViewController.addIncomeView()
                     returnView0Second()
                     isExpanded = false
                 }else{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
+                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
                     expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
                     expenseItemViewController.deleteCategoryDelegateForHouseholdAccountBook = self
-                    present(expenseItemViewController,animated: true)
+                    navigationController.pushViewController(expenseItemViewController, animated: true)
+                    present(navigationController,animated: true)
                     returnView0Second()
                     isExpanded = false
                 }
@@ -963,6 +967,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             default:
                 return
             }
+            tableView.deselectRow(at: indexPath, animated: true)
         }else{
             if isExpanded == true{
                 returnView()
