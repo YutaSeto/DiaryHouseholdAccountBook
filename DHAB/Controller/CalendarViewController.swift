@@ -383,15 +383,18 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if tableView === householdAccountBookTableView{
-            let targetItem = displayPaymentList[indexPath.row]
+            let targetItem = displayJournalList[indexPath.row]
             let realm = try! Realm()
             if !targetItem.isInvalidated{
-                displayPaymentList.remove(at: indexPath.row)
+                displayJournalList.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
-                //idが一致しているmonthPaymentModelListの同じインデックス番号を削除
-                let index:Int = monthPaymentModelList.firstIndex(where: {$0.id == targetItem.id})!
-                monthPaymentModelList.remove(at: index)
-                
+                if targetItem.isPayment == true{
+                    let index:Int = monthPaymentModelList.firstIndex(where: {$0.id == targetItem.id})!
+                    monthPaymentModelList.remove(at: index)
+                }else if targetItem.isPayment == false{
+                    let index:Int = monthIncomeModelList.firstIndex(where: {$0.id == targetItem.id})!
+                    monthIncomeModelList.remove(at: index)
+                }
                 setSum()
                 setSubLabel()
                 calendarView.reloadData()
@@ -451,6 +454,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
         }
     }
     
+    //色は要調整
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView === householdAccountBookTableView{
             let item = displayJournalList[indexPath.row]

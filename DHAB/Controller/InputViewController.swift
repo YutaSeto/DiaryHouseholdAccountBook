@@ -390,8 +390,8 @@ class InputViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = true
             resultLabel.text = ""
             priceTextField.text = ""
-            addButton.isEnabled = true
-            continueAddButton.isEnabled = true
+            addButton.isEnabled = false
+            continueAddButton.isEnabled = false
         }else if journal != nil{
             let realm = try! Realm()
             try! realm.write{
@@ -406,8 +406,8 @@ class InputViewController:UIViewController{
             journal = nil
             resultLabel.text = ""
             priceTextField.text = ""
-            addButton.isEnabled = true
-            continueAddButton.isEnabled = true
+            addButton.isEnabled = false
+            continueAddButton.isEnabled = false
         }
     }
     

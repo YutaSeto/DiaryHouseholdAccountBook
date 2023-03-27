@@ -50,12 +50,17 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var sumIncomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
     @IBOutlet weak var incomePieGraphView: PieChartView!
+    var targetItem:CategoryModel?
+    var targetIndex:IndexPath?
+    var targetJournal:[JournalModel]?
+    var targetBudget:[BudgetModel]?
     
     //slideMenu画面関連
     let menuList = ["カテゴリーの設定","予算の設定"]
     var isExpanded:Bool = false
     @IBOutlet var slideMenuView: UIView!
     @IBOutlet weak var menuTableView: UITableView!
+    var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?
     
     //推移画面関連
     var sumPaymentList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -103,9 +108,6 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("aaaaaa")
-        print(paymentBudgetList)
-        print(categoryList)
         if RecognitionChange.shared.updateHouseholdAccountBook == true{
             setPaymentData()
             setIncomeData()
@@ -932,6 +934,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
+                    expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
+                    expenseItemViewController.deleteCategoryDelegateForHouseholdAccountBook = self
                     present(expenseItemViewController,animated: true)
                     expenseItemViewController.segmentedControl!.selectedSegmentIndex = 1
                     expenseItemViewController.addIncomeView()
@@ -941,6 +945,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
+                    expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
+                    expenseItemViewController.deleteCategoryDelegateForHouseholdAccountBook = self
                     present(expenseItemViewController,animated: true)
                     returnView0Second()
                     isExpanded = false
@@ -949,8 +955,6 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
                 let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
                 let budgetViewController = storyboard.instantiateViewController(withIdentifier: "BudgetViewController") as! BudgetViewController
-                
-                budgetViewController.budgetViewControllerDelegate = self
                 navigationController.pushViewController(budgetViewController, animated: true)
                 
                 present(navigationController,animated: true)
@@ -1012,8 +1016,63 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         incomeTableView.reloadData()
         resultSumTableView.reloadData()
     }
+    
 }
 
-extension HouseholdAccountBookViewController:BudgetViewControllerDelegate{
+extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
+    func setTargetItem(data:CategoryModel,index:IndexPath,journal:[JournalModel],budget:[BudgetModel]){
+        targetItem = data
+        targetIndex = index
+        targetJournal = journal
+        targetBudget = budget
+    }
     
+    func remakeViewController() {
+        print("delegateが実行")
+        //カテゴリーについて
+        if targetItem?.isPayment == true{
+            categoryList.remove(at: targetIndex!.row)
+            paymentTableView.deleteRows(at: [targetIndex!], with: .automatic)
+        }else if targetItem?.isPayment == false{
+            incomeCategoryList.remove(at: targetIndex!.row)
+            incomeTableView.deleteRows(at: [targetIndex!], with: .automatic)
+        }
+        //Journalについて paymentlist,incomelist, struct2種
+        if targetItem?.isPayment == true{
+            targetJournal!.forEach{target in
+                let index = paymentList.firstIndex(where: {$0.id == target.id})
+                paymentList.remove(at: index!)
+            }
+        }else if targetItem?.isPayment == false{
+            targetJournal!.forEach{target in
+                let index = incomeList.firstIndex(where: {$0.id == target.id})
+                incomeList.remove(at: index!)
+            }
+        }
+        //Budgetについて paymentBudgetList,incomeBudgetList, struct2種類
+        if targetItem?.isPayment == true{
+            targetBudget!.forEach{target in
+                let index = paymentBudgetList.firstIndex(where: {$0.id == target.id})
+                paymentBudgetList.remove(at: index!)
+            }
+        }else if targetItem?.isPayment == false{
+            targetBudget!.forEach{target in
+                let index = incomeBudgetList.firstIndex(where: {$0.id == target.id})
+                incomeBudgetList.remove(at: index!)
+            }
+        }
+        
+        //合計欄を更新
+        setSumPaymentData()
+        setSumIncomeData()
+        sumPaymentTableView.reloadData()
+        sumIncomeTableView.reloadData()
+        
+        //グラフを更新
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
+        
+        //推移画面を更新
+    }
 }

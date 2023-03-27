@@ -264,7 +264,6 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     }
                 }
                 
-                self.budgetViewControllerDelegate!.updateList()
                 self.updateList()
             })
             

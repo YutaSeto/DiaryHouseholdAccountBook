@@ -12,13 +12,16 @@ import RealmSwift
 class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     @IBOutlet weak var tabMenuBar: UITabBar!
-    
-    var inputViewControllerDelegateClosure:InputViewControllerDelegate?
+    var controllers:[UIViewController] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBackgroundColor()
-        inputViewControllerDelegateClosure = self
+        
+        if let targetVC = viewControllers?.first(where:{$0 is HouseholdAccountBookViewController}) as? HouseholdAccountBookViewController{
+            print("if文のなかが読まれています。")
+            targetVC.deleteCategoryDelegateForTabBar = self
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -114,7 +117,6 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     }
     
     func initTab(){
-        var controllers:[UIViewController] = []
         
         let storyboard1 = UIStoryboard(name: "CalendarViewController", bundle: nil)
         if let calendarViewController = storyboard1.instantiateInitialViewController(){
@@ -168,5 +170,17 @@ extension TabBarController:InputViewControllerDelegate{
     
     func inputViewController(_ viewController: InputViewController, didUpdateData data: String) {
         return
+    }
+}
+
+extension TabBarController:DeleteCategoryDelegate{
+    func setTargetItem(data: CategoryModel, index: IndexPath, journal: [JournalModel], budget: [BudgetModel]) {
+        return
+    }
+
+    func remakeViewController() {
+        self.viewControllers?.forEach({ vc in
+            vc.reloadInputViews()
+        })
     }
 }

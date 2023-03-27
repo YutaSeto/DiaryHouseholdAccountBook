@@ -22,6 +22,11 @@ protocol CategoryViewControllerDelegate{
     func deleteIncome()
 }
 
+protocol DeleteCategoryDelegate{
+    func remakeViewController()
+    func setTargetItem(data:CategoryModel,index:IndexPath,journal:[JournalModel],budget:[BudgetModel])
+}
+
 class ExpenseItemViewController: UIViewController{
     
     let realm = try! Realm()
@@ -29,6 +34,8 @@ class ExpenseItemViewController: UIViewController{
     var incomeCategoryList:[CategoryModel] = []
     var expenseItemViewControllerDelegate:ExpenseItemViewControllerDelegate?
     var categoryViewControllerDelegate:CategoryViewControllerDelegate?
+    var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?
+    var deleteCategoryDelegateForHouseholdAccountBook:DeleteCategoryDelegate?
     
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var addIncomeButton: UIButton!
@@ -304,19 +311,23 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             let warning = UIAlertAction(title:"理解した上で削除する",style: .default, handler:{(action) -> Void in
                 let targetItem = self.categoryList[indexPath.row]
                 let realm = try! Realm()
-                let targetJornal = realm.objects(JournalModel.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}
-                let targetBudget = realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}
+                let targetJornal = Array(realm.objects(JournalModel.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
+                var targetBudget = Array(realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
                 
                 self.categoryList.remove(at: indexPath.row)
                 self.expenseItemTableView.deleteRows(at: [indexPath], with: .automatic)
-//                try! realm.write{
-//                    realm.delete(targetItem)
-//                    realm.delete(targetJornal)
-//                    realm.delete(targetBudget)
-//                }
+                //ここで家計簿画面の配列とテーブルビューのセルを削除しないといけない
+                self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJornal,budget: targetBudget)
+                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
+                
+                try! realm.write{
+                    realm.delete(targetItem)
+                    realm.delete(targetJornal)
+                    realm.delete(targetBudget)
+                }
                 self.setCategoryData()
                 self.expenseItemTableView.reloadData()
-                self.categoryViewControllerDelegate?.deletePayment()
+                self.deleteCategoryDelegateForTabBar?.remakeViewController()
                 //ここについて修正が必要　家計簿画面のテーブルの修正、インプット画面のコレクションビュー、予算画面のカテゴリーリスト、カレンダー画面のほぼ全ての配列の修正を伝える必要がある。何か良い方法はある？
             })
             
@@ -331,14 +342,24 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             
         }else if tableView === incomeTableView{
             let targetItem = incomeCategoryList[indexPath.row]
+            let targetJornal = Array(realm.objects(JournalModel.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
+            var targetBudget = Array(realm.objects(BudgetModel.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
             incomeCategoryList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJornal,budget: targetBudget)
+            self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
+            
             let realm = try! Realm()
             try! realm.write{
                 realm.delete(targetItem)
+                realm.delete(targetJornal)
+                realm.delete(targetBudget)
             }
+            self.setIncomeCategoryData()
             tableView.reloadData()
             categoryViewControllerDelegate?.updateIncome()
+            self.deleteCategoryDelegateForTabBar?.remakeViewController()
+            
         }
     }
 }
