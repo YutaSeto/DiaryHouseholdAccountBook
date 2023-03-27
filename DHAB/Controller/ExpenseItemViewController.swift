@@ -170,6 +170,8 @@ class ExpenseItemViewController: UIViewController{
             } catch CategoryModel.ValidationError.invalidNameLength{
                 print("8文字を超えています")
                 return
+            } catch CategoryModel.ValidationError.invalidTooManyCategories{
+                print("カテゴリーが12個を超えています")
             } catch{
                 print("予期せぬエラーが発生")
                 return
@@ -249,7 +251,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 }catch CategoryModel.ValidationError.invalidNameLength{
                     print("8文字を超えています")
                 }catch{
-                    print("予期せぬエラーが発生しています")
+                    print("予期せぬエラーが発生")
                 }
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in

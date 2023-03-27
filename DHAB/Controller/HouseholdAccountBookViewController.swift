@@ -37,7 +37,6 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var paymentTableView: UITableView!
     @IBOutlet weak var inputButton: UIButton!
     @IBOutlet weak var paymentPieGraphView: PieChartView!
-    
     @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
     
     //収入画面関連

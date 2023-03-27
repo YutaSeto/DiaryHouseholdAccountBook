@@ -22,8 +22,6 @@ protocol InputViewControllerDelegate{
 
 class InputViewController:UIViewController{
     
-    var zoomImageView = UIImageView()
-    
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
@@ -111,13 +109,7 @@ class InputViewController:UIViewController{
         setIncomeCategoryData()
         configureAddButton()
         setNavigationBarButton()
-        zoomImageView.frame = view.frame
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
-        zoomImageView.addGestureRecognizer(pinchGesture)
-        view.addSubview(zoomImageView)
-        print("aaaaa")
-        print(paymentCollectionView.contentSize.height)
-    }
+        setToolbar()    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -138,6 +130,13 @@ class InputViewController:UIViewController{
         settingCollectionViewAutoLayout()
     }
     
+    func setToolbar(){
+        titleTextField.inputAccessoryView = toolbar
+        priceTextField.inputAccessoryView = toolbar
+        memoTextField.inputAccessoryView = toolbar
+        diaryInputTextView.inputAccessoryView = toolbar
+    }
+    
     func setNavigationBarButton(){
         let buttonActionSelector: Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: buttonActionSelector)
@@ -146,16 +145,6 @@ class InputViewController:UIViewController{
 
     @objc func tapBackButton(){
         dismiss(animated: true)
-    }
-    
-    @objc func handlePinchGesture(_ gesture: UIPinchGestureRecognizer){
-        if gesture.state == .changed{
-            let scale = gesture.scale
-            zoomImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
-        }else if gesture.state == .ended{
-            let scale = gesture.scale
-            zoomImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
-        }
     }
     
     func setPaymentData(data:JournalModel){

@@ -195,7 +195,7 @@
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V8v-jx-J9b">
                             <rect key="frame" x="20" y="296" width="348" height="34"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
+                            <textInputTraits key="textInputTraits" keyboardType="alphabet"/>
                         </textField>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="8x6-Vu-sdN"/>
