@@ -24,6 +24,7 @@ class BudgetViewController: UIViewController{
     var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
+    var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
     var inputViewControllerDelegate:InputViewControllerDelegate?
     let realm = try! Realm()
     
@@ -69,6 +70,7 @@ class BudgetViewController: UIViewController{
         let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
         let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
         navigationController?.pushViewController(budgetConfigureViewController, animated: true)
+        budgetConfigureViewController.forHouseholdAccountBookDelegate = forHouseholdAccountBookDelegate
         budgetConfigureViewController.delegate = self
         budgetConfigureViewController.date = date.zeroclock
     }
@@ -269,8 +271,8 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                         budget.budgetPrice = Int(textFieldOnAlert.text!)!
                     }
                 }
-                
                 self.updateList()
+                self.budgetViewControllerDelegate?.updateList()
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in

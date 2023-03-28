@@ -112,40 +112,34 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     }
     
     func initTab(){
+        let storyboard = UIStoryboard(name: "CalendarViewController", bundle: nil)
+        let calendarViewController = storyboard.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController
+        calendarViewController?.tabBarItem = UITabBarItem(title: "カレンダー", image: UIImage(systemName: "calendar"), tag: 0)
+        controllers.append(calendarViewController!)
         
-        let storyboard1 = UIStoryboard(name: "CalendarViewController", bundle: nil)
-        if let calendarViewController = storyboard1.instantiateInitialViewController(){
-            calendarViewController.tabBarItem = UITabBarItem(title: "カレンダー", image: UIImage(systemName: "calendar"), tag: 0)
-            controllers.append(calendarViewController)
-        }
+        let storyboard1 = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
+        let householdAccountBookViewController = storyboard1.instantiateViewController(withIdentifier: "HouseholdAccountBookViewController") as? HouseholdAccountBookViewController
+        householdAccountBookViewController!.tabBarItem = UITabBarItem(title: "家計簿", image: UIImage(systemName: "yensign.circle"), tag: 1)
+        let householdAccoutBookNavigationController = UINavigationController(rootViewController: householdAccountBookViewController!)
+        controllers.append(householdAccoutBookNavigationController)
         
-        let storyboard2 = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
-        if let householdAccountBookViewController = storyboard2.instantiateInitialViewController(){
-            householdAccountBookViewController.tabBarItem = UITabBarItem(title: "家計簿", image: UIImage(systemName: "yensign.circle"), tag: 1)
-            controllers.append(householdAccountBookViewController)
-        }
-        
-        let storyboard3 = UIStoryboard(name: "DiaryViewController", bundle: nil)
-        if let diaryViewController = storyboard3.instantiateInitialViewController(){
-            diaryViewController.tabBarItem = UITabBarItem(title: "日記", image: UIImage(systemName: "book"), tag: 2)
-            controllers.append(diaryViewController)
-        }
+        let storyboard2 = UIStoryboard(name: "DiaryViewController", bundle: nil)
+        let diaryViewController = storyboard2.instantiateViewController(withIdentifier: "DiaryViewController") as? DiaryViewController
+        diaryViewController!.tabBarItem = UITabBarItem(title: "日記", image: UIImage(systemName: "book"), tag: 2)
+        let diaryNavigationController = UINavigationController(rootViewController: diaryViewController!)
+        controllers.append(diaryNavigationController)
         
         setViewControllers(controllers, animated: false)
     }
     
     func remakeViewController() {
-        print("デリゲートが実行")
         let vc = self.viewControllers
         vc!.forEach{
             if let target = $0 as? CalendarViewController{
-                print("カレンダーをリロード")
                 target.reloadInputViews()
             }else if let target = $0 as? HouseholdAccountBookViewController{
-                print("家計簿をリロード")
                 target.reloadInputViews()
             }else if let target = $0 as? DiaryViewController{
-                print("日記をリロード")
                 target.reloadInputViews()
             }
         }

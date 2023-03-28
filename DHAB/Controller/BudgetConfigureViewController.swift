@@ -13,12 +13,17 @@ protocol BudgetConfigureViewControllerDelegate{
     func updateBudget()
 }
 
+protocol ForHouseholdAccountBookDeleagte{
+    func updateHouseholdAccountBookView()
+}
+
 class BudgetConfigureViewController: UIViewController{
     
     let util = Util()
     let realm = try! Realm()
     var date: Date = Date()
     var delegate:BudgetConfigureViewControllerDelegate?
+    var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
     var categoryList:[CategoryModel] = []
     var incomeCategoryList:[CategoryModel] = []
     var paymentBudgetList:[BudgetModel] = []
@@ -75,6 +80,7 @@ class BudgetConfigureViewController: UIViewController{
             }
         }
         delegate?.updateBudget()
+        forHouseholdAccountBookDelegate?.updateHouseholdAccountBookView()
     }
     
     @objc func tapBackButton(){

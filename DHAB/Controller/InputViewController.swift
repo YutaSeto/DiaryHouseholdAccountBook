@@ -79,6 +79,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var diaryInputTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
     @IBOutlet weak var addDiaryButton: UIButton!
+    @IBOutlet weak var countLabel: UILabel!
     
     @IBOutlet weak var diaryDateTextField: UITextField!
     
@@ -109,7 +110,9 @@ class InputViewController:UIViewController{
         setIncomeCategoryData()
         configureAddButton()
         setNavigationBarButton()
-        setToolbar()    }
+        setToolbar()
+        configureTextView()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -304,7 +307,6 @@ class InputViewController:UIViewController{
         diaryDateTextField.text = util.monthDateFormatter.string(from: targetDate)
         diaryDateTextField.inputAccessoryView = toolbar
         householdAccountBookDatePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
-        
     }
     
     @objc func didChangeDate(picker: UIDatePicker){
@@ -324,6 +326,14 @@ class InputViewController:UIViewController{
             addButton.isEnabled = false
             continueAddButton.isEnabled = false
         }
+    }
+    
+    func configureTextView(){
+        diaryInputTextView.layer.borderWidth = 1
+        diaryInputTextView.layer.borderColor = UIColor.systemGray.cgColor
+        diaryInputTextView.layer.cornerRadius = 5
+        diaryInputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        countLabel.alpha = 0.3
     }
     
     func configureAddButton(){
@@ -476,6 +486,11 @@ class InputViewController:UIViewController{
         }else{
             addDiaryButton.isEnabled = false
         }
+    }
+    
+    @objc func diaryInputTextViewDidChange(_ textView:UITextView){
+        let count = diaryInputTextView.text.count
+        countLabel.text = "\(count) / 2000"
     }
     
     
@@ -719,7 +734,9 @@ extension InputViewController:UIImagePickerControllerDelegate,UINavigationContro
 
 extension InputViewController:UITextViewDelegate{
     public func textViewDidChange(_ textView: UITextView) {
-        if diaryInputTextView.text != "" && titleTextField.text != ""{
+        countLabel.text = String("\(diaryInputTextView.text.count)/2000")
+        
+        if diaryInputTextView.text!.count <= 2000 && diaryInputTextView.text != "" && titleTextField.text != ""{
             addDiaryButton.isEnabled = true
         }else{
             addDiaryButton.isEnabled = false

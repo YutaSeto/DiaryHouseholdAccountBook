@@ -95,6 +95,9 @@ class HouseholdAccountBookViewController:UIViewController{
         
         setChartView()
         chartView.data = setData()
+        setIncomePieGraphView()
+        incomePieGraphView.data = setIncomePieGraphData()
+        setNavigationBarButton()
         
         if sumPayment(date) == 0{
             return
@@ -102,9 +105,6 @@ class HouseholdAccountBookViewController:UIViewController{
             setPaymentPieGraphView()
             paymentPieGraphView.data = setPaymentPieGraphData()
         }
-        setIncomePieGraphView()
-        incomePieGraphView.data = setIncomePieGraphData()
-        setNavigationBarButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -615,12 +615,15 @@ class HouseholdAccountBookViewController:UIViewController{
     
     //slidemenu関連
     func setNavigationBarButton(){
-        let buttonActionSelector: Selector = #selector(tapBackButton)
+        let buttonActionSelector: Selector = #selector(showMenuButton)
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
+        navigationItem.title = "家計簿"
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
-    @objc func tapBackButton(){
+    @objc func showMenuButton(){
         showMenu(shouldExpand: isExpanded)
     }
     
@@ -784,6 +787,11 @@ class HouseholdAccountBookViewController:UIViewController{
         setSumIncomeData()
         sumPaymentTableView.reloadData()
         sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
     }
 }
         
@@ -970,6 +978,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
                 let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
                 let budgetViewController = storyboard.instantiateViewController(withIdentifier: "BudgetViewController") as! BudgetViewController
+                budgetViewController.forHouseholdAccountBookDelegate = self
+                budgetViewController.budgetViewControllerDelegate = self
                 navigationController.pushViewController(budgetViewController, animated: true)
                 
                 present(navigationController,animated: true)
@@ -1005,6 +1015,11 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         sumPaymentTableView.reloadData()
         incomeTableView.reloadData()
         sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
     }
     
     func deleteIncome() {
@@ -1019,6 +1034,11 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         setPaymentTableViewDataSourse()
         setSumPaymentData()
         sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
     }
     
     func updateIncome() {
@@ -1031,6 +1051,11 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
         setMonthSumIncome()
         incomeTableView.reloadData()
         resultSumTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
     }
     
 }
@@ -1076,24 +1101,35 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
                 incomeBudgetList.remove(at: index!)
             }
         }
-        
-        //合計欄を更新
-        setSumPaymentData()
-        setSumIncomeData()
-        sumPaymentTableView.reloadData()
-        sumIncomeTableView.reloadData()
-        
-        //グラフを更新
-        updateChartView()
-        updatePaymentPieGraph()
-        updateIncomePieGraph()
-        
-        //推移画面を更新
     }
     
     func remakeUIView(){
         print("デリゲートを実行")
         guard let tab = self.tabBarController as? TabBarController else {return}
         tab.remakeViewController()
+    }
+}
+
+extension HouseholdAccountBookViewController:ForHouseholdAccountBookDeleagte,BudgetViewControllerDelegate{
+    func updateHouseholdAccountBookView() {
+        setPaymentData()
+        setIncomeData()
+        setSumPaymentData()
+        setSumIncomeData()
+        paymentTableViewDataSource = []
+        incomeTableViewDataSource = []
+        setPaymentTableViewDataSourse()
+        setIncomeTableViewDataSourse()
+        setMonthSumPayment()
+        setMonthSumIncome()
+        paymentTableView.reloadData()
+        sumPaymentTableView.reloadData()
+        incomeTableView.reloadData()
+        sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
     }
 }

@@ -64,6 +64,7 @@
                         <outlet property="addDiaryButton" destination="Csk-I7-mkc" id="zt6-UR-oUp"/>
                         <outlet property="addImageButton" destination="tga-kJ-rCq" id="DI2-Hf-cho"/>
                         <outlet property="continueAddButton" destination="W2c-KJ-R3W" id="9bQ-qF-Mit"/>
+                        <outlet property="countLabel" destination="Mzb-Jv-Mhi" id="ssm-2u-ckD"/>
                         <outlet property="dateTextField" destination="7Re-CN-JLV" id="uW2-mH-ufm"/>
                         <outlet property="diaryDateTextField" destination="4nk-ou-JqQ" id="9Pa-1u-B7A"/>
                         <outlet property="diaryInputTextView" destination="7cH-uk-sXu" id="wa7-SX-gVZ"/>
@@ -226,16 +227,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="353" height="500"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7cH-uk-sXu">
-                            <rect key="frame" x="25" y="108.33333333333331" width="303" height="200"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="200" id="EAd-fw-p62"/>
-                            </constraints>
-                            <color key="textColor" systemColor="labelColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                        </textView>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tga-kJ-rCq">
                             <rect key="frame" x="25" y="362.66666666666669" width="303" height="80"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -321,6 +312,22 @@
                                 </button>
                             </subviews>
                         </stackView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="文字数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mzb-Jv-Mhi">
+                            <rect key="frame" x="251" y="288.33333333333331" width="52" height="20.333333333333314"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7cH-uk-sXu">
+                            <rect key="frame" x="25" y="108" width="303" height="200"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="200" id="EAd-fw-p62"/>
+                            </constraints>
+                            <color key="textColor" systemColor="labelColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="jWS-pe-qe5"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -335,7 +342,9 @@
                         <constraint firstItem="lNm-Dv-lWG" firstAttribute="top" secondItem="rad-1v-mEU" secondAttribute="top" constant="10" id="Z08-LB-xgw"/>
                         <constraint firstItem="jWS-pe-qe5" firstAttribute="trailing" secondItem="TTs-lB-pbb" secondAttribute="trailing" constant="25" id="aUF-kQ-jgv"/>
                         <constraint firstItem="7cH-uk-sXu" firstAttribute="centerX" secondItem="rad-1v-mEU" secondAttribute="centerX" id="aco-Hh-LTA"/>
+                        <constraint firstItem="jWS-pe-qe5" firstAttribute="trailing" secondItem="Mzb-Jv-Mhi" secondAttribute="trailing" constant="50" id="eZ4-d5-14U"/>
                         <constraint firstItem="TTs-lB-pbb" firstAttribute="trailing" secondItem="7cH-uk-sXu" secondAttribute="trailing" id="fL2-cG-5T2"/>
+                        <constraint firstItem="Mzb-Jv-Mhi" firstAttribute="top" secondItem="TTs-lB-pbb" secondAttribute="bottom" constant="200" id="h2Y-Kb-y7s"/>
                         <constraint firstItem="lNm-Dv-lWG" firstAttribute="trailing" secondItem="TTs-lB-pbb" secondAttribute="trailing" id="h9X-7D-4cG"/>
                         <constraint firstItem="HLP-WA-x2y" firstAttribute="leading" secondItem="7cH-uk-sXu" secondAttribute="leading" id="mTm-vh-Kbz"/>
                         <constraint firstItem="TTs-lB-pbb" firstAttribute="leading" secondItem="7cH-uk-sXu" secondAttribute="leading" id="oth-bF-Yoc"/>
@@ -346,7 +355,7 @@
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="459" y="-1642"/>
+            <point key="canvasLocation" x="457" y="-1642"/>
         </scene>
         <!--Picture View Controller-->
         <scene sceneID="T9y-mq-dkd">

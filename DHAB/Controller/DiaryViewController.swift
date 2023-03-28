@@ -10,7 +10,7 @@ import RealmSwift
 import UIKit
 
 class DiaryViewController:UIViewController,UISearchBarDelegate{
-    
+   
     let util = Util()
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
@@ -117,7 +117,8 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
         let diaryModel: DiaryModel = diaryList[indexPath.row]
-        cell.cellDateLabel.text = util.dayDateFormatter.string(from:diaryModel.date)
+        cell.cellDateLabel.text = util.onliDayDateFormatter.string(from:diaryModel.date)
+        cell.dayOfWeekLabel.text = util.dayOfWeekDateFormatter.string(from: diaryModel.date)
         cell.cellTitleLabel.text = diaryModel.title
         cell.cellTextLabel.text = diaryModel.text
         return cell

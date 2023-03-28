@@ -30,7 +30,7 @@
         <!--日記-->
         <scene sceneID="8km-jt-p5Q">
             <objects>
-                <viewController id="by8-77-SUy" customClass="DiaryViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DiaryViewController" id="by8-77-SUy" customClass="DiaryViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9UA-CI-xop">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

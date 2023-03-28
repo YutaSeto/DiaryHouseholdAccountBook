@@ -34,7 +34,7 @@
             <connections>
                 <outlet property="categoryLabel" destination="OLY-bS-ktm" id="g9h-e2-83p"/>
             </connections>
-            <point key="canvasLocation" x="237" y="56"/>
+            <point key="canvasLocation" x="236.64122137404578" y="55.633802816901408"/>
         </collectionViewCell>
     </objects>
 </document>

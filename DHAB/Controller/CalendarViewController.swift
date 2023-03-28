@@ -14,7 +14,7 @@ import CalculateCalendarLogic
 class CalendarViewController:UIViewController{
     
     let holiday = CalculateCalendarLogic()
-    
+    let realm = try! Realm()
     var date:Date = Date()
     var selectedDate:Date = Date()
     var displayDate:Date = Date()
@@ -53,14 +53,17 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var stackView: UIStackView!
     override func viewDidLoad(){
         super.viewDidLoad()
-        householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
-        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         calendarView.dataSource = self
         calendarView.delegate = self
         diaryTableView.delegate = self
         diaryTableView.dataSource = self
         householdAccountBookTableView.dataSource = self
         householdAccountBookTableView.delegate = self
+        householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
+        diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        let nib = UINib(nibName: "FSCalendarCustomCell", bundle: nil)
+        let customCell = nib.instantiate(withOwner: nil,options: nil).first as! FSCalendarCustomCell
+        calendarView.register(type(of: customCell), forCellReuseIdentifier: "FSCalendarCustomCell")
         configureButtonZIndex()
         addSubView()
         setTableView(selectedDate)
@@ -75,7 +78,6 @@ class CalendarViewController:UIViewController{
         setSubLabel()
         setSum()
         dateLabel.text = util.monthDateFormatter.string(from: date)
-        configureTableViewSize()
     }
     
     
@@ -184,20 +186,7 @@ class CalendarViewController:UIViewController{
         diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
-    
-    func configureTableViewSize(){
-//        householdAccountBookTableView.translatesAutoresizingMaskIntoConstraints = false
-//        householdAccountBookTableView.topAnchor.constraint(equalTo: stackView.topAnchor).isActive = true
-//        householdAccountBookTableView.leftAnchor.constraint(equalTo: stackView.leftAnchor).isActive = true
-//        householdAccountBookTableView.rightAnchor.constraint(equalTo: stackView.rightAnchor).isActive = true
-//        householdAccountBookTableView.heightAnchor.constraint(equalToConstant: householdAccountBookTableView.contentSize.height).isActive = true
-//        incomeTableView.translatesAutoresizingMaskIntoConstraints = false
-//        incomeTableView.topAnchor.constraint(equalTo: householdAccountBookTableView.topAnchor).isActive = true
-//        incomeTableView.leftAnchor.constraint(equalTo: stackView.leftAnchor).isActive = true
-//        incomeTableView.rightAnchor.constraint(equalTo: stackView.rightAnchor).isActive = true
-//        incomeTableView.heightAnchor.constraint(equalToConstant: incomeTableView.contentSize.height).isActive = true
-    }
-    
+        
     func getComma(_ num: Int) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -213,8 +202,6 @@ class CalendarViewController:UIViewController{
         let firstDay = calendar.date(from: comps)!.zeroclock
         let addMonth = DateComponents(month: 1)
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
-        
-        let realm = try! Realm()
         let paymentList:[JournalModel] = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay!}.filter{$0.isPayment == true}
         monthPaymentModelList = paymentList
     }
@@ -225,8 +212,6 @@ class CalendarViewController:UIViewController{
         let firstDay = calendar.date(from: comps)!.zeroclock
         let addMonth = DateComponents(month: 1)
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
-        
-        let realm = try! Realm()
         let incomeList:[JournalModel] = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay!}.filter{$0.isPayment == false}
         monthIncomeModelList = incomeList
     }
@@ -273,7 +258,6 @@ class CalendarViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
         
         var sum:Int = 0
-        let realm = try! Realm()
         let paymentList = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay!}.filter{$0.isPayment == true}
         paymentList.forEach{payment in
             sum += payment.price
@@ -289,7 +273,6 @@ class CalendarViewController:UIViewController{
         let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
         
         var sum:Int = 0
-        let realm = try! Realm()
         let incomeList = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay!}.filter{$0.isPayment == false}
         incomeList.forEach{income in
             sum += income.price
@@ -298,7 +281,6 @@ class CalendarViewController:UIViewController{
     }
     
     func setTableView(_: Date){
-        let realm = try! Realm()
         var result:[JournalModel] = []
         let paymentList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false).filter{$0.isPayment == true}
         paymentList.forEach{payment in
@@ -310,7 +292,6 @@ class CalendarViewController:UIViewController{
     }
     
     func setDisplayJournalList(_: Date){
-        let realm = try! Realm()
         var result:[JournalModel] = []
         let journalList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false)
         journalList.forEach{journal in
@@ -322,7 +303,6 @@ class CalendarViewController:UIViewController{
     }
     
     func setIncomeTableView(_: Date){
-        let realm = try! Realm()
         var result:[JournalModel] = []
         let incomeList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false).filter{$0.isPayment == false}
         incomeList.forEach{income in
@@ -344,7 +324,6 @@ class CalendarViewController:UIViewController{
     }
     
     func setDiaryData(){
-        let realm = try! Realm()
         let result = realm.objects(DiaryModel.self)
         diaryModelList = Array(result)
         diaryTableView.reloadData()
@@ -384,7 +363,6 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if tableView === householdAccountBookTableView{
             let targetItem = displayJournalList[indexPath.row]
-            let realm = try! Realm()
             if !targetItem.isInvalidated{
                 displayJournalList.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -408,8 +386,6 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             let targetItem = diaryModelList[indexPath.row]
             diaryModelList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            
-            let realm = try! Realm()
             try! realm.write{
                 realm.delete(targetItem)
             }
@@ -581,6 +557,15 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         view.layoutIfNeeded()
         view.updateConstraints()
+    }
+    
+    func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: position) as! FSCalendarCustomCell
+        cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
+
+        cell.paymentLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        cell.incomeLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        return cell
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
