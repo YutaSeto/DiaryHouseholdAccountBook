@@ -104,6 +104,7 @@ class HouseholdAccountBookViewController:UIViewController{
         }
         setIncomePieGraphView()
         incomePieGraphView.data = setIncomePieGraphData()
+        setNavigationBarButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -613,6 +614,16 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     //slidemenu関連
+    func setNavigationBarButton(){
+        let buttonActionSelector: Selector = #selector(tapBackButton)
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
+        navigationItem.rightBarButtonItem = rightBarButton
+    }
+
+    @objc func tapBackButton(){
+        showMenu(shouldExpand: isExpanded)
+    }
+    
     @IBAction func menuButton(_ sender: UIBarButtonItem) {
         showMenu(shouldExpand: isExpanded)
     }
@@ -1033,7 +1044,6 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
     }
     
     func remakeViewController() {
-        print("delegateが実行")
         //カテゴリーについて
         if targetItem?.isPayment == true{
             categoryList.remove(at: targetIndex!.row)
@@ -1079,5 +1089,11 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
         updateIncomePieGraph()
         
         //推移画面を更新
+    }
+    
+    func remakeUIView(){
+        print("デリゲートを実行")
+        guard let tab = self.tabBarController as? TabBarController else {return}
+        tab.remakeViewController()
     }
 }

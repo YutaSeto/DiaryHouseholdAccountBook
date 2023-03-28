@@ -17,11 +17,6 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBackgroundColor()
-        
-        if let targetVC = viewControllers?.first(where:{$0 is HouseholdAccountBookViewController}) as? HouseholdAccountBookViewController{
-            print("if文のなかが読まれています。")
-            targetVC.deleteCategoryDelegateForTabBar = self
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -138,6 +133,24 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
         
         setViewControllers(controllers, animated: false)
     }
+    
+    func remakeViewController() {
+        print("デリゲートが実行")
+        let vc = self.viewControllers
+        vc!.forEach{
+            if let target = $0 as? CalendarViewController{
+                print("カレンダーをリロード")
+                target.reloadInputViews()
+            }else if let target = $0 as? HouseholdAccountBookViewController{
+                print("家計簿をリロード")
+                target.reloadInputViews()
+            }else if let target = $0 as? DiaryViewController{
+                print("日記をリロード")
+                target.reloadInputViews()
+            }
+        }
+    }
+
 }
 
 extension TabBarController:InputViewControllerDelegate{
@@ -170,17 +183,5 @@ extension TabBarController:InputViewControllerDelegate{
     
     func inputViewController(_ viewController: InputViewController, didUpdateData data: String) {
         return
-    }
-}
-
-extension TabBarController:DeleteCategoryDelegate{
-    func setTargetItem(data: CategoryModel, index: IndexPath, journal: [JournalModel], budget: [BudgetModel]) {
-        return
-    }
-
-    func remakeViewController() {
-        self.viewControllers?.forEach({ vc in
-            vc.reloadInputViews()
-        })
     }
 }

@@ -25,6 +25,7 @@ protocol CategoryViewControllerDelegate{
 protocol DeleteCategoryDelegate{
     func remakeViewController()
     func setTargetItem(data:CategoryModel,index:IndexPath,journal:[JournalModel],budget:[BudgetModel])
+    func remakeUIView()
 }
 
 class ExpenseItemViewController: UIViewController{
@@ -341,6 +342,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 self.expenseItemTableView.reloadData()
                 self.deleteCategoryDelegateForTabBar?.remakeViewController()
                 //ここについて修正が必要　家計簿画面のテーブルの修正、インプット画面のコレクションビュー、予算画面のカテゴリーリスト、カレンダー画面のほぼ全ての配列の修正を伝える必要がある。何か良い方法はある？
+                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeUIView()
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
