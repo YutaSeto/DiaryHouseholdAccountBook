@@ -536,12 +536,20 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-        selectedDate = date
-        if let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: monthPosition) as? FSCalendarCustomCell{
-            cell.collectionViewDate = selectedDate
-            cell.toggleSelection()
+        calendar.visibleCells()
+            .map { $0 as? FSCalendarCustomCell } // カスタムセルに変換する
+            .compactMap { $0 } // nilを削除
+            .filter { $0._isSelected } // 選択中のセルのみ取り出す
+            .forEach { customCell in
+                customCell.deselect()
+            }
+        
+        if let cell = calendar.cell(for: date, at: monthPosition) as? FSCalendarCustomCell {
+            cell.select()
         }
-        setTableView(selectedDate)
+        
+        selectedDate = date
+        
         setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
         setMonthPaymentModelList()
@@ -564,16 +572,27 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
         cell.paymentLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
         cell.incomeLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        
+        if date.zeroclock == selectedDate.zeroclock {
+            cell.select()
+        } else {
+            cell.deselect()
+        }
+        
         if cell.paymentLabel.text != "0"{
             cell.paymentLabel.textColor = .red
         }else{
             cell.paymentLabel.textColor = .clear
         }
+        
         if cell.incomeLabel.text != "0"{
             cell.incomeLabel.textColor = .blue
         }else{
             cell.incomeLabel.textColor = .clear
         }
+        
+        
+        
         return cell
     }
     

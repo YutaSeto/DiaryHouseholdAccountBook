@@ -16,6 +16,7 @@ class FSCalendarCustomCell: FSCalendarCell {
     
     var collectionViewDate:Date?
     var labelsDate:Date?
+    var _isSelected = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,10 +31,13 @@ class FSCalendarCustomCell: FSCalendarCell {
         }
     }
     
-    func toggleSelection(){
-        if labelsDate?.zeroclock == collectionViewDate?.zeroclock{
-            self.contentView.backgroundColor = .lightGray
-        }
+    func select() {
+        _isSelected = true
+        self.contentView.backgroundColor = .lightGray
     }
     
+    func deselect() {
+        _isSelected = false
+        self.contentView.backgroundColor = .white
+    }
 }
