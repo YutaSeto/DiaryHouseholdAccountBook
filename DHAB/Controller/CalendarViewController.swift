@@ -61,9 +61,7 @@ class CalendarViewController:UIViewController{
         householdAccountBookTableView.delegate = self
         householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        let nib = UINib(nibName: "FSCalendarCustomCell", bundle: nil)
-        let customCell = nib.instantiate(withOwner: nil,options: nil).first as! FSCalendarCustomCell
-        calendarView.register(type(of: customCell), forCellReuseIdentifier: "FSCalendarCustomCell")
+        calendarView.collectionView.register(UINib(nibName: "FSCalendarCustomCell", bundle: nil),forCellWithReuseIdentifier: "FSCalendarCustomCell")
         configureButtonZIndex()
         addSubView()
         setTableView(selectedDate)
@@ -560,8 +558,14 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     }
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        
+        if let originalCell = calendar.cell(for: date, at: position){
+            originalCell.removeFromSuperview()
+        }
+        
         let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: position) as! FSCalendarCustomCell
         cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
+        
 
         cell.paymentLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
         cell.incomeLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
