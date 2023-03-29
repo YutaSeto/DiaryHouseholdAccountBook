@@ -35,7 +35,7 @@ class Util:UIViewController{
     
     public var onliDayDateFormatter:DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd日"
+        dateFormatter.dateFormat = "d日"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter

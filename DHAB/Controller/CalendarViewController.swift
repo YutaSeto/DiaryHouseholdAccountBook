@@ -61,9 +61,7 @@ class CalendarViewController:UIViewController{
         householdAccountBookTableView.delegate = self
         householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        let nib = UINib(nibName: "FSCalendarCustomCell", bundle: nil)
-        let customCell = nib.instantiate(withOwner: nil,options: nil).first as! FSCalendarCustomCell
-        calendarView.register(type(of: customCell), forCellReuseIdentifier: "FSCalendarCustomCell")
+        calendarView.collectionView.register(UINib(nibName: "FSCalendarCustomCell", bundle: nil),forCellWithReuseIdentifier: "FSCalendarCustomCell")
         configureButtonZIndex()
         addSubView()
         setTableView(selectedDate)
@@ -523,26 +521,26 @@ extension CalendarViewController:InputViewControllerDelegate{
 }
 
 extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance{
-    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        let dateList = monthPaymentModelList.map({$0.date.zeroclock})
-        let dateList2 = monthIncomeModelList.map({$0.date.zeroclock})
-        let isEqualDate = dateList.contains(date.zeroclock)
-        let isEqualDate2 = dateList2.contains(date.zeroclock)
-        var isJudge:Bool = true
-        if isEqualDate == false && isEqualDate2 == false{
-            isJudge = false
-        }
-        return isJudge ? 1 : 0
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
+        return UIColor.clear
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        return UIColor.clear
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor?{
-        let dateList = diaryModelList.map({$0.date.zeroclock})
-        let isEqualDate = dateList.contains(date.zeroclock)
-        return isEqualDate ? UIColor.orange : .none
+        return UIColor.clear
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        
         selectedDate = date
+        if let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: monthPosition) as? FSCalendarCustomCell{
+            cell.collectionViewDate = selectedDate
+            cell.toggleSelection()
+        }
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
@@ -555,16 +553,27 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         householdAccountBookTableView.reloadData()
         diaryTableView.reloadData()
         
+        
         view.layoutIfNeeded()
         view.updateConstraints()
     }
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        
         let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: position) as! FSCalendarCustomCell
         cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
-
         cell.paymentLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
         cell.incomeLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        if cell.paymentLabel.text != "0"{
+            cell.paymentLabel.textColor = .red
+        }else{
+            cell.paymentLabel.textColor = .clear
+        }
+        if cell.incomeLabel.text != "0"{
+            cell.incomeLabel.textColor = .blue
+        }else{
+            cell.incomeLabel.textColor = .clear
+        }
         return cell
     }
     
@@ -593,42 +602,5 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         }
     }
     
-    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: date)
-        
-        let year = calendar.dateComponents([.year], from: date)
-        let intYear = year.year!
-        
-        let month = calendar.dateComponents([.month], from: date)
-        let intMonth = month.month!
-        
-        let day = calendar.dateComponents([.day], from: date)
-        let intDay = day.day!
-        
-        var holidayArray:[Date] = []
-        func judgeHoliday(year:Int,month:Int,day:Int){
-            let result = holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
-            if result == true{
-                holidayArray.append(calendar.date(from:DateComponents(year:intYear,month:intMonth,day: intDay))!.zeroclock)
-            }
-        }
-        judgeHoliday(year: intYear, month: intMonth, day: intDay)
-        
-        let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
-        let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
-        let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
-        
-        if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
-            return UIColor.red
-        }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
-            return UIColor.blue
-        }else if weekday == 1 && date >= startOfMonth && date <= endOfMonth{ // 日曜日または祝日
-            return UIColor.red
-        }else if date >= startOfMonth && date <= endOfMonth{
-            return appearance.titleDefaultColor
-        }else{
-            return UIColor.lightGray
-        }
-    }
+    
 }
