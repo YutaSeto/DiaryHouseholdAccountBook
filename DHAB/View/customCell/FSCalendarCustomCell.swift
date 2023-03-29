@@ -16,6 +16,7 @@ class FSCalendarCustomCell: FSCalendarCell {
     
     var collectionViewDate:Date?
     var labelsDate:Date?
+    var _isSelected = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,17 +24,16 @@ class FSCalendarCustomCell: FSCalendarCell {
         self.layer.borderWidth = 1.0
         self.layer.borderColor = UIColor.lightGray.cgColor // 枠線の色
     }
-    
-    var date: Date!{
-        didSet{
-            self.labelsDate = date
-        }
+        
+    func select(){
+        _isSelected = true
+        self.layer.borderColor = UIColor.blue.cgColor
+        self.layer.borderWidth = 2.0
     }
     
-    func toggleSelection(){
-        if labelsDate?.zeroclock == collectionViewDate?.zeroclock{
-            self.contentView.backgroundColor = .lightGray
-        }
+    func deselect(){
+        _isSelected = false
+        self.layer.borderWidth = 1.0
+        self.layer.borderColor = UIColor.lightGray.cgColor
     }
-    
 }

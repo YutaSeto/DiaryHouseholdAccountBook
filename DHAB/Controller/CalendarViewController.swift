@@ -17,7 +17,7 @@ class CalendarViewController:UIViewController{
     let realm = try! Realm()
     var date:Date = Date()
     var selectedDate:Date = Date()
-    var displayDate:Date = Date()
+    var swipeDate:Date = Date()
     var sumPayment:Int = 0
     var isButtonPush:Bool = false
     var deleteIndexPath:IndexPath = IndexPath(row: 0, section: 0)
@@ -536,12 +536,19 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-        selectedDate = date
-        if let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: monthPosition) as? FSCalendarCustomCell{
-            cell.collectionViewDate = selectedDate
-            cell.toggleSelection()
+        calendar.visibleCells()
+            .map{$0 as? FSCalendarCustomCell}
+            .compactMap{$0}
+            .filter{$0._isSelected}
+            .forEach{ customCell in
+                customCell.deselect()
+            }
+        
+        if let cell = calendar.cell(for:date, at: monthPosition) as? FSCalendarCustomCell{
+            cell.select()
         }
-        setTableView(selectedDate)
+        
+        selectedDate = date
         setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
         setMonthPaymentModelList()
@@ -562,8 +569,53 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: position) as! FSCalendarCustomCell
         cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
+        cell.labelsDate = date
         cell.paymentLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
         cell.incomeLabel.text = getComma(realm.objects(JournalModel.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        
+        if date.zeroclock == selectedDate.zeroclock{
+            cell.select()
+        }else{
+            cell.deselect()
+        }
+        
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        
+        let year = calendar.dateComponents([.year], from: date)
+        let intYear = year.year!
+        
+        let month = calendar.dateComponents([.month], from: date)
+        let intMonth = month.month!
+        
+        let day = calendar.dateComponents([.day], from: date)
+        let intDay = day.day!
+        
+        var holidayArray:[Date] = []
+        func judgeHoliday(year:Int,month:Int,day:Int){
+            let result = holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
+            if result == true{
+                holidayArray.append(calendar.date(from:DateComponents(year:intYear,month:intMonth,day: intDay))!.zeroclock)
+            }
+        }
+        judgeHoliday(year: intYear, month: intMonth, day: intDay)
+        
+        let targetMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedDate))?.zeroclock
+        let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
+        let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
+        
+        if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
+            cell.dayLabel.textColor = .red
+        }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
+            cell.dayLabel.textColor = UIColor.blue
+        }else if weekday == 1 && date >= startOfMonth && date <= endOfMonth{ // 日曜日または祝日
+            cell.dayLabel.textColor = UIColor.red
+        }else if date >= startOfMonth && date <= endOfMonth{
+            cell.dayLabel.textColor = UIColor.black
+        }else{
+            cell.dayLabel.textColor = UIColor.lightGray
+        }
+        
         if cell.paymentLabel.text != "0"{
             cell.paymentLabel.textColor = .red
         }else{
@@ -579,28 +631,41 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         if isButtonPush == false{
-            displayDate = calendar.currentPage.zeroclock
-            dateLabel.text = util.monthDateFormatter.string(from: displayDate)
-            selectedDate = displayDate
+            let calendar = Calendar(identifier: .gregorian)
+            let currentPage = calendarView.currentPage //現在表示しているページの日付
+            let minus = DateComponents(month: -1)
+            let add = DateComponents(month: 1)
             
-            dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
-            calendarView.select(selectedDate)
-            setTableView(selectedDate)
-            setDisplayJournalList(selectedDate)
-            setIncomeTableView(selectedDate)
-            setSubLabel()
-            setMonthPaymentModelList()
-            setMonthIncomeModelList()
-            paymentLabel.text = getComma(setMonthPayment())
-            incomeLabel.text = getComma(setMonthIncome())
-            householdAccountBookTableView.reloadData()
-            view.layoutIfNeeded()
-            view.updateConstraints()
+            let lastDay = calendar.date(byAdding: add, to: currentPage)!.zeroclock
+            let comparePrevDay = calendar.date(byAdding: minus, to: selectedDate.zeroclock)
+            let compareNextDay = calendar.date(byAdding: add, to: selectedDate.zeroclock)
+            
+            if comparePrevDay! >= currentPage && comparePrevDay! <= lastDay{//先月に移動した場合
+                selectedDate = calendar.date(byAdding: minus, to: selectedDate)!
+                
+                dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
+                calendarView.select(selectedDate)
+                setTableView(selectedDate)
+                setDisplayJournalList(selectedDate)
+                setSubLabel()
+                setMonthPaymentModelList()
+                paymentLabel.text = getComma(setMonthPayment())
+                incomeLabel.text = getComma(setMonthIncome())
+                
+            }else if compareNextDay! >= currentPage && compareNextDay! <= lastDay{//翌月に移動した場合
+                selectedDate = calendar.date(byAdding: add, to: selectedDate)!
+                dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
+                calendarView.select(selectedDate)
+                setTableView(selectedDate)
+                setDisplayJournalList(selectedDate)
+                setSubLabel()
+                setMonthPaymentModelList()
+                paymentLabel.text = getComma(setMonthPayment())
+                incomeLabel.text = getComma(setMonthIncome())
+            }
             calendarView.reloadData()
-        }else{
-            return
+            householdAccountBookTableView.reloadData()
+            diaryTableView.reloadData()
         }
     }
-    
-    
 }
