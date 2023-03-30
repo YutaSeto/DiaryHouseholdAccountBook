@@ -35,7 +35,6 @@ class HouseholdAccountBookViewController:UIViewController{
     
     @IBOutlet weak var sumPaymentTableView: UITableView!
     @IBOutlet weak var paymentTableView: UITableView!
-    @IBOutlet weak var inputButton: UIButton!
     @IBOutlet weak var paymentPieGraphView: PieChartView!
     @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
     
@@ -45,7 +44,6 @@ class HouseholdAccountBookViewController:UIViewController{
     var incomeBudgetList:[BudgetModel] = []
     var incomeCategoryList:[CategoryModel] = []
     var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
-    @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var incomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
@@ -80,7 +78,6 @@ class HouseholdAccountBookViewController:UIViewController{
         addPaymentView()
         settingSubView()
         setDelegateAndDataSource()
-        configureInputButton()
         setPaymentData()
         setIncomeData()
         setPaymentBudgetData()
@@ -309,9 +306,6 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     //支出画面関連
-    @IBAction func inputButton(_ sender: Any) {
-        tapInputButton()
-    }
     
     func setCategoryData(){
         let realm = try! Realm()
@@ -369,19 +363,6 @@ class HouseholdAccountBookViewController:UIViewController{
             setPaymentPieGraphView()
             paymentPieGraphView.data = setPaymentPieGraphData()
         }
-    }
-    
-    func configureInputButton(){
-        inputButton.layer.cornerRadius = inputButton.bounds.width / 2
-        addIncomeButton.layer.cornerRadius = addIncomeButton.bounds.width / 2
-    }
-    
-    func  tapInputButton(){
-        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
-        let navigationController = UINavigationController(rootViewController: inputViewController)
-        inputViewController.inputViewControllerDelegate = self
-        self.present(navigationController,animated:true)
     }
     
     func setPaymentTableViewDataSourse(){
@@ -469,18 +450,7 @@ class HouseholdAccountBookViewController:UIViewController{
     
     
     //収入画面関連
-    
-    @IBAction func addIncomeButton(_ sender: UIButton) {
-        tapAddIncomeButton()
-    }
-    
-    func tapAddIncomeButton(){
-        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
-        let navigationController = UINavigationController(rootViewController: inputViewController)
-        inputViewController.inputViewControllerDelegate = self
-        self.present(navigationController,animated:true)
-    }
+
     
     func setIncomeData(){
         let realm = try! Realm()
@@ -617,12 +587,25 @@ class HouseholdAccountBookViewController:UIViewController{
     func setNavigationBarButton(){
         let buttonActionSelector: Selector = #selector(showMenuButton)
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
+        
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.title = "家計簿"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        let leftButtonActionSelector: Selector = #selector(showInputView)
+        let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
+        navigationItem.leftBarButtonItem = leftBarButton
     }
-
+    
+    @objc func showInputView(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+        let navigationController = UINavigationController(rootViewController: inputViewController)
+        inputViewController.inputViewControllerDelegate = self
+        self.present(navigationController,animated:true)
+    }
+    
     @objc func showMenuButton(){
         showMenu(shouldExpand: isExpanded)
     }

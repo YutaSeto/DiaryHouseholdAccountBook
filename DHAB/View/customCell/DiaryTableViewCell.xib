@@ -11,56 +11,57 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="customCell" rowHeight="127" id="KGk-i7-Jjw" customClass="DiaryTableViewCell" customModule="DHAB" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="511" height="127"/>
+            <rect key="frame" x="0.0" y="0.0" width="450" height="127"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="511" height="127"/>
+                <rect key="frame" x="0.0" y="0.0" width="450" height="127"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="タイトル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDy-el-dRb">
-                        <rect key="frame" x="112" y="10" width="70" height="20.333333333333329"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ofU-xl-6wP">
-                        <rect key="frame" x="369" y="0.0" width="142" height="128"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="本文" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dts-eX-Sa9">
-                        <rect key="frame" x="112" y="38" width="34.666666666666664" height="58.666666666666657"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="4ea-2m-UFH">
-                        <rect key="frame" x="0.0" y="0.0" width="80" height="127"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSc-4J-EYU">
-                                <rect key="frame" x="0.0" y="86.333333333333329" width="80" height="20.333333333333329"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曜日" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x76-Yp-WjN">
-                                <rect key="frame" x="0.0" y="106.66666666666667" width="80" height="20.333333333333329"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ofU-xl-6wP">
+                        <rect key="frame" x="365" y="5" width="80" height="117"/>
                         <constraints>
-                            <constraint firstItem="iSc-4J-EYU" firstAttribute="top" secondItem="4ea-2m-UFH" secondAttribute="top" constant="50" id="Rx3-89-eWX"/>
-                            <constraint firstAttribute="width" constant="80" id="yWz-sW-Trr"/>
+                            <constraint firstAttribute="width" constant="80" id="Wwa-lE-a0v"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="geU-2v-PCn"/>
                         </constraints>
-                    </stackView>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="本文" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dts-eX-Sa9">
+                        <rect key="frame" x="80" y="45.333333333333336" width="275" height="20.333333333333336"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSc-4J-EYU">
+                        <rect key="frame" x="14.999999999999996" y="14.999999999999998" width="34.666666666666657" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曜日" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x76-Yp-WjN">
+                        <rect key="frame" x="14.999999999999996" y="65.333333333333329" width="34.666666666666657" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="タイトル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDy-el-dRb">
+                        <rect key="frame" x="80" y="14.999999999999998" width="70" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="4ea-2m-UFH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="4cJ-2L-FKw"/>
-                    <constraint firstItem="4ea-2m-UFH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="AWa-lF-vAR"/>
-                    <constraint firstAttribute="bottom" secondItem="4ea-2m-UFH" secondAttribute="bottom" id="Ov2-49-jee"/>
+                    <constraint firstItem="iSc-4J-EYU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="3Mk-hR-P99"/>
+                    <constraint firstAttribute="trailing" secondItem="ofU-xl-6wP" secondAttribute="trailing" constant="5" id="F4U-Ga-vWM"/>
+                    <constraint firstItem="ofU-xl-6wP" firstAttribute="leading" secondItem="Dts-eX-Sa9" secondAttribute="trailing" constant="10" id="LWl-WS-249"/>
+                    <constraint firstItem="ofU-xl-6wP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="MUK-MS-a4h"/>
+                    <constraint firstItem="Dts-eX-Sa9" firstAttribute="top" secondItem="yDy-el-dRb" secondAttribute="bottom" constant="10" id="RzH-JE-Rs7"/>
+                    <constraint firstItem="yDy-el-dRb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="80" id="Uth-jL-oP0"/>
+                    <constraint firstAttribute="bottom" secondItem="ofU-xl-6wP" secondAttribute="bottom" constant="5" id="bED-bt-Gdc"/>
+                    <constraint firstItem="Dts-eX-Sa9" firstAttribute="leading" secondItem="yDy-el-dRb" secondAttribute="leading" id="c7G-sC-FEe"/>
+                    <constraint firstItem="yDy-el-dRb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="dSo-iA-XgF"/>
+                    <constraint firstItem="iSc-4J-EYU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="djm-VT-vWb"/>
+                    <constraint firstItem="x76-Yp-WjN" firstAttribute="leading" secondItem="iSc-4J-EYU" secondAttribute="leading" id="eaY-V2-PBj"/>
+                    <constraint firstItem="x76-Yp-WjN" firstAttribute="top" secondItem="iSc-4J-EYU" secondAttribute="bottom" constant="30" id="fAU-lC-Ddf"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -69,8 +70,9 @@
                 <outlet property="cellTextLabel" destination="Dts-eX-Sa9" id="5L8-5c-3to"/>
                 <outlet property="cellTitleLabel" destination="yDy-el-dRb" id="eGV-YM-aQS"/>
                 <outlet property="dayOfWeekLabel" destination="x76-Yp-WjN" id="WTe-B3-k28"/>
+                <outlet property="thumbnailImageView" destination="ofU-xl-6wP" id="F8c-IU-t77"/>
             </connections>
-            <point key="canvasLocation" x="63.358778625954194" y="-58.098591549295776"/>
+            <point key="canvasLocation" x="16.793893129770993" y="-58.098591549295776"/>
         </tableViewCell>
     </objects>
 </document>

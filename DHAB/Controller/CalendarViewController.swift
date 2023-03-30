@@ -76,6 +76,7 @@ class CalendarViewController:UIViewController{
         setSubLabel()
         setSum()
         dateLabel.text = util.monthDateFormatter.string(from: date)
+        print(diaryModelList)
     }
     
     
@@ -350,9 +351,22 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
         }else if tableView === diaryTableView{
             let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
             let item = setDiaryTableView(selectedDate)[indexPath.row]
-            cell.cellDateLabel.text = util.dayDateFormatter.string(from: item.date)
-            cell.cellTextLabel.text = item.text
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineBreakMode = .byTruncatingTail
+            let attributedText = NSAttributedString(string:item.text,attributes:[.font:cell.cellTextLabel.font!,.paragraphStyle: paragraphStyle])
+            
+            cell.cellDateLabel.text = util.onliDayDateFormatter.string(from: item.date)
+            cell.dayOfWeekLabel.text = util.dayOfWeekDateFormatter.string(from: item.date)
+            cell.cellTextLabel.attributedText = attributedText
+            cell.cellTextLabel.sizeToFit()
             cell.cellTitleLabel.text = item.title
+            
+            
+            
+            if item.pictureList.count != 0{
+                cell.thumbnailImageView.image = UIImage(data: item.pictureList[0])
+            }
             return cell
         }
         return UITableViewCell()
@@ -440,6 +454,14 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             }
         }
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView === diaryTableView{
+            return 120.0
+        }
+        return UITableView.automaticDimension
+    }
+    
 }
 
 extension CalendarViewController:InputViewControllerDelegate{
@@ -527,12 +549,21 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        calendar.calendarWeekdayView.weekdayLabels[0].textColor = .red
+        calendar.calendarWeekdayView.weekdayLabels[6].textColor = .blue
+        calendar.calendarWeekdayView.weekdayLabels[1].textColor = .black
+        calendar.calendarWeekdayView.weekdayLabels[2].textColor = .black
+        calendar.calendarWeekdayView.weekdayLabels[3].textColor = .black
+        calendar.calendarWeekdayView.weekdayLabels[4].textColor = .black
+        calendar.calendarWeekdayView.weekdayLabels[5].textColor = .black
         return UIColor.clear
     }
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor?{
         return UIColor.clear
     }
+    
+    
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
@@ -546,6 +577,10 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         if let cell = calendar.cell(for:date, at: monthPosition) as? FSCalendarCustomCell{
             cell.select()
+        }
+        
+        if monthPosition != .current{
+            calendar.setCurrentPage(date, animated: true)
         }
         
         selectedDate = date
@@ -604,17 +639,6 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
         
-        if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
-            cell.dayLabel.textColor = .red
-        }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
-            cell.dayLabel.textColor = UIColor.blue
-        }else if weekday == 1 && date >= startOfMonth && date <= endOfMonth{ // 日曜日または祝日
-            cell.dayLabel.textColor = UIColor.red
-        }else if date >= startOfMonth && date <= endOfMonth{
-            cell.dayLabel.textColor = UIColor.black
-        }else{
-            cell.dayLabel.textColor = UIColor.lightGray
-        }
         
         if cell.paymentLabel.text != "0"{
             cell.paymentLabel.textColor = .red
@@ -626,6 +650,29 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         }else{
             cell.incomeLabel.textColor = .clear
         }
+        
+        if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
+            cell.dayLabel.textColor = .red
+        }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
+            cell.dayLabel.textColor = UIColor.blue
+        }else if weekday == 1 && date >= startOfMonth && date <= endOfMonth{ // 日曜日または祝日
+            cell.dayLabel.textColor = UIColor.red
+        }else if date >= startOfMonth && date <= endOfMonth{
+            cell.dayLabel.textColor = UIColor.black
+        }else{
+            cell.dayLabel.textColor = UIColor.lightGray
+            cell.paymentLabel.textColor = UIColor.lightGray
+            cell.incomeLabel.textColor = UIColor.lightGray
+            
+            if cell.paymentLabel.text == "0"{
+                cell.paymentLabel.textColor = .clear
+            }
+            if cell.incomeLabel.text == "0"{
+                cell.incomeLabel.textColor = .clear
+            }
+            
+        }
+        
         return cell
     }
     
@@ -643,26 +690,18 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             if comparePrevDay! >= currentPage && comparePrevDay! <= lastDay{//先月に移動した場合
                 selectedDate = calendar.date(byAdding: minus, to: selectedDate)!
                 
-                dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
-                calendarView.select(selectedDate)
-                setTableView(selectedDate)
-                setDisplayJournalList(selectedDate)
-                setSubLabel()
-                setMonthPaymentModelList()
-                paymentLabel.text = getComma(setMonthPayment())
-                incomeLabel.text = getComma(setMonthIncome())
                 
             }else if compareNextDay! >= currentPage && compareNextDay! <= lastDay{//翌月に移動した場合
                 selectedDate = calendar.date(byAdding: add, to: selectedDate)!
-                dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
-                calendarView.select(selectedDate)
-                setTableView(selectedDate)
-                setDisplayJournalList(selectedDate)
-                setSubLabel()
-                setMonthPaymentModelList()
-                paymentLabel.text = getComma(setMonthPayment())
-                incomeLabel.text = getComma(setMonthIncome())
             }
+            dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
+            calendarView.select(selectedDate)
+            setTableView(selectedDate)
+            setDisplayJournalList(selectedDate)
+            setSubLabel()
+            setMonthPaymentModelList()
+            paymentLabel.text = getComma(setMonthPayment())
+            incomeLabel.text = getComma(setMonthIncome())
             calendarView.reloadData()
             householdAccountBookTableView.reloadData()
             diaryTableView.reloadData()
