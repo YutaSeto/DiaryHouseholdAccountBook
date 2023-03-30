@@ -43,16 +43,16 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         }
     }
     
-    func setSectionMonth(){
-        for diary in diaryList{
-            let date = diary.date
-            util.monthDateFormatter.string(from: date)
-            if diaryByMonth[month] == nil{
-                diaryByMonth[month] = [Diary]()
-                monthArray.append(month)
-            }
-        }
-    }
+//    func setSectionMonth(){
+//        for diary in diaryList{
+//            let date = diary.date
+//            util.monthDateFormatter.string(from: date)
+//            if diaryByMonth[month] == nil{
+//                diaryByMonth[month] = [Diary]()
+//                monthArray.append(month)
+//            }
+//        }
+//    }
     
     func setNavigationBarButton(){
         navigationItem.title = "日記"

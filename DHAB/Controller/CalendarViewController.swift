@@ -34,11 +34,9 @@ class CalendarViewController:UIViewController{
     
     private var displayJournalList:[JournalModel] = []
     
-    @IBOutlet weak var subDateLabel: UILabel!
-    @IBOutlet weak var subPaymentLabel: UILabel!
-    @IBOutlet weak var subIncomeLabel: UILabel!
     @IBOutlet weak var paymentLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
+    @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var householdAccountBookTableView: UITableView!
     @IBOutlet weak var diaryTableView: UITableView!
@@ -73,7 +71,6 @@ class CalendarViewController:UIViewController{
         settingSubView()
         setMonthPaymentModelList()
         setMonthIncomeModelList()
-        setSubLabel()
         setSum()
         dateLabel.text = util.monthDateFormatter.string(from: date)
         print(diaryModelList)
@@ -90,6 +87,7 @@ class CalendarViewController:UIViewController{
             setMonthPaymentModelList()
             paymentLabel.text = getComma(setMonthPayment())
             incomeLabel.text = getComma(setMonthIncome())
+            balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
             calendarView.reloadData()
             householdAccountBookTableView.reloadData()
             diaryTableView.reloadData()
@@ -97,7 +95,6 @@ class CalendarViewController:UIViewController{
             view.updateConstraints()
             RecognitionChange.shared.updateCalendar = false
         }
-        setSubLabel()
         setMonthPaymentModelList()
         setMonthIncomeModelList()
     }
@@ -116,10 +113,10 @@ class CalendarViewController:UIViewController{
         calendarView.select(selectedDate)
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
-        setSubLabel()
         setMonthPaymentModelList()
         paymentLabel.text = getComma(setMonthPayment())
         incomeLabel.text = getComma(setMonthIncome())
+        balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
         calendarView.setCurrentPage(prevMonth, animated: true)
         isButtonPush = false
     }
@@ -133,10 +130,10 @@ class CalendarViewController:UIViewController{
         calendarView.select(selectedDate)
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
-        setSubLabel()
         setMonthPaymentModelList()
         paymentLabel.text = getComma(setMonthPayment())
         incomeLabel.text = getComma(setMonthIncome())
+        balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
         calendarView.setCurrentPage(nextMonth, animated: true)
         isButtonPush = false
     }
@@ -241,13 +238,9 @@ class CalendarViewController:UIViewController{
     func setSum(){
         paymentLabel.text = getComma(setMonthPayment())
         incomeLabel.text = getComma(setMonthIncome())
+        balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
     }
     
-    func setSubLabel(){
-        subDateLabel.text = util.dayDateFormatter.string(from: selectedDate)
-        subPaymentLabel.text = getComma(sumPayment(selectedDate))
-        subIncomeLabel.text = getComma(sumIncome(selectedDate))
-    }
     
     func setMonthPayment()-> Int{
         let calendar = Calendar(identifier: .gregorian)
@@ -386,7 +379,6 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                     monthIncomeModelList.remove(at: index)
                 }
                 setSum()
-                setSubLabel()
                 calendarView.reloadData()
                 
                 try! realm.write{
@@ -504,7 +496,6 @@ extension CalendarViewController:InputViewControllerDelegate{
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
-        setSubLabel()
         householdAccountBookTableView.reloadData()
         
         view.layoutIfNeeded()
@@ -515,7 +506,6 @@ extension CalendarViewController:InputViewControllerDelegate{
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
         setIncomeTableView(selectedDate)
-        setSubLabel()
         householdAccountBookTableView.reloadData()
         
         view.layoutIfNeeded()
@@ -534,7 +524,7 @@ extension CalendarViewController:InputViewControllerDelegate{
         setIncomeTableView(selectedDate)
         paymentLabel.text = getComma(sumPayment(selectedDate))
         incomeLabel.text = getComma(sumIncome(selectedDate))
-        setSubLabel()
+        balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
         calendarView.reloadData()
         householdAccountBookTableView.reloadData()
         view.layoutIfNeeded()
@@ -590,7 +580,8 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         setMonthIncomeModelList()
         paymentLabel.text = getComma(setMonthPayment())
         incomeLabel.text = getComma(setMonthIncome())
-        setSubLabel()
+        
+        balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         householdAccountBookTableView.reloadData()
         diaryTableView.reloadData()
@@ -698,10 +689,10 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             calendarView.select(selectedDate)
             setTableView(selectedDate)
             setDisplayJournalList(selectedDate)
-            setSubLabel()
             setMonthPaymentModelList()
             paymentLabel.text = getComma(setMonthPayment())
             incomeLabel.text = getComma(setMonthIncome())
+            balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
             calendarView.reloadData()
             householdAccountBookTableView.reloadData()
             diaryTableView.reloadData()

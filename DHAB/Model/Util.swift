@@ -27,7 +27,7 @@ class Util:UIViewController{
     
     public var dayDateFormatter:DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年M月dd日"
+        dateFormatter.dateFormat = "yy年M月d日"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
@@ -42,9 +42,16 @@ class Util:UIViewController{
     }
     
     public var dayOfWeekDateFormatter:DateFormatter{
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
+        dateFormatter.locale = Locale(identifier: "ja-JP")
+        return dateFormatter
+    }
+    
+    public var monthAndDayDateFormatter:DateFormatter{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M月d日"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
