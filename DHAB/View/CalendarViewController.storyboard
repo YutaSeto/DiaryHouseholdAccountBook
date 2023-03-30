@@ -50,7 +50,7 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="css-5S-DnE">
-                                <rect key="frame" x="0.0" y="392" width="393" height="32"/>
+                                <rect key="frame" x="0.0" y="387" width="393" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="akg-LM-MKf"/>
                                 </constraints>
@@ -63,7 +63,7 @@
                                 </connections>
                             </segmentedControl>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cnc-5J-WYa">
-                                <rect key="frame" x="20.000000000000004" y="351.33333333333331" width="43.333333333333343" height="40.666666666666686"/>
+                                <rect key="frame" x="20.000000000000004" y="346.33333333333331" width="43.333333333333343" height="40.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="支出" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VJf-hq-Hty">
                                         <rect key="frame" x="0.0" y="0.0" width="43.333333333333336" height="20.333333333333332"/>
@@ -94,7 +94,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="i9M-8M-WB1">
-                                <rect key="frame" x="179.33333333333334" y="351.33333333333331" width="34.666666666666657" height="40.666666666666686"/>
+                                <rect key="frame" x="179.33333333333334" y="346.33333333333331" width="34.666666666666657" height="40.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="収入" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19N-kI-EUS">
                                         <rect key="frame" x="0.0" y="0.0" width="34.666666666666664" height="20.333333333333332"/>
@@ -125,7 +125,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="e2c-2z-Yth">
-                                <rect key="frame" x="335.33333333333331" y="351.33333333333331" width="37.666666666666686" height="40.666666666666686"/>
+                                <rect key="frame" x="335.33333333333331" y="346.33333333333331" width="37.666666666666686" height="40.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="合計" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HPy-pj-9n1">
                                         <rect key="frame" x="0.0" y="0.0" width="37.666666666666664" height="20.333333333333332"/>
@@ -164,15 +164,15 @@
                             <constraint firstItem="css-5S-DnE" firstAttribute="trailing" secondItem="xMG-n1-35c" secondAttribute="trailing" id="MZ5-d2-Isd"/>
                             <constraint firstItem="i9M-8M-WB1" firstAttribute="centerX" secondItem="zSf-2P-KYT" secondAttribute="centerX" id="NPb-ZX-eMV"/>
                             <constraint firstItem="Q4b-87-1kI" firstAttribute="leading" secondItem="3i0-um-rZR" secondAttribute="trailing" constant="30" id="NaZ-GL-4qB"/>
-                            <constraint firstItem="i9M-8M-WB1" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="5" id="PfA-j1-cwa"/>
+                            <constraint firstItem="i9M-8M-WB1" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="PfA-j1-cwa"/>
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="top" secondItem="W3f-Xy-uYG" secondAttribute="bottom" id="QNd-8Y-ouD"/>
                             <constraint firstItem="cnc-5J-WYa" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" constant="20" id="TNU-or-qpk"/>
                             <constraint firstItem="3i0-um-rZR" firstAttribute="top" secondItem="xMG-n1-35c" secondAttribute="top" constant="10" id="WEh-hB-HoI"/>
                             <constraint firstItem="3i0-um-rZR" firstAttribute="centerX" secondItem="zSf-2P-KYT" secondAttribute="centerX" id="axL-2r-lHZ"/>
                             <constraint firstItem="Q4b-87-1kI" firstAttribute="centerY" secondItem="W3f-Xy-uYG" secondAttribute="centerY" id="eG9-5p-I8C"/>
-                            <constraint firstItem="cnc-5J-WYa" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="5" id="kah-vY-iy6"/>
+                            <constraint firstItem="cnc-5J-WYa" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="kah-vY-iy6"/>
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="lKZ-HS-FzP"/>
-                            <constraint firstItem="e2c-2z-Yth" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" constant="5" id="mng-Gs-naA"/>
+                            <constraint firstItem="e2c-2z-Yth" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="mng-Gs-naA"/>
                             <constraint firstItem="3i0-um-rZR" firstAttribute="leading" secondItem="W3f-Xy-uYG" secondAttribute="trailing" constant="30" id="or5-No-pfV"/>
                             <constraint firstItem="css-5S-DnE" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="uS2-s0-w36"/>
                             <constraint firstAttribute="trailing" secondItem="REY-mA-5Sv" secondAttribute="trailing" id="wE1-KA-Si8"/>

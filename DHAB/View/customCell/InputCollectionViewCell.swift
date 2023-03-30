@@ -21,7 +21,7 @@ class InputCollectionViewCell: UICollectionViewCell {
     
     func toggleSelection(){
         if categoryLabel.text == journal?.category{
-            self.contentView.backgroundColor = .lightGray
+            self.backgroundColor = .lightGray
             journal = nil
         }
     }

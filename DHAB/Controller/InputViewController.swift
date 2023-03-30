@@ -29,8 +29,6 @@ class InputViewController:UIViewController{
     @IBOutlet weak var segmentedControlHeight: NSLayoutConstraint!
     //家計簿記入画面関連
     var journal:JournalModel? = nil
-    var selectedIndexPath: IndexPath?
-    var selectedIncomeIndexPath: IndexPath?
     var isPayment:Bool = true
     let util = Util()
     let realm = try! Realm()
@@ -365,16 +363,29 @@ class InputViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = true
             dismiss(animated: true)
         }else if journal != nil{ //paymetTableViewを選択した場合
-            let realm = try! Realm()
-            try! realm.write{
-                journal?.date = date
-                journal?.isPayment = isPayment
-                journal?.price = Int(priceTextField.text!) ?? 0
-                journal?.category = resultLabel.text!
-                journal?.memo = memoTextField.text!
-            }
-            if isPayment == false{
-                inputViewControllerDelegate?.changeFromPaymentToIncome()
+            if journal?.isPayment == true{
+                let realm = try! Realm()
+                try! realm.write{
+                    journal?.date = date
+                    journal?.isPayment = isPayment
+                    journal?.price = Int(priceTextField.text!) ?? 0
+                    journal?.category = resultLabel.text!
+                    journal?.memo = memoTextField.text!
+                }
+                if isPayment == false{
+                    inputViewControllerDelegate?.changeFromPaymentToIncome()
+                }
+            }else if journal?.isPayment == false{
+                try! realm.write{
+                    journal?.date = date
+                    journal?.isPayment = isPayment
+                    journal?.price = Int(priceTextField.text!) ?? 0
+                    journal?.category = resultLabel.text!
+                    journal?.memo = memoTextField.text!
+                }
+                if isPayment == true{
+                    inputViewControllerDelegate?.changeFromIncomeToPayment()
+                }
             }
             inputViewControllerDelegate?.updatePayment()
             inputViewControllerDelegate?.updateCalendar()
@@ -616,8 +627,8 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
 
             if journal != nil{
                 cell.journal = journal!
-                cell.toggleSelection()
             }
+            cell.toggleSelection()
             return cell
         }
         return UICollectionViewCell()
@@ -653,24 +664,24 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView === paymentCollectionView{
             let cell = collectionView.cellForItem(at: indexPath)
-            cell?.backgroundColor = .lightGray
             resultLabel.text = categoryList[indexPath.row].name
-            if selectedIndexPath != nil{
-                if indexPath != selectedIndexPath{
-                    paymentCollectionView.cellForItem(at:selectedIndexPath!)?.backgroundColor = .white
-                    selectedIndexPath = indexPath
-                }
-            }else{
-                selectedIndexPath = indexPath
+            
+            for i in 0 ..< categoryList.count{
+                collectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
+            cell?.backgroundColor = .lightGray
+            
+            for i in 0 ..< incomeCategoryList.count{
+                incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
+            }
+            cell?.backgroundColor = .lightGray
+            
             if priceTextField.text != ""{
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
             isPayment = true
-            guard selectedIncomeIndexPath != nil else{return}
-            incomeCollectionView.cellForItem(at: selectedIncomeIndexPath!)?.backgroundColor = .white
-            selectedIncomeIndexPath = nil
+            
             return
         }else if collectionView === imageCollectionView{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
@@ -684,23 +695,22 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
         }else if collectionView === incomeCollectionView{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
             resultLabel.text = incomeCategoryList[indexPath.row].name
-            if selectedIncomeIndexPath != nil{
-                if indexPath != selectedIncomeIndexPath{
-                    incomeCollectionView.cellForItem(at:selectedIncomeIndexPath!)?.backgroundColor = .white
-                    selectedIncomeIndexPath = indexPath
-                }
-            }else{
-                selectedIncomeIndexPath = indexPath
+            
+            for i in 0 ..< categoryList.count{
+                paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
+            cell?.backgroundColor = .lightGray
+            
+            for i in 0 ..< incomeCategoryList.count{
+                incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
+            }
+            cell?.backgroundColor = .lightGray
+            
             if priceTextField.text != ""{
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
             isPayment = false
-            cell?.backgroundColor = .lightGray
-            guard selectedIndexPath != nil else{return}
-            paymentCollectionView.cellForItem(at: selectedIndexPath!)?.backgroundColor = .white
-            selectedIndexPath = nil
             return
         }
     }

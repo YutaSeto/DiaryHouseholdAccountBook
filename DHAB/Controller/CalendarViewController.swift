@@ -21,6 +21,7 @@ class CalendarViewController:UIViewController{
     var sumPayment:Int = 0
     var isButtonPush:Bool = false
     var deleteIndexPath:IndexPath = IndexPath(row: 0, section: 0)
+    var displayTableViewIndexPath:IndexPath?
     var income:JournalModel?
     var payment:JournalModel?
     
@@ -409,12 +410,14 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             inputViewController.inputViewControllerDelegate = self
             inputViewController.journal? = displayJournalList[indexPath.row]
             if journal.isPayment == false{
+                income = journal
                 inputViewController.isPayment = false
                 inputViewController.setPaymentData(data: displayJournalList[indexPath.row])
                 inputCollectionViewCell.journal = journal
                 present(navigationController,animated:true)
                 tableView.deselectRow(at: indexPath, animated: true)
             }else if journal.isPayment == true{
+                payment = journal
                 inputViewController.setPaymentData(data: displayJournalList[indexPath.row])
                 inputCollectionViewCell.journal = journal
                 present(navigationController,animated:true)
@@ -457,8 +460,9 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
 }
 
 extension CalendarViewController:InputViewControllerDelegate{
+    
     func changeFromPaymentToIncome() {
-        displayPaymentList.remove(at: deleteIndexPath.row)
+        displayJournalList.remove(at: deleteIndexPath.row)
         householdAccountBookTableView.deleteRows(at: [deleteIndexPath], with: .automatic)
         let index:Int = monthPaymentModelList.firstIndex(where: {$0.id == payment!.id})!
         monthPaymentModelList.remove(at: index)
@@ -474,11 +478,13 @@ extension CalendarViewController:InputViewControllerDelegate{
     }
     
     func changeFromIncomeToPayment() {
-        displayIncomeList.remove(at: deleteIndexPath.row)
+        displayJournalList.remove(at: deleteIndexPath.row)
+        householdAccountBookTableView.deleteRows(at: [deleteIndexPath], with: .automatic)
         let index:Int = monthIncomeModelList.firstIndex(where: {$0.id == income!.id})!
         monthIncomeModelList.remove(at: index)
+        
         displayPaymentList.append(income!)
-        householdAccountBookTableView.insertRows(at: [IndexPath(row: displayPaymentList.count - 1, section: 0)], with: .automatic)
+//        householdAccountBookTableView.insertRows(at: [IndexPath(row: displayPaymentList.count - 1, section: 0)], with: .automatic)
         monthPaymentModelList.append(income!)
         householdAccountBookTableView.reloadData()
         
