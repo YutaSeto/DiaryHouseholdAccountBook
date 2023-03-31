@@ -611,18 +611,15 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             cell.deselect()
         }
         
+        //祝日判定
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: date)
-        
         let year = calendar.dateComponents([.year], from: date)
         let intYear = year.year!
-        
         let month = calendar.dateComponents([.month], from: date)
         let intMonth = month.month!
-        
         let day = calendar.dateComponents([.day], from: date)
         let intDay = day.day!
-        
         var holidayArray:[Date] = []
         func judgeHoliday(year:Int,month:Int,day:Int){
             let result = holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
@@ -636,7 +633,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let startOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: targetMonth!)!.zeroclock
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
         
-        
+        //テキストの色変更
         if cell.paymentLabel.text != "0"{
             cell.paymentLabel.textColor = .red
         }else{
@@ -648,6 +645,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             cell.incomeLabel.textColor = .clear
         }
         
+        //日付の色変更+当月外のテキストの色変更
         if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{
             cell.dayLabel.textColor = .red
         }else if weekday == 7 && date >= startOfMonth && date <= endOfMonth{
@@ -667,7 +665,16 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             if cell.incomeLabel.text == "0"{
                 cell.incomeLabel.textColor = .clear
             }
-            
+        }
+        
+        //日記があると背景の色変更
+        //めちゃくちゃバグある
+        let dateList = diaryModelList.map({$0.date.zeroclock})
+        
+        let isEqualDate = dateList.contains(date.zeroclock)
+        print(dateList.contains(date.zeroclock))
+        if isEqualDate{
+            cell.backgroundColor = .orange
         }
         
         return cell

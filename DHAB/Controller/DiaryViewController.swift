@@ -17,8 +17,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     
     //日記関連
     private var diaryList: [DiaryModel] = []
-    private var diaryByMonth = [String: [DiaryModel]]()
-    
+    private var diaryByMonth:[String: [DiaryModel]] = [:]
     
     private var titleResult: Results<DiaryModel>?
     private var textResult: Results<DiaryModel>?
@@ -42,18 +41,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
             diaryTableView.reloadData()
         }
     }
-    
-//    func setSectionMonth(){
-//        for diary in diaryList{
-//            let date = diary.date
-//            util.monthDateFormatter.string(from: date)
-//            if diaryByMonth[month] == nil{
-//                diaryByMonth[month] = [Diary]()
-//                monthArray.append(month)
-//            }
-//        }
-//    }
-    
+        
     func setNavigationBarButton(){
         navigationItem.title = "日記"
         navigationController?.navigationBar.barStyle = .default
@@ -92,6 +80,15 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         let realm = try! Realm()
         let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
         diaryList = Array(result)
+        
+        for diary in diaryList{
+            let dateString = util.monthDateFormatter.string(from: diary.date)
+            if diaryByMonth[dateString] == nil{
+                diaryByMonth[dateString] = []
+            }
+            diaryByMonth[dateString]?.append(diary)
+        }
+        
         diaryTableView.reloadData()
     }
 }
@@ -127,26 +124,43 @@ extension DiaryViewController:InputViewControllerDelegate{
 }
 
 extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        return sortedKeys.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        diaryList.count
+        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let month = sortedKeys[section]
+        return diaryByMonth[month]?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let monthString = sortedKeys[section]
+        let date = util.monthDateFormatter.date(from: monthString)
+        return util.monthDateFormatter.string(from: date!)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
-        let diaryModel: DiaryModel = diaryList[indexPath.row]
+        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+//        let diaryModel: DiaryModel = diaryList[indexPath.row]
+        let month = sortedKeys[indexPath.section]
+        let diary = diaryByMonth[month]?[indexPath.row]
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingTail
-        let attributedText = NSAttributedString(string:diaryModel.text,attributes:[.font:cell.cellTextLabel.font!,.paragraphStyle: paragraphStyle])
+        let attributedText = NSAttributedString(string:diary!.text,attributes:[.font:cell.cellTextLabel.font!,.paragraphStyle: paragraphStyle])
         
         
-        cell.cellDateLabel.text = util.onliDayDateFormatter.string(from:diaryModel.date)
-        cell.dayOfWeekLabel.text = util.dayOfWeekDateFormatter.string(from: diaryModel.date)
-        cell.cellTitleLabel.text = diaryModel.title
+        cell.cellDateLabel.text = util.onliDayDateFormatter.string(from:diary!.date)
+        cell.dayOfWeekLabel.text = util.dayOfWeekDateFormatter.string(from: diary!.date)
+        cell.cellTitleLabel.text = diary!.title
         cell.cellTextLabel.attributedText = attributedText
         cell.cellTextLabel.sizeToFit()
-        if diaryModel.pictureList.count != 0{
-            cell.thumbnailImageView.image = UIImage(data: diaryModel.pictureList[0])
+        if diary!.pictureList.count != 0{
+            cell.thumbnailImageView.image = UIImage(data: diary!.pictureList[0])
         }
         return cell
     }
