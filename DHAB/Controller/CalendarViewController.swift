@@ -669,12 +669,11 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         //日記があると背景の色変更
         //めちゃくちゃバグある
-        let dateList = diaryModelList.map({$0.date.zeroclock})
-        
-        let isEqualDate = dateList.contains(date.zeroclock)
-        print(dateList.contains(date.zeroclock))
+        let isEqualDate = diaryModelList.contains(where: {$0.date.zeroclock == date.zeroclock})
         if isEqualDate{
             cell.backgroundColor = .orange
+        }else{
+            cell.backgroundColor = .white
         }
         
         return cell
