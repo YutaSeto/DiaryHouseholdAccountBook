@@ -10,12 +10,15 @@ import UIKit
 
 protocol PictureViewControllerDelegate{
     func deletePicuture()
+    func setAddDiaryButtonIsEnable()
 }
 
 class PictureViewController:UIViewController{
     
     var pictureViewControllerDelegate:PictureViewControllerDelegate?
     var inputViewControllerImage:Data!
+    var text:String?
+    var titleText:String?
     
     var image:Data!{
         didSet{
@@ -65,6 +68,9 @@ class PictureViewController:UIViewController{
 
     @objc func tapBackButton(){
         self.navigationController?.popViewController(animated: true)
+        if text != "" && titleText != ""{
+            pictureViewControllerDelegate?.setAddDiaryButtonIsEnable()
+        }
     }
     
     func setNavigationBarDeleteButton(){

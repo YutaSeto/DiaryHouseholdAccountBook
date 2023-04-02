@@ -114,7 +114,6 @@ class InputViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureAddButton()
         
         if isDiary == true{
             viewChangeSegmentedControl.selectedSegmentIndex = 1
@@ -348,87 +347,148 @@ class InputViewController:UIViewController{
     }
     
     private func tapAddButton(){
+        let text = priceTextField.text
         if journal == nil{
             let realm = try! Realm()
-            try! realm.write{
-                let journalModel = JournalModel()
-                journalModel.date = date
-                journalModel.price = Int(priceTextField.text!) ?? 0
-                journalModel.category = resultLabel.text!
-                journalModel.isPayment = isPayment
-                journalModel.memo = memoTextField.text!
-                realm.add(journalModel)
+            do{
+                try realm.write{
+                    let journalModel = try JournalModel(price:Int(text!)!,memo: memoTextField.text!, category: resultLabel.text!)
+                    journalModel.date = date
+                    journalModel.price = Int(text!)!
+                    journalModel.category = resultLabel.text!
+                    journalModel.isPayment = isPayment
+                    journalModel.memo = memoTextField.text!
+                    realm.add(journalModel)
+                }
+                inputViewControllerDelegate?.updatePayment()
+                RecognitionChange.shared.updateCalendar = true
+                dismiss(animated: true)
+            }catch JournalModel.ValidationError.invalidPriceLimit{
+                print("１億円を超えています")
+            }catch JournalModel.ValidationError.invalidMemoLimit{
+                print("メモの文字数は10文字以内で")
+            }catch{
+                print("エラーが発生")
             }
-            inputViewControllerDelegate?.updatePayment()
-            RecognitionChange.shared.updateCalendar = true
-            dismiss(animated: true)
         }else if journal != nil{ //paymetTableViewを選択した場合
-            if journal?.isPayment == true{
+            do{
                 let realm = try! Realm()
-                try! realm.write{
-                    journal?.date = date
-                    journal?.isPayment = isPayment
-                    journal?.price = Int(priceTextField.text!) ?? 0
-                    journal?.category = resultLabel.text!
-                    journal?.memo = memoTextField.text!
+                if journal?.isPayment == true{
+                    try realm.write{
+                        journal?.date = date
+                        journal?.isPayment = isPayment
+                        if let price = Int(text!),
+                           price < 100000000{
+                            journal?.price = price
+                        }else{
+                            throw JournalModel.ValidationError.invalidPriceLimit
+                        }
+                        journal?.price = Int(text!)!
+                        journal?.category = resultLabel.text!
+                        if memoTextField.text!.count <= 10{
+                            journal?.memo = memoTextField.text!
+                        }else{
+                            throw JournalModel.ValidationError.invalidMemoLimit
+                        }
+                    }
+                    if isPayment == false{
+                        inputViewControllerDelegate?.changeFromPaymentToIncome()
+                    }
+                }else if journal?.isPayment == false{
+                    try realm.write{
+                        journal?.date = date
+                        journal?.isPayment = isPayment
+                        if let price = Int(text!),
+                           price < 100000000{
+                            journal?.price = price
+                        }else{
+                            throw JournalModel.ValidationError.invalidPriceLimit
+                        }
+                        journal?.category = resultLabel.text!
+                        if memoTextField.text!.count <= 10{
+                            journal?.memo = memoTextField.text!
+                        }else{
+                            throw JournalModel.ValidationError.invalidMemoLimit
+                        }
+                    }
+                    if isPayment == true{
+                        inputViewControllerDelegate?.changeFromIncomeToPayment()
+                    }
                 }
-                if isPayment == false{
-                    inputViewControllerDelegate?.changeFromPaymentToIncome()
-                }
-            }else if journal?.isPayment == false{
-                try! realm.write{
-                    journal?.date = date
-                    journal?.isPayment = isPayment
-                    journal?.price = Int(priceTextField.text!) ?? 0
-                    journal?.category = resultLabel.text!
-                    journal?.memo = memoTextField.text!
-                }
-                if isPayment == true{
-                    inputViewControllerDelegate?.changeFromIncomeToPayment()
-                }
+                inputViewControllerDelegate?.updatePayment()
+                inputViewControllerDelegate?.updateCalendar()
+                RecognitionChange.shared.updateCalendar = true
+                journal = nil
+                dismiss(animated: true)
+            }catch JournalModel.ValidationError.invalidPriceLimit{
+                print("１億円を超えています")
+            }catch JournalModel.ValidationError.invalidMemoLimit{
+                print("メモは10文字以内で")
+            }catch{
+                print("エラーが発生")
             }
-            inputViewControllerDelegate?.updatePayment()
-            inputViewControllerDelegate?.updateCalendar()
-            RecognitionChange.shared.updateCalendar = true
-            journal = nil
-            dismiss(animated: true)
         }
     }
     
     private func tapContinueAddButton(){
         let realm = try! Realm()
         if journal == nil{
-            try! realm.write{
-                let journalModel = JournalModel()
-                journalModel.date = date.zeroclock
-                journalModel.price = Int(priceTextField.text!) ?? 0
-                journalModel.isPayment = isPayment
-                journalModel.category = resultLabel.text!
-                journalModel.memo = memoTextField.text!
-                realm.add(journalModel)
+            do{
+                try realm.write{
+                    let journalModel = try JournalModel(price: Int(priceTextField.text!)!, memo: memoTextField.text!, category: resultLabel.text!)
+                    journalModel.date = date.zeroclock
+                    journalModel.price = Int(priceTextField.text!) ?? 0
+                    journalModel.isPayment = isPayment
+                    journalModel.category = resultLabel.text!
+                    journalModel.memo = memoTextField.text!
+                    realm.add(journalModel)
+                }
+                inputViewControllerDelegate?.updatePayment()
+                RecognitionChange.shared.updateCalendar = true
+                resultLabel.text = ""
+                priceTextField.text = ""
+                addButton.isEnabled = false
+                continueAddButton.isEnabled = false
+            }catch JournalModel.ValidationError.invalidPriceLimit{
+                print("１億円を超えています")
+            }catch JournalModel.ValidationError.invalidMemoLimit{
+                print("メモは10文字以内で")
+            }catch{
+                print("エラーが発生")
             }
-            inputViewControllerDelegate?.updatePayment()
-            RecognitionChange.shared.updateCalendar = true
-            resultLabel.text = ""
-            priceTextField.text = ""
-            addButton.isEnabled = false
-            continueAddButton.isEnabled = false
         }else if journal != nil{
             let realm = try! Realm()
-            try! realm.write{
-                journal?.date = date.zeroclock
-                journal?.isPayment = isPayment
-                journal?.price = Int(priceTextField.text!) ?? 0
-                journal?.category = resultLabel.text!
-                journal?.memo = memoTextField.text!
+            do{
+                try realm.write{
+                    journal?.date = date.zeroclock
+                    journal?.isPayment = isPayment
+                    if let price = Int(priceTextField.text!),
+                       price < 100000000{
+                        journal?.price = price
+                    }else{
+                        throw JournalModel.ValidationError.invalidPriceLimit
+                    }
+                    journal?.category = resultLabel.text!
+                    if memoTextField.text!.count <= 10{
+                        journal?.memo = memoTextField.text!
+                    }else{
+                        throw JournalModel.ValidationError.invalidMemoLimit
+                    }
+                }
+                inputViewControllerDelegate?.updatePayment()
+                RecognitionChange.shared.updateCalendar = true
+                journal = nil
+                resultLabel.text = ""
+                priceTextField.text = ""
+                addButton.isEnabled = false
+                continueAddButton.isEnabled = false
+            }catch JournalModel.ValidationError.invalidPriceLimit{
+                print("１億円を超えています")
+            }catch JournalModel.ValidationError.invalidMemoLimit{
+                print("メモは10文字以内で")
+            }catch{
+                print("エラーが発生")
             }
-            inputViewControllerDelegate?.updatePayment()
-            RecognitionChange.shared.updateCalendar = true
-            journal = nil
-            resultLabel.text = ""
-            priceTextField.text = ""
-            addButton.isEnabled = false
-            continueAddButton.isEnabled = false
         }
     }
     
@@ -641,7 +701,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             let cellHeight = labelHeight + 10
             return CGSize(width: cellWidth, height: cellHeight)
         }else if collectionView === imageCollectionView{
-            let cellWidth = collectionView.frame.width / 5
+            let cellWidth = collectionView.frame.width / 3
             let cellHeight = cellWidth
             return CGSize(width: cellWidth, height: cellHeight)
         }else if collectionView === incomeCollectionView{
@@ -665,6 +725,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
         if collectionView === paymentCollectionView{
             let cell = collectionView.cellForItem(at: indexPath)
             resultLabel.text = categoryList[indexPath.row].name
+            
             
             for i in 0 ..< categoryList.count{
                 collectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
@@ -692,6 +753,8 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             selectedIndex = indexPath.item
             pictureViewController.inputViewControllerImage = selectedImage
             pictureViewController.pictureViewControllerDelegate = self
+            pictureViewController.text = diaryInputTextView.text
+            pictureViewController.titleText = titleTextField.text
         }else if collectionView === incomeCollectionView{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
             resultLabel.text = incomeCategoryList[indexPath.row].name
@@ -755,6 +818,10 @@ extension InputViewController:UITextViewDelegate{
 }
 
 extension InputViewController:PictureViewControllerDelegate{
+    func setAddDiaryButtonIsEnable() {
+        addDiaryButton.isEnabled = true
+    }
+    
     func deletePicuture() {
         imageArray.remove(at: selectedIndex!)
         print(imageArray.count)

@@ -149,10 +149,10 @@ class ExpenseItemViewController: UIViewController{
                 
             }catch CategoryModel.ValidationError.invalidNameLength{
                 print("文字数が8文字を超えています")
-                return
-            }catch{
+            }catch CategoryModel.ValidationError.invalidTooManyCategories{
+                print("カテゴリーの数が１２を超えています")
+            }catch {
                 print("エラーが発生しました")
-                return
             }
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in

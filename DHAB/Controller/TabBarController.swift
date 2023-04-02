@@ -115,7 +115,8 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
         let storyboard = UIStoryboard(name: "CalendarViewController", bundle: nil)
         let calendarViewController = storyboard.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController
         calendarViewController?.tabBarItem = UITabBarItem(title: "カレンダー", image: UIImage(systemName: "calendar"), tag: 0)
-        controllers.append(calendarViewController!)
+        let calendarNavigationController = UINavigationController(rootViewController: calendarViewController!)
+        controllers.append(calendarNavigationController)
         
         let storyboard1 = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
         let householdAccountBookViewController = storyboard1.instantiateViewController(withIdentifier: "HouseholdAccountBookViewController") as? HouseholdAccountBookViewController

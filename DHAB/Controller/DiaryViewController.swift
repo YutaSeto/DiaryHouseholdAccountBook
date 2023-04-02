@@ -36,9 +36,10 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if RecognitionChange.shared.deleteDiary == true{
+        if RecognitionChange.shared.deleteDiaryByCalendar == true{
             setDiaryData()
             diaryTableView.reloadData()
+            
         }
     }
         
@@ -65,13 +66,29 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         let realm = try! Realm()
         
         if searchText.isEmpty{
-            let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
-            diaryList = Array(result)
+            setDiaryData()
+            diaryTableView.reloadData()
         }else{
-            textResult = realm.objects(DiaryModel.self).filter("text CONTAINS %@ " , searchText).sorted(byKeyPath: "date", ascending: false)
-            titleResult = realm.objects(DiaryModel.self).filter("title CONTAINS %@", searchText).sorted(byKeyPath: "date", ascending: false)
-            let allResults = Set(Array(textResult!) + Array(titleResult!))
+            let textResult = Array(realm.objects(DiaryModel.self).filter("text CONTAINS %@ " , searchText).sorted(byKeyPath: "date", ascending: false))
+            var titleResult = Array(realm.objects(DiaryModel.self).filter("title CONTAINS %@", searchText).sorted(byKeyPath: "date", ascending: false))
+            
+            textResult.forEach{object in
+                if let index = titleResult.firstIndex(where: {$0.id == object.id}){
+                    titleResult.remove(at: index)
+                }
+            }
+            
+            let allResults = Set(Array(textResult) + Array(titleResult))
             diaryList = Array(allResults).sorted(by: {$0.date > $1.date})
+            
+            diaryByMonth = [:]
+            for diary in diaryList{
+                let month = util.yearDateFormatter.string(from: diary.date)
+                if diaryByMonth[month] == nil{
+                    diaryByMonth[month] = []
+                }
+                diaryByMonth[month]?.append(diary)
+            }
         }
         diaryTableView.reloadData()
     }
@@ -80,6 +97,8 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         let realm = try! Realm()
         let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
         diaryList = Array(result)
+        
+        diaryByMonth.removeAll()
         
         for diary in diaryList{
             let dateString = util.monthDateFormatter.string(from: diary.date)
@@ -138,14 +157,17 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
         let monthString = sortedKeys[section]
-        let date = util.monthDateFormatter.date(from: monthString)
-        return util.monthDateFormatter.string(from: date!)
+        if let date = util.monthDateFormatter.date(from: monthString){
+            return util.monthDateFormatter.string(from: date)
+        }else{
+            return nil
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
         let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
-//        let diaryModel: DiaryModel = diaryList[indexPath.row]
         let month = sortedKeys[indexPath.section]
         let diary = diaryByMonth[month]?[indexPath.row]
         
@@ -159,28 +181,43 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         cell.cellTitleLabel.text = diary!.title
         cell.cellTextLabel.attributedText = attributedText
         cell.cellTextLabel.sizeToFit()
-        if diary!.pictureList.count != 0{
+        if !diary!.pictureList.isEmpty{
             cell.thumbnailImageView.image = UIImage(data: diary!.pictureList[0])
+        }else{
+            cell.thumbnailImageView.image = nil
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let month = sortedKeys[indexPath.section]
+        let diary = diaryByMonth[month]?[indexPath.row]
         
         let storyboard = UIStoryboard(name: "DiaryViewController", bundle: nil)
         guard let lookDiaryViewController = storyboard.instantiateViewController(withIdentifier: "LookDiaryViewController") as? LookDiaryViewController else{return}
         self.navigationController?.pushViewController(lookDiaryViewController, animated: true)
-        lookDiaryViewController.diary = diaryList[indexPath.row]
+        lookDiaryViewController.diary = diary
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let targetItem = diaryList[indexPath.row]
-        diaryList.remove(at: indexPath.row)
+        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let targetMonth = sortedKeys[indexPath.section]
+        let targetItem = diaryByMonth[sortedKeys[indexPath.section]]![indexPath.row]
+        diaryByMonth[sortedKeys[indexPath.section]]?.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         let realm = try! Realm()
         try! realm.write{
             realm.delete(targetItem)
         }
+        
+        if diaryByMonth[targetMonth]?.count == 0{
+            diaryByMonth.removeValue(forKey: targetMonth)
+            tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
+        }
+        
+        RecognitionChange.shared.deleteDiaryByDiary = true
+        //カレンダービューの日記の更新をする必要あり
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120

@@ -49,6 +49,7 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var paymentTableViewFlowLayout: NSLayoutConstraint!
     
+    
     @IBOutlet weak var stackView: UIStackView!
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -65,8 +66,6 @@ class CalendarViewController:UIViewController{
         addSubView()
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
-        setIncomeTableView(selectedDate)
-        setDisplayJournalList(selectedDate)
         setDiaryData()
         showPaymentView()
         settingSubView()
@@ -74,7 +73,6 @@ class CalendarViewController:UIViewController{
         setMonthIncomeModelList()
         setSum()
         dateLabel.text = util.monthDateFormatter.string(from: date)
-        print(diaryModelList)
     }
     
     
@@ -98,6 +96,13 @@ class CalendarViewController:UIViewController{
         }
         setMonthPaymentModelList()
         setMonthIncomeModelList()
+        
+        if RecognitionChange.shared.deleteDiaryByDiary == true{
+            calendarView.reloadData()
+            setDiaryData()
+            diaryTableView.reloadData()
+            RecognitionChange.shared.deleteDiaryByDiary = false
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -294,18 +299,7 @@ class CalendarViewController:UIViewController{
         }
         displayJournalList = result
     }
-    
-    func setIncomeTableView(_: Date){
-        var result:[JournalModel] = []
-        let incomeList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false).filter{$0.isPayment == false}
-        incomeList.forEach{income in
-            if income.date.zeroclock == selectedDate.zeroclock{
-                result.append(income)
-            }
-        }
-        displayIncomeList = result
-    }
-    
+       
     func setDiaryTableView(_ : Date)-> [DiaryModel]{
         var result:[DiaryModel] = []
         diaryModelList.forEach{diary in
@@ -379,23 +373,28 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                     let index:Int = monthIncomeModelList.firstIndex(where: {$0.id == targetItem.id})!
                     monthIncomeModelList.remove(at: index)
                 }
-                setSum()
-                calendarView.reloadData()
-                
                 try! realm.write{
                     realm.delete(targetItem)
                 }
+                setMonthPaymentModelList()
+                setMonthIncomeModelList()
+                setSum()
+                calendarView.reloadData()
+                
                 RecognitionChange.shared.deletePayment = true
             }
         }else if tableView === diaryTableView{
-            let targetItem = diaryModelList[indexPath.row]
-            diaryModelList.remove(at: indexPath.row)
+            let targetItem = setDiaryTableView(selectedDate)[indexPath.row]
+            if let index = diaryModelList.firstIndex(where: {$0.id == targetItem.id}){
+                diaryModelList.remove(at: index)
+            }
+            
             tableView.deleteRows(at: [indexPath], with: .automatic)
             try! realm.write{
                 realm.delete(targetItem)
             }
             calendarView.reloadData()
-            RecognitionChange.shared.deleteDiary = true
+            RecognitionChange.shared.deleteDiaryByCalendar = true
         }
     }
     
@@ -484,7 +483,6 @@ extension CalendarViewController:InputViewControllerDelegate{
         monthIncomeModelList.remove(at: index)
         
         displayPaymentList.append(income!)
-//        householdAccountBookTableView.insertRows(at: [IndexPath(row: displayPaymentList.count - 1, section: 0)], with: .automatic)
         monthPaymentModelList.append(income!)
         householdAccountBookTableView.reloadData()
         
@@ -501,7 +499,6 @@ extension CalendarViewController:InputViewControllerDelegate{
     func updateIncome() {
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
-        setIncomeTableView(selectedDate)
         householdAccountBookTableView.reloadData()
         
         view.layoutIfNeeded()
@@ -511,7 +508,6 @@ extension CalendarViewController:InputViewControllerDelegate{
     func updatePayment() {
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
-        setIncomeTableView(selectedDate)
         householdAccountBookTableView.reloadData()
         
         view.layoutIfNeeded()
@@ -527,7 +523,6 @@ extension CalendarViewController:InputViewControllerDelegate{
     func updateCalendar() {
         setTableView(selectedDate)
         setDisplayJournalList(selectedDate)
-        setIncomeTableView(selectedDate)
         paymentLabel.text = getComma(sumPayment(selectedDate))
         incomeLabel.text = getComma(sumIncome(selectedDate))
         balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
@@ -581,13 +576,9 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         selectedDate = date
         setDisplayJournalList(selectedDate)
-        setIncomeTableView(selectedDate)
         setMonthPaymentModelList()
         setMonthIncomeModelList()
-        paymentLabel.text = getComma(setMonthPayment())
-        incomeLabel.text = getComma(setMonthIncome())
-        
-        balanceLabel.text = getComma(Int(setMonthIncome() - setMonthPayment()))
+        setSum()
         dateLabel.text = util.monthDateFormatter.string(from: selectedDate)
         householdAccountBookTableView.reloadData()
         diaryTableView.reloadData()
@@ -667,8 +658,6 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             }
         }
         
-        //日記があると背景の色変更
-        //めちゃくちゃバグある
         let isEqualDate = diaryModelList.contains(where: {$0.date.zeroclock == date.zeroclock})
         if isEqualDate{
             cell.backgroundColor = .orange

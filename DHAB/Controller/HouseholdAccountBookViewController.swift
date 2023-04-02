@@ -121,6 +121,9 @@ class HouseholdAccountBookViewController:UIViewController{
             sumPaymentTableView.reloadData()
             incomeTableView.reloadData()
             sumIncomeTableView.reloadData()
+            updateChartView()
+            updatePaymentPieGraph()
+            updateIncomePieGraph()
             RecognitionChange.shared.updateHouseholdAccountBook = false
         }
         
@@ -139,6 +142,9 @@ class HouseholdAccountBookViewController:UIViewController{
             sumPaymentTableView.reloadData()
             incomeTableView.reloadData()
             sumIncomeTableView.reloadData()
+            updateChartView()
+            updatePaymentPieGraph()
+            updateIncomePieGraph()
             RecognitionChange.shared.deletePayment = false
         }
     }
