@@ -56,4 +56,5 @@ class Util:UIViewController{
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter
     }
+    
 }

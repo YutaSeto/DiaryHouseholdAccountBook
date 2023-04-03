@@ -22,6 +22,8 @@ protocol InputViewControllerDelegate{
 
 class InputViewController:UIViewController{
     
+    let inputViewModel = InputViewModel()
+    
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
     @IBOutlet var diaryView: UIView!
@@ -364,9 +366,23 @@ class InputViewController:UIViewController{
                 RecognitionChange.shared.updateCalendar = true
                 dismiss(animated: true)
             }catch JournalModel.ValidationError.invalidPriceLimit{
-                print("１億円を超えています")
+                let alert = UIAlertController(title:"1億円以内で入力してください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             }catch JournalModel.ValidationError.invalidMemoLimit{
-                print("メモの文字数は10文字以内で")
+                let alert = UIAlertController(title:"メモは10文字以内で入力してください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             }catch{
                 print("エラーが発生")
             }
@@ -421,9 +437,23 @@ class InputViewController:UIViewController{
                 journal = nil
                 dismiss(animated: true)
             }catch JournalModel.ValidationError.invalidPriceLimit{
-                print("１億円を超えています")
+                let alert = UIAlertController(title:"1億円以内で入力してください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             }catch JournalModel.ValidationError.invalidMemoLimit{
-                print("メモは10文字以内で")
+                let alert = UIAlertController(title:"メモは10文字以内で入力してください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             }catch{
                 print("エラーが発生")
             }

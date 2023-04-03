@@ -1093,7 +1093,6 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
     }
     
     func remakeUIView(){
-        print("デリゲートを実行")
         guard let tab = self.tabBarController as? TabBarController else {return}
         tab.remakeViewController()
     }

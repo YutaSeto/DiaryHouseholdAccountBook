@@ -148,9 +148,23 @@ class ExpenseItemViewController: UIViewController{
                 self.expenseItemTableView.reloadData()
                 
             }catch CategoryModel.ValidationError.invalidNameLength{
-                print("文字数が8文字を超えています")
+                let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             }catch CategoryModel.ValidationError.invalidTooManyCategories{
-                print("カテゴリーの数が１２を超えています")
+                let alert = UIAlertController(title:"カテゴリーの数は12個までにしてください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             }catch {
                 print("エラーが発生しました")
             }
@@ -188,10 +202,24 @@ class ExpenseItemViewController: UIViewController{
                 self.categoryViewControllerDelegate?.updateIncome()
                 self.incomeTableView.reloadData()
             } catch CategoryModel.ValidationError.invalidNameLength{
-                print("8文字を超えています")
+                let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
                 return
             } catch CategoryModel.ValidationError.invalidTooManyCategories{
-                print("カテゴリーが12個を超えています")
+                let alert = UIAlertController(title:"カテゴリーの数は12個までにしてください", message: nil, preferredStyle: .alert)
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                self.present(alert,animated: true, completion: nil)
             } catch{
                 print("予期せぬエラーが発生")
                 return
@@ -269,7 +297,14 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                     self.expenseItemTableView.reloadData()
                     print(self.categoryList[indexPath.row])
                 }catch CategoryModel.ValidationError.invalidNameLength{
-                    print("8文字を超えています")
+                    let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
+                    
+                    let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                        return
+                    })
+                    
+                    alert.addAction(cancel)
+                    self.present(alert,animated: true, completion: nil)
                 }catch{
                     print("予期せぬエラーが発生")
                 }
@@ -302,7 +337,14 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                         self.expenseItemViewControllerDelegate?.updateCategory()
                         self.incomeTableView.reloadData()
                 }catch CategoryModel.ValidationError.invalidNameLength{
-                    print("8文字を超えています")
+                    let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
+                    
+                    let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                        return
+                    })
+                    
+                    alert.addAction(cancel)
+                    self.present(alert,animated: true, completion: nil)
                 }catch{
                     print("予期せぬエラーが発生")
                 }

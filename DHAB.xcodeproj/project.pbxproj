@@ -43,6 +43,16 @@
 		23CBECC429CD726F00A5E777 /* LookDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */; };
 		23CBECCB29D30AAD00A5E777 /* FSCalendarCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CBECC929D30AAD00A5E777 /* FSCalendarCustomCell.swift */; };
 		23CBECCC29D30AAD00A5E777 /* FSCalendarCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23CBECCA29D30AAD00A5E777 /* FSCalendarCustomCell.xib */; };
+		23D406FC29DA927F00E92C52 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D406FB29DA927F00E92C52 /* TabBarModel.swift */; };
+		23D406FE29DA92AC00E92C52 /* InputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D406FD29DA92AC00E92C52 /* InputViewModel.swift */; };
+		23D4070029DA92D300E92C52 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D406FF29DA92D300E92C52 /* CalendarViewModel.swift */; };
+		23D4070229DA92F600E92C52 /* HouseholdAccountBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070129DA92F600E92C52 /* HouseholdAccountBookViewModel.swift */; };
+		23D4070429DA931400E92C52 /* DiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070329DA931400E92C52 /* DiaryViewModel.swift */; };
+		23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070529DA932D00E92C52 /* BudgetViewModel.swift */; };
+		23D4070829DA936900E92C52 /* BudgetConfigureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070729DA936900E92C52 /* BudgetConfigureViewModel.swift */; };
+		23D4070A29DA937C00E92C52 /* ExpenseItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070929DA937C00E92C52 /* ExpenseItemViewModel.swift */; };
+		23D4070C29DA939100E92C52 /* PictureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070B29DA939100E92C52 /* PictureViewModel.swift */; };
+		23D4070E29DA93AA00E92C52 /* LookDiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4070D29DA93AA00E92C52 /* LookDiaryViewModel.swift */; };
 		23EC22BB2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EC22B92971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift */; };
 		23EC22BC2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23EC22BA2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.xib */; };
 		23EEE7CF2972CF2700A52939 /* InputViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7CE2972CF2700A52939 /* InputViewController.storyboard */; };
@@ -95,6 +105,16 @@
 		23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookDiaryViewController.swift; sourceTree = "<group>"; };
 		23CBECC929D30AAD00A5E777 /* FSCalendarCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSCalendarCustomCell.swift; sourceTree = "<group>"; };
 		23CBECCA29D30AAD00A5E777 /* FSCalendarCustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FSCalendarCustomCell.xib; sourceTree = "<group>"; };
+		23D406FB29DA927F00E92C52 /* TabBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarModel.swift; sourceTree = "<group>"; };
+		23D406FD29DA92AC00E92C52 /* InputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewModel.swift; sourceTree = "<group>"; };
+		23D406FF29DA92D300E92C52 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		23D4070129DA92F600E92C52 /* HouseholdAccountBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookViewModel.swift; sourceTree = "<group>"; };
+		23D4070329DA931400E92C52 /* DiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryViewModel.swift; sourceTree = "<group>"; };
+		23D4070529DA932D00E92C52 /* BudgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewModel.swift; sourceTree = "<group>"; };
+		23D4070729DA936900E92C52 /* BudgetConfigureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetConfigureViewModel.swift; sourceTree = "<group>"; };
+		23D4070929DA937C00E92C52 /* ExpenseItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItemViewModel.swift; sourceTree = "<group>"; };
+		23D4070B29DA939100E92C52 /* PictureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureViewModel.swift; sourceTree = "<group>"; };
+		23D4070D29DA93AA00E92C52 /* LookDiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookDiaryViewModel.swift; sourceTree = "<group>"; };
 		23EC22B92971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookTableViewCell.swift; sourceTree = "<group>"; };
 		23EC22BA2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HouseholdAccountBookTableViewCell.xib; sourceTree = "<group>"; };
 		23EEE7CE2972CF2700A52939 /* InputViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InputViewController.storyboard; sourceTree = "<group>"; };
@@ -183,6 +203,16 @@
 			isa = PBXGroup;
 			children = (
 				EDE9354529BE0FAA006109C7 /* Util.swift */,
+				23D406FB29DA927F00E92C52 /* TabBarModel.swift */,
+				23D406FD29DA92AC00E92C52 /* InputViewModel.swift */,
+				23D406FF29DA92D300E92C52 /* CalendarViewModel.swift */,
+				23D4070129DA92F600E92C52 /* HouseholdAccountBookViewModel.swift */,
+				23D4070329DA931400E92C52 /* DiaryViewModel.swift */,
+				23D4070529DA932D00E92C52 /* BudgetViewModel.swift */,
+				23D4070729DA936900E92C52 /* BudgetConfigureViewModel.swift */,
+				23D4070929DA937C00E92C52 /* ExpenseItemViewModel.swift */,
+				23D4070B29DA939100E92C52 /* PictureViewModel.swift */,
+				23D4070D29DA93AA00E92C52 /* LookDiaryViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -380,15 +410,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23D4070E29DA93AA00E92C52 /* LookDiaryViewModel.swift in Sources */,
 				23507F10298E9BD00025EAE5 /* BudgetTableViewCellItem.swift in Sources */,
 				23EC22BB2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift in Sources */,
+				23D4070429DA931400E92C52 /* DiaryViewModel.swift in Sources */,
 				23EEE7D92972D7C000A52939 /* BudgetModel.swift in Sources */,
 				23CBECC429CD726F00A5E777 /* LookDiaryViewController.swift in Sources */,
 				23A0B29229AA4522000956CF /* extension + Date.swift in Sources */,
+				23D4070829DA936900E92C52 /* BudgetConfigureViewModel.swift in Sources */,
+				23D4070C29DA939100E92C52 /* PictureViewModel.swift in Sources */,
 				23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */,
 				237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */,
 				233E500729C2C55E00F35DB8 /* InputCollectionViewCell.swift in Sources */,
 				EDE9354629BE0FAA006109C7 /* Util.swift in Sources */,
+				23D406FC29DA927F00E92C52 /* TabBarModel.swift in Sources */,
 				23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */,
 				EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */,
 				237B85F62970492B001E4639 /* JournalModel.swift in Sources */,
@@ -400,14 +435,19 @@
 				23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */,
 				237B860129704A59001E4639 /* InputViewController.swift in Sources */,
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
+				23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */,
+				23D4070229DA92F600E92C52 /* HouseholdAccountBookViewModel.swift in Sources */,
 				237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */,
 				237B85FF29704A49001E4639 /* TabBarController.swift in Sources */,
 				23CBECCB29D30AAD00A5E777 /* FSCalendarCustomCell.swift in Sources */,
 				23A0B28C29A84CA1000956CF /* RecognitionChange.swift in Sources */,
+				23D4070029DA92D300E92C52 /* CalendarViewModel.swift in Sources */,
 				237AFB70297506A20060ECD0 /* ExpenseItemViewController.swift in Sources */,
 				237B860329704A68001E4639 /* CalendarViewController.swift in Sources */,
 				23CBECC229CD4E3000A5E777 /* PictureViewController.swift in Sources */,
+				23D4070A29DA937C00E92C52 /* ExpenseItemViewModel.swift in Sources */,
 				237B85E12970471A001E4639 /* SceneDelegate.swift in Sources */,
+				23D406FE29DA92AC00E92C52 /* InputViewModel.swift in Sources */,
 				237AFB672974ECBC0060ECD0 /* BudgetViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
