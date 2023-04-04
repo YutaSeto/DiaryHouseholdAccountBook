@@ -35,14 +35,14 @@ class CalendarViewModel{
     func setMonthPaymentModelList(){
         let firstDay = util.setFirstDay(date: selectedDate)
         let lastDay = util.setLastDay(date: selectedDate)
-        let paymentList:[JournalModel] = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == true}
+        let paymentList:[Journal] = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == true}
         monthPaymentModelList = paymentList
     }
     
     func setMonthIncomeModelList(){
         let firstDay = util.setFirstDay(date: selectedDate)
         let lastDay = util.setLastDay(date: selectedDate)
-        let incomeList:[JournalModel] = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == false}
+        let incomeList:[Journal] = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == false}
         monthIncomeModelList = incomeList
     }
     
@@ -51,7 +51,7 @@ class CalendarViewModel{
         let lastDay = util.setLastDay(date: selectedDate)
         
         var sum:Int = 0
-        let paymentList = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == true}
+        let paymentList = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == true}
         paymentList.forEach{payment in
             sum += payment.price
         }
@@ -63,7 +63,7 @@ class CalendarViewModel{
         let lastDay = util.setLastDay(date: selectedDate)
         
         var sum:Int = 0
-        let incomeList = realm.objects(JournalModel.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == false}
+        let incomeList = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == false}
         incomeList.forEach{income in
             sum += income.price
         }
@@ -88,8 +88,8 @@ class CalendarViewModel{
     }
     
     func setTableView(){
-        var result:[JournalModel] = []
-        let paymentList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false).filter{$0.isPayment == true}
+        var result:[Journal] = []
+        let paymentList = realm.objects(Journal.self).sorted(byKeyPath: "date",ascending: false).filter{$0.isPayment == true}
         paymentList.forEach{payment in
             if payment.date.zeroclock == selectedDate.zeroclock{
                 result.append(payment)
@@ -99,8 +99,8 @@ class CalendarViewModel{
     }
     
     func setDisplayJournalList(){
-        var result:[JournalModel] = []
-        let journalList = realm.objects(JournalModel.self).sorted(byKeyPath: "date",ascending: false)
+        var result:[Journal] = []
+        let journalList = realm.objects(Journal.self).sorted(byKeyPath: "date",ascending: false)
         journalList.forEach{journal in
             if journal.date.zeroclock == selectedDate.zeroclock{
                 result.append(journal)
@@ -110,7 +110,7 @@ class CalendarViewModel{
     }
     
     func setDiaryTableView()-> [Diary]{
-        var result:[DiaryModel] = []
+        var result:[Diary] = []
         diaryModelList.forEach{diary in
             if diary.date.zeroclock == selectedDate.zeroclock{
                 result.append(diary)
@@ -120,7 +120,7 @@ class CalendarViewModel{
     }
     
     func setDiaryData(){
-        let result = realm.objects(DiaryModel.self)
+        let result = realm.objects(Diary.self)
         diaryModelList = Array(result)
     }
     
@@ -178,11 +178,11 @@ class CalendarViewModel{
     }
     
     func setSumPaymentForCalendarCell(date:Date) -> String{
-        return util.getComma(realm.objects(JournalModel.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        return util.getComma(realm.objects(Journal.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
     }
     
     func setSumIncomeForCalendarCell(date:Date) -> String{
-        util.getComma(realm.objects(JournalModel.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
+        return util.getComma(realm.objects(Journal.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
     }
     
     

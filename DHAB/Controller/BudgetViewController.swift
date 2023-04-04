@@ -16,17 +16,11 @@ protocol BudgetViewControllerDelegate{
 class BudgetViewController: UIViewController{
     
     var util = Util()
-    var date = Date()
-    var categoryList:[Category] = []
-    var incomeCategoryList:[Category] = []
-    var paymentBudgetList:[Budget] = []
-    var incomeBudgetList:[Budget] = []
-    var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
-    var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
+    let budgetViewModel = BudgetViewModel()
+    
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
     var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
     var inputViewControllerDelegate:InputViewControllerDelegate?
-    let realm = try! Realm()
     
     @IBOutlet weak var budgetTableView: UITableView!
     @IBOutlet weak var incomeBudgetTableView: UITableView!
@@ -39,18 +33,21 @@ class BudgetViewController: UIViewController{
         super.viewDidLoad()
         budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         incomeBudgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
-        dateLabel.text = util.monthDateFormatter.string(from: date)
+        dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
         incomeBudgetTableView.delegate = self
         incomeBudgetTableView.dataSource = self
-        setPaymentBudgetData()
-        setIncomeBudgetData()
-        setCategoryData()
-        setIncomeCategoryData()
-        setBudgetTableViewDataSourse()
-        setIncomeBudgetTableViewDataSourse()
+        budgetViewModel.setPaymentBudgetData()
+        budgetViewModel.setIncomeBudgetData()
+        budgetViewModel.setCategoryData()
+        budgetViewModel.setIncomeCategoryData()
+        budgetViewModel.setBudgetTableViewDataSourse()
+        budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
+        
+        budgetTableView.reloadData()
+        incomeBudgetTableView.reloadData()
     }
     
     override func viewWillLayoutSubviews() {
@@ -72,7 +69,7 @@ class BudgetViewController: UIViewController{
         navigationController?.pushViewController(budgetConfigureViewController, animated: true)
         budgetConfigureViewController.forHouseholdAccountBookDelegate = forHouseholdAccountBookDelegate
         budgetConfigureViewController.delegate = self
-        budgetConfigureViewController.date = date.zeroclock
+        budgetConfigureViewController.budgetConfigureViewModel.date = budgetViewModel.date.zeroclock
     }
     
     @objc func tapBackButton(){
@@ -91,123 +88,33 @@ class BudgetViewController: UIViewController{
     }
     
     func dayBack(){
-        date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
-        dateLabel.text = util.monthDateFormatter.string(from: date)
+        budgetViewModel.date = Calendar.current.date(byAdding: .month, value: -1, to:budgetViewModel.date)!
+        dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
         updateList()
         budgetTableView.reloadData()
     }
     
     func dayPass(){
-        date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
-        dateLabel.text = util.monthDateFormatter.string(from: date)
+        budgetViewModel.date = Calendar.current.date(byAdding: .month, value: 1, to:budgetViewModel.date)!
+        dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
         updateList()
         budgetTableView.reloadData()
     }
     
-    func setCategoryData(){
-        let result = realm.objects(Category.self).filter{$0.isPayment == true}
-        categoryList = Array(result)
-        budgetTableView.reloadData()
-    }
     
-    func setIncomeCategoryData(){
-        let result = realm.objects(Category.self).filter{$0.isPayment == false}
-        incomeCategoryList = Array(result)
-    }
     
-    func setPaymentBudgetData(){
-        let result = realm.objects(Budget.self).filter{$0.isPayment == true}
-        paymentBudgetList = Array(result)
-        budgetTableView.reloadData()
-    }
     
-    func setIncomeBudgetData(){
-        let result = realm.objects(Budget.self).filter{$0.isPayment == false}
-        incomeBudgetList = Array(result)
-        incomeBudgetTableView.reloadData()
-    }
-    
-    func setBudgetTableViewDataSourse(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-        let add = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!
-        categoryList.forEach{ expense in
-            let dayCheckBudget = self.paymentBudgetList.filter({$0.budgetDate >= firstDay})
-            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:Budget = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
-                let item = BudgetTableViewCellItem(
-                    id: budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                budgetTableViewDataSource.append(item)
-            } else {
-                let budget = Budget()
-                budget.id = UUID().uuidString
-                budget.expenseID = expense.id
-                budget.budgetDate = date.zeroclock
-                budget.isPayment = true
-                budget.budgetPrice = 0
-                try! realm.write { realm.add(budget)}
-                paymentBudgetList.append(budget)
-                
-                let item = BudgetTableViewCellItem(
-                    id:budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                budgetTableViewDataSource.append(item)
-            }
-        }
-        budgetTableView.reloadData()
-    }
-    
-    func setIncomeBudgetTableViewDataSourse(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-        let add = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!
-        incomeCategoryList.forEach{ expense in
-            let dayCheckBudget = self.incomeBudgetList.filter({$0.budgetDate >= firstDay})
-            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:Budget = dayCheckBudget2.filter({$0.expenseID == expense.id}).filter({$0.isPayment == false}).first{
-                let item = IncomeBudgetTableViewCellItem(
-                    id: budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                incomeBudgetTableViewDataSource.append(item)
-            } else {
-                let budget = Budget()
-                budget.id = UUID().uuidString
-                budget.expenseID = expense.id
-                budget.budgetDate = date.zeroclock
-                budget.isPayment = false
-                budget.budgetPrice = 0
-                try! realm.write { realm.add(budget)}
-                incomeBudgetList.append(budget)
-                
-                let item = IncomeBudgetTableViewCellItem(
-                    id:budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                incomeBudgetTableViewDataSource.append(item)
-            }
-        }
-        incomeBudgetTableView.reloadData()
-    }
+
     
     func updateList(){
-        setPaymentBudgetData()
-        setCategoryData()
-        budgetTableViewDataSource = []
-        incomeBudgetTableViewDataSource = []
-        setBudgetTableViewDataSourse()
-        setIncomeBudgetTableViewDataSourse()
+        budgetViewModel.setPaymentBudgetData()
+        budgetViewModel.setCategoryData()
+        budgetViewModel.budgetTableViewDataSource = []
+        budgetViewModel.incomeBudgetTableViewDataSource = []
+        budgetViewModel.setBudgetTableViewDataSourse()
+        budgetViewModel.setIncomeBudgetTableViewDataSourse()
+        budgetTableView.reloadData()
+        incomeBudgetTableView.reloadData()
         view.layoutIfNeeded()
         view.updateConstraints()
     }
@@ -226,9 +133,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === budgetTableView{
-            return budgetTableViewDataSource.count
+            return budgetViewModel.budgetTableViewDataSource.count
         }else if tableView === incomeBudgetTableView{
-            return incomeBudgetTableViewDataSource.count
+            return budgetViewModel.incomeBudgetTableViewDataSource.count
         }
         return 0
     }
@@ -236,13 +143,13 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView === budgetTableView{
             let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            let item = budgetTableViewDataSource[indexPath.row]
+            let item = budgetViewModel.budgetTableViewDataSource[indexPath.row]
             cell.budgetCategoryLabel.text = item.name
             cell.budgetPriceLabel.text = String(item.price)
             return cell
         }else if tableView === incomeBudgetTableView{
             let cell = incomeBudgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-            let item = incomeBudgetTableViewDataSource[indexPath.row]
+            let item = budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row]
             cell.budgetCategoryLabel.text = item.name
             cell.budgetPriceLabel.text = String(item.price)
             return cell
@@ -259,13 +166,13 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             var textFieldOnAlert = UITextField()
             alert.addTextField{textField in
                 textFieldOnAlert = textField
-                textField.placeholder = String(self.budgetTableViewDataSource[indexPath.row].price)
+                textField.placeholder = String(self.budgetViewModel.budgetTableViewDataSource[indexPath.row].price)
                 textField.textAlignment = NSTextAlignment.right
             }
             
             let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
-                let dataSource = self.budgetTableViewDataSource[indexPath.row]
-                if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
+                let dataSource = self.budgetViewModel.budgetTableViewDataSource[indexPath.row]
+                if let budget = self.budgetViewModel.paymentBudgetList.filter({$0.id == dataSource.id}).first{
                     let realm = try!Realm()
                     try! realm.write{
                         budget.budgetPrice = Int(textFieldOnAlert.text!)!
@@ -290,12 +197,12 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             var textFieldOnAlert = UITextField()
             alert.addTextField{textField in
                 textFieldOnAlert = textField
-                textField.placeholder = String(self.incomeBudgetTableViewDataSource[indexPath.row].price)
+                textField.placeholder = String(self.budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row].price)
                 textField.textAlignment = NSTextAlignment.right
             }
             let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
-                let dataSource = self.incomeBudgetTableViewDataSource[indexPath.row]
-                if let budget = self.incomeBudgetList.filter({$0.id == dataSource.id}).first{
+                let dataSource = self.budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row]
+                if let budget = self.budgetViewModel.incomeBudgetList.filter({$0.id == dataSource.id}).first{
                     let realm = try!Realm()
                     try! realm.write{
                         budget.budgetPrice = Int(textFieldOnAlert.text!)!
@@ -319,12 +226,16 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
 
 extension BudgetViewController:BudgetConfigureViewControllerDelegate{
     func updateBudget(){
-        setPaymentBudgetData()
-        setCategoryData()
-        budgetTableViewDataSource = []
-        incomeBudgetTableViewDataSource = []
-        setBudgetTableViewDataSourse()
-        setIncomeBudgetTableViewDataSourse()
+        budgetViewModel.setPaymentBudgetData()
+        budgetViewModel.setIncomeCategoryData()
+        budgetViewModel.setCategoryData()
+        budgetViewModel.budgetTableViewDataSource = []
+        budgetViewModel.incomeBudgetTableViewDataSource = []
+        budgetViewModel.setBudgetTableViewDataSourse()
+        budgetViewModel.setIncomeBudgetTableViewDataSourse()
+        budgetTableView.reloadData()
+        incomeBudgetTableView.reloadData()
+        
         view.layoutIfNeeded()
         view.updateConstraints()
     }

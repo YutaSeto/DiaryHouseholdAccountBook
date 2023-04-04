@@ -331,12 +331,12 @@ class InputViewController:UIViewController{
             dismiss(animated: true)
         }else if inputViewModel.journal != nil{ //paymetTableViewを選択した場合
             if inputViewModel.journal?.isPayment == true{
-                inputViewModel.OverwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+                inputViewModel.overwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
                     if inputViewModel.isPayment == false{
                         inputViewControllerDelegate?.changeFromPaymentToIncome()
                     }
                 }else if inputViewModel.journal?.isPayment == false{
-                    inputViewModel.OverwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+                    inputViewModel.overwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
                     if inputViewModel.isPayment == true{
                         inputViewControllerDelegate?.changeFromIncomeToPayment()
                     }
@@ -349,6 +349,7 @@ class InputViewController:UIViewController{
         }
     }
     
+    
     private func tapContinueAddButton(){
         if inputViewModel.journal == nil{
             inputViewModel.addNewJournal(priceText: priceTextField.text!, memoText: memoTextField.text!, result: resultLabel.text!)
@@ -359,7 +360,7 @@ class InputViewController:UIViewController{
             addButton.isEnabled = false
             continueAddButton.isEnabled = false
         }else if inputViewModel.journal != nil{
-            inputViewModel.OverwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+            inputViewModel.overwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             inputViewModel.journal = nil

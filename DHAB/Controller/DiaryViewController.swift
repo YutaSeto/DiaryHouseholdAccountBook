@@ -12,32 +12,29 @@ import UIKit
 class DiaryViewController:UIViewController,UISearchBarDelegate{
    
     let util = Util()
+    let diaryViewModel = DiaryViewModel()
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
     
     //日記関連
-    private var diaryList: [Diary] = []
-    private var diaryByMonth:[String: [Diary]] = [:]
-    
-    private var titleResult: Results<Diary>?
-    private var textResult: Results<Diary>?
     
     @IBOutlet weak var diaryTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
-        setDiaryData()
+        diaryViewModel.setDiaryData()
         diaryTableView.delegate = self
         diaryTableView.dataSource = self
         searchBar.delegate = self
+        diaryTableView.reloadData()
         setNavigationBarButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if RecognitionChange.shared.deleteDiaryByCalendar == true{
-            setDiaryData()
+            diaryViewModel.setDiaryData()
             diaryTableView.reloadData()
             
         }
@@ -66,7 +63,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         let realm = try! Realm()
         
         if searchText.isEmpty{
-            setDiaryData()
+            diaryViewModel.setDiaryData()
             diaryTableView.reloadData()
         }else{
             let textResult = Array(realm.objects(Diary.self).filter("text CONTAINS %@ " , searchText).sorted(byKeyPath: "date", ascending: false))
@@ -79,37 +76,21 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
             }
             
             let allResults = Set(Array(textResult) + Array(titleResult))
-            diaryList = Array(allResults).sorted(by: {$0.date > $1.date})
+            diaryViewModel.diaryList = Array(allResults).sorted(by: {$0.date > $1.date})
             
-            diaryByMonth = [:]
-            for diary in diaryList{
+            diaryViewModel.diaryByMonth = [:]
+            for diary in diaryViewModel.diaryList{
                 let month = util.yearDateFormatter.string(from: diary.date)
-                if diaryByMonth[month] == nil{
-                    diaryByMonth[month] = []
+                if diaryViewModel.diaryByMonth[month] == nil{
+                    diaryViewModel.diaryByMonth[month] = []
                 }
-                diaryByMonth[month]?.append(diary)
+                diaryViewModel.diaryByMonth[month]?.append(diary)
             }
         }
         diaryTableView.reloadData()
     }
     
-    func setDiaryData(){
-        let realm = try! Realm()
-        let result = realm.objects(Diary.self).sorted(byKeyPath: "date", ascending: false)
-        diaryList = Array(result)
-        
-        diaryByMonth.removeAll()
-        
-        for diary in diaryList{
-            let dateString = util.monthDateFormatter.string(from: diary.date)
-            if diaryByMonth[dateString] == nil{
-                diaryByMonth[dateString] = []
-            }
-            diaryByMonth[dateString]?.append(diary)
-        }
-        
-        diaryTableView.reloadData()
-    }
+    
 }
 
 extension DiaryViewController:InputViewControllerDelegate{
@@ -138,24 +119,25 @@ extension DiaryViewController:InputViewControllerDelegate{
     }
     
     func updateDiary() {
-        setDiaryData()
+        diaryViewModel.setDiaryData()
+        diaryTableView.reloadData()
     }
 }
 
 extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         return sortedKeys.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         let month = sortedKeys[section]
-        return diaryByMonth[month]?.count ?? 0
+        return diaryViewModel.diaryByMonth[month]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         let monthString = sortedKeys[section]
         if let date = util.monthDateFormatter.date(from: monthString){
             return util.monthDateFormatter.string(from: date)
@@ -167,9 +149,9 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
-        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         let month = sortedKeys[indexPath.section]
-        let diary = diaryByMonth[month]?[indexPath.row]
+        let diary = diaryViewModel.diaryByMonth[month]?[indexPath.row]
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingTail
@@ -190,9 +172,9 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         let month = sortedKeys[indexPath.section]
-        let diary = diaryByMonth[month]?[indexPath.row]
+        let diary = diaryViewModel.diaryByMonth[month]?[indexPath.row]
         
         let storyboard = UIStoryboard(name: "DiaryViewController", bundle: nil)
         guard let lookDiaryViewController = storyboard.instantiateViewController(withIdentifier: "LookDiaryViewController") as? LookDiaryViewController else{return}
@@ -201,18 +183,18 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let sortedKeys = diaryByMonth.keys.sorted(by: {$0 > $1})
+        let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         let targetMonth = sortedKeys[indexPath.section]
-        let targetItem = diaryByMonth[sortedKeys[indexPath.section]]![indexPath.row]
-        diaryByMonth[sortedKeys[indexPath.section]]?.remove(at: indexPath.row)
+        let targetItem = diaryViewModel.diaryByMonth[sortedKeys[indexPath.section]]![indexPath.row]
+        diaryViewModel.diaryByMonth[sortedKeys[indexPath.section]]?.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         let realm = try! Realm()
         try! realm.write{
             realm.delete(targetItem)
         }
         
-        if diaryByMonth[targetMonth]?.count == 0{
-            diaryByMonth.removeValue(forKey: targetMonth)
+        if diaryViewModel.diaryByMonth[targetMonth]?.count == 0{
+            diaryViewModel.diaryByMonth.removeValue(forKey: targetMonth)
             tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
         }
         

@@ -93,7 +93,7 @@ class InputViewModel{
         }
     }
     
-    func OverwriteJournal(priceText:String,result:String,memoText:String){
+    func overwriteJournal(priceText:String,result:String,memoText:String){
         do{
             let text = priceText
             try realm.write{
