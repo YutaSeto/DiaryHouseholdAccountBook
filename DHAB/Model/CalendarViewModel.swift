@@ -20,15 +20,15 @@ class CalendarViewModel{
     var isButtonPush:Bool = false
     var deleteIndexPath:IndexPath = IndexPath(row: 0, section: 0)
     var displayTableViewIndexPath:IndexPath?
-    var income:JournalModel?
-    var payment:JournalModel?
-    var monthPaymentModelList:[JournalModel] = []
-    var displayPaymentList:[JournalModel] = []
-    var monthIncomeModelList:[JournalModel] = []
-    var displayIncomeList:[JournalModel] = []
-    var diaryModelList:[DiaryModel] = []
-    var incomeModelList:[JournalModel] = []
-    var displayJournalList:[JournalModel] = []
+    var income:Journal?
+    var payment:Journal?
+    var monthPaymentModelList:[Journal] = []
+    var displayPaymentList:[Journal] = []
+    var monthIncomeModelList:[Journal] = []
+    var displayIncomeList:[Journal] = []
+    var diaryModelList:[Diary] = []
+    var incomeModelList:[Journal] = []
+    var displayJournalList:[Journal] = []
     
 
     
@@ -109,7 +109,7 @@ class CalendarViewModel{
         displayJournalList = result
     }
     
-    func setDiaryTableView()-> [DiaryModel]{
+    func setDiaryTableView()-> [Diary]{
         var result:[DiaryModel] = []
         diaryModelList.forEach{diary in
             if diary.date.zeroclock == selectedDate.zeroclock{

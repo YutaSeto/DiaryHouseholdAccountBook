@@ -24,15 +24,15 @@ protocol CategoryViewControllerDelegate{
 
 protocol DeleteCategoryDelegate{
     func remakeViewController()
-    func setTargetItem(data:CategoryModel,index:IndexPath,journal:[JournalModel],budget:[BudgetModel])
+    func setTargetItem(data:Category,index:IndexPath,journal:[Journal],budget:[Budget])
     func remakeUIView()
 }
 
 class ExpenseItemViewController: UIViewController{
     
     let realm = try! Realm()
-    var categoryList:[CategoryModel] = []
-    var incomeCategoryList:[CategoryModel] = []
+    var categoryList:[Category] = []
+    var incomeCategoryList:[Category] = []
     var expenseItemViewControllerDelegate:ExpenseItemViewControllerDelegate?
     var categoryViewControllerDelegate:CategoryViewControllerDelegate?
     var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?

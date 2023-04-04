@@ -742,7 +742,7 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
 }
 
 extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
-    func setTargetItem(data:CategoryModel,index:IndexPath,journal:[JournalModel],budget:[BudgetModel]){
+    func setTargetItem(data:Category,index:IndexPath,journal:[Journal],budget:[Budget]){
         householdAccountBookViewModel.targetItem = data
         householdAccountBookViewModel.targetIndex = index
         householdAccountBookViewModel.targetJournal = journal

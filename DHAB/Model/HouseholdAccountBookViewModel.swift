@@ -16,19 +16,19 @@ class HouseholdAccountBookViewModel{
     var date = Date()
     var isMonth = true
     var sumPayment:HouseholdAccountBookTableViewCellItem = HouseholdAccountBookTableViewCellItem()
-    var paymentList:[JournalModel] = []
-    var paymentBudgetList:[BudgetModel] = []
-    var categoryList:[CategoryModel] = []
+    var paymentList:[Journal] = []
+    var paymentBudgetList:[Budget] = []
+    var categoryList:[Category] = []
     var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
     var sumIncome:IncomeTableViewCellItem = IncomeTableViewCellItem()
-    var incomeList:[JournalModel] = []
-    var incomeBudgetList:[BudgetModel] = []
-    var incomeCategoryList:[CategoryModel] = []
+    var incomeList:[Journal] = []
+    var incomeBudgetList:[Budget] = []
+    var incomeCategoryList:[Category] = []
     var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
-    var targetItem:CategoryModel?
+    var targetItem:Category?
     var targetIndex:IndexPath?
-    var targetJournal:[JournalModel]?
-    var targetBudget:[BudgetModel]?
+    var targetJournal:[Journal]?
+    var targetBudget:[Budget]?
     let menuList = ["カテゴリーの設定","予算の設定"]
     var isExpanded:Bool = false
     var sumPaymentList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -40,7 +40,7 @@ class HouseholdAccountBookViewModel{
     
     func setCategoryData(){
         let realm = try! Realm()
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
+        let result = realm.objects(Category.self).filter{$0.isPayment == true}
         categoryList = Array(result)
     }
     
@@ -64,7 +64,7 @@ class HouseholdAccountBookViewModel{
     
     func setPaymentBudgetData(){
         let realm = try! Realm()
-        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == true}
+        let result = realm.objects(Budget.self).filter{$0.isPayment == true}
         paymentBudgetList = Array(result)
     }
     
@@ -76,7 +76,7 @@ class HouseholdAccountBookViewModel{
     
     func setPaymentData(){
         let realm = try! Realm()
-        let result = realm.objects(JournalModel.self).filter{$0.isPayment == true}
+        let result = realm.objects(Journal.self).filter{$0.isPayment == true}
         paymentList = Array(result)
     }
     
@@ -144,7 +144,7 @@ class HouseholdAccountBookViewModel{
         
         let dayCheckPayment = paymentList.filter({$0.date >= firstDay}).filter{$0.date < lastDay}
         categoryList.forEach{ expense in
-            if let budget:BudgetModel = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
+            if let budget:Budget = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
                 let sum = dayCheckPayment.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
                 
                 let item = HouseholdAccountBookTableViewCellItem(
@@ -156,7 +156,7 @@ class HouseholdAccountBookViewModel{
                 paymentTableViewDataSource.append(item)
             } else {
                 let sumPayment = dayCheckPayment.filter{$0.category == expense.name}.map{$0.price}.reduce(0, {$0 + $1})
-                let data = BudgetModel()
+                let data = Budget()
                 data.id = UUID().uuidString
                 data.expenseID = expense.id
                 data.budgetDate = date
@@ -196,19 +196,19 @@ class HouseholdAccountBookViewModel{
     
     func setIncomeData(){
         let realm = try! Realm()
-        let result = realm.objects(JournalModel.self).filter{$0.isPayment == false}
+        let result = realm.objects(Journal.self).filter{$0.isPayment == false}
         incomeList = Array(result)
     }
     
     func setIncomeCategoryData(){
         let realm = try! Realm()
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
+        let result = realm.objects(Category.self).filter{$0.isPayment == false}
         incomeCategoryList = Array(result)
     }
     
     func setIncomeBudgetData(){
         let realm = try! Realm()
-        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == false}
+        let result = realm.objects(Budget.self).filter{$0.isPayment == false}
         incomeBudgetList = Array(result)
     }
     
@@ -225,7 +225,7 @@ class HouseholdAccountBookViewModel{
         
         let dayCheckIncome = incomeList.filter({$0.date >= firstDay}).filter{$0.date < lastDay}
         incomeCategoryList.forEach{ expense in
-            if let budget:BudgetModel = dayCheckBudget.filter({$0.expenseID == expense.id}).first{ //予算に入力がある時
+            if let budget:Budget = dayCheckBudget.filter({$0.expenseID == expense.id}).first{ //予算に入力がある時
                 let sum = dayCheckIncome.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
 
                 let item = IncomeTableViewCellItem(
@@ -237,7 +237,7 @@ class HouseholdAccountBookViewModel{
                 incomeTableViewDataSource.append(item)
             }else{ //予算が入力されていなくて、priceに入力がない時
                 let sumPrice = dayCheckIncome.filter{$0.category == expense.name}.map{$0.price}.reduce(0, {$0 + $1})
-                let data = BudgetModel()
+                let data = Budget()
                 data.id = UUID().uuidString
                 data.expenseID = expense.id
                 data.budgetDate = date

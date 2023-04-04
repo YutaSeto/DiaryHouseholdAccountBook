@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class JournalModel: Object{
+class Journal: Object{
     @objc dynamic var date:Date = Date()
     @objc dynamic var price:Int = 0
     @objc dynamic var memo:String = ""

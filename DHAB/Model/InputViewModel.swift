@@ -11,11 +11,11 @@ import RealmSwift
 
 class InputViewModel{
     
-    var journal:JournalModel? = nil
+    var journal:Journal? = nil
     var isPayment:Bool = true
     let realm = try! Realm()
-    var categoryList:[CategoryModel] = []
-    var incomeCategoryList:[CategoryModel] = []
+    var categoryList:[Category] = []
+    var incomeCategoryList:[Category] = []
     var date:Date = Date()
     var datePicker:UIDatePicker{
         let datePicker = UIDatePicker()
@@ -26,21 +26,21 @@ class InputViewModel{
         return datePicker
     }
     var isDiary:Bool = false
-    var diary:DiaryModel?
+    var diary:Diary?
     var selectedIndex:Int?
     var imageArray:[Data] = []
     var currentIndex = 0
-    var diaryModel = DiaryModel()
-    var diaryList:[DiaryModel] = []
+    var diaryModel = Diary()
+    var diaryList:[Diary] = []
     
     
     func setCategoryData(){
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
+        let result = realm.objects(Category.self).filter{$0.isPayment == true}
         categoryList = Array(result)
     }
     
     func setIncomeCategoryData(){
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
+        let result = realm.objects(Category.self).filter{$0.isPayment == false}
         incomeCategoryList = Array(result)
     }
     
@@ -49,7 +49,7 @@ class InputViewModel{
         let realm = try! Realm()
         do{
             try realm.write{
-                let journalModel = try JournalModel(price:Int(text)!,memo: memoText, category: result)
+                let journalModel = try Journal(price:Int(text)!,memo: memoText, category: result)
                 journalModel.date = date
                 journalModel.price = Int(text)!
                 journalModel.category = result
@@ -58,9 +58,9 @@ class InputViewModel{
                 realm.add(journalModel)
             }
             RecognitionChange.shared.updateCalendar = true
-        }catch JournalModel.ValidationError.invalidPriceLimit{
+        }catch Journal.ValidationError.invalidPriceLimit{
             showPriceAlert()
-        }catch JournalModel.ValidationError.invalidMemoLimit{
+        }catch Journal.ValidationError.invalidMemoLimit{
             showMemoAlert()
         }catch{
             print("エラーが発生")
@@ -103,19 +103,19 @@ class InputViewModel{
                    price < 100000000{
                     journal?.price = price
                 }else{
-                    throw JournalModel.ValidationError.invalidPriceLimit
+                    throw Journal.ValidationError.invalidPriceLimit
                 }
                 journal?.price = Int(text)!
                 journal?.category = result
                 if memoText.count <= 10{
                     journal?.memo = memoText
                 }else{
-                    throw JournalModel.ValidationError.invalidMemoLimit
+                    throw Journal.ValidationError.invalidMemoLimit
                 }
             }
-        }catch JournalModel.ValidationError.invalidPriceLimit{
+        }catch Journal.ValidationError.invalidPriceLimit{
             showPriceAlert()
-        }catch JournalModel.ValidationError.invalidMemoLimit{
+        }catch Journal.ValidationError.invalidMemoLimit{
             showMemoAlert()
         }catch{
             print("エラーが発生")

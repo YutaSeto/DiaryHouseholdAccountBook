@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 
-class BudgetModel: Object{
+class Budget: Object{
     @objc dynamic var id: String = ""
     @objc dynamic var expenseID: String = ""
     @objc dynamic var budgetDate: Date = Date()

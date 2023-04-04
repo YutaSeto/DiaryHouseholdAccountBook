@@ -10,7 +10,7 @@ import UIKit
 
 class LookDiaryViewController:UIViewController{
     
-    var diary:DiaryModel?
+    var diary:Diary?
     var pictureList:[Data] = []
     
     @IBOutlet weak var titleTextView: UITextView!

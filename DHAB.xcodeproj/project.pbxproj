@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		233E500729C2C55E00F35DB8 /* InputCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233E500529C2C55E00F35DB8 /* InputCollectionViewCell.swift */; };
 		233E500829C2C55E00F35DB8 /* InputCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */; };
-		23507F0E298E9AD70025EAE5 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0D298E9AD70025EAE5 /* CategoryModel.swift */; };
+		23507F0E298E9AD70025EAE5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0D298E9AD70025EAE5 /* Category.swift */; };
 		23507F10298E9BD00025EAE5 /* BudgetTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */; };
 		23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */; };
 		237AFB652974ECAC0060ECD0 /* BudgetViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */; };
@@ -23,8 +23,8 @@
 		237B85E62970471A001E4639 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237B85E42970471A001E4639 /* Main.storyboard */; };
 		237B85E82970471B001E4639 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 237B85E72970471B001E4639 /* Assets.xcassets */; };
 		237B85EB2970471B001E4639 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237B85E92970471B001E4639 /* LaunchScreen.storyboard */; };
-		237B85F62970492B001E4639 /* JournalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B85F52970492B001E4639 /* JournalModel.swift */; };
-		237B85FA29704956001E4639 /* DiaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B85F929704956001E4639 /* DiaryModel.swift */; };
+		237B85F62970492B001E4639 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B85F52970492B001E4639 /* Journal.swift */; };
+		237B85FA29704956001E4639 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B85F929704956001E4639 /* Diary.swift */; };
 		237B85FF29704A49001E4639 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B85FE29704A49001E4639 /* TabBarController.swift */; };
 		237B860129704A59001E4639 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B860029704A59001E4639 /* InputViewController.swift */; };
 		237B860329704A68001E4639 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B860229704A68001E4639 /* CalendarViewController.swift */; };
@@ -59,7 +59,7 @@
 		23EEE7D12972CF4000A52939 /* CalendarViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D02972CF4000A52939 /* CalendarViewController.storyboard */; };
 		23EEE7D32972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */; };
 		23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */; };
-		23EEE7D92972D7C000A52939 /* BudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7D82972D7C000A52939 /* BudgetModel.swift */; };
+		23EEE7D92972D7C000A52939 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7D82972D7C000A52939 /* Budget.swift */; };
 		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
 		EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */; };
 		EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */; };
@@ -69,7 +69,7 @@
 /* Begin PBXFileReference section */
 		233E500529C2C55E00F35DB8 /* InputCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCollectionViewCell.swift; sourceTree = "<group>"; };
 		233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputCollectionViewCell.xib; sourceTree = "<group>"; };
-		23507F0D298E9AD70025EAE5 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
+		23507F0D298E9AD70025EAE5 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTableViewCellItem.swift; sourceTree = "<group>"; };
 		23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookTableViewCellItem.swift; sourceTree = "<group>"; };
 		237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BudgetViewController.storyboard; sourceTree = "<group>"; };
@@ -85,8 +85,8 @@
 		237B85E72970471B001E4639 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		237B85EA2970471B001E4639 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		237B85EC2970471B001E4639 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		237B85F52970492B001E4639 /* JournalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalModel.swift; sourceTree = "<group>"; };
-		237B85F929704956001E4639 /* DiaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryModel.swift; sourceTree = "<group>"; };
+		237B85F52970492B001E4639 /* Journal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Journal.swift; sourceTree = "<group>"; };
+		237B85F929704956001E4639 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		237B85FE29704A49001E4639 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		237B860029704A59001E4639 /* InputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		237B860229704A68001E4639 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
@@ -121,7 +121,7 @@
 		23EEE7D02972CF4000A52939 /* CalendarViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CalendarViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HouseholdAccountBookViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DiaryViewController.storyboard; sourceTree = "<group>"; };
-		23EEE7D82972D7C000A52939 /* BudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetModel.swift; sourceTree = "<group>"; };
+		23EEE7D82972D7C000A52939 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
 		94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
 		C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
@@ -186,6 +186,8 @@
 		237B85DD2970471A001E4639 /* DHAB */ = {
 			isa = PBXGroup;
 			children = (
+				237B85DE2970471A001E4639 /* AppDelegate.swift */,
+				237B85E02970471A001E4639 /* SceneDelegate.swift */,
 				23A0B28B29A84CA1000956CF /* RecognitionChange.swift */,
 				23A0B29129AA4522000956CF /* extension + Date.swift */,
 				23CBECC029CBE87500A5E777 /* Entity */,
@@ -252,12 +254,10 @@
 		23CBECC029CBE87500A5E777 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				237B85DE2970471A001E4639 /* AppDelegate.swift */,
-				237B85E02970471A001E4639 /* SceneDelegate.swift */,
-				237B85F52970492B001E4639 /* JournalModel.swift */,
-				237B85F929704956001E4639 /* DiaryModel.swift */,
-				23EEE7D82972D7C000A52939 /* BudgetModel.swift */,
-				23507F0D298E9AD70025EAE5 /* CategoryModel.swift */,
+				237B85F52970492B001E4639 /* Journal.swift */,
+				237B85F929704956001E4639 /* Diary.swift */,
+				23EEE7D82972D7C000A52939 /* Budget.swift */,
+				23507F0D298E9AD70025EAE5 /* Category.swift */,
 				23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */,
 				23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */,
 			);
@@ -414,7 +414,7 @@
 				23507F10298E9BD00025EAE5 /* BudgetTableViewCellItem.swift in Sources */,
 				23EC22BB2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.swift in Sources */,
 				23D4070429DA931400E92C52 /* DiaryViewModel.swift in Sources */,
-				23EEE7D92972D7C000A52939 /* BudgetModel.swift in Sources */,
+				23EEE7D92972D7C000A52939 /* Budget.swift in Sources */,
 				23CBECC429CD726F00A5E777 /* LookDiaryViewController.swift in Sources */,
 				23A0B29229AA4522000956CF /* extension + Date.swift in Sources */,
 				23D4070829DA936900E92C52 /* BudgetConfigureViewModel.swift in Sources */,
@@ -426,11 +426,11 @@
 				23D406FC29DA927F00E92C52 /* TabBarModel.swift in Sources */,
 				23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */,
 				EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */,
-				237B85F62970492B001E4639 /* JournalModel.swift in Sources */,
+				237B85F62970492B001E4639 /* Journal.swift in Sources */,
 				23C1600D29795E0F0026EAF9 /* BudgetConfigureViewController.swift in Sources */,
 				239137F52970FF5500BF09F8 /* DiaryTableViewCell.swift in Sources */,
-				23507F0E298E9AD70025EAE5 /* CategoryModel.swift in Sources */,
-				237B85FA29704956001E4639 /* DiaryModel.swift in Sources */,
+				23507F0E298E9AD70025EAE5 /* Category.swift in Sources */,
+				237B85FA29704956001E4639 /* Diary.swift in Sources */,
 				237B860729704A8D001E4639 /* DiaryViewController.swift in Sources */,
 				23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */,
 				237B860129704A59001E4639 /* InputViewController.swift in Sources */,

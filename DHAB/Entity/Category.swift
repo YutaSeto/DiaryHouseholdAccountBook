@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class CategoryModel: Object{
+class Category: Object{
     @objc dynamic var id: String = NSUUID().uuidString
     @objc dynamic var name: String = ""
     @objc dynamic var isPayment: Bool = true
@@ -17,12 +17,12 @@ class CategoryModel: Object{
         self.init()
         let realm = try! Realm()
         
-        let paymentCategoriesCount = realm.objects(CategoryModel.self).filter{$0.isPayment == true}.count
+        let paymentCategoriesCount = realm.objects(Category.self).filter{$0.isPayment == true}.count
         guard paymentCategoriesCount <= 12 else {
             throw ValidationError.invalidTooManyCategories
         }
         
-        let incomeCategoriesCount = realm.objects(CategoryModel.self).filter{$0.isPayment == false}.count
+        let incomeCategoriesCount = realm.objects(Category.self).filter{$0.isPayment == false}.count
         guard incomeCategoriesCount <= 12 else {
             throw ValidationError.invalidTooManyCategories
         }

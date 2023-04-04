@@ -16,7 +16,7 @@ class TabBarModel{
             userDefaults.set(true, forKey: "hasLaunchedBefore")
             let realm = try! Realm()
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "食費"
                 category.isPayment = true
@@ -24,7 +24,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "日用品"
                 category.isPayment = true
@@ -32,7 +32,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "交通費"
                 category.isPayment = true
@@ -40,7 +40,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "光熱費"
                 category.isPayment = true
@@ -48,7 +48,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "交際費"
                 category.isPayment = true
@@ -56,7 +56,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "その他"
                 category.isPayment = true
@@ -64,7 +64,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "給料"
                 category.isPayment = false
@@ -72,7 +72,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "賞与"
                 category.isPayment = false
@@ -80,7 +80,7 @@ class TabBarModel{
             }
             
             try! realm.write{
-                let category = CategoryModel()
+                let category = Category()
                 category.id = NSUUID().uuidString
                 category.name = "その他"
                 category.isPayment = false

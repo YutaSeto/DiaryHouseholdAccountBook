@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class DiaryModel: Object{
+class Diary: Object{
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var date: Date = Date()
     @objc dynamic var title: String = ""

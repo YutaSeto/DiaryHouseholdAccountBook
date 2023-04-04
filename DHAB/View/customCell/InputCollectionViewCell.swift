@@ -9,7 +9,7 @@ import UIKit
 
 class InputCollectionViewCell: UICollectionViewCell {
 
-    var journal:JournalModel?
+    var journal:Journal?
     @IBOutlet weak var categoryLabel: UILabel!
     
     override func awakeFromNib() {

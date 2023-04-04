@@ -126,7 +126,7 @@ class InputViewController:UIViewController{
         dismiss(animated: true)
     }
     
-    func setPaymentData(data:JournalModel){
+    func setPaymentData(data:Journal){
         inputViewModel.journal = data
         priceTextField.text = String(data.price)
         resultLabel.text = data.category
@@ -141,7 +141,7 @@ class InputViewController:UIViewController{
         paymentCollectionView.reloadData()
     }
     
-    func setIncomeData(data:JournalModel){
+    func setIncomeData(data:Journal){
         inputViewModel.journal = data
         priceTextField.text = String(inputViewModel.journal!.price)
         resultLabel.text = inputViewModel.journal?.category
@@ -152,7 +152,7 @@ class InputViewController:UIViewController{
         }
     }
     
-    func setDiary(data:DiaryModel){
+    func setDiary(data:Diary){
         inputViewModel.diary = data
         titleTextField.text = inputViewModel.diary!.text
         diaryInputTextView.text = inputViewModel.diary!.text

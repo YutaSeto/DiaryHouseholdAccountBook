@@ -9,7 +9,7 @@ import UIKit
 
 class BudgetTableViewCell: UITableViewCell {
 
-    var journal:JournalModel?
+    var journal:Journal?
     @IBOutlet weak var budgetCategoryLabel: UILabel!
     @IBOutlet weak var budgetPriceLabel: UILabel!
     @IBOutlet weak var memoLabel: UILabel!

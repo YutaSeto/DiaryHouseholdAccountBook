@@ -16,11 +16,11 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     @IBOutlet weak var searchBar: UISearchBar!
     
     //日記関連
-    private var diaryList: [DiaryModel] = []
-    private var diaryByMonth:[String: [DiaryModel]] = [:]
+    private var diaryList: [Diary] = []
+    private var diaryByMonth:[String: [Diary]] = [:]
     
-    private var titleResult: Results<DiaryModel>?
-    private var textResult: Results<DiaryModel>?
+    private var titleResult: Results<Diary>?
+    private var textResult: Results<Diary>?
     
     @IBOutlet weak var diaryTableView: UITableView!
     
@@ -69,8 +69,8 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
             setDiaryData()
             diaryTableView.reloadData()
         }else{
-            let textResult = Array(realm.objects(DiaryModel.self).filter("text CONTAINS %@ " , searchText).sorted(byKeyPath: "date", ascending: false))
-            var titleResult = Array(realm.objects(DiaryModel.self).filter("title CONTAINS %@", searchText).sorted(byKeyPath: "date", ascending: false))
+            let textResult = Array(realm.objects(Diary.self).filter("text CONTAINS %@ " , searchText).sorted(byKeyPath: "date", ascending: false))
+            var titleResult = Array(realm.objects(Diary.self).filter("title CONTAINS %@", searchText).sorted(byKeyPath: "date", ascending: false))
             
             textResult.forEach{object in
                 if let index = titleResult.firstIndex(where: {$0.id == object.id}){
@@ -95,7 +95,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     
     func setDiaryData(){
         let realm = try! Realm()
-        let result = realm.objects(DiaryModel.self).sorted(byKeyPath: "date", ascending: false)
+        let result = realm.objects(Diary.self).sorted(byKeyPath: "date", ascending: false)
         diaryList = Array(result)
         
         diaryByMonth.removeAll()
