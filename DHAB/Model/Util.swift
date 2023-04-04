@@ -57,4 +57,28 @@ class Util:UIViewController{
         return dateFormatter
     }
     
+    func getComma(_ num: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        formatter.groupingSize = 3
+        let number = "\(formatter.string(from: NSNumber(value: num)) ?? "")"
+        return number
+    }
+    
+    func setFirstDay(date:Date) -> Date{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date.zeroclock)
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        return firstDay
+    }
+    
+    func setLastDay(date:Date) -> Date{
+        let calendar = Calendar(identifier: .gregorian)
+        let comps = calendar.dateComponents([.year, .month], from: date.zeroclock)
+        let firstDay = calendar.date(from: comps)!.zeroclock
+        let addMonth = DateComponents(month: 1)
+        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)?.zeroclock
+        return lastDay!
+    }
 }

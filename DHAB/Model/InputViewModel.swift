@@ -21,7 +21,7 @@ class InputViewModel{
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.timeZone = TimeZone(identifier: "Asia/tokyo")
-        datePicker.preferredDatePickerStyle = .wheels
+//        datePicker.preferredDatePickerStyle = .wheels
         datePicker.locale = Locale(identifier: "ja-JP")
         return datePicker
     }
@@ -75,9 +75,9 @@ class InputViewModel{
         })
         
         alert.addAction(cancel)
-//        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-//            rootViewController.present(alert, animated: true, completion: nil)
-//        }
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            rootViewController.present(alert, animated: true, completion: nil)
+        }
     }
     
     func showMemoAlert(){
@@ -88,9 +88,9 @@ class InputViewModel{
         })
         
         alert.addAction(cancel)
-//        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-//            rootViewController.present(alert, animated: true, completion: nil)
-//        }
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            rootViewController.present(alert, animated: true, completion: nil)
+        }
     }
     
     func OverwriteJournal(priceText:String,result:String,memoText:String){

@@ -12,26 +12,21 @@ import Charts
 
 class HouseholdAccountBookViewController:UIViewController{
         
-    private var date = Date()
+    let householdAccountBookViewModel = HouseholdAccountBookViewModel()
+    let util = Util()
+    
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var dayBackButton: UIButton!
     @IBOutlet weak var dayPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
     @IBOutlet weak var menuButton: UIBarButtonItem!
-    let util = Util()
     
     //subView関連
-    var isMonth = true
     @IBOutlet var paymentView: UIView!
     @IBOutlet var incomeView: UIView!
     @IBOutlet var savingView: UIView!
     
     //支出画面の設定
-    var sumPayment:HouseholdAccountBookTableViewCellItem = HouseholdAccountBookTableViewCellItem()
-    private var paymentList:[JournalModel] = []
-    private var paymentBudgetList:[BudgetModel] = []
-    private var categoryList:[CategoryModel] = []
-    private var paymentTableViewDataSource: [HouseholdAccountBookTableViewCellItem] = []
     
     @IBOutlet weak var sumPaymentTableView: UITableView!
     @IBOutlet weak var paymentTableView: UITableView!
@@ -39,84 +34,73 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var sumPaymentTableViewHeight: NSLayoutConstraint!
     
     //収入画面関連
-    var sumIncome:IncomeTableViewCellItem = IncomeTableViewCellItem()
-    var incomeList:[JournalModel] = []
-    var incomeBudgetList:[BudgetModel] = []
-    var incomeCategoryList:[CategoryModel] = []
-    var incomeTableViewDataSource: [IncomeTableViewCellItem] = []
     @IBOutlet weak var incomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableView: UITableView!
     @IBOutlet weak var sumIncomeTableViewHeight: NSLayoutConstraint!
     @IBOutlet weak var incomePieGraphView: PieChartView!
-    var targetItem:CategoryModel?
-    var targetIndex:IndexPath?
-    var targetJournal:[JournalModel]?
-    var targetBudget:[BudgetModel]?
     
     //slideMenu画面関連
-    let menuList = ["カテゴリーの設定","予算の設定"]
-    var isExpanded:Bool = false
     @IBOutlet var slideMenuView: UIView!
     @IBOutlet weak var menuTableView: UITableView!
     var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?
     
     //推移画面関連
-    var sumPaymentList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
-    var sumYearPayment: Int = 0
-    var sumIncomeList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
-    var sumYearIncome: Int = 0
     @IBOutlet weak var chartView: BarChartView!
     @IBOutlet weak var resultTableView: UITableView!
     @IBOutlet weak var resultSumTableView: UITableView!
-    
     @IBOutlet weak var resultSumTableViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         setNib()
-        dayLabel.text = util.monthDateFormatter.string(from:date)
+        dayLabel.text = util.monthDateFormatter.string(from:householdAccountBookViewModel.date)
         addSubView()
         addPaymentView()
         settingSubView()
         setDelegateAndDataSource()
-        setPaymentData()
-        setIncomeData()
-        setPaymentBudgetData()
-        setIncomeBudgetData()
-        setIncomeCategoryData()
-        setCategoryData()
-        setPaymentTableViewDataSourse()
-        setIncomeTableViewDataSourse()
-        setMonthSumPayment()
-        setMonthSumIncome()
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.setIncomeBudgetData()
+        householdAccountBookViewModel.setIncomeCategoryData()
+        householdAccountBookViewModel.setCategoryData()
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
         tableViewScroll()
         
+        incomeTableView.reloadData()
+        paymentTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        
         setChartView()
-        chartView.data = setData()
+        chartView.data = householdAccountBookViewModel.setData()
         setIncomePieGraphView()
-        incomePieGraphView.data = setIncomePieGraphData()
+        incomePieGraphView.data = householdAccountBookViewModel.setIncomePieGraphData()
         setNavigationBarButton()
         
-        if sumPayment(date) == 0{
+        if householdAccountBookViewModel.setSumPayment() == 0{
             return
         }else{
             setPaymentPieGraphView()
-            paymentPieGraphView.data = setPaymentPieGraphData()
+            paymentPieGraphView.data = householdAccountBookViewModel.setPaymentPieGraphData()
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if RecognitionChange.shared.updateHouseholdAccountBook == true{
-            setPaymentData()
-            setIncomeData()
-            setCategoryData()
-            setIncomeCategoryData()
-            setPaymentBudgetData()
-            setIncomeBudgetData()
-            paymentTableViewDataSource = []
-            setPaymentTableViewDataSourse()
-            incomeTableViewDataSource = []
-            setIncomeTableViewDataSourse()
+            householdAccountBookViewModel.setPaymentData()
+            householdAccountBookViewModel.setIncomeData()
+            householdAccountBookViewModel.setCategoryData()
+            householdAccountBookViewModel.setIncomeCategoryData()
+            householdAccountBookViewModel.setPaymentBudgetData()
+            householdAccountBookViewModel.setIncomeBudgetData()
+            householdAccountBookViewModel.paymentTableViewDataSource = []
+            householdAccountBookViewModel.setPaymentTableViewDataSourse()
+            householdAccountBookViewModel.incomeTableViewDataSource = []
+            householdAccountBookViewModel.setIncomeTableViewDataSourse()
             paymentTableView.reloadData()
             sumPaymentTableView.reloadData()
             incomeTableView.reloadData()
@@ -128,20 +112,23 @@ class HouseholdAccountBookViewController:UIViewController{
         }
         
         if RecognitionChange.shared.deletePayment == true{
-            setPaymentData()
-            setIncomeData()
-            setSumPaymentData()
-            setSumIncomeData()
-            paymentTableViewDataSource = []
-            incomeTableViewDataSource = []
-            setPaymentTableViewDataSourse()
-            setIncomeTableViewDataSourse()
-            setMonthSumPayment()
-            setMonthSumIncome()
+            householdAccountBookViewModel.setPaymentData()
+            householdAccountBookViewModel.setIncomeData()
+            householdAccountBookViewModel.setSumPaymentData()
+            householdAccountBookViewModel.setSumIncomeData()
+            householdAccountBookViewModel.paymentTableViewDataSource = []
+            householdAccountBookViewModel.incomeTableViewDataSource = []
+            
+            householdAccountBookViewModel.setPaymentTableViewDataSourse()
+            householdAccountBookViewModel.setIncomeTableViewDataSourse()
+            householdAccountBookViewModel.setMonthSumPayment()
+            householdAccountBookViewModel.setMonthSumIncome()
             paymentTableView.reloadData()
             sumPaymentTableView.reloadData()
             incomeTableView.reloadData()
             sumIncomeTableView.reloadData()
+            resultTableView.reloadData()
+            resultSumTableView.reloadData()
             updateChartView()
             updatePaymentPieGraph()
             updateIncomePieGraph()
@@ -193,13 +180,13 @@ class HouseholdAccountBookViewController:UIViewController{
         switch sender.selectedSegmentIndex{
         case 0:
             addPaymentView()
-            isMonth = true
+            householdAccountBookViewModel.isMonth = true
         case 1:
             addIncomeView()
-            isMonth = true
+            householdAccountBookViewModel.isMonth = true
         case 2:
             addSavingView()
-            isMonth = false
+            householdAccountBookViewModel.isMonth = false
         default:
             return
         }
@@ -222,38 +209,40 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     func dayBack(){
-        if isMonth{
-            date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
-            dayLabel.text = util.monthDateFormatter.string(from: date)
+        if householdAccountBookViewModel.isMonth{
+            householdAccountBookViewModel.date = Calendar.current.date(byAdding: .month, value: -1, to: householdAccountBookViewModel.date)!
+            dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
         }else{
-            date = Calendar.current.date(byAdding: .year, value: -1, to: date)!
-            dayLabel.text = util.yearDateFormatter.string(from: date)
+            householdAccountBookViewModel.date = Calendar.current.date(byAdding: .year, value: -1, to: householdAccountBookViewModel.date)!
+            dayLabel.text = util.yearDateFormatter.string(from: householdAccountBookViewModel.date)
         }
-        resetSumYearPaymentAndIncome()
-        setMonthSumPayment()
-        setMonthSumIncome()
+        householdAccountBookViewModel.resetSumYearPaymentAndIncome()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
         updateList()
         updateIncome()
         paymentTableView.reloadData()
         incomeTableView.reloadData()
+        resultTableView.reloadData()
         resultSumTableView.reloadData()
     }
     
     func dayPass(){
-        if isMonth{
-            date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
-            dayLabel.text = util.monthDateFormatter.string(from: date)
+        if householdAccountBookViewModel.isMonth{
+            householdAccountBookViewModel.date = Calendar.current.date(byAdding: .month, value: 1, to: householdAccountBookViewModel.date)!
+            dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
         }else{
-            date = Calendar.current.date(byAdding: .year, value: 1, to: date)!
-            dayLabel.text = util.yearDateFormatter.string(from: date)
+            householdAccountBookViewModel.date = Calendar.current.date(byAdding: .year, value: 1, to: householdAccountBookViewModel.date)!
+            dayLabel.text = util.yearDateFormatter.string(from: householdAccountBookViewModel.date)
         }
-        resetSumYearPaymentAndIncome()
-        setMonthSumPayment()
-        setMonthSumIncome()
+        householdAccountBookViewModel.resetSumYearPaymentAndIncome()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
         updateList()
         updateIncome()
         paymentTableView.reloadData()
         incomeTableView.reloadData()
+        resultTableView.reloadData()
         resultSumTableView.reloadData()
     }
     
@@ -269,20 +258,20 @@ class HouseholdAccountBookViewController:UIViewController{
         savingView.isHidden = true
         incomeView.isHidden = true
         paymentView.isHidden = false
-        dayLabel.text = util.monthDateFormatter.string(from: date)
+        dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
     }
     func addIncomeView(){
         savingView.isHidden = true
         paymentView.isHidden = true
         incomeView.isHidden = false
-        dayLabel.text = util.monthDateFormatter.string(from: date)
+        dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
     }
     
     func addSavingView(){
         incomeView.isHidden = true
         paymentView.isHidden = true
         savingView.isHidden = false
-        dayLabel.text = util.yearDateFormatter.string(from: date)
+        dayLabel.text = util.yearDateFormatter.string(from: householdAccountBookViewModel.date)
     }
     
     func settingSubView(){
@@ -313,27 +302,6 @@ class HouseholdAccountBookViewController:UIViewController{
     
     //支出画面関連
     
-    func setCategoryData(){
-        let realm = try! Realm()
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
-        categoryList = Array(result)
-        paymentTableView.reloadData()
-    }
-    
-    func setPaymentBudgetData(){
-        let realm = try! Realm()
-        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == true}
-        paymentBudgetList = Array(result)
-        paymentTableView.reloadData()
-    }
-    
-    func setPaymentData(){
-        let realm = try! Realm()
-        let result = realm.objects(JournalModel.self).filter{$0.isPayment == true}
-        paymentList = Array(result)
-        paymentTableView.reloadData()
-    }
-    
     func setPaymentPieGraphView(){
         paymentPieGraphView.highlightPerTapEnabled = false
         paymentPieGraphView.legend.enabled = false
@@ -342,217 +310,17 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentPieGraphView.noDataTextColor = .black
     }
     
-    private func setPaymentPieGraphData() -> PieChartData {
-        // データの配列を作成する
-        var dataEntries:[PieChartDataEntry] = []
-        
-        //こうすると項目の数が有限になってしまう
-        let colors:[UIColor] = [.red, .blue, .green, .yellow, .gray, .brown, .cyan, .purple, .orange]
-        for i in 0 ..< paymentTableViewDataSource.count{
-            dataEntries.append(PieChartDataEntry(value: Double(paymentTableViewDataSource[i].paymentPrice), label: paymentTableViewDataSource[i].name))
-        }
-        
-        let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
-        dataSet.colors = colors
-        dataSet.sliceSpace = 0.0
-        let data = PieChartData(dataSets: [dataSet])
-        dataSet.drawValuesEnabled = false
-        return data
-    }
-    
     private func updatePaymentPieGraph(){
-        if sumPayment(date) == 0{
+        if householdAccountBookViewModel.setSumPayment() == 0{
             paymentPieGraphView.data = nil
             paymentPieGraphView.notifyDataSetChanged()
             return
         }else{
             setPaymentPieGraphView()
-            paymentPieGraphView.data = setPaymentPieGraphData()
+            paymentPieGraphView.data = householdAccountBookViewModel.setPaymentPieGraphData()
         }
     }
-    
-    func setPaymentTableViewDataSourse(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!.zeroclock
-        let add = DateComponents(month: 1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!.zeroclock
-        let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay}).filter{$0.budgetDate < lastDay}
-        
-        let dayCheckPayment = paymentList.filter({$0.date >= firstDay}).filter{$0.date < lastDay}
-        categoryList.forEach{ expense in
-            if let budget:BudgetModel = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
-                let sum = dayCheckPayment.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
-                
-                let item = HouseholdAccountBookTableViewCellItem(
-                    id: budget.id,
-                    name: expense.name,
-                    paymentPrice:sum,
-                    budgetPrice: budget.budgetPrice
-                )
-                paymentTableViewDataSource.append(item)
-            } else {
-                let sumPayment = dayCheckPayment.filter{$0.category == expense.name}.map{$0.price}.reduce(0, {$0 + $1})
-                let data = BudgetModel()
-                data.id = UUID().uuidString
-                data.expenseID = expense.id
-                data.budgetDate = date
-                data.budgetPrice = 0
-                let realm = try! Realm()
-                try! realm.write { realm.add(data)}
-                paymentBudgetList.append(data)
-                
-                let item = HouseholdAccountBookTableViewCellItem(
-                    id:data.id,
-                    name: expense.name,
-                    paymentPrice: sumPayment,
-                    budgetPrice: data.budgetPrice
-                )
-                paymentTableViewDataSource.append(item)
-            }
-            
-            paymentTableView.reloadData()
-        }
-    }
-    
-    func sumPayment(_:Date) -> Int{
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!.zeroclock
-        let addMonth = DateComponents(month: 1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
-        let dayCheck = paymentList.filter({$0.date >= firstDay})
-        let dayCheck2 = dayCheck.filter({$0.date < lastDay})
-        let sum = dayCheck2.map{$0.price}.reduce(0){$0 + $1}
-        return sum
-    }
-    
-    func sumPaymentBudget(_:Date) -> Int{
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!.zeroclock
-        let addMonth = DateComponents(month: 1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
-        let dayCheck = paymentBudgetList.filter({$0.budgetDate >= firstDay})
-        let dayCheck2 = dayCheck.filter({$0.budgetDate < lastDay})
-        let sum = dayCheck2.map{$0.budgetPrice}.reduce(0){$0 + $1}
-        return sum
-    }
-    
-    func setSumPaymentData(){
-        sumPayment.name = "合計"
-        sumPayment.paymentPrice = sumPayment(date)
-        sumPayment.budgetPrice = sumPaymentBudget(date)
-    }
-    
-    func getComma(_ num: Int) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        formatter.groupingSize = 3
-        let number = "\(formatter.string(from: NSNumber(value: num)) ?? "")"
-        return number
-    }
-    
-    
-    //収入画面関連
 
-    
-    func setIncomeData(){
-        let realm = try! Realm()
-        let result = realm.objects(JournalModel.self).filter{$0.isPayment == false}
-        incomeList = Array(result)
-        incomeTableView.reloadData()
-    }
-    
-    func setIncomeCategoryData(){
-        let realm = try! Realm()
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
-        incomeCategoryList = Array(result)
-    }
-    
-    func setIncomeBudgetData(){
-        let realm = try! Realm()
-        let result = realm.objects(BudgetModel.self).filter{$0.isPayment == false}
-        incomeBudgetList = Array(result)
-    }
-    
-    func setSumIncomeData(){
-        sumIncome.name = "合計"
-        sumIncome.incomePrice = sumIncome(date)
-        sumIncome.incomeBudget = sumIncomeBudget(date)
-    }
-    
-    func setIncomeTableViewDataSourse(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!.zeroclock
-        let add = DateComponents(month: 1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!.zeroclock
-        let dayCheckBudget = incomeBudgetList.filter({$0.budgetDate >= firstDay}).filter{$0.budgetDate < lastDay}
-        
-        let dayCheckIncome = incomeList.filter({$0.date >= firstDay}).filter{$0.date < lastDay}
-        incomeCategoryList.forEach{ expense in
-            if let budget:BudgetModel = dayCheckBudget.filter({$0.expenseID == expense.id}).first{ //予算に入力がある時
-                let sum = dayCheckIncome.filter{$0.category == expense.name}.map{$0.price}.reduce(0){$0 + $1}
-
-                let item = IncomeTableViewCellItem(
-                    id: budget.id,
-                    name: expense.name,
-                    incomePrice:sum,
-                    incomeBudget: budget.budgetPrice
-                )
-                incomeTableViewDataSource.append(item)
-            }else{ //予算が入力されていなくて、priceに入力がない時
-                let sumPrice = dayCheckIncome.filter{$0.category == expense.name}.map{$0.price}.reduce(0, {$0 + $1})
-                let data = BudgetModel()
-                data.id = UUID().uuidString
-                data.expenseID = expense.id
-                data.budgetDate = date
-                data.budgetPrice = 0
-                let realm = try! Realm()
-                try! realm.write { realm.add(data)}
-                incomeBudgetList.append(data)
-
-                let item = IncomeTableViewCellItem(
-                    id:data.id,
-                    name: expense.name,
-                    incomePrice: sumPrice,
-                    incomeBudget:data.budgetPrice
-                )
-                incomeTableViewDataSource.append(item)
-            }
-        }
-        //カテゴリーの数だけデータを返す。これは正しい
-        //budgetではなくてpriceでデータを集約する。ケースはpriceが0の時、
-        
-        incomeTableView.reloadData()
-    }
-    
-    func sumIncome(_:Date) -> Int{
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!.zeroclock
-        let addMonth = DateComponents(month: 1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
-        let dayCheck = incomeList.filter({$0.date >= firstDay})
-        let dayCheck2 = dayCheck.filter({$0.date < lastDay})
-        let sum = dayCheck2.filter{$0.isPayment == false}.map{$0.price}.reduce(0){$0 + $1}
-        return sum
-    }
-    
-    func sumIncomeBudget(_:Date) -> Int{
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!.zeroclock
-        let addMonth = DateComponents(month: 1)
-        let lastDay = calendar.date(byAdding: addMonth, to: firstDay)!.zeroclock
-        let dayCheck = incomeBudgetList.filter({$0.budgetDate >= firstDay})
-        let dayCheck2 = dayCheck.filter({$0.budgetDate < lastDay})
-        let sum = dayCheck2.filter{$0.isPayment == false}.map{$0.budgetPrice}.reduce(0){$0 + $1}
-        return sum
-    }
-    
     func setIncomePieGraphView(){
         incomePieGraphView.highlightPerTapEnabled = false
         incomePieGraphView.legend.enabled = false
@@ -561,31 +329,14 @@ class HouseholdAccountBookViewController:UIViewController{
         incomePieGraphView.noDataTextColor = .black
     }
     
-    private func setIncomePieGraphData() -> PieChartData {
-        // データの配列を作成する
-        var dataEntries:[PieChartDataEntry] = []
-        
-        //こうすると項目の数が有限になる
-        let colors:[UIColor] = [.red, .blue, .green, .yellow, .gray, .brown, .cyan, .purple, .orange]
-        for i in 0 ..< incomeTableViewDataSource.count{
-            dataEntries.append(PieChartDataEntry(value: Double(incomeTableViewDataSource[i].incomePrice), label: incomeTableViewDataSource[i].name))
-        }
-        
-        let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
-        dataSet.colors = colors
-        let data = PieChartData(dataSets: [dataSet])
-        dataSet.drawValuesEnabled = false
-        return data
-    }
-    
     private func updateIncomePieGraph(){
-        if sumIncome(date) == 0{
+        if householdAccountBookViewModel.setSumIncome() == 0{
             incomePieGraphView.data = nil
             incomePieGraphView.notifyDataSetChanged()
             return
         }else{
             setIncomePieGraphView()
-            incomePieGraphView.data = setIncomePieGraphData()
+            incomePieGraphView.data = householdAccountBookViewModel.setIncomePieGraphData()
         }
     }
     
@@ -613,17 +364,17 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     @objc func showMenuButton(){
-        showMenu(shouldExpand: isExpanded)
+        showMenu(shouldExpand: householdAccountBookViewModel.isExpanded)
     }
     
     @IBAction func menuButton(_ sender: UIBarButtonItem) {
-        showMenu(shouldExpand: isExpanded)
+        showMenu(shouldExpand: householdAccountBookViewModel.isExpanded)
     }
     
     func showMenu(shouldExpand:Bool){
         if shouldExpand{
             returnView()
-            isExpanded = false
+            householdAccountBookViewModel.isExpanded = false
         }else{
             UIView.animate(
                 withDuration: 0.3,
@@ -634,7 +385,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 animations: {
                     self.slideMenuView.frame.origin.x = self.view.frame.width - self.slideMenuView.frame.width
                 }, completion: nil)
-            isExpanded = true
+            householdAccountBookViewModel.isExpanded = true
         }
     }
     
@@ -645,7 +396,7 @@ class HouseholdAccountBookViewController:UIViewController{
                 return
             }else{
                 returnView()
-                isExpanded = true
+                householdAccountBookViewModel.isExpanded = true
             }
         }
     }
@@ -674,47 +425,6 @@ class HouseholdAccountBookViewController:UIViewController{
         )
     }
     
-    //推移画面関連
-    func setMonthSumPayment(){
-        for i in 0 ..< 12{
-            let calendar = Calendar(identifier: .gregorian)
-            let comps = calendar.dateComponents([.year], from: date)
-            let day = calendar.date(from: comps)!
-            let addIMonth = DateComponents(month: i)
-            let add2Month = DateComponents(month: i + 1)
-            let firstDay = calendar.date(byAdding: addIMonth, to: day)?.zeroclock
-            let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
-            let dayCheckSumPayment = paymentList.filter({$0.date >= firstDay!})
-            let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
-            sumPaymentList[i] = Double(Int(dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1}))
-            sumYearPayment += Int(sumPaymentList[i])
-        }
-        resultTableView.reloadData()
-        resultSumTableView.reloadData()
-    }
-    
-    func resetSumYearPaymentAndIncome(){
-        sumYearPayment = 0
-        sumYearIncome = 0
-    }
-    
-    func setMonthSumIncome(){
-        for i in 0 ..< 12{
-            let calendar = Calendar(identifier: .gregorian)
-            let comps = calendar.dateComponents([.year], from: date)
-            let day = calendar.date(from: comps)!
-            let addIMonth = DateComponents(month: i)
-            let add2Month = DateComponents(month: i + 1)
-            let firstDay = calendar.date(byAdding: addIMonth, to: day)?.zeroclock
-            let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
-            let dayCheckSumPayment = incomeList.filter({$0.date >= firstDay!})
-            let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
-            sumIncomeList[i] = Double(dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1})
-            sumYearIncome += Int(sumIncomeList[i])
-        }
-        resultTableView.reloadData()
-        resultSumTableView.reloadData()
-    }
     
     private func setChartView() {
         chartView.highlightPerTapEnabled = false
@@ -725,55 +435,34 @@ class HouseholdAccountBookViewController:UIViewController{
     }
     
     private func updateChartView(){
-        if sumYearPayment == 0{
+        if householdAccountBookViewModel.sumYearPayment == 0{
             chartView.data = nil
             chartView.notifyDataSetChanged()
         }else{
-            chartView.data = setData()
+            chartView.data = householdAccountBookViewModel.setData()
             chartView.notifyDataSetChanged()
         }
     }
     
 
     // チャートのデータを設定するメソッド
-    private func setData() -> BarChartData {
-        // データの配列を作成する
-        
-        var colors: [UIColor] = []
-        var dataEntries:[BarChartDataEntry] = []
-        for i in 0 ..< 12{
-            dataEntries.append(BarChartDataEntry(x: Double(i), y: sumIncomeList[i] - sumPaymentList[i]))
-            if sumIncomeList[i] - sumPaymentList[i] <= 0 {
-                colors.append(.red)
-            } else {
-                colors.append(.blue)
-            }
-        }
-        
-        // データセットを作成する
-        let dataSet = BarChartDataSet(entries: dataEntries, label: "収支")
-        dataSet.colors = colors
-        
-        // チャートデータを作成する
-        let data = BarChartData(dataSets: [dataSet])
-        data.barWidth = 0.6
-        
-        return data
-    }
+
     
     func updateList() {
-        setPaymentData()
-        setIncomeData()
-        setCategoryData()
-        setIncomeCategoryData()
-        setPaymentBudgetData()
-        setIncomeBudgetData()
-        paymentTableViewDataSource = []
-        incomeTableViewDataSource = []
-        setPaymentTableViewDataSourse()
-        setIncomeTableViewDataSourse()
-        setSumPaymentData()
-        setSumIncomeData()
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setCategoryData()
+        householdAccountBookViewModel.setIncomeCategoryData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.setIncomeBudgetData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setSumPaymentData()
+        householdAccountBookViewModel.setSumIncomeData()
+        paymentTableView.reloadData()
+        incomeTableView.reloadData()
         sumPaymentTableView.reloadData()
         sumIncomeTableView.reloadData()
         resultTableView.reloadData()
@@ -803,27 +492,29 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
     }
     
     func updatePayment() {
-        setPaymentData()
-        setIncomeData()
-        setCategoryData()
-        setIncomeCategoryData()
-        setPaymentBudgetData()
-        setIncomeBudgetData()
-        paymentTableViewDataSource = []
-        incomeTableViewDataSource = []
-        setPaymentTableViewDataSourse()
-        setIncomeTableViewDataSourse()
-        setSumPaymentData()
-        setSumIncomeData()
-        setMonthSumPayment()
-        setMonthSumIncome()
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setCategoryData()
+        householdAccountBookViewModel.setIncomeCategoryData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.setIncomeBudgetData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setSumPaymentData()
+        householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
         
         updateChartView()
         updatePaymentPieGraph()
         updateIncomePieGraph()
         
+        paymentTableView.reloadData()
         incomeTableView.reloadData()
         sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
         resultSumTableView.reloadData()
         paymentTableView.reloadData()
         sumPaymentTableView.reloadData()
@@ -840,15 +531,15 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === paymentTableView{
-            return categoryList.count
+            return householdAccountBookViewModel.categoryList.count
         }else if tableView === incomeTableView{
-            return incomeCategoryList.count
+            return householdAccountBookViewModel.incomeCategoryList.count
         }else if tableView === sumPaymentTableView{
             return 1
         }else if tableView === sumIncomeTableView{
             return 1
         }else if tableView === menuTableView{
-            return menuList.count
+            return householdAccountBookViewModel.menuList.count
         }else if tableView === resultTableView{
             return 12
         }else if tableView === resultSumTableView{
@@ -860,12 +551,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView === paymentTableView{
             let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
-            let item = paymentTableViewDataSource[indexPath.row]
+            let item = householdAccountBookViewModel.paymentTableViewDataSource[indexPath.row]
             cell.data = item
             cell.expenceItemLabel.text = item.name
-            cell.budgetLabel.text = getComma(item.budgetPrice)
-            cell.priceLabel.text = getComma(item.paymentPrice)
-            cell.balanceLabel.text = getComma(item.budgetPrice - item.paymentPrice)
+            cell.budgetLabel.text = util.getComma(item.budgetPrice)
+            cell.priceLabel.text = util.getComma(item.paymentPrice)
+            cell.balanceLabel.text = util.getComma(item.budgetPrice - item.paymentPrice)
             guard item.budgetPrice != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
@@ -874,12 +565,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             return cell
         }else if tableView === incomeTableView{
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
-            let item = incomeTableViewDataSource[indexPath.row]
+            let item = householdAccountBookViewModel.incomeTableViewDataSource[indexPath.row]
             cell.incomeData = item
             cell.expenceItemLabel.text = item.name
-            cell.budgetLabel.text = getComma(item.incomeBudget)
-            cell.priceLabel.text = getComma(item.incomePrice)
-            cell.balanceLabel.text = getComma(item.incomeBudget - item.incomePrice)
+            cell.budgetLabel.text = util.getComma(item.incomeBudget)
+            cell.priceLabel.text = util.getComma(item.incomePrice)
+            cell.balanceLabel.text = util.getComma(item.incomeBudget - item.incomePrice)
             guard item.incomeBudget != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
@@ -889,46 +580,46 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         }else if tableView === sumPaymentTableView{
             let cell = sumPaymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
-            cell.budgetLabel.text = getComma(sumPaymentBudget(_:date))
-            cell.priceLabel.text = getComma(sumPayment(_:date))
-            cell.balanceLabel.text = getComma(sumPaymentBudget(date) - sumPayment(date))
-            guard sumPaymentBudget(date) != 0 else {
+            cell.budgetLabel.text = util.getComma(householdAccountBookViewModel.sumPaymentBudget())
+            cell.priceLabel.text = util.getComma(householdAccountBookViewModel.setSumPayment())
+            cell.balanceLabel.text = util.getComma(householdAccountBookViewModel.sumPaymentBudget() - householdAccountBookViewModel.setSumPayment())
+            guard householdAccountBookViewModel.sumPaymentBudget() != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
             }
-            cell.progressBar.setProgress(1 - Float(Float(sumPaymentBudget(date) - sumPayment(date)) / Float(sumPaymentBudget(date))), animated: false)
+            cell.progressBar.setProgress(1 - Float(Float(householdAccountBookViewModel.sumPaymentBudget() - householdAccountBookViewModel.setSumPayment()) / Float(householdAccountBookViewModel.sumPaymentBudget())), animated: false)
             return cell
         }else if tableView === sumIncomeTableView{
             let cell = sumIncomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
-            cell.budgetLabel.text = String(sumIncomeBudget(_:date))
-            cell.priceLabel.text = String(sumIncome(_:date))
-            cell.balanceLabel.text = String(sumIncomeBudget(date) - sumIncome(date))
-            guard sumIncomeBudget(date) != 0 else {
+            cell.budgetLabel.text = String(householdAccountBookViewModel.sumIncomeBudget())
+            cell.priceLabel.text = String(householdAccountBookViewModel.setSumIncome())
+            cell.balanceLabel.text = String(householdAccountBookViewModel.sumIncomeBudget() - householdAccountBookViewModel.setSumIncome())
+            guard householdAccountBookViewModel.sumIncomeBudget() != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
             }
-            cell.progressBar.setProgress(1 - Float(Float(sumIncomeBudget(date) - sumIncome(date)) / Float(sumIncomeBudget(date))), animated: false)
+            cell.progressBar.setProgress(1 - Float(Float(householdAccountBookViewModel.sumIncomeBudget() - householdAccountBookViewModel.setSumIncome()) / Float(householdAccountBookViewModel.sumIncomeBudget())), animated: false)
             return cell
         }else if tableView === menuTableView{
             let cell = menuTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel!.text = menuList[indexPath.row]
+            cell.textLabel!.text = householdAccountBookViewModel.menuList[indexPath.row]
             return cell
         }else if tableView === resultTableView{
             let cell = resultTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "\(String(indexPath.row + 1))月"
-            cell.paymentLabel.text = String(Int(sumPaymentList[indexPath.row]))
-            cell.incomeLabel.text = String(Int(sumIncomeList[indexPath.row]))
-            cell.resultLabel.text = String(Int(sumIncomeList[indexPath.row] - sumPaymentList[indexPath.row]))
+            cell.paymentLabel.text = String(Int(householdAccountBookViewModel.sumPaymentList[indexPath.row]))
+            cell.incomeLabel.text = String(Int(householdAccountBookViewModel.sumIncomeList[indexPath.row]))
+            cell.resultLabel.text = String(Int(householdAccountBookViewModel.sumIncomeList[indexPath.row] - householdAccountBookViewModel.sumPaymentList[indexPath.row]))
             return cell
         }else if tableView === resultSumTableView{
             let cell = resultSumTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "累計"
-            cell.paymentLabel.text = String(sumYearPayment)
-            cell.incomeLabel.text = String(sumYearIncome)
-            cell.resultLabel.text = String(sumYearIncome - sumYearPayment)
+            cell.paymentLabel.text = String(householdAccountBookViewModel.sumYearPayment)
+            cell.incomeLabel.text = String(householdAccountBookViewModel.sumYearIncome)
+            cell.resultLabel.text = String(householdAccountBookViewModel.sumYearIncome - householdAccountBookViewModel.sumYearPayment)
             return cell
         }
         return UITableViewCell()
@@ -950,7 +641,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     expenseItemViewController.segmentedControl!.selectedSegmentIndex = 1
                     expenseItemViewController.addIncomeView()
                     returnView0Second()
-                    isExpanded = false
+                    householdAccountBookViewModel.isExpanded = false
                 }else{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
                     let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
@@ -961,7 +652,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     navigationController.pushViewController(expenseItemViewController, animated: true)
                     present(navigationController,animated: true)
                     returnView0Second()
-                    isExpanded = false
+                    householdAccountBookViewModel.isExpanded = false
                 }
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
@@ -973,13 +664,13 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 
                 present(navigationController,animated: true)
                 returnView0Second()
-                isExpanded = false
+                householdAccountBookViewModel.isExpanded = false
             default:
                 return
             }
             tableView.deselectRow(at: indexPath, animated: true)
         }else{
-            if isExpanded == true{
+            if householdAccountBookViewModel.isExpanded == true{
                 returnView()
             }
         }
@@ -990,16 +681,16 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
 
 extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
     func deletePayment() {
-        setPaymentData()
-        setIncomeData()
-        setSumPaymentData()
-        setSumIncomeData()
-        paymentTableViewDataSource = []
-        incomeTableViewDataSource = []
-        setPaymentTableViewDataSourse()
-        setIncomeTableViewDataSourse()
-        setMonthSumPayment()
-        setMonthSumIncome()
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setSumPaymentData()
+        householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
         paymentTableView.reloadData()
         sumPaymentTableView.reloadData()
         incomeTableView.reloadData()
@@ -1016,12 +707,13 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
     }
     
     func updateHouseholdAccountBook() {
-        setPaymentData()
-        setCategoryData()
-        setPaymentBudgetData()
-        paymentTableViewDataSource = []
-        setPaymentTableViewDataSourse()
-        setSumPaymentData()
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setCategoryData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setSumPaymentData()
+        paymentTableView.reloadData()
         sumIncomeTableView.reloadData()
         resultTableView.reloadData()
         resultSumTableView.reloadData()
@@ -1031,13 +723,13 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
     }
     
     func updateIncome() {
-        setIncomeData()
-        setIncomeBudgetData()
-        setIncomeCategoryData()
-        incomeTableViewDataSource = []
-        setIncomeTableViewDataSourse()
-        setSumIncomeData()
-        setMonthSumIncome()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setIncomeBudgetData()
+        householdAccountBookViewModel.setIncomeCategoryData()
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.setMonthSumIncome()
         incomeTableView.reloadData()
         resultSumTableView.reloadData()
         resultTableView.reloadData()
@@ -1051,43 +743,43 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
 
 extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
     func setTargetItem(data:CategoryModel,index:IndexPath,journal:[JournalModel],budget:[BudgetModel]){
-        targetItem = data
-        targetIndex = index
-        targetJournal = journal
-        targetBudget = budget
+        householdAccountBookViewModel.targetItem = data
+        householdAccountBookViewModel.targetIndex = index
+        householdAccountBookViewModel.targetJournal = journal
+        householdAccountBookViewModel.targetBudget = budget
     }
     
     func remakeViewController() {
         //カテゴリーについて
-        if targetItem?.isPayment == true{
-            categoryList.remove(at: targetIndex!.row)
-            paymentTableView.deleteRows(at: [targetIndex!], with: .automatic)
-        }else if targetItem?.isPayment == false{
-            incomeCategoryList.remove(at: targetIndex!.row)
-            incomeTableView.deleteRows(at: [targetIndex!], with: .automatic)
+        if householdAccountBookViewModel.targetItem?.isPayment == true{
+            householdAccountBookViewModel.categoryList.remove(at: householdAccountBookViewModel.targetIndex!.row)
+            paymentTableView.deleteRows(at: [householdAccountBookViewModel.targetIndex!], with: .automatic)
+        }else if householdAccountBookViewModel.targetItem?.isPayment == false{
+            householdAccountBookViewModel.incomeCategoryList.remove(at: householdAccountBookViewModel.targetIndex!.row)
+            incomeTableView.deleteRows(at: [householdAccountBookViewModel.targetIndex!], with: .automatic)
         }
         //Journalについて paymentlist,incomelist, struct2種
-        if targetItem?.isPayment == true{
-            targetJournal!.forEach{target in
-                let index = paymentList.firstIndex(where: {$0.id == target.id})
-                paymentList.remove(at: index!)
+        if householdAccountBookViewModel.targetItem?.isPayment == true{
+            householdAccountBookViewModel.targetJournal!.forEach{target in
+                let index = householdAccountBookViewModel.paymentList.firstIndex(where: {$0.id == target.id})
+                householdAccountBookViewModel.paymentList.remove(at: index!)
             }
-        }else if targetItem?.isPayment == false{
-            targetJournal!.forEach{target in
-                let index = incomeList.firstIndex(where: {$0.id == target.id})
-                incomeList.remove(at: index!)
+        }else if householdAccountBookViewModel.targetItem?.isPayment == false{
+            householdAccountBookViewModel.targetJournal!.forEach{target in
+                let index = householdAccountBookViewModel.incomeList.firstIndex(where: {$0.id == target.id})
+                householdAccountBookViewModel.incomeList.remove(at: index!)
             }
         }
         //Budgetについて paymentBudgetList,incomeBudgetList, struct2種類
-        if targetItem?.isPayment == true{
-            targetBudget!.forEach{target in
-                let index = paymentBudgetList.firstIndex(where: {$0.id == target.id})
-                paymentBudgetList.remove(at: index!)
+        if householdAccountBookViewModel.targetItem?.isPayment == true{
+            householdAccountBookViewModel.targetBudget!.forEach{target in
+                let index = householdAccountBookViewModel.paymentBudgetList.firstIndex(where: {$0.id == target.id})
+                householdAccountBookViewModel.paymentBudgetList.remove(at: index!)
             }
-        }else if targetItem?.isPayment == false{
-            targetBudget!.forEach{target in
-                let index = incomeBudgetList.firstIndex(where: {$0.id == target.id})
-                incomeBudgetList.remove(at: index!)
+        }else if householdAccountBookViewModel.targetItem?.isPayment == false{
+            householdAccountBookViewModel.targetBudget!.forEach{target in
+                let index = householdAccountBookViewModel.incomeBudgetList.firstIndex(where: {$0.id == target.id})
+                householdAccountBookViewModel.incomeBudgetList.remove(at: index!)
             }
         }
     }
@@ -1100,16 +792,16 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
 
 extension HouseholdAccountBookViewController:ForHouseholdAccountBookDeleagte,BudgetViewControllerDelegate{
     func updateHouseholdAccountBookView() {
-        setPaymentData()
-        setIncomeData()
-        setSumPaymentData()
-        setSumIncomeData()
-        paymentTableViewDataSource = []
-        incomeTableViewDataSource = []
-        setPaymentTableViewDataSourse()
-        setIncomeTableViewDataSourse()
-        setMonthSumPayment()
-        setMonthSumIncome()
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setSumPaymentData()
+        householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
         paymentTableView.reloadData()
         sumPaymentTableView.reloadData()
         incomeTableView.reloadData()
