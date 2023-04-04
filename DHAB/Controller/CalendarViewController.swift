@@ -407,10 +407,10 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
             let navigationController = UINavigationController(rootViewController: inputViewController)
             inputViewController.inputViewControllerDelegate = self
-            inputViewController.journal? = displayJournalList[indexPath.row]
+            inputViewController.inputViewModel.journal? = displayJournalList[indexPath.row]
             if journal.isPayment == false{
                 income = journal
-                inputViewController.isPayment = false
+                inputViewController.inputViewModel.isPayment = false
                 inputViewController.setPaymentData(data: displayJournalList[indexPath.row])
                 inputCollectionViewCell.journal = journal
                 present(navigationController,animated:true)
@@ -427,11 +427,11 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
             let navigationController = UINavigationController(rootViewController: inputViewController)
             inputViewController.inputViewControllerDelegate = self
-            inputViewController.diary? = setDiaryTableView(selectedDate)[indexPath.row]
+            inputViewController.inputViewModel.diary? = setDiaryTableView(selectedDate)[indexPath.row]
             inputViewController.setDiary(data: setDiaryTableView(selectedDate)[indexPath.row])
             present(navigationController,animated:true)
             inputViewController.addDiaryView()
-            inputViewController.isDiary = true
+            inputViewController.inputViewModel.isDiary = true
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }

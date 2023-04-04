@@ -17,6 +17,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBarModel.setFirstCategory()
         tabBarModel.configureBackgroundColor()
         controllers = tabBarModel.initTab()
         setViewControllers(controllers, animated: false)
@@ -34,6 +35,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     
     func remakeViewController() {
+        print(" デリゲートが機能しました")
         let vc = self.viewControllers
         vc!.forEach{
             if let target = $0 as? CalendarViewController{

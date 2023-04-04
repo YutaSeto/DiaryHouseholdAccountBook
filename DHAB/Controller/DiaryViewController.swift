@@ -59,7 +59,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         let navigationController = UINavigationController(rootViewController: inputViewController)
         inputViewController.inputViewControllerDelegate = self
         self.present(navigationController,animated:true)
-        inputViewController.isDiary = true
+        inputViewController.inputViewModel.isDiary = true
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

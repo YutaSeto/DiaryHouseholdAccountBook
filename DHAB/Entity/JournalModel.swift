@@ -35,4 +35,5 @@ class JournalModel: Object{
         case invalidPriceLimit
         case invalidMemoLimit
     }
+    
 }

@@ -23,6 +23,7 @@ protocol InputViewControllerDelegate{
 class InputViewController:UIViewController{
     
     let inputViewModel = InputViewModel()
+    let util = Util()
     
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
@@ -30,13 +31,6 @@ class InputViewController:UIViewController{
     @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var segmentedControlHeight: NSLayoutConstraint!
     //家計簿記入画面関連
-    var journal:JournalModel? = nil
-    var isPayment:Bool = true
-    let util = Util()
-    let realm = try! Realm()
-    var categoryList:[CategoryModel] = []
-    var incomeCategoryList:[CategoryModel] = []
-    public var date:Date = Date()
     public var inputViewControllerDelegate:InputViewControllerDelegate?
     public var inputViewControllerDelegate2:InputViewControllerDelegate?
     @IBOutlet weak var incomeCollectionView: UICollectionView!
@@ -48,15 +42,6 @@ class InputViewController:UIViewController{
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var memoTextField: UITextField!
     
-    var datePicker:UIDatePicker{
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.timeZone = TimeZone(identifier: "Asia/tokyo")
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.locale = Locale(identifier: "ja-JP")
-        return datePicker
-    }
-    
     var toolbar: UIToolbar{
         let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
         let toolbar = UIToolbar(frame: toolbarRect)
@@ -66,21 +51,13 @@ class InputViewController:UIViewController{
     }
     
     //日記関連
-    var isDiary:Bool = false
-    var diary:DiaryModel?
-    var selectedIndex:Int?
-    var imageArray:[Data] = []
-    var currentIndex = 0
     var collectionViewDelegate:UICollectionViewDelegate?
-    private var diaryModel = DiaryModel()
-    private var diaryList:[DiaryModel] = []
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
     @IBOutlet weak var addDiaryButton: UIButton!
     @IBOutlet weak var countLabel: UILabel!
-    
     @IBOutlet weak var diaryDateTextField: UITextField!
     
     override func viewDidLoad(){
@@ -103,11 +80,11 @@ class InputViewController:UIViewController{
         addSubView()
         addHouseholdAccountView()
         settingSubView()
-        dateTextField.text = util.dayDateFormatter.string(from: date)
-        diaryDateTextField.text = util.dayDateFormatter.string(from: date)
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
         settingCollectionView()
-        setCategoryData()
-        setIncomeCategoryData()
+        inputViewModel.setCategoryData()
+        inputViewModel.setIncomeCategoryData()
         configureAddButton()
         setNavigationBarButton()
         setToolbar()
@@ -117,12 +94,12 @@ class InputViewController:UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if isDiary == true{
+        if inputViewModel.isDiary == true{
             viewChangeSegmentedControl.selectedSegmentIndex = 1
             addDiaryView()
         }
         
-        if diary != nil || journal != nil{
+        if inputViewModel.diary != nil || inputViewModel.journal != nil{
             viewChangeSegmentedControl.isHidden = true
             segmentedControlHeight.constant = 0
         }
@@ -150,38 +127,37 @@ class InputViewController:UIViewController{
     }
     
     func setPaymentData(data:JournalModel){
-        journal = data
+        inputViewModel.journal = data
         priceTextField.text = String(data.price)
         resultLabel.text = data.category
-        isPayment = journal!.isPayment
-        date = data.date
-        setCategoryData()
+        inputViewModel.isPayment = inputViewModel.journal!.isPayment
+        inputViewModel.date = data.date
+        inputViewModel.setCategoryData()
         if data.memo != ""{
             memoTextField.text = data.memo
         }
         paymentCollectionView.dataSource = self
         paymentCollectionView.delegate = self
         paymentCollectionView.reloadData()
-        
     }
     
     func setIncomeData(data:JournalModel){
-        journal = data
-        priceTextField.text = String(journal!.price)
-        resultLabel.text = journal?.category
-        isPayment = false
-        date = journal!.date
+        inputViewModel.journal = data
+        priceTextField.text = String(inputViewModel.journal!.price)
+        resultLabel.text = inputViewModel.journal?.category
+        inputViewModel.isPayment = false
+        inputViewModel.date = inputViewModel.journal!.date
         if data.memo != ""{
             memoTextField.text = data.memo
         }
     }
     
     func setDiary(data:DiaryModel){
-        diary = data
-        titleTextField.text = diary!.text
-        diaryInputTextView.text = diary!.text
-        date = diary!.date
-        imageArray = Array(data.pictureList)
+        inputViewModel.diary = data
+        titleTextField.text = inputViewModel.diary!.text
+        diaryInputTextView.text = inputViewModel.diary!.text
+        inputViewModel.date = inputViewModel.diary!.date
+        inputViewModel.imageArray = Array(data.pictureList)
     }
     
     func addSubView(){
@@ -218,7 +194,7 @@ class InputViewController:UIViewController{
         paymentCollectionView.topAnchor.constraint(equalTo: dateTextField.bottomAnchor,constant: 10).isActive = true
         paymentCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         paymentCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
-        let numberOfItems = categoryList.count
+        let numberOfItems = inputViewModel.categoryList.count
         let itemHeight: CGFloat = 38.0
         let space: CGFloat = 5
         
@@ -233,7 +209,7 @@ class InputViewController:UIViewController{
             return 1
         }
         let paymentCollectionHeight = CGFloat((returnRows(items: numberOfItems) * Int(itemHeight)) + Int(returnRows(items: numberOfItems) - 2) * Int(space))
-        let incomeNumberOfItems = incomeCategoryList.count
+        let incomeNumberOfItems = inputViewModel.incomeCategoryList.count
         paymentCollectionView.heightAnchor.constraint(equalToConstant: paymentCollectionHeight).isActive = true
         incomeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         incomeCollectionView.topAnchor.constraint(equalTo: paymentCollectionView.bottomAnchor,constant: 10).isActive = true
@@ -277,24 +253,24 @@ class InputViewController:UIViewController{
         if let selectedItem = incomeCollectionView.indexPathsForSelectedItems?.first{
             incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
-        journal = nil
+        inputViewModel.journal = nil
         
     }
     
     @objc func didTapFinishButton(){
         if let targetDateText = dateTextField.text,
            let targetDate = util.monthDateFormatter.date(from:targetDateText){
-            date = targetDate.zeroclock
+            inputViewModel.date = targetDate.zeroclock
         }
         if let targetDateText = diaryDateTextField.text,
            let targetDate = util.monthDateFormatter.date(from: targetDateText){
-            date = targetDate.zeroclock
+            inputViewModel.date = targetDate.zeroclock
         }
         view.endEditing(true)
     }
     
     func configureDateTextField(){
-        let householdAccountBookDatePicker = datePicker
+        let householdAccountBookDatePicker = inputViewModel.datePicker
         let targetDate = Date()
         householdAccountBookDatePicker.date = targetDate
         dateTextField.inputView = householdAccountBookDatePicker
@@ -309,13 +285,13 @@ class InputViewController:UIViewController{
     }
     
     @objc func didChangeDate(picker: UIDatePicker){
-        date = picker.date
+        inputViewModel.date = picker.date
         dateTextField.text = util.dayDateFormatter.string(from: picker.date)
         diaryDateTextField.text = util.dayDateFormatter.string(from: picker.date)
     }
     
     @IBAction func textFieldActionAddButtonInactive(_ sender: Any) {
-        if journal != nil{
+        if inputViewModel.journal != nil{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
         }else if priceTextField.text != "" && resultLabel.text != ""{
@@ -336,10 +312,10 @@ class InputViewController:UIViewController{
     }
     
     func configureAddButton(){
-        if journal != nil{
+        if inputViewModel.journal != nil{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
-        }else if diary != nil{
+        }else if inputViewModel.diary != nil{
             addDiaryButton.isEnabled = true
         }else{
             addButton.isEnabled = false
@@ -349,176 +325,48 @@ class InputViewController:UIViewController{
     }
     
     private func tapAddButton(){
-        let text = priceTextField.text
-        if journal == nil{
-            let realm = try! Realm()
-            do{
-                try realm.write{
-                    let journalModel = try JournalModel(price:Int(text!)!,memo: memoTextField.text!, category: resultLabel.text!)
-                    journalModel.date = date
-                    journalModel.price = Int(text!)!
-                    journalModel.category = resultLabel.text!
-                    journalModel.isPayment = isPayment
-                    journalModel.memo = memoTextField.text!
-                    realm.add(journalModel)
-                }
-                inputViewControllerDelegate?.updatePayment()
-                RecognitionChange.shared.updateCalendar = true
-                dismiss(animated: true)
-            }catch JournalModel.ValidationError.invalidPriceLimit{
-                let alert = UIAlertController(title:"1億円以内で入力してください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            }catch JournalModel.ValidationError.invalidMemoLimit{
-                let alert = UIAlertController(title:"メモは10文字以内で入力してください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            }catch{
-                print("エラーが発生")
-            }
-        }else if journal != nil{ //paymetTableViewを選択した場合
-            do{
-                let realm = try! Realm()
-                if journal?.isPayment == true{
-                    try realm.write{
-                        journal?.date = date
-                        journal?.isPayment = isPayment
-                        if let price = Int(text!),
-                           price < 100000000{
-                            journal?.price = price
-                        }else{
-                            throw JournalModel.ValidationError.invalidPriceLimit
-                        }
-                        journal?.price = Int(text!)!
-                        journal?.category = resultLabel.text!
-                        if memoTextField.text!.count <= 10{
-                            journal?.memo = memoTextField.text!
-                        }else{
-                            throw JournalModel.ValidationError.invalidMemoLimit
-                        }
-                    }
-                    if isPayment == false{
+        if inputViewModel.journal == nil{
+            inputViewModel.addNewJournal(priceText: priceTextField.text!, memoText: memoTextField.text!, result: resultLabel.text!)
+            inputViewControllerDelegate?.updatePayment()
+            dismiss(animated: true)
+        }else if inputViewModel.journal != nil{ //paymetTableViewを選択した場合
+            if inputViewModel.journal?.isPayment == true{
+                inputViewModel.OverwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+                    if inputViewModel.isPayment == false{
                         inputViewControllerDelegate?.changeFromPaymentToIncome()
                     }
-                }else if journal?.isPayment == false{
-                    try realm.write{
-                        journal?.date = date
-                        journal?.isPayment = isPayment
-                        if let price = Int(text!),
-                           price < 100000000{
-                            journal?.price = price
-                        }else{
-                            throw JournalModel.ValidationError.invalidPriceLimit
-                        }
-                        journal?.category = resultLabel.text!
-                        if memoTextField.text!.count <= 10{
-                            journal?.memo = memoTextField.text!
-                        }else{
-                            throw JournalModel.ValidationError.invalidMemoLimit
-                        }
-                    }
-                    if isPayment == true{
+                }else if inputViewModel.journal?.isPayment == false{
+                    inputViewModel.OverwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+                    if inputViewModel.isPayment == true{
                         inputViewControllerDelegate?.changeFromIncomeToPayment()
                     }
                 }
                 inputViewControllerDelegate?.updatePayment()
                 inputViewControllerDelegate?.updateCalendar()
                 RecognitionChange.shared.updateCalendar = true
-                journal = nil
+                inputViewModel.journal = nil
                 dismiss(animated: true)
-            }catch JournalModel.ValidationError.invalidPriceLimit{
-                let alert = UIAlertController(title:"1億円以内で入力してください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            }catch JournalModel.ValidationError.invalidMemoLimit{
-                let alert = UIAlertController(title:"メモは10文字以内で入力してください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            }catch{
-                print("エラーが発生")
-            }
         }
     }
     
     private func tapContinueAddButton(){
-        let realm = try! Realm()
-        if journal == nil{
-            do{
-                try realm.write{
-                    let journalModel = try JournalModel(price: Int(priceTextField.text!)!, memo: memoTextField.text!, category: resultLabel.text!)
-                    journalModel.date = date.zeroclock
-                    journalModel.price = Int(priceTextField.text!) ?? 0
-                    journalModel.isPayment = isPayment
-                    journalModel.category = resultLabel.text!
-                    journalModel.memo = memoTextField.text!
-                    realm.add(journalModel)
-                }
-                inputViewControllerDelegate?.updatePayment()
-                RecognitionChange.shared.updateCalendar = true
-                resultLabel.text = ""
-                priceTextField.text = ""
-                addButton.isEnabled = false
-                continueAddButton.isEnabled = false
-            }catch JournalModel.ValidationError.invalidPriceLimit{
-                print("１億円を超えています")
-            }catch JournalModel.ValidationError.invalidMemoLimit{
-                print("メモは10文字以内で")
-            }catch{
-                print("エラーが発生")
-            }
-        }else if journal != nil{
-            let realm = try! Realm()
-            do{
-                try realm.write{
-                    journal?.date = date.zeroclock
-                    journal?.isPayment = isPayment
-                    if let price = Int(priceTextField.text!),
-                       price < 100000000{
-                        journal?.price = price
-                    }else{
-                        throw JournalModel.ValidationError.invalidPriceLimit
-                    }
-                    journal?.category = resultLabel.text!
-                    if memoTextField.text!.count <= 10{
-                        journal?.memo = memoTextField.text!
-                    }else{
-                        throw JournalModel.ValidationError.invalidMemoLimit
-                    }
-                }
-                inputViewControllerDelegate?.updatePayment()
-                RecognitionChange.shared.updateCalendar = true
-                journal = nil
-                resultLabel.text = ""
-                priceTextField.text = ""
-                addButton.isEnabled = false
-                continueAddButton.isEnabled = false
-            }catch JournalModel.ValidationError.invalidPriceLimit{
-                print("１億円を超えています")
-            }catch JournalModel.ValidationError.invalidMemoLimit{
-                print("メモは10文字以内で")
-            }catch{
-                print("エラーが発生")
-            }
+        if inputViewModel.journal == nil{
+            inputViewModel.addNewJournal(priceText: priceTextField.text!, memoText: memoTextField.text!, result: resultLabel.text!)
+            inputViewControllerDelegate?.updatePayment()
+            RecognitionChange.shared.updateCalendar = true
+            resultLabel.text = ""
+            priceTextField.text = ""
+            addButton.isEnabled = false
+            continueAddButton.isEnabled = false
+        }else if inputViewModel.journal != nil{
+            inputViewModel.OverwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+            inputViewControllerDelegate?.updatePayment()
+            RecognitionChange.shared.updateCalendar = true
+            inputViewModel.journal = nil
+            resultLabel.text = ""
+            priceTextField.text = ""
+            addButton.isEnabled = false
+            continueAddButton.isEnabled = false
         }
     }
     
@@ -530,7 +378,6 @@ class InputViewController:UIViewController{
     }
     
     func settingCollectionView(){
-        
         paymentCollectionView.layer.borderWidth = 1.0
         paymentCollectionView.layer.borderColor = UIColor.lightGray.cgColor
         paymentCollectionView.layer.cornerRadius = 5.0
@@ -540,26 +387,20 @@ class InputViewController:UIViewController{
     }
     
     func dayBack(){
-        date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
-        dateTextField.text = util.dayDateFormatter.string(from: date)
-        diaryDateTextField.text = util.dayDateFormatter.string(from: date)
+        inputViewModel.date = Calendar.current.date(byAdding: .day, value: -1, to: inputViewModel.date)!
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
     }
     
     func dayPass(){
-        date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-        dateTextField.text = util.dayDateFormatter.string(from: date)
-        diaryDateTextField.text = util.dayDateFormatter.string(from: date)
+        inputViewModel.date = Calendar.current.date(byAdding: .day, value: 1, to: inputViewModel.date)!
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
     }
     
-    func setCategoryData(){
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == true}
-        categoryList = Array(result)
-    }
     
-    func setIncomeCategoryData(){
-        let result = realm.objects(CategoryModel.self).filter{$0.isPayment == false}
-        incomeCategoryList = Array(result)
-    }
+    
+    
     
     //日記記入関連の画面
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
@@ -596,102 +437,31 @@ class InputViewController:UIViewController{
     
     
     private func addDiary(){
-        if diary == nil{
-            let realm = try! Realm()
-            try! realm.write{
-                diaryModel.date = date.zeroclock
-                diaryModel.title = titleTextField.text!
-                diaryModel.text = diaryInputTextView.text
-                diaryModel.pictureList.append(objectsIn: imageArray)
-                realm.add(diaryModel)
-            }
-            titleTextField.text = ""
-            diaryInputTextView.text = ""
+        if inputViewModel.diary == nil{
+            inputViewModel.addNewDiary(titleText: titleTextField.text!, diaryText: diaryInputTextView.text!)
             inputViewControllerDelegate?.updateDiary()
             RecognitionChange.shared.updateCalendar = true
             dismiss(animated: true)
         }else{
-            let realm = try! Realm()
-            try! realm.write{
-                diary!.pictureList.removeAll()
-                diary!.date = date.zeroclock
-                diary!.title = titleTextField.text!
-                diary!.text = diaryInputTextView.text
-                diary!.pictureList.append(objectsIn: imageArray)
-            }
-            titleTextField.text = ""
-            diaryInputTextView.text = ""
+            inputViewModel.overwriteDiary(titleText:titleTextField.text!,diaryText:diaryInputTextView.text!)
             inputViewControllerDelegate?.updateDiary()
             RecognitionChange.shared.updateCalendar = true
-            diary = nil
             dismiss(animated: true)
         }
     }
     
-    func fixImageOrientation(_ image: UIImage) -> UIImage {
-        if image.imageOrientation == .up {
-            return image
-        }
-
-        var transform = CGAffineTransform.identity
-
-        switch image.imageOrientation {
-        case .down, .downMirrored:
-            transform = transform.translatedBy(x: image.size.width, y: image.size.height)
-            transform = transform.rotated(by: CGFloat.pi)
-        case .left, .leftMirrored:
-            transform = transform.translatedBy(x: image.size.width, y: 0)
-            transform = transform.rotated(by: CGFloat.pi / 2)
-        case .right, .rightMirrored:
-            transform = transform.translatedBy(x: 0, y: image.size.height)
-            transform = transform.rotated(by: -CGFloat.pi / 2)
-        case .up, .upMirrored:
-            break
-        @unknown default:
-            break
-        }
-
-        switch image.imageOrientation {
-        case .upMirrored, .downMirrored:
-            transform = transform.translatedBy(x: image.size.width, y: 0)
-            transform = transform.scaledBy(x: -1, y: 1)
-        case .leftMirrored, .rightMirrored:
-            transform = transform.translatedBy(x: image.size.height, y: 0)
-            transform = transform.scaledBy(x: -1, y: 1)
-        case .up, .down, .left, .right:
-            break
-        @unknown default:
-            break
-        }
-
-        let ctx = CGContext(data: nil, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: (image.cgImage?.bitsPerComponent)!, bytesPerRow: 0, space: (image.cgImage?.colorSpace!)!, bitmapInfo: (image.cgImage?.bitmapInfo.rawValue)!)
-
-        ctx?.concatenate(transform)
-
-        switch image.imageOrientation {
-        case .left, .leftMirrored, .right, .rightMirrored:
-            ctx?.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width))
-        default:
-            ctx?.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-        }
-
-        if let cgImage = ctx?.makeImage() {
-            return UIImage(cgImage: cgImage)
-        } else {
-            return image
-        }
-    }
+    
 }
 
 extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView === paymentCollectionView{
-            return categoryList.count
+            return inputViewModel.categoryList.count
         }else if collectionView === imageCollectionView{
-            return imageArray.count
+            return inputViewModel.imageArray.count
         }else if collectionView === incomeCollectionView{
-            return incomeCategoryList.count
+            return inputViewModel.incomeCategoryList.count
         }
         return 0
     }
@@ -699,24 +469,24 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView === paymentCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
-            cell.categoryLabel.text = categoryList[indexPath.row].name
-            if journal != nil{
-                cell.journal = journal!
+            cell.categoryLabel.text = inputViewModel.categoryList[indexPath.row].name
+            if inputViewModel.journal != nil{
+                cell.journal = inputViewModel.journal!
                 cell.toggleSelection()
             }
             return cell
         }else if collectionView === imageCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath) as! SliderViewCell
-            let cellImage = fixImageOrientation(UIImage(data: imageArray[indexPath.item])!)
+            let cellImage = inputViewModel.fixImageOrientation(UIImage(data: inputViewModel.imageArray[indexPath.item])!)
             cell.imageView.image = cellImage
             cell.imageView.contentMode = .scaleAspectFit
             return cell
         }else if collectionView === incomeCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
-            cell.categoryLabel.text = incomeCategoryList[indexPath.row].name
+            cell.categoryLabel.text = inputViewModel.incomeCategoryList[indexPath.row].name
 
-            if journal != nil{
-                cell.journal = journal!
+            if inputViewModel.journal != nil{
+                cell.journal = inputViewModel.journal!
             }
             cell.toggleSelection()
             return cell
@@ -754,15 +524,15 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView === paymentCollectionView{
             let cell = collectionView.cellForItem(at: indexPath)
-            resultLabel.text = categoryList[indexPath.row].name
+            resultLabel.text = inputViewModel.categoryList[indexPath.row].name
             
             
-            for i in 0 ..< categoryList.count{
+            for i in 0 ..< inputViewModel.categoryList.count{
                 collectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
             cell?.backgroundColor = .lightGray
             
-            for i in 0 ..< incomeCategoryList.count{
+            for i in 0 ..< inputViewModel.incomeCategoryList.count{
                 incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
             cell?.backgroundColor = .lightGray
@@ -771,7 +541,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
-            isPayment = true
+            inputViewModel.isPayment = true
             
             return
         }else if collectionView === imageCollectionView{
@@ -779,22 +549,22 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             guard let pictureViewController = storyboard.instantiateViewController(withIdentifier: "PictureViewController") as? PictureViewController else{return}
             self.navigationController?.pushViewController(pictureViewController, animated: true)
             
-            let selectedImage = imageArray[indexPath.item]
-            selectedIndex = indexPath.item
+            let selectedImage = inputViewModel.imageArray[indexPath.item]
+            inputViewModel.selectedIndex = indexPath.item
             pictureViewController.inputViewControllerImage = selectedImage
             pictureViewController.pictureViewControllerDelegate = self
             pictureViewController.text = diaryInputTextView.text
             pictureViewController.titleText = titleTextField.text
         }else if collectionView === incomeCollectionView{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
-            resultLabel.text = incomeCategoryList[indexPath.row].name
+            resultLabel.text = inputViewModel.incomeCategoryList[indexPath.row].name
             
-            for i in 0 ..< categoryList.count{
+            for i in 0 ..< inputViewModel.categoryList.count{
                 paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
             cell?.backgroundColor = .lightGray
             
-            for i in 0 ..< incomeCategoryList.count{
+            for i in 0 ..< inputViewModel.incomeCategoryList.count{
                 incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
             cell?.backgroundColor = .lightGray
@@ -803,7 +573,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
-            isPayment = false
+            inputViewModel.isPayment = false
             return
         }
     }
@@ -825,13 +595,13 @@ extension InputViewController:UIImagePickerControllerDelegate,UINavigationContro
         let image = (info[.originalImage] as! UIImage)
         let imageData = image.jpegData(compressionQuality: 0.5)
 
-        imageArray.append(imageData!)
+        inputViewModel.imageArray.append(imageData!)
         imageCollectionView.reloadData()
         dismiss(animated:true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
+        inputViewModel.currentIndex = Int(scrollView.contentOffset.x / imageCollectionView.frame.size.width)
     }
 }
 
@@ -853,8 +623,7 @@ extension InputViewController:PictureViewControllerDelegate{
     }
     
     func deletePicuture() {
-        imageArray.remove(at: selectedIndex!)
-        print(imageArray.count)
+        inputViewModel.imageArray.remove(at: inputViewModel.selectedIndex!)
         imageCollectionView.reloadData()
     }
 }
