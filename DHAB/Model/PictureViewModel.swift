@@ -10,4 +10,8 @@ import UIKit
 
 class PictureViewModel{
     
+    var inputViewControllerImage:Data!
+    var text:String?
+    var titleText:String?
+    
 }

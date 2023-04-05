@@ -484,7 +484,32 @@ extension HouseholdAccountBookViewController:InputViewControllerDelegate{
     }
     
     func didReceiveNotification() {
-        return
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setCategoryData()
+        householdAccountBookViewModel.setIncomeCategoryData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.setIncomeBudgetData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setSumPaymentData()
+        householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
+        
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
+        
+        paymentTableView.reloadData()
+        incomeTableView.reloadData()
+        sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+        paymentTableView.reloadData()
+        sumPaymentTableView.reloadData()
     }
     
     func updateCalendar() {
@@ -782,6 +807,22 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
                 householdAccountBookViewModel.incomeBudgetList.remove(at: index!)
             }
         }
+        householdAccountBookViewModel.setPaymentData()
+        householdAccountBookViewModel.setIncomeData()
+        householdAccountBookViewModel.setSumPaymentData()
+        householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.paymentTableViewDataSource = []
+        householdAccountBookViewModel.incomeTableViewDataSource = []
+        householdAccountBookViewModel.setPaymentTableViewDataSourse()
+        householdAccountBookViewModel.setIncomeTableViewDataSourse()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
+        paymentTableView.reloadData()
+        incomeTableView.reloadData()
+        sumPaymentTableView.reloadData()
+        sumIncomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
     }
     
     func remakeUIView(){

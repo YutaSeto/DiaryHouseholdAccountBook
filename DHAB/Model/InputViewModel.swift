@@ -12,6 +12,7 @@ import RealmSwift
 class InputViewModel{
     
     var journal:Journal? = nil
+    var category:String = ""
     var isPayment:Bool = true
     let realm = try! Realm()
     var categoryList:[Category] = []
@@ -44,82 +45,35 @@ class InputViewModel{
         incomeCategoryList = Array(result)
     }
     
-    func addNewJournal(priceText:String,memoText:String,result:String){
-        let text = priceText
-        let realm = try! Realm()
-        do{
-            try realm.write{
-                let journalModel = try Journal(price:Int(text)!,memo: memoText, category: result)
-                journalModel.date = date
-                journalModel.price = Int(text)!
-                journalModel.category = result
-                journalModel.isPayment = isPayment
-                journalModel.memo = memoText
-                realm.add(journalModel)
-            }
-            RecognitionChange.shared.updateCalendar = true
-        }catch Journal.ValidationError.invalidPriceLimit{
-            showPriceAlert()
-        }catch Journal.ValidationError.invalidMemoLimit{
-            showMemoAlert()
-        }catch{
-            print("エラーが発生")
+    func addNewJournal(priceText:Int, expenseItem: String, memo:String){
+        try! realm.write{
+            let journal = Journal()
+            journal.date = date
+            journal.price = priceText
+            journal.category = expenseItem
+            journal.isPayment = isPayment
+            journal.memo = memo
+            realm.add(journal)
         }
     }
     
-    func showPriceAlert(){
-        let alert = UIAlertController(title:"1億円以内で入力してください", message: nil, preferredStyle: .alert)
-        
-        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-            return
-        })
-        
-        alert.addAction(cancel)
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-            rootViewController.present(alert, animated: true, completion: nil)
+    func overwriteJournal(price:Int,result:String, memo:String){
+        try! realm.write{
+            journal?.date = date
+            journal?.isPayment = isPayment
+            journal?.price = price
+            journal?.price = price
+            journal?.category = result
+            journal?.memo = memo
         }
     }
     
-    func showMemoAlert(){
-        let alert = UIAlertController(title:"メモは10文字以内で入力してください", message: nil, preferredStyle: .alert)
-        
-        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-            return
-        })
-        
-        alert.addAction(cancel)
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-            rootViewController.present(alert, animated: true, completion: nil)
-        }
+    func isValidPrice(price:Int) ->Bool{
+        return price > 100000000
     }
     
-    func overwriteJournal(priceText:String,result:String,memoText:String){
-        do{
-            let text = priceText
-            try realm.write{
-                journal?.date = date
-                journal?.isPayment = isPayment
-                if let price = Int(text),
-                   price < 100000000{
-                    journal?.price = price
-                }else{
-                    throw Journal.ValidationError.invalidPriceLimit
-                }
-                journal?.price = Int(text)!
-                journal?.category = result
-                if memoText.count <= 10{
-                    journal?.memo = memoText
-                }else{
-                    throw Journal.ValidationError.invalidMemoLimit
-                }
-            }
-        }catch Journal.ValidationError.invalidPriceLimit{
-            showPriceAlert()
-        }catch Journal.ValidationError.invalidMemoLimit{
-            showMemoAlert()
-        }catch{
-            print("エラーが発生")
-        }
+    func isValidMemoLimit(memo: String) -> Bool{
+        return memo.count > 10
     }
     
     func addNewDiary(titleText:String,diaryText:String){

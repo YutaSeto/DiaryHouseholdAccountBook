@@ -10,8 +10,7 @@ import UIKit
 
 class LookDiaryViewController:UIViewController{
     
-    var diary:Diary?
-    var pictureList:[Data] = []
+    let lookDiaryViewModel = LookDiaryViewModel()
     
     @IBOutlet weak var titleTextView: UITextView!
     @IBOutlet weak var diaryTextView: UITextView!
@@ -35,9 +34,9 @@ class LookDiaryViewController:UIViewController{
     }
     
     func configureTextView(){
-        titleTextView.text! = diary!.title
-        diaryTextView.text! = diary!.text
-        pictureList = Array(diary!.pictureList)
+        titleTextView.text! = lookDiaryViewModel.diary!.title
+        diaryTextView.text! = lookDiaryViewModel.diary!.text
+        lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
     }
     
     func configureCollectionViewFlowLayout(){
@@ -61,19 +60,19 @@ class LookDiaryViewController:UIViewController{
 
 extension LookDiaryViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        pictureList.count
+        lookDiaryViewModel.pictureList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderViewCell", for: indexPath) as! SliderViewCell
-        let cellImage = UIImage(data: diary!.pictureList[indexPath.item])!
+        let cellImage = UIImage(data: lookDiaryViewModel.diary!.pictureList[indexPath.item])!
         cell.imageView.image = cellImage
         cell.imageView.contentMode = .scaleAspectFit
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let image = UIImage(data: pictureList[indexPath.row])
+        let image = UIImage(data: lookDiaryViewModel.pictureList[indexPath.row])
         let imageSize = image?.size
         let width:CGFloat = imageSize!.width
         let height:CGFloat = imageSize!.height

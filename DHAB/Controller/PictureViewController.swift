@@ -15,14 +15,11 @@ protocol PictureViewControllerDelegate{
 
 class PictureViewController:UIViewController{
     
+    let pictureViewModel = PictureViewModel()
     var pictureViewControllerDelegate:PictureViewControllerDelegate?
-    var inputViewControllerImage:Data!
-    var text:String?
-    var titleText:String?
-    
     var image:Data!{
         didSet{
-            imageView.image = UIImage(data: inputViewControllerImage)!
+            imageView.image = UIImage(data: pictureViewModel.inputViewControllerImage)!
         }
     }
     
@@ -30,11 +27,9 @@ class PictureViewController:UIViewController{
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        image = inputViewControllerImage
+        image = pictureViewModel.inputViewControllerImage
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()
         //ピンチジェスチャーの設定
@@ -68,7 +63,7 @@ class PictureViewController:UIViewController{
 
     @objc func tapBackButton(){
         self.navigationController?.popViewController(animated: true)
-        if text != "" && titleText != ""{
+        if pictureViewModel.text != "" && pictureViewModel.titleText != ""{
             pictureViewControllerDelegate?.setAddDiaryButtonIsEnable()
         }
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cqe-U2-Ncb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cqe-U2-Ncb">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -59,7 +59,7 @@
                     <tabBarItem key="tabBarItem" title="入力" id="EkT-bM-uvd"/>
                     <navigationItem key="navigationItem" id="uAb-dN-ns4"/>
                     <connections>
-                        <outlet property="addButton" destination="qMi-dv-ast" id="kB6-4y-rI3"/>
+                        <outlet property="addButton" destination="qMi-dv-ast" id="N8V-Rd-BGk"/>
                         <outlet property="addDiaryButton" destination="Csk-I7-mkc" id="zt6-UR-oUp"/>
                         <outlet property="addImageButton" destination="tga-kJ-rCq" id="DI2-Hf-cho"/>
                         <outlet property="continueAddButton" destination="W2c-KJ-R3W" id="9bQ-qF-Mit"/>
@@ -74,7 +74,6 @@
                         <outlet property="memoTextField" destination="V8v-jx-J9b" id="bPb-4z-ERK"/>
                         <outlet property="paymentCollectionView" destination="bRy-IY-AL9" id="J6Y-VM-sgz"/>
                         <outlet property="priceTextField" destination="E78-I1-bxO" id="aTu-Sl-tug"/>
-                        <outlet property="resultLabel" destination="aaE-36-xv7" id="UtI-jV-amf"/>
                         <outlet property="segmentedControlHeight" destination="sA3-us-Fmj" id="yZU-v0-klj"/>
                         <outlet property="titleTextField" destination="TTs-lB-pbb" id="ZRu-KE-VRD"/>
                         <outlet property="viewChangeSegmentedControl" destination="7cL-QX-Ga4" id="a3Y-xK-bJp"/>
@@ -108,12 +107,6 @@
                             </collectionViewFlowLayout>
                             <cells/>
                         </collectionView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aaE-36-xv7">
-                            <rect key="frame" x="194" y="352.66666666666669" width="0.0" height="0.0"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WMF-zU-FFi">
                             <rect key="frame" x="20" y="382" width="348" height="34.333333333333371"/>
                             <subviews>
@@ -218,7 +211,6 @@
                         <constraint firstItem="jZe-Af-nLz" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" id="tqm-mR-16R"/>
                         <constraint firstItem="bRy-IY-AL9" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="uev-ox-F6a"/>
                         <constraint firstItem="V8v-jx-J9b" firstAttribute="trailing" secondItem="E78-I1-bxO" secondAttribute="trailing" id="vFA-k7-b3q"/>
-                        <constraint firstItem="aaE-36-xv7" firstAttribute="centerX" secondItem="nU6-bC-CYB" secondAttribute="centerX" id="wuI-AB-C7k"/>
                         <constraint firstItem="WMF-zU-FFi" firstAttribute="top" secondItem="V8v-jx-J9b" secondAttribute="bottom" constant="10" id="yYJ-qy-vB1"/>
                     </constraints>
                 </view>
@@ -227,10 +219,10 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tga-kJ-rCq">
-                            <rect key="frame" x="25" y="362.66666666666669" width="303" height="80"/>
+                            <rect key="frame" x="25" y="362.66666666666669" width="303" height="200.00000000000006"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="80" id="cVK-mQ-ocA"/>
+                                <constraint firstAttribute="height" constant="200" id="cVK-mQ-ocA"/>
                             </constraints>
                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Pa6-iF-0IL">
                                 <size key="itemSize" width="128" height="128"/>

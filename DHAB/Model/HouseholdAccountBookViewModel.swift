@@ -128,7 +128,7 @@ class HouseholdAccountBookViewModel{
         
         // データセットを作成する
         let dataSet = BarChartDataSet(entries: dataEntries, label: "収支")
-        dataSet.colors = colors
+        dataSet.colors = barColors
         
         // チャートデータを作成する
         let data = BarChartData(dataSets: [dataSet])

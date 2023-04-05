@@ -30,9 +30,7 @@ protocol DeleteCategoryDelegate{
 
 class ExpenseItemViewController: UIViewController{
     
-    let realm = try! Realm()
-    var categoryList:[Category] = []
-    var incomeCategoryList:[Category] = []
+    let expenseItemViewModel = ExpenseItemViewModel()
     var expenseItemViewControllerDelegate:ExpenseItemViewControllerDelegate?
     var categoryViewControllerDelegate:CategoryViewControllerDelegate?
     var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?
@@ -48,8 +46,8 @@ class ExpenseItemViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setCategoryData()
-        setIncomeCategoryData()
+        expenseItemViewModel.setCategoryData()
+        expenseItemViewModel.setIncomeCategoryData()
         expenseItemTableView.delegate = self
         expenseItemTableView.dataSource = self
         incomeTableView.delegate = self
@@ -60,6 +58,8 @@ class ExpenseItemViewController: UIViewController{
         configureAddButton()
         categoryViewControllerDelegate?.updateHouseholdAccountBook()
         setNavigationBarButton()
+        expenseItemTableView.reloadData()
+        incomeTableView.reloadData()
     }
     
     @objc func tapBackButton(){
@@ -135,39 +135,22 @@ class ExpenseItemViewController: UIViewController{
             textField.placeholder = "カテゴリーの名前を入力してください"
         }
         
-        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) in
+        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
             guard let text = textFieldOnAlert.text else {return}
-            do{
-                let categoryModel = try Category(name: text,isPayment: true)
-                let realm = try Realm()
-                try realm.write{
-                    realm.add(categoryModel)
-                }
-                self.expenseItemViewControllerDelegate?.updateCategory()
-                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
-                self.expenseItemTableView.reloadData()
-                
-            }catch Category.ValidationError.invalidNameLength{
-                let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            }catch Category.ValidationError.invalidTooManyCategories{
-                let alert = UIAlertController(title:"カテゴリーの数は12個までにしてください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            }catch {
-                print("エラーが発生しました")
+            if self.expenseItemViewModel.isValidNameLimit(name: text){
+                self.showAlert(title: "カテゴリー名は8文字以内にしてください")
+                return
             }
+            if self.expenseItemViewModel.isValidTooManyPaymentCategories(){
+                self.showAlert(title: "カテゴリー数は12個までにしてください")
+                return
+            }
+            
+            self.expenseItemViewModel.addNewCategory(value: text, isPayment: true)
+            
+            self.expenseItemViewControllerDelegate?.updateCategory()
+            self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
+            self.expenseItemTableView.reloadData()
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
@@ -190,40 +173,21 @@ class ExpenseItemViewController: UIViewController{
             textField.placeholder = "カテゴリーの名前を入力してください"
         }
         
-        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) in
+        let add = UIAlertAction(title:"追加する", style: .default,handler: {(action) -> Void in
             guard let text = textFieldOnAlert.text else {return}
-            do{
-                let categoryModel = try Category(name: text, isPayment: false)
-                let realm = try Realm()
-                try realm.write{
-                    realm.add(categoryModel)
-                }
-                self.expenseItemViewControllerDelegate?.updateCategory()
-                self.categoryViewControllerDelegate?.updateIncome()
-                self.incomeTableView.reloadData()
-            } catch Category.ValidationError.invalidNameLength{
-                let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-                return
-            } catch Category.ValidationError.invalidTooManyCategories{
-                let alert = UIAlertController(title:"カテゴリーの数は12個までにしてください", message: nil, preferredStyle: .alert)
-                
-                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                    return
-                })
-                
-                alert.addAction(cancel)
-                self.present(alert,animated: true, completion: nil)
-            } catch{
-                print("予期せぬエラーが発生")
+            if self.expenseItemViewModel.isValidNameLimit(name: text){
+                self.showAlert(title: "カテゴリー名は8文字以内にしてください")
                 return
             }
+            if self.expenseItemViewModel.isValidTooManyPaymentCategories(){
+                self.showAlert(title: "カテゴリー数は12個までにしてください")
+                return
+            }
+            
+            self.expenseItemViewModel.addNewCategory(value: text, isPayment: false)
+            self.expenseItemViewControllerDelegate?.updateCategory()
+            self.categoryViewControllerDelegate?.updateIncome()
+            self.incomeTableView.reloadData()
         })
         let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
             return
@@ -236,26 +200,27 @@ class ExpenseItemViewController: UIViewController{
         self.present(alert,animated:true, completion: nil)
     }
     
-    func setCategoryData(){
-        let result = realm.objects(Category.self).filter{$0.isPayment == true}
-        categoryList = Array(result)
-        expenseItemTableView.reloadData()
+    func showAlert(title:String){
+        let alert = UIAlertController(title:title, message: nil, preferredStyle: .alert)
+        
+        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+            return
+        })
+        
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
     
-    func setIncomeCategoryData(){
-        let result = realm.objects(Category.self).filter{$0.isPayment == false}
-        incomeCategoryList = Array(result)
-        incomeTableView.reloadData()
-    }
+    
 }
 
 extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === expenseItemTableView{
-            return categoryList.count
+            return expenseItemViewModel.categoryList.count
         }else if tableView === incomeTableView{
-            return incomeCategoryList.count
+            return expenseItemViewModel.incomeCategoryList.count
         }
         return 0
     }
@@ -263,11 +228,11 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView === expenseItemTableView{
             let cell = expenseItemTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel!.text = categoryList[indexPath.row].name
+            cell.textLabel!.text = expenseItemViewModel.categoryList[indexPath.row].name
             return cell
         }else if tableView === incomeTableView{
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel!.text = incomeCategoryList[indexPath.row].name
+            cell.textLabel!.text = expenseItemViewModel.incomeCategoryList[indexPath.row].name
             return cell
         }
         return UITableViewCell()
@@ -277,37 +242,24 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
         if tableView === expenseItemTableView{
             expenseItemViewControllerDelegate = self
             RecognitionChange.shared.updateHouseholdAccountBook = true
-            let alert = UIAlertController(title: "\(categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: "\(expenseItemViewModel.categoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
             var textFieldOnAlert = UITextField()
             alert.addTextField{ textField in
                 textFieldOnAlert = textField
                 textField.placeholder = "新しいカテゴリーの名前を入力してください"
             }
             let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) in
-                do{
-                    guard let text = textFieldOnAlert.text else{return}
-                    let categoryModel = try Category(name: text, isPayment: true)
-                    let realm = try!Realm()
-                    try! realm.write{
-                        self.categoryList[indexPath.row] = categoryModel
-                    }
-                    self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
-                    self.expenseItemViewControllerDelegate?.updateCategory()
-                    self.expenseItemViewControllerDelegate?.updatePayment()
-                    self.expenseItemTableView.reloadData()
-                    print(self.categoryList[indexPath.row])
-                }catch Category.ValidationError.invalidNameLength{
-                    let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
-                    
-                    let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                        return
-                    })
-                    
-                    alert.addAction(cancel)
-                    self.present(alert,animated: true, completion: nil)
-                }catch{
-                    print("予期せぬエラーが発生")
+                guard let text = textFieldOnAlert.text else{return}
+                if self.expenseItemViewModel.isValidNameLimit(name: text){
+                    self.showAlert(title: "カテゴリー名は8文字以内にしてください")
+                    return
                 }
+                self.expenseItemViewModel.overwriteCategory(value: text, indexPath: indexPath)
+                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
+                self.expenseItemViewControllerDelegate?.updateCategory()
+                self.expenseItemViewControllerDelegate?.updatePayment()
+                self.expenseItemTableView.reloadData()
+                
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
                 return
@@ -318,7 +270,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             tableView.deselectRow(at: indexPath, animated: true)
         }else if tableView === incomeTableView{
             RecognitionChange.shared.updateHouseholdAccountBook = true
-            let alert = UIAlertController(title: "\(incomeCategoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: "\(expenseItemViewModel.incomeCategoryList[indexPath.row].name)のカテゴリー名を変更します", message: nil, preferredStyle: .alert)
             var textFieldOnAlert = UITextField()
             alert.addTextField{ textField in
                 textFieldOnAlert = textField
@@ -327,27 +279,15 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             
             let add = UIAlertAction(title:"変更する", style: .default,handler: {(action) in
                 guard let text = textFieldOnAlert.text else {return}
-                do{
-                    let categoryModel = try Category(name: text, isPayment: false)
-                        let realm = try Realm()
-                        try realm.write{
-                            self.incomeCategoryList[indexPath.row] = categoryModel
-                        }
-                        self.categoryViewControllerDelegate?.updateIncome()
-                        self.expenseItemViewControllerDelegate?.updateCategory()
-                        self.incomeTableView.reloadData()
-                }catch Category.ValidationError.invalidNameLength{
-                    let alert = UIAlertController(title:"カテゴリー名は8文字以内にしてください", message: nil, preferredStyle: .alert)
-                    
-                    let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-                        return
-                    })
-                    
-                    alert.addAction(cancel)
-                    self.present(alert,animated: true, completion: nil)
-                }catch{
-                    print("予期せぬエラーが発生")
+                if self.expenseItemViewModel.isValidNameLimit(name: text){
+                    self.showAlert(title: "カテゴリー名は8文字以内にしてください")
+                    return
                 }
+                self.expenseItemViewModel.overwriteCategory(value: text, indexPath: indexPath)
+                self.categoryViewControllerDelegate?.updateIncome()
+                self.expenseItemViewControllerDelegate?.updateCategory()
+                self.incomeTableView.reloadData()
+                
             })
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
                 return
@@ -364,26 +304,18 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             let alert = UIAlertController(title: "関連する支出・収入・予算の履歴が\n全て削除されます。\nよろしいでしょうか", message: nil, preferredStyle: .alert)
             
             let warning = UIAlertAction(title:"理解した上で削除する",style: .default, handler:{(action) -> Void in
-                let targetItem = self.categoryList[indexPath.row]
                 let realm = try! Realm()
-                let targetJornal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
+                let targetItem = self.expenseItemViewModel.categoryList[indexPath.row]
+                let targetJournal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
                 let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
-                
-                self.categoryList.remove(at: indexPath.row)
+                self.expenseItemViewModel.categoryList.remove(at: indexPath.row)
                 self.expenseItemTableView.deleteRows(at: [indexPath], with: .automatic)
-                //ここで家計簿画面の配列とテーブルビューのセルを削除しないといけない
-                self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJornal,budget: targetBudget)
+                self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
                 self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
-                
-                try! realm.write{
-                    realm.delete(targetItem)
-                    realm.delete(targetJornal)
-                    realm.delete(targetBudget)
-                }
-                self.setCategoryData()
+                self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)
+                self.expenseItemViewModel.setCategoryData()
                 self.expenseItemTableView.reloadData()
                 self.deleteCategoryDelegateForTabBar?.remakeViewController()
-                //ここについて修正が必要　家計簿画面のテーブルの修正、インプット画面のコレクションビュー、予算画面のカテゴリーリスト、カレンダー画面のほぼ全ての配列の修正を伝える必要がある。何か良い方法はある？
                 self.deleteCategoryDelegateForHouseholdAccountBook?.remakeUIView()
             })
             
@@ -397,21 +329,17 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             
             
         }else if tableView === incomeTableView{
-            let targetItem = incomeCategoryList[indexPath.row]
-            let targetJornal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == false}) //消すべきジャーナル一覧
+            let realm = try! Realm()
+            let targetItem = expenseItemViewModel.incomeCategoryList[indexPath.row]
+            let targetJournal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == false}) //消すべきジャーナル一覧
             let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == false}) //消すべき予算一覧
-            incomeCategoryList.remove(at: indexPath.row)
+            expenseItemViewModel.incomeCategoryList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJornal,budget: targetBudget)
+            self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
             self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
             
-            let realm = try! Realm()
-            try! realm.write{
-                realm.delete(targetItem)
-                realm.delete(targetJornal)
-                realm.delete(targetBudget)
-            }
-            self.setIncomeCategoryData()
+            self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)
+            self.expenseItemViewModel.setIncomeCategoryData()
             tableView.reloadData()
             categoryViewControllerDelegate?.updateIncome()
             self.deleteCategoryDelegateForTabBar?.remakeViewController()
@@ -422,8 +350,10 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
 
 extension ExpenseItemViewController:ExpenseItemViewControllerDelegate{
     func updateCategory() {
-        setCategoryData()
-        setIncomeCategoryData()
+        expenseItemViewModel.setCategoryData()
+        expenseItemViewModel.setIncomeCategoryData()
+        expenseItemTableView.reloadData()
+        incomeTableView.reloadData()
     }
     
     func updateBudget() {

@@ -36,7 +36,13 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         if RecognitionChange.shared.deleteDiaryByCalendar == true{
             diaryViewModel.setDiaryData()
             diaryTableView.reloadData()
-            
+            RecognitionChange.shared.deleteDiaryByCalendar = false
+        }
+        
+        if RecognitionChange.shared.updateDiaryByCalendar == true{
+            diaryViewModel.setDiaryData()
+            diaryTableView.reloadData()
+            RecognitionChange.shared.updateDiaryByCalendar = false
         }
     }
         
@@ -179,7 +185,7 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         let storyboard = UIStoryboard(name: "DiaryViewController", bundle: nil)
         guard let lookDiaryViewController = storyboard.instantiateViewController(withIdentifier: "LookDiaryViewController") as? LookDiaryViewController else{return}
         self.navigationController?.pushViewController(lookDiaryViewController, animated: true)
-        lookDiaryViewController.diary = diary
+        lookDiaryViewController.lookDiaryViewModel.diary = diary
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

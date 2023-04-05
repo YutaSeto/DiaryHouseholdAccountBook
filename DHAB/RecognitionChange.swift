@@ -16,6 +16,7 @@ final public class RecognitionChange{
     var deletePayment:Bool = false
     var deleteDiaryByCalendar:Bool = false
     var deleteDiaryByDiary:Bool = false
+    var updateDiaryByCalendar:Bool = false
     public static let shared = RecognitionChange()
     
     private init(){}

@@ -32,9 +32,7 @@ class InputViewController:UIViewController{
     @IBOutlet weak var segmentedControlHeight: NSLayoutConstraint!
     //家計簿記入画面関連
     public var inputViewControllerDelegate:InputViewControllerDelegate?
-    public var inputViewControllerDelegate2:InputViewControllerDelegate?
     @IBOutlet weak var incomeCollectionView: UICollectionView!
-    @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
@@ -51,7 +49,6 @@ class InputViewController:UIViewController{
     }
     
     //日記関連
-    var collectionViewDelegate:UICollectionViewDelegate?
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var addImageButton: UIView!
     @IBOutlet weak var diaryInputTextView: UITextView!
@@ -89,6 +86,12 @@ class InputViewController:UIViewController{
         setNavigationBarButton()
         setToolbar()
         configureTextView()
+        
+        if inputViewModel.journal == nil{
+            addButton.setTitle("追加する",for: .normal)
+        }else{
+            addButton.setTitle("編集する", for: .normal)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,10 +102,11 @@ class InputViewController:UIViewController{
             addDiaryView()
         }
         
-        if inputViewModel.diary != nil || inputViewModel.journal != nil{
-            viewChangeSegmentedControl.isHidden = true
-            segmentedControlHeight.constant = 0
+        if inputViewModel.diary != nil || inputViewModel.journal != nil || inputViewControllerDelegate != nil{
+            vanishSegmentedControl()
         }
+        
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -129,7 +133,7 @@ class InputViewController:UIViewController{
     func setPaymentData(data:Journal){
         inputViewModel.journal = data
         priceTextField.text = String(data.price)
-        resultLabel.text = data.category
+        inputViewModel.category = data.category
         inputViewModel.isPayment = inputViewModel.journal!.isPayment
         inputViewModel.date = data.date
         inputViewModel.setCategoryData()
@@ -144,7 +148,7 @@ class InputViewController:UIViewController{
     func setIncomeData(data:Journal){
         inputViewModel.journal = data
         priceTextField.text = String(inputViewModel.journal!.price)
-        resultLabel.text = inputViewModel.journal?.category
+        inputViewModel.category = inputViewModel.journal!.category
         inputViewModel.isPayment = false
         inputViewModel.date = inputViewModel.journal!.date
         if data.memo != ""{
@@ -241,12 +245,12 @@ class InputViewController:UIViewController{
     
     @IBAction func addButton(_ sender: UIButton) {
         tapAddButton()
-        inputViewControllerDelegate2?.didReceiveNotification()
+        inputViewControllerDelegate?.didReceiveNotification()
     }
     
     @IBAction func continueAddButton(_ sender: UIButton) {
         tapContinueAddButton()
-        inputViewControllerDelegate2?.didReceiveNotification()
+        inputViewControllerDelegate?.didReceiveNotification()
         if let selectedItem = paymentCollectionView.indexPathsForSelectedItems?.first{
             paymentCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
@@ -254,7 +258,6 @@ class InputViewController:UIViewController{
             incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
         inputViewModel.journal = nil
-        
     }
     
     @objc func didTapFinishButton(){
@@ -294,7 +297,7 @@ class InputViewController:UIViewController{
         if inputViewModel.journal != nil{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
-        }else if priceTextField.text != "" && resultLabel.text != ""{
+        }else if priceTextField.text != "" && inputViewModel.category != ""{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
         }else{
@@ -326,49 +329,110 @@ class InputViewController:UIViewController{
     
     private func tapAddButton(){
         if inputViewModel.journal == nil{
-            inputViewModel.addNewJournal(priceText: priceTextField.text!, memoText: memoTextField.text!, result: resultLabel.text!)
+            if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                showAlert(title: "金額は1億円以内にしてください")
+                return
+            }
+            if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                showAlert(title: "メモは10文字以内にしてください")
+                return
+            }
+            inputViewModel.addNewJournal(priceText: Int(priceTextField.text!)!, expenseItem: inputViewModel.category, memo: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
             dismiss(animated: true)
         }else if inputViewModel.journal != nil{ //paymetTableViewを選択した場合
             if inputViewModel.journal?.isPayment == true{
-                inputViewModel.overwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
-                    if inputViewModel.isPayment == false{
-                        inputViewControllerDelegate?.changeFromPaymentToIncome()
-                    }
-                }else if inputViewModel.journal?.isPayment == false{
-                    inputViewModel.overwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
-                    if inputViewModel.isPayment == true{
+                if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                    showAlert(title: "金額は1億円以内にしてください")
+                    return
+                }
+                if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                    showAlert(title: "メモは10文字以内にしてください")
+                    return
+                }
+                
+                inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
+                
+                if inputViewModel.isPayment == false{
+                    inputViewControllerDelegate?.changeFromPaymentToIncome()
+                }
+            }else if inputViewModel.journal?.isPayment == false{
+                if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                    showAlert(title: "金額は1億円以内にしてください")
+                    return
+                }
+                if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                    showAlert(title: "メモは10文字以内にしてください")
+                    return
+                }
+                
+                inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
+                if inputViewModel.isPayment == true{
                         inputViewControllerDelegate?.changeFromIncomeToPayment()
                     }
                 }
                 inputViewControllerDelegate?.updatePayment()
                 inputViewControllerDelegate?.updateCalendar()
-                RecognitionChange.shared.updateCalendar = true
                 inputViewModel.journal = nil
                 dismiss(animated: true)
         }
+        RecognitionChange.shared.updateCalendar = true
+    }
+    
+    func showAlert(title:String){
+        let alert = UIAlertController(title:title, message: nil, preferredStyle: .alert)
+        
+        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+            return
+        })
+        
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
     
     
     private func tapContinueAddButton(){
         if inputViewModel.journal == nil{
-            inputViewModel.addNewJournal(priceText: priceTextField.text!, memoText: memoTextField.text!, result: resultLabel.text!)
+            if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                showAlert(title: "金額は1億円以内にしてください")
+                return
+            }
+            if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                showAlert(title: "メモは10文字以内にしてください")
+                return
+            }
+            
+            inputViewModel.addNewJournal(priceText: Int(priceTextField.text!)!, expenseItem: inputViewModel.category, memo: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
-            resultLabel.text = ""
+            inputViewModel.category = ""
             priceTextField.text = ""
             addButton.isEnabled = false
             continueAddButton.isEnabled = false
         }else if inputViewModel.journal != nil{
-            inputViewModel.overwriteJournal(priceText: priceTextField.text!, result: resultLabel.text!, memoText: memoTextField.text!)
+            if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                showAlert(title: "金額は1億円以内にしてください")
+                return
+            }
+            if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                showAlert(title: "メモは10文字以内にしてください")
+                return
+            }
+            
+            inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
             RecognitionChange.shared.updateCalendar = true
             inputViewModel.journal = nil
-            resultLabel.text = ""
+            inputViewModel.category = ""
             priceTextField.text = ""
             addButton.isEnabled = false
             continueAddButton.isEnabled = false
         }
+    }
+    
+    func vanishSegmentedControl(){
+            viewChangeSegmentedControl.isHidden = true
+            segmentedControlHeight.constant = 0
     }
     
     func configureTextfield(){
@@ -399,10 +463,6 @@ class InputViewController:UIViewController{
         diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
     }
     
-    
-    
-    
-    
     //日記記入関連の画面
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
         dayBack()
@@ -415,7 +475,6 @@ class InputViewController:UIViewController{
         addDiary()
     }
     @IBAction func addImageButton(_ sender: UIButton) {
-        collectionViewDelegate = self
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
         picker.delegate = self
@@ -502,7 +561,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             let cellHeight = labelHeight + 10
             return CGSize(width: cellWidth, height: cellHeight)
         }else if collectionView === imageCollectionView{
-            let cellWidth = collectionView.frame.width / 3
+            let cellWidth = collectionView.frame.width / 2
             let cellHeight = cellWidth
             return CGSize(width: cellWidth, height: cellHeight)
         }else if collectionView === incomeCollectionView{
@@ -525,7 +584,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView === paymentCollectionView{
             let cell = collectionView.cellForItem(at: indexPath)
-            resultLabel.text = inputViewModel.categoryList[indexPath.row].name
+            inputViewModel.category = inputViewModel.categoryList[indexPath.row].name
             
             
             for i in 0 ..< inputViewModel.categoryList.count{
@@ -552,13 +611,13 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             
             let selectedImage = inputViewModel.imageArray[indexPath.item]
             inputViewModel.selectedIndex = indexPath.item
-            pictureViewController.inputViewControllerImage = selectedImage
+            pictureViewController.pictureViewModel.inputViewControllerImage = selectedImage
             pictureViewController.pictureViewControllerDelegate = self
-            pictureViewController.text = diaryInputTextView.text
-            pictureViewController.titleText = titleTextField.text
+            pictureViewController.pictureViewModel.text = diaryInputTextView.text
+            pictureViewController.pictureViewModel.titleText = titleTextField.text
         }else if collectionView === incomeCollectionView{
             let cell = incomeCollectionView.cellForItem(at: indexPath)
-            resultLabel.text = inputViewModel.incomeCategoryList[indexPath.row].name
+            inputViewModel.category = inputViewModel.incomeCategoryList[indexPath.row].name
             
             for i in 0 ..< inputViewModel.categoryList.count{
                 paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
@@ -576,15 +635,6 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             }
             inputViewModel.isPayment = false
             return
-        }
-    }
-    
-    @objc func dismissZoomImageView(_ sender: UITapGestureRecognizer) {
-        guard let zoomView = sender.view else { return }
-        UIView.animate(withDuration: 0.3, animations: {
-            zoomView.alpha = 0
-        }) { _ in
-            zoomView.removeFromSuperview()
         }
     }
 }

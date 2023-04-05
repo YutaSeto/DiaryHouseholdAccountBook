@@ -269,6 +269,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             present(navigationController,animated:true)
             inputViewController.addDiaryView()
             inputViewController.inputViewModel.isDiary = true
+            RecognitionChange.shared.updateDiaryByCalendar = true
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }

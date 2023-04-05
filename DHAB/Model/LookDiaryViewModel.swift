@@ -11,4 +11,6 @@ import RealmSwift
 
 class LookDiaryViewModel{
     
+    var diary:Diary?
+    var pictureList:[Data] = []
     }
