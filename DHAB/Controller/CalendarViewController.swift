@@ -56,8 +56,15 @@ class CalendarViewController:UIViewController{
         calendarViewModel.setMonthIncomeModelList()
         setSum()
         dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.date)
+        
+        if RecognitionChange.shared.startUpTimeModal == true{
+            let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+            guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+            let navigationController = UINavigationController(rootViewController: inputViewController)
+            present(navigationController,animated:true)
+            inputViewController.inputByStartUpModalDelegate = self
+        }
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -300,12 +307,14 @@ extension CalendarViewController:InputViewControllerDelegate{
     
     func changeFromPaymentToIncome() {
         calendarViewModel.removePaymentAddIncome(tableView: householdAccountBookTableView)
+        setSum()
         view.layoutIfNeeded()
         view.updateConstraints()
     }
     
     func changeFromIncomeToPayment() {
         calendarViewModel.removeIncomeAddPayment(tableView: householdAccountBookTableView)
+        setSum()
         view.layoutIfNeeded()
         view.updateConstraints()
     }
@@ -314,19 +323,13 @@ extension CalendarViewController:InputViewControllerDelegate{
         return
     }
     
-    func updateIncome() {
-        calendarViewModel.setTableView()
-        calendarViewModel.setDisplayJournalList()
-        householdAccountBookTableView.reloadData()
-        
-        view.layoutIfNeeded()
-        view.updateConstraints()
-    }
-    
     func updatePayment() {
+        print(paymentLabel.text!)
         calendarViewModel.setTableView()
+        print(paymentLabel.text!)
         calendarViewModel.setDisplayJournalList()
-        householdAccountBookTableView.reloadData()
+        print(paymentLabel.text!)
+//        householdAccountBookTableView.reloadData()
         
         view.layoutIfNeeded()
         view.updateConstraints()
@@ -483,6 +486,19 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             cell.backgroundColor = .white
         }
         
+        //cellの文字のサイズの調整
+        let cellWidth = cell.bounds.width * 0.9
+        let paymentLabelHeight = paymentLabel.frame.height - 100
+        let incomeLabelHeight = incomeLabel.frame.height + 5
+        cell.paymentLabel.adjustsFontSizeToFitWidth = true
+        cell.paymentLabel.minimumScaleFactor = 0.5
+        cell.paymentLabel.sizeToFit()
+        cell.incomeLabel.adjustsFontSizeToFitWidth = true
+        cell.incomeLabel.minimumScaleFactor = 0.5
+        cell.incomeLabel.sizeToFit()
+        cell.paymentLabel.frame.size = CGSize(width: cellWidth, height: paymentLabelHeight)
+        cell.incomeLabel.frame.size = CGSize(width: cellWidth, height: incomeLabelHeight)
+        
         return cell
     }
     
@@ -516,5 +532,25 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             householdAccountBookTableView.reloadData()
             diaryTableView.reloadData()
         }
+    }
+}
+
+extension CalendarViewController:InputByStartUpModalDelegate{
+    func updateJournal() {
+        calendarViewModel.setMonthIncomeModelList()
+        calendarViewModel.setMonthPaymentModelList()
+        calendarViewModel.setTableView()
+        calendarViewModel.setDisplayJournalList()
+        setSum()
+        householdAccountBookTableView.reloadData()
+        calendarView.reloadData()
+        
+    }
+    
+    func updateDiaryAndCalendar() {
+        updateDiary()
+        updateCalendar()
+        diaryTableView.reloadData()
+        calendarView.reloadData()
     }
 }

@@ -11,10 +11,13 @@ import UIKit
 class LookDiaryViewController:UIViewController{
     
     let lookDiaryViewModel = LookDiaryViewModel()
+    let util = Util()
+    var forDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
     
     @IBOutlet weak var titleTextView: UITextView!
     @IBOutlet weak var diaryTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,7 @@ class LookDiaryViewController:UIViewController{
         titleTextView.isEditable = false
         diaryTextView.isEditable = false
         setNavigationBarButton()
+        setNavigationBarTitle()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,6 +41,12 @@ class LookDiaryViewController:UIViewController{
         titleTextView.text! = lookDiaryViewModel.diary!.title
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
+    }
+    
+    func setNavigationBarTitle(){
+        navigationItem.title = util.forLookDiaryViewDateFormatter.string(from:lookDiaryViewModel.diary!.date)
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     func configureCollectionViewFlowLayout(){
@@ -51,10 +61,28 @@ class LookDiaryViewController:UIViewController{
         let buttonActionSelector: Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        
+        let rightButtonActionSelector: Selector = #selector(tapEditButton)
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: rightButtonActionSelector)
+        navigationItem.rightBarButtonItem = rightBarButton
     }
 
     @objc func tapBackButton(){
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    @objc func tapEditButton(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+        let navigationController = UINavigationController(rootViewController: inputViewController)
+        inputViewController.inputViewModel.diary = lookDiaryViewModel.diary!
+        inputViewController.setDiary(data: lookDiaryViewModel.diary!)
+        present(navigationController,animated:true)
+        inputViewController.addDiaryView()
+        inputViewController.inputViewModel.isDiary = true
+        inputViewController.forDiaryViewUpdateDiaryByLookDiaryViewDelegate = forDiaryViewUpdateDiaryByLookDiaryViewDelegate
+        inputViewController.forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate = self
     }
 }
 
@@ -85,8 +113,13 @@ extension LookDiaryViewController:UICollectionViewDelegate,UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
     }
-    
-    
 }
 
 
+extension LookDiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
+    func updateDiaryByLookDiaryView() {
+        
+        configureTextView()
+        imageCollectionView.reloadData()
+    }
+}

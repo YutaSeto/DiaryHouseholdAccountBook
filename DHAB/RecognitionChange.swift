@@ -17,7 +17,16 @@ final public class RecognitionChange{
     var deleteDiaryByCalendar:Bool = false
     var deleteDiaryByDiary:Bool = false
     var updateDiaryByCalendar:Bool = false
-    public static let shared = RecognitionChange()
+    var startUpTimeModal:Bool = false{
+        didSet{
+            let defaults = UserDefaults.standard
+            defaults.set(startUpTimeModal, forKey: "startUpTimeModal")
+        }
+    }
+    static let shared = RecognitionChange()
     
-    private init(){}
+    private init(){
+        let defaults = UserDefaults.standard
+        startUpTimeModal = defaults.bool(forKey: "startUpTimeModal")
+    }
 }

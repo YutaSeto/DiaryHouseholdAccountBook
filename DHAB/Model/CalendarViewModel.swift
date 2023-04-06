@@ -82,7 +82,7 @@ class CalendarViewModel{
     func setSumIncome() -> Int{
         let firstDay = util.setFirstDay(date: selectedDate)
         let lastDay = util.setLastDay(date: selectedDate)
-        let dayCheck = displayIncomeList.filter({$0.date >= firstDay}).filter{$0.date <= lastDay}
+        let dayCheck = displayIncomeList.filter({$0.date >= firstDay}).filter{$0.date <= lastDay}.filter{$0.isPayment == false}
         let sum = dayCheck.map{$0.price}.reduce(0){$0 + $1}
         return sum
     }
@@ -160,6 +160,11 @@ class CalendarViewModel{
         monthPaymentModelList.remove(at: index)
         displayIncomeList.append(payment!)
         monthIncomeModelList.append(payment!)
+        
+        setDisplayJournalList()
+        setMonthPaymentModelList()
+        setMonthIncomeModelList()
+        
         tableView.reloadData()
         payment = nil
         income = nil
@@ -172,6 +177,10 @@ class CalendarViewModel{
         monthIncomeModelList.remove(at: index)
         displayPaymentList.append(income!)
         monthPaymentModelList.append(income!)
+        
+        setDisplayJournalList()
+        setMonthPaymentModelList()
+        setMonthIncomeModelList()
         tableView.reloadData()
         payment = nil
         income = nil

@@ -22,7 +22,11 @@ class InputViewModel{
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.timeZone = TimeZone(identifier: "Asia/tokyo")
-//        datePicker.preferredDatePickerStyle = .wheels
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        } else {
+            // Fallback on earlier versions
+        }
         datePicker.locale = Locale(identifier: "ja-JP")
         return datePicker
     }

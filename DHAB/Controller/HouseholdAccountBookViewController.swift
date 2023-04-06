@@ -156,6 +156,7 @@ class HouseholdAccountBookViewController:UIViewController{
         sumIncomeTableView.register(UINib(nibName: "HouseholdAccountBookTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         resultTableView.register(UINib(nibName: "ResultTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         resultSumTableView.register(UINib(nibName: "ResultTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
+        menuTableView.register(UINib(nibName: "SelectStartUpModalTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
     }
     
     func setDelegateAndDataSource(){
@@ -296,7 +297,7 @@ class HouseholdAccountBookViewController:UIViewController{
         slideMenuView.translatesAutoresizingMaskIntoConstraints = false
         slideMenuView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         slideMenuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        slideMenuView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        slideMenuView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         slideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
@@ -627,9 +628,20 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             cell.progressBar.setProgress(1 - Float(Float(householdAccountBookViewModel.sumIncomeBudget() - householdAccountBookViewModel.setSumIncome()) / Float(householdAccountBookViewModel.sumIncomeBudget())), animated: false)
             return cell
         }else if tableView === menuTableView{
-            let cell = menuTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel!.text = householdAccountBookViewModel.menuList[indexPath.row]
-            return cell
+            if indexPath.row == 2{
+                if RecognitionChange.shared.startUpTimeModal == false{
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
+                    cell.modalSwitch.isOn = false
+                    return cell
+                }else{
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
+                    return cell
+                }
+            }else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                cell.textLabel!.text = householdAccountBookViewModel.menuList[indexPath.row]
+                return cell
+            }
         }else if tableView === resultTableView{
             let cell = resultTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
@@ -690,6 +702,19 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 present(navigationController,animated: true)
                 returnView0Second()
                 householdAccountBookViewModel.isExpanded = false
+            case 2:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
+                if cell.modalSwitch.isOn{
+                    RecognitionChange.shared.startUpTimeModal = false
+                    
+                    cell.switchOff()
+                }else{
+                    RecognitionChange.shared.startUpTimeModal = true
+                    cell.modalSwitch.isOn = true
+
+                    print("modalSwitchIsOff")
+                    print(RecognitionChange.shared.startUpTimeModal)
+                }
             default:
                 return
             }

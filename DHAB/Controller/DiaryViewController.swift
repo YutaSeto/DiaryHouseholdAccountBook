@@ -186,6 +186,7 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         guard let lookDiaryViewController = storyboard.instantiateViewController(withIdentifier: "LookDiaryViewController") as? LookDiaryViewController else{return}
         self.navigationController?.pushViewController(lookDiaryViewController, animated: true)
         lookDiaryViewController.lookDiaryViewModel.diary = diary
+        lookDiaryViewController.forDiaryViewUpdateDiaryByLookDiaryViewDelegate = self
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -209,5 +210,12 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
+    }
+}
+
+extension DiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
+    func updateDiaryByLookDiaryView() {
+        diaryViewModel.setDiaryData()
+        diaryTableView.reloadData()
     }
 }

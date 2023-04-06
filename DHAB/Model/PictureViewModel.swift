@@ -10,6 +10,7 @@ import UIKit
 
 class PictureViewModel{
     
+    var diary:Diary?
     var inputViewControllerImage:Data!
     var text:String?
     var titleText:String?

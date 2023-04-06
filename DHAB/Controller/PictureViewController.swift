@@ -56,17 +56,19 @@ class PictureViewController:UIViewController{
     }
     
     func setNavigationBarBackButton(){
-        let buttonActionSelector: Selector = #selector(tapBackButton)
-        let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: buttonActionSelector)
+        let leftButtonActionSelector: Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        
     }
-
+    
     @objc func tapBackButton(){
         self.navigationController?.popViewController(animated: true)
         if pictureViewModel.text != "" && pictureViewModel.titleText != ""{
             pictureViewControllerDelegate?.setAddDiaryButtonIsEnable()
         }
     }
+    
     
     func setNavigationBarDeleteButton(){
         let buttonActionSelector: Selector = #selector(tapDeleteButton)

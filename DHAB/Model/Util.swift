@@ -33,6 +33,14 @@ class Util:UIViewController{
         return dateFormatter
     }
     
+    public var forLookDiaryViewDateFormatter:DateFormatter{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy年M月d日(E)"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
+        dateFormatter.locale = Locale(identifier: "ja-JP")
+        return dateFormatter
+    }
+    
     public var onliDayDateFormatter:DateFormatter{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d日"

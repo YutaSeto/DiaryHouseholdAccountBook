@@ -29,7 +29,7 @@ class HouseholdAccountBookViewModel{
     var targetIndex:IndexPath?
     var targetJournal:[Journal]?
     var targetBudget:[Budget]?
-    let menuList = ["カテゴリーの設定","予算の設定"]
+    let menuList = ["カテゴリーの設定","予算の設定","初回起動時の設定"]
     var isExpanded:Bool = false
     var sumPaymentList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
     var sumYearPayment: Int = 0

@@ -22,7 +22,16 @@ class FSCalendarCustomCell: FSCalendarCell {
         super.awakeFromNib()
         // Initialization code
         self.layer.borderWidth = 1.0
-        self.layer.borderColor = UIColor.lightGray.cgColor // 枠線の色
+        self.layer.borderColor = UIColor.lightGray.cgColor
+        
+        paymentLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let labelWidth = paymentLabel.frame.width
+        let fontScaleFactor = min(labelWidth / 100.0,0.9)
     }
         
     func select(){

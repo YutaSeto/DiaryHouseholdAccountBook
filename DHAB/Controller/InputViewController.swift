@@ -14,10 +14,18 @@ protocol InputViewControllerDelegate{
     func updatePayment()
     func updateDiary()
     func updateCalendar()
-    func updateIncome()
     func didReceiveNotification()
     func changeFromPaymentToIncome()
     func changeFromIncomeToPayment()
+}
+
+protocol InputByStartUpModalDelegate{
+    func updateJournal()
+    func updateDiaryAndCalendar()
+}
+
+protocol UpdateDiaryByLookDiaryViewDelegate{
+    func updateDiaryByLookDiaryView()
 }
 
 class InputViewController:UIViewController{
@@ -31,7 +39,10 @@ class InputViewController:UIViewController{
     @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var segmentedControlHeight: NSLayoutConstraint!
     //家計簿記入画面関連
-    public var inputViewControllerDelegate:InputViewControllerDelegate?
+    var inputViewControllerDelegate:InputViewControllerDelegate?
+    var inputByStartUpModalDelegate:InputByStartUpModalDelegate?
+    var forDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
+    var forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
     @IBOutlet weak var incomeCollectionView: UICollectionView!
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var paymentCollectionView: UICollectionView!
@@ -158,7 +169,7 @@ class InputViewController:UIViewController{
     
     func setDiary(data:Diary){
         inputViewModel.diary = data
-        titleTextField.text = inputViewModel.diary!.text
+        titleTextField.text = inputViewModel.diary!.title
         diaryInputTextView.text = inputViewModel.diary!.text
         inputViewModel.date = inputViewModel.diary!.date
         inputViewModel.imageArray = Array(data.pictureList)
@@ -246,6 +257,7 @@ class InputViewController:UIViewController{
     @IBAction func addButton(_ sender: UIButton) {
         tapAddButton()
         inputViewControllerDelegate?.didReceiveNotification()
+        inputByStartUpModalDelegate?.updateJournal()
     }
     
     @IBAction func continueAddButton(_ sender: UIButton) {
@@ -257,6 +269,7 @@ class InputViewController:UIViewController{
         if let selectedItem = incomeCollectionView.indexPathsForSelectedItems?.first{
             incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
+        inputByStartUpModalDelegate?.updateJournal()
         inputViewModel.journal = nil
     }
     
@@ -368,13 +381,13 @@ class InputViewController:UIViewController{
                 
                 inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
                 if inputViewModel.isPayment == true{
-                        inputViewControllerDelegate?.changeFromIncomeToPayment()
-                    }
+                    inputViewControllerDelegate?.changeFromIncomeToPayment()
                 }
-                inputViewControllerDelegate?.updatePayment()
-                inputViewControllerDelegate?.updateCalendar()
-                inputViewModel.journal = nil
-                dismiss(animated: true)
+            }
+            inputViewControllerDelegate?.updatePayment()
+            inputViewControllerDelegate?.updateCalendar()
+            inputViewModel.journal = nil
+            dismiss(animated: true)
         }
         RecognitionChange.shared.updateCalendar = true
     }
@@ -496,7 +509,7 @@ class InputViewController:UIViewController{
     }
     
     
-    private func addDiary(){
+    func addDiary(){
         if inputViewModel.diary == nil{
             inputViewModel.addNewDiary(titleText: titleTextField.text!, diaryText: diaryInputTextView.text!)
             inputViewControllerDelegate?.updateDiary()
@@ -508,7 +521,11 @@ class InputViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = true
             dismiss(animated: true)
         }
+        forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate?.updateDiaryByLookDiaryView()
+        forDiaryViewUpdateDiaryByLookDiaryViewDelegate?.updateDiaryByLookDiaryView()
+        inputByStartUpModalDelegate?.updateDiaryAndCalendar()
     }
+    
     
     
 }

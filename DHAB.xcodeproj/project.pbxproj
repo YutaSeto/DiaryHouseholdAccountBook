@@ -12,6 +12,8 @@
 		23507F0E298E9AD70025EAE5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0D298E9AD70025EAE5 /* Category.swift */; };
 		23507F10298E9BD00025EAE5 /* BudgetTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */; };
 		23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */; };
+		2368D62329DE76D20070A67E /* SelectStartUpModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */; };
+		2368D62429DE76D20070A67E /* SelectStartUpModalTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */; };
 		237AFB652974ECAC0060ECD0 /* BudgetViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */; };
 		237AFB672974ECBC0060ECD0 /* BudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */; };
 		237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237AFB692975027B0060ECD0 /* BudgetTableViewCell.swift */; };
@@ -72,6 +74,8 @@
 		23507F0D298E9AD70025EAE5 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTableViewCellItem.swift; sourceTree = "<group>"; };
 		23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookTableViewCellItem.swift; sourceTree = "<group>"; };
+		2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectStartUpModalTableViewCell.swift; sourceTree = "<group>"; };
+		2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectStartUpModalTableViewCell.xib; sourceTree = "<group>"; };
 		237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BudgetViewController.storyboard; sourceTree = "<group>"; };
 		237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewController.swift; sourceTree = "<group>"; };
 		237AFB692975027B0060ECD0 /* BudgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTableViewCell.swift; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 				233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */,
 				23CBECC929D30AAD00A5E777 /* FSCalendarCustomCell.swift */,
 				23CBECCA29D30AAD00A5E777 /* FSCalendarCustomCell.xib */,
+				2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */,
+				2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */,
 			);
 			path = customCell;
 			sourceTree = "<group>";
@@ -350,6 +356,7 @@
 				23ACC142297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib in Resources */,
 				23CBECCC29D30AAD00A5E777 /* FSCalendarCustomCell.xib in Resources */,
 				237AFB6C2975027B0060ECD0 /* BudgetTableViewCell.xib in Resources */,
+				2368D62429DE76D20070A67E /* SelectStartUpModalTableViewCell.xib in Resources */,
 				237AFB652974ECAC0060ECD0 /* BudgetViewController.storyboard in Resources */,
 				EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */,
 				23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */,
@@ -437,6 +444,7 @@
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
 				23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */,
 				23D4070229DA92F600E92C52 /* HouseholdAccountBookViewModel.swift in Sources */,
+				2368D62329DE76D20070A67E /* SelectStartUpModalTableViewCell.swift in Sources */,
 				237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */,
 				237B85FF29704A49001E4639 /* TabBarController.swift in Sources */,
 				23CBECCB29D30AAD00A5E777 /* FSCalendarCustomCell.swift in Sources */,
