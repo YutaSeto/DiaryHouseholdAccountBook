@@ -7,6 +7,7 @@
 
 import UIKit
 import FSCalendar
+import ChameleonFramework
 
 class FSCalendarCustomCell: FSCalendarCell {
     
@@ -36,7 +37,7 @@ class FSCalendarCustomCell: FSCalendarCell {
         
     func select(){
         _isSelected = true
-        self.layer.borderColor = UIColor.blue.cgColor
+        self.layer.borderColor = UIColor.flatPowderBlueColorDark().cgColor
         self.layer.borderWidth = 2.0
     }
     

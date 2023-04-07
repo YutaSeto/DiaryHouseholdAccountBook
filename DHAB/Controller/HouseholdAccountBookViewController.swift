@@ -71,8 +71,8 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumPayment()
         householdAccountBookViewModel.setMonthSumIncome()
         tableViewScroll()
-        setSegmentedControlColor(color: .flatBlue())
-        setStatusBarBackgroundColor(.flatBlue())
+        setSegmentedControlColor(color: .flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         incomeTableView.reloadData()
         paymentTableView.reloadData()
         resultTableView.reloadData()
@@ -94,6 +94,8 @@ class HouseholdAccountBookViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        householdAccountBookViewModel.isExpanded = false
+        
         if RecognitionChange.shared.updateHouseholdAccountBook == true{
             householdAccountBookViewModel.setPaymentData()
             householdAccountBookViewModel.setIncomeData()
@@ -430,7 +432,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.title = "家計簿"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
         
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -438,6 +440,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let leftButtonActionSelector: Selector = #selector(showInputView)
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     @objc func showInputView(){
@@ -481,9 +484,10 @@ class HouseholdAccountBookViewController:UIViewController{
                 return
             }else{
                 returnView()
-                householdAccountBookViewModel.isExpanded = true
+                householdAccountBookViewModel.isExpanded = false
             }
         }
+        householdAccountBookViewModel.isExpanded = false
     }
     
     func returnView(){
@@ -496,6 +500,7 @@ class HouseholdAccountBookViewController:UIViewController{
             },
             completion: nil
         )
+        householdAccountBookViewModel.isExpanded = false
     }
     
     func returnView0Second(){
@@ -755,7 +760,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     expenseItemViewController.deleteCategoryDelegateForHouseholdAccountBook = self
                     navigationController.pushViewController(expenseItemViewController, animated: true)
                     present(navigationController,animated: true)
-                    expenseItemViewController.segmentedControl!.selectedSegmentIndex = 1
+                    
+                    expenseItemViewController.expenseItemViewModel.isIncome = true
                     expenseItemViewController.addIncomeView()
                     returnView0Second()
                     householdAccountBookViewModel.isExpanded = false
@@ -783,7 +789,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 returnView0Second()
                 householdAccountBookViewModel.isExpanded = false
             case 2:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
                 return
             default:
                 return
@@ -862,11 +868,23 @@ extension HouseholdAccountBookViewController:CategoryViewControllerDelegate{
 }
 
 extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
-    func setTargetItem(data:Category,index:IndexPath,journal:[Journal],budget:[Budget]){
+    func deleteTargetItem(data:Category,index:IndexPath,journal:[Journal],budget:[Budget]){
         householdAccountBookViewModel.targetItem = data
         householdAccountBookViewModel.targetIndex = index
         householdAccountBookViewModel.targetJournal = journal
-        householdAccountBookViewModel.targetBudget = budget
+//        householdAccountBookViewModel.targetBudget = budget
+        //paymentListの削除
+        householdAccountBookViewModel.deleteTargetJournal()
+        //categorylistの削除
+        householdAccountBookViewModel.deleteTargetCategory()
+        //paymentbudgetlistの削除
+//        householdAccountBookViewModel.deleteTargetBudget()
+        
+        if data.isPayment == true{
+            paymentTableView.deleteRows(at: [index], with: .automatic)
+        }else if data.isPayment == false{
+            incomeTableView.deleteRows(at: [index], with: .automatic)
+        }
     }
     
     func remakeViewController() {

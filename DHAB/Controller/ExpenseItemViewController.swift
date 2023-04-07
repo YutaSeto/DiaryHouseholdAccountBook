@@ -24,7 +24,7 @@ protocol CategoryViewControllerDelegate{
 
 protocol DeleteCategoryDelegate{
     func remakeViewController()
-    func setTargetItem(data:Category,index:IndexPath,journal:[Journal],budget:[Budget])
+    func deleteTargetItem(data:Category,index:IndexPath,journal:[Journal],budget:[Budget])
     func remakeUIView()
 }
 
@@ -58,9 +58,14 @@ class ExpenseItemViewController: UIViewController{
         configureAddButton()
         categoryViewControllerDelegate?.updateHouseholdAccountBook()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         expenseItemTableView.reloadData()
         incomeTableView.reloadData()
+        
+        if expenseItemViewModel.isIncome == true{
+            addIncomeView()
+            segmentedControl.selectedSegmentIndex = 1
+        }
     }
     
     @objc func tapBackButton(){
@@ -71,6 +76,7 @@ class ExpenseItemViewController: UIViewController{
         let buttonActionSelector:Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"xmark"), style: .plain,target: self,action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
         
     }
     
@@ -309,12 +315,24 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let targetItem = self.expenseItemViewModel.categoryList[indexPath.row]
                 let targetJournal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
                 let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
+                
+                //このビューでのデータ配列の削除、テーブルビューセルの削除
+                print("ここから開始")
                 self.expenseItemViewModel.categoryList.remove(at: indexPath.row)
                 self.expenseItemTableView.deleteRows(at: [indexPath], with: .automatic)
-                self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
+                
+                print("expenseitemviewの削除が完了")
+                //ここで家計簿画面の配列とテーブルビューから消す必要がある。
+                self.deleteCategoryDelegateForHouseholdAccountBook!.deleteTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)//データを持ってく&削除
+                print("家計簿画面の削除が完了")
+                
+                self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)//ここで消している
+                print("realmのデータ削除完了")
+                
                 self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
-                self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)
+                print("remakeviewControllerを実施")
                 self.expenseItemViewModel.setCategoryData()
+                print("setCategoryDataの実施")
                 self.expenseItemTableView.reloadData()
                 self.deleteCategoryDelegateForTabBar?.remakeViewController()
                 self.deleteCategoryDelegateForHouseholdAccountBook?.remakeUIView()
@@ -336,10 +354,11 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == false}) //消すべき予算一覧
             expenseItemViewModel.incomeCategoryList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.deleteCategoryDelegateForHouseholdAccountBook!.setTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
-            self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
+            
+            self.deleteCategoryDelegateForHouseholdAccountBook!.deleteTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
             
             self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)
+            self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
             self.expenseItemViewModel.setIncomeCategoryData()
             tableView.reloadData()
             categoryViewControllerDelegate?.updateIncome()

@@ -45,7 +45,7 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureViewModel.setIncomeBudgetTableViewDataSourse()
         dateLabel.text = util.monthDateFormatter.string(from:budgetConfigureViewModel.date)
         configureNavigationBarButton()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
     }
     
     override func viewWillLayoutSubviews() {
@@ -74,6 +74,7 @@ class BudgetConfigureViewController: UIViewController{
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"arrow.uturn.backward"), style: .plain
                                             ,target: self,action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     @IBAction func cancelButton(_ sender: UIButton) {

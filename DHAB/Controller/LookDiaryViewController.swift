@@ -32,7 +32,7 @@ class LookDiaryViewController:UIViewController{
         configureTextFont()
         setNavigationBarButton()
         setNavigationBarTitle()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +72,7 @@ class LookDiaryViewController:UIViewController{
         let rightButtonActionSelector: Selector = #selector(tapEditButton)
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: rightButtonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
 
     @objc func tapBackButton(){

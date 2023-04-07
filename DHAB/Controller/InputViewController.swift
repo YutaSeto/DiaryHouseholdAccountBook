@@ -102,7 +102,7 @@ class InputViewController:UIViewController{
         configureAddButton()
         setNavigationBarButton()
         setToolbar()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         configureTextView()
         setNavigationTitle()        
         if inputViewModel.journal == nil{
@@ -139,7 +139,7 @@ class InputViewController:UIViewController{
         }
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
     }
     
     
@@ -154,6 +154,7 @@ class InputViewController:UIViewController{
         let buttonActionSelector: Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
 
     @objc func tapBackButton(){

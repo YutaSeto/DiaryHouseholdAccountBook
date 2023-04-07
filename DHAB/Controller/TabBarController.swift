@@ -37,7 +37,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
-            let selectedColor:UIColor = .flatBlue()
+            let selectedColor:UIColor = .flatPowderBlueColorDark().darken(byPercentage: 0.2)
             let unselectedColor:UIColor = .systemGray2
             viewController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:selectedColor], for: .selected)
             viewController.tabBarItem.image = viewController.tabBarItem.image?.withTintColor(selectedColor, renderingMode: .alwaysOriginal)

@@ -58,8 +58,8 @@ class CalendarViewController:UIViewController{
         calendarViewModel.setMonthIncomeModelList()
         setSum()
         setButtonTitle()
-        setStatusBarBackgroundColor(.flatBlue())
-        setSegmentedControlColor(color: .flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setSegmentedControlColor(color: .flatPowderBlueColorDark())
         setNavigationTitle()
         dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.date)
         if RecognitionChange.shared.startUpTimeModal == true{
@@ -105,6 +105,7 @@ class CalendarViewController:UIViewController{
         monthBackButton.setTitle(nil, for: .normal)
         monthPassButton.setTitle(nil, for: .normal)
         threeMonthPassButton.setTitle(nil, for: .normal)
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     override func viewWillLayoutSubviews() {
@@ -200,7 +201,7 @@ class CalendarViewController:UIViewController{
         navigationItem.title = "カレンダー"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
     }
     
 
@@ -351,7 +352,7 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             if item.isPayment == true{
                 cell?.backgroundColor = .white
             }else{
-                cell!.backgroundColor = .flatBlue().lighten(byPercentage: 5)
+                cell!.backgroundColor = .flatWhite()
             }
         }
     }
@@ -537,7 +538,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         }
         
         if calendar.isDateInToday(date){
-            cell.dayLabel.backgroundColor = .flatBlue()
+            cell.dayLabel.backgroundColor = .flatPowderBlue()
             cell.dayLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: cell.dayLabel.backgroundColor!, isFlat: true)
         }else{
             cell.dayLabel.backgroundColor = nil
@@ -546,7 +547,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         let isEqualDate = calendarViewModel.diaryModelList.contains(where: {$0.date.zeroclock == date.zeroclock})
         if isEqualDate && date >= startOfMonth && date <= endOfMonth{
-            cell.backgroundColor = UIColor.flatBlue().lighten(byPercentage: 1)
+            cell.backgroundColor = UIColor.flatPowderBlueColorDark().lighten(byPercentage: 1)
         }else{
             cell.backgroundColor = .white
         }

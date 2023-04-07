@@ -74,7 +74,7 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="css-5S-DnE">
-                                <rect key="frame" x="0.0" y="494" width="393" height="32"/>
+                                <rect key="frame" x="0.0" y="504" width="393" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="akg-LM-MKf"/>
                                 </constraints>
@@ -226,10 +226,10 @@
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="lKZ-HS-FzP"/>
                             <constraint firstItem="e2c-2z-Yth" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="mng-Gs-naA"/>
                             <constraint firstItem="i9M-8M-WB1" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="okf-Zg-Sgf"/>
+                            <constraint firstItem="css-5S-DnE" firstAttribute="top" secondItem="cnc-5J-WYa" secondAttribute="bottom" constant="10" id="rO0-V9-wac"/>
                             <constraint firstItem="css-5S-DnE" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="uS2-s0-w36"/>
                             <constraint firstAttribute="trailing" secondItem="REY-mA-5Sv" secondAttribute="trailing" id="wE1-KA-Si8"/>
                             <constraint firstItem="W3f-Xy-uYG" firstAttribute="centerY" secondItem="DWs-ad-ASc" secondAttribute="centerY" id="zbU-kI-JFa"/>
-                            <constraint firstItem="css-5S-DnE" firstAttribute="top" secondItem="cnc-5J-WYa" secondAttribute="bottom" id="zbf-Vl-HgY"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="カレンダー" id="rLI-lD-Jzf"/>

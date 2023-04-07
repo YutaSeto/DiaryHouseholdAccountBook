@@ -28,7 +28,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         diaryTableView.reloadData()
         setNavigationBarButton()
         setSearchBarPlaceholder()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,10 +54,11 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         navigationItem.title = "日記"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
         let leftButtonActionSelector: Selector = #selector(showInputView)
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     @objc func showInputView(){

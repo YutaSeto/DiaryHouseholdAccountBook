@@ -32,7 +32,7 @@ class PictureViewController:UIViewController{
         image = pictureViewModel.inputViewControllerImage
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         //ピンチジェスチャーの設定
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchGestureAction(_:)))
         imageView.isUserInteractionEnabled = true
@@ -60,6 +60,7 @@ class PictureViewController:UIViewController{
         let leftButtonActionSelector: Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
         
     }
     

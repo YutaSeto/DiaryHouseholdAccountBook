@@ -45,7 +45,7 @@ class BudgetViewController: UIViewController{
         budgetViewModel.setBudgetTableViewDataSourse()
         budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(.flatBlue())
+        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         
         budgetTableView.reloadData()
         incomeBudgetTableView.reloadData()
@@ -85,6 +85,7 @@ class BudgetViewController: UIViewController{
         let buttonActionSelector2:Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"xmark"), style: .plain,target: self,action: buttonActionSelector2)
         navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
         
     }
     

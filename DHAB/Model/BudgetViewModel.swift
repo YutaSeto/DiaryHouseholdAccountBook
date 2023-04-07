@@ -46,9 +46,8 @@ class BudgetViewModel{
         let firstDay = util.setFirstDay(date: date)
         let lastDay = util.setLastDay(date: date)
         categoryList.forEach{ expense in
-            let dayCheckBudget = self.paymentBudgetList.filter({$0.budgetDate >= firstDay})
-            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:Budget = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
+            let dayCheckBudget = self.paymentBudgetList.filter({$0.budgetDate >= firstDay}).filter({$0.budgetDate <= lastDay})
+            if let budget:Budget = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
                 let item = BudgetTableViewCellItem(
                     id: budget.id,
                     name: expense.name,
@@ -79,9 +78,8 @@ class BudgetViewModel{
         let firstDay = util.setFirstDay(date: date)
         let lastDay = util.setLastDay(date: date)
         incomeCategoryList.forEach{ expense in
-            let dayCheckBudget = self.incomeBudgetList.filter({$0.budgetDate >= firstDay})
-            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:Budget = dayCheckBudget2.filter({$0.expenseID == expense.id}).filter({$0.isPayment == false}).first{
+            let dayCheckBudget = self.incomeBudgetList.filter({$0.budgetDate >= firstDay}).filter{$0.budgetDate <= lastDay}
+            if let budget:Budget = dayCheckBudget.filter({$0.expenseID == expense.id}).filter({$0.isPayment == false}).first{
                 let item = IncomeBudgetTableViewCellItem(
                     id: budget.id,
                     name: expense.name,

@@ -17,8 +17,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="起動時に入力画面を表示する" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rH7-Ae-niQ">
-                        <rect key="frame" x="10" y="11.666666666666664" width="226" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="起動時に入力画面を表示" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rH7-Ae-niQ">
+                        <rect key="frame" x="15" y="11.666666666666664" width="191" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -31,7 +31,7 @@
                     </switch>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="rH7-Ae-niQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="4xc-hp-6BK"/>
+                    <constraint firstItem="rH7-Ae-niQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="4xc-hp-6BK"/>
                     <constraint firstAttribute="trailing" secondItem="jMl-9i-d8j" secondAttribute="trailing" constant="10" id="BCU-zp-fqg"/>
                     <constraint firstItem="jMl-9i-d8j" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="GSp-zy-bhB"/>
                     <constraint firstItem="rH7-Ae-niQ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="N1O-mW-rdi"/>

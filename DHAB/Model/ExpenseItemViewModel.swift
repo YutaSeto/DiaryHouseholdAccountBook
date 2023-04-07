@@ -14,6 +14,7 @@ class ExpenseItemViewModel{
     let realm = try! Realm()
     var categoryList:[Category] = []
     var incomeCategoryList:[Category] = []
+    var isIncome: Bool?
     
     func addNewCategory(value: String,isPayment: Bool){
         let categoryModel = Category()

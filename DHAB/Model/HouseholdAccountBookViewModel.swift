@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import RealmSwift
 import Charts
+import ChameleonFramework
 
 class HouseholdAccountBookViewModel{
     
@@ -35,8 +36,10 @@ class HouseholdAccountBookViewModel{
     var sumYearPayment: Int = 0
     var sumIncomeList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
     var sumYearIncome: Int = 0
-    let colors:[UIColor] = [.red, .blue, .green, .yellow, .gray, .brown, .cyan, .purple, .orange]
     
+    let paymentColors:[UIColor] = [.flatRed(), .flatOrange(), .flatMagenta(), .flatYellow(), .flatWatermelon(), .flatPink(), .flatRedColorDark(), .flatOrangeColorDark(), .flatMagentaColorDark(), .flatYellowColorDark(), .flatWatermelonColorDark(), .flatPinkColorDark()]
+    
+    let incomeColors:[UIColor] = [.flatSkyBlue(), .flatTeal(), .flatGreen(), .flatLime(), .flatCoffee(), .flatPowderBlue(), .flatSkyBlueColorDark(), .flatTealColorDark(), .flatGreen(), .flatLimeColorDark(), .flatCoffeeColorDark(), .flatPowderBlueColorDark()]
     
     func setCategoryData(){
         let realm = try! Realm()
@@ -89,7 +92,7 @@ class HouseholdAccountBookViewModel{
         }
         
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
-        dataSet.colors = colors
+        dataSet.colors = paymentColors
         dataSet.sliceSpace = 0.0
         dataSet.valueFont = UIFont.boldSystemFont(ofSize: 12)
         let data = PieChartData(dataSets: [dataSet])
@@ -106,7 +109,7 @@ class HouseholdAccountBookViewModel{
         }
         
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
-        dataSet.colors = colors
+        dataSet.colors = incomeColors
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
         return data
@@ -295,4 +298,44 @@ class HouseholdAccountBookViewModel{
         sumYearIncome = 0
     }
     
+    func deleteTargetJournal(){
+        if targetItem?.isPayment == true{
+            targetJournal!.forEach{ journal in
+                if let index = paymentList.firstIndex(where: {$0.id == journal.id}){
+                    paymentList.remove(at: index)
+                }
+            }
+        }else if targetItem?.isPayment == false{
+            targetJournal!.forEach{ Journal in
+                if let index = incomeList.firstIndex(where: {$0.id == Journal.id}){
+                    incomeList.remove(at: index)
+                }
+            }
+        }
+        print("paymentList.count\(paymentList.count)")
+    }
+    
+    func deleteTargetCategory(){
+        if targetItem?.isPayment == true{
+            categoryList.remove(at: targetIndex!.row)
+        }else if targetItem?.isPayment == false{
+            incomeCategoryList.remove(at: targetIndex!.row)
+        }
+        print("categoryList.count\(categoryList.count)")
+    }
+    
+    func deleteTargetBudget(){
+        if targetItem!.isPayment == true{
+            targetBudget!.forEach{ budget in
+                let index = paymentBudgetList.firstIndex(where: {$0.id == budget.id})
+                paymentBudgetList.remove(at: index!)
+            }
+        }else if targetItem!.isPayment == false{
+            targetBudget!.forEach{ budget in
+                let index = incomeBudgetList.firstIndex(where: {$0.id == budget.id})
+                incomeBudgetList.remove(at: index!)
+            }
+        }
+        print("paymentBudgetList.count\(paymentBudgetList.count)")
+    }
 }
