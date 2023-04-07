@@ -25,6 +25,7 @@ class LookDiaryViewController:UIViewController{
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
         configureCollectionViewFlowLayout()
+        diaryTextView.delegate = self
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
         titleTextView.isEditable = false
@@ -45,6 +46,8 @@ class LookDiaryViewController:UIViewController{
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
     }
+    
+    
     
     func configureTextFont(){
         titleTextView.font = UIFont.boldSystemFont(ofSize: 16)
@@ -139,4 +142,16 @@ extension LookDiaryViewController:UpdateDiaryByCalendarViewDelegate{
         imageCollectionView.reloadData()
     }
     
+}
+
+extension LookDiaryViewController: UITextViewDelegate{
+    func textViewDidChange(_ textView: UITextView){
+        let size = CGSize(width: textView.frame.width, height: .infinity)
+        let estimatedSize = diaryTextView.sizeThatFits(size)
+        diaryTextView.constraints.forEach{ constraint in
+            if constraint.firstAttribute == .height{
+                constraint.constant = estimatedSize.height
+            }
+        }
+    }
 }

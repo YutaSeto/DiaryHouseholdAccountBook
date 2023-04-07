@@ -872,19 +872,23 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
         householdAccountBookViewModel.targetItem = data
         householdAccountBookViewModel.targetIndex = index
         householdAccountBookViewModel.targetJournal = journal
-//        householdAccountBookViewModel.targetBudget = budget
+        householdAccountBookViewModel.targetBudget = budget
         //paymentListの削除
         householdAccountBookViewModel.deleteTargetJournal()
         //categorylistの削除
         householdAccountBookViewModel.deleteTargetCategory()
-        //paymentbudgetlistの削除
-//        householdAccountBookViewModel.deleteTargetBudget()
+//        paymentbudgetlistの削除
+        householdAccountBookViewModel.deleteTargetBudget()
         
         if data.isPayment == true{
             paymentTableView.deleteRows(at: [index], with: .automatic)
         }else if data.isPayment == false{
             incomeTableView.deleteRows(at: [index], with: .automatic)
         }
+        
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
     }
     
     func remakeViewController() {
