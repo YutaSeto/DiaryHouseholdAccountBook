@@ -89,10 +89,6 @@ class TabBarModel{
         }
     }
     
-    func configureBackgroundColor(){
-        UITabBar.appearance().backgroundColor = UIColor.lightGray
-    }
-    
     func initTab() -> [UIViewController]{
         var controllers = [UIViewController]()
         let storyboard = UIStoryboard(name: "CalendarViewController", bundle: nil)

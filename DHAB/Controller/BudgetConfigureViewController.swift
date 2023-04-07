@@ -45,6 +45,7 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureViewModel.setIncomeBudgetTableViewDataSourse()
         dateLabel.text = util.monthDateFormatter.string(from:budgetConfigureViewModel.date)
         configureNavigationBarButton()
+        setStatusBarBackgroundColor(.flatBlue())
     }
     
     override func viewWillLayoutSubviews() {

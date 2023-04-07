@@ -33,16 +33,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q4b-87-1kI">
-                                <rect key="frame" x="247.33333333333337" y="96" width="76" height="34.333333333333343"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q4b-87-1kI">
+                                <rect key="frame" x="288" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Cja-Xf-vLd"/>
+                                    <constraint firstAttribute="width" constant="30" id="RMt-ab-Xzi"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="進める"/>
+                                <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.right" catalog="system" title=" "/>
                                 <connections>
                                     <action selector="monthPassButton:" destination="yy7-sQ-xHa" eventType="touchUpInside" id="I8N-tc-04p"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REY-mA-5Sv" customClass="FSCalendar">
-                                <rect key="frame" x="0.0" y="130.33333333333337" width="393" height="320"/>
+                                <rect key="frame" x="0.0" y="133.33333333333337" width="393" height="320"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="320" id="ruc-tk-UTu"/>
@@ -52,21 +56,25 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3i0-um-rZR">
-                                <rect key="frame" x="176" y="103" width="41.333333333333343" height="20.333333333333329"/>
+                                <rect key="frame" x="176" y="113" width="41.333333333333343" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W3f-Xy-uYG">
-                                <rect key="frame" x="87.333333333333329" y="96" width="58.666666666666671" height="34.333333333333343"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W3f-Xy-uYG">
+                                <rect key="frame" x="75" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Avx-17-XAF"/>
+                                    <constraint firstAttribute="width" constant="30" id="Wtg-WH-hhW"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="戻す"/>
+                                <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.left" catalog="system" title=" "/>
                                 <connections>
                                     <action selector="monthBackButton:" destination="yy7-sQ-xHa" eventType="touchUpInside" id="dKv-4F-d6x"/>
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="css-5S-DnE">
-                                <rect key="frame" x="0.0" y="491" width="393" height="32"/>
+                                <rect key="frame" x="0.0" y="494" width="393" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="akg-LM-MKf"/>
                                 </constraints>
@@ -79,7 +87,7 @@
                                 </connections>
                             </segmentedControl>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cnc-5J-WYa">
-                                <rect key="frame" x="20.000000000000004" y="450.33333333333331" width="43.333333333333343" height="40.666666666666686"/>
+                                <rect key="frame" x="20.000000000000004" y="453.33333333333331" width="43.333333333333343" height="40.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="支出" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VJf-hq-Hty">
                                         <rect key="frame" x="0.0" y="0.0" width="43.333333333333336" height="20.333333333333332"/>
@@ -110,7 +118,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="i9M-8M-WB1">
-                                <rect key="frame" x="179.33333333333334" y="450.33333333333331" width="34.666666666666657" height="40.666666666666686"/>
+                                <rect key="frame" x="179.33333333333334" y="453.33333333333331" width="34.666666666666657" height="40.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="収入" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19N-kI-EUS">
                                         <rect key="frame" x="0.0" y="0.0" width="34.666666666666664" height="20.333333333333332"/>
@@ -138,10 +146,11 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="19N-kI-EUS" firstAttribute="centerX" secondItem="i9M-8M-WB1" secondAttribute="centerX" id="SPe-HD-ebj"/>
+                                    <constraint firstItem="9uh-CC-8s5" firstAttribute="centerX" secondItem="19N-kI-EUS" secondAttribute="centerX" id="ZY9-kN-KXe"/>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="e2c-2z-Yth">
-                                <rect key="frame" x="335.33333333333331" y="450.33333333333331" width="37.666666666666686" height="40.666666666666686"/>
+                                <rect key="frame" x="335.33333333333331" y="453.33333333333331" width="37.666666666666686" height="40.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="合計" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HPy-pj-9n1">
                                         <rect key="frame" x="0.0" y="0.0" width="37.666666666666664" height="20.333333333333332"/>
@@ -171,27 +180,55 @@
                                     <constraint firstItem="HPy-pj-9n1" firstAttribute="centerX" secondItem="e2c-2z-Yth" secondAttribute="centerX" id="EVy-lY-H92"/>
                                 </constraints>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DWs-ad-ASc">
+                                <rect key="frame" x="30" y="110.66666666666667" width="30" height="25.000000000000014"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="h0q-VA-aqV"/>
+                                    <constraint firstAttribute="width" constant="30" id="q8e-bM-Uk8"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="backward" catalog="system" title=" "/>
+                                <connections>
+                                    <action selector="threeMonthBackButton:" destination="yy7-sQ-xHa" eventType="touchUpInside" id="v4I-zK-E3u"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LO1-HK-idT">
+                                <rect key="frame" x="333" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="2cU-5u-eFr"/>
+                                    <constraint firstAttribute="width" constant="30" id="SVc-6e-G0U"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="forward" catalog="system" title=" "/>
+                                <connections>
+                                    <action selector="threeMonthPassButton:" destination="yy7-sQ-xHa" eventType="touchUpInside" id="blS-hf-7DR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xMG-n1-35c"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="3i0-um-rZR" firstAttribute="centerY" secondItem="W3f-Xy-uYG" secondAttribute="centerY" id="DeX-qf-2lg"/>
+                            <constraint firstItem="Q4b-87-1kI" firstAttribute="centerY" secondItem="DWs-ad-ASc" secondAttribute="centerY" id="AaG-HJ-52i"/>
+                            <constraint firstItem="LO1-HK-idT" firstAttribute="centerY" secondItem="DWs-ad-ASc" secondAttribute="centerY" id="CFm-zP-us9"/>
+                            <constraint firstItem="3i0-um-rZR" firstAttribute="top" secondItem="xMG-n1-35c" secondAttribute="top" constant="10" id="FI6-VG-BU2"/>
+                            <constraint firstItem="REY-mA-5Sv" firstAttribute="top" secondItem="3i0-um-rZR" secondAttribute="bottom" id="G9R-9B-4EK"/>
+                            <constraint firstItem="3i0-um-rZR" firstAttribute="centerY" secondItem="DWs-ad-ASc" secondAttribute="centerY" id="IDV-dP-8c5"/>
                             <constraint firstItem="xMG-n1-35c" firstAttribute="trailing" secondItem="e2c-2z-Yth" secondAttribute="trailing" constant="20" id="JDb-CI-ngC"/>
                             <constraint firstItem="css-5S-DnE" firstAttribute="trailing" secondItem="xMG-n1-35c" secondAttribute="trailing" id="MZ5-d2-Isd"/>
+                            <constraint firstItem="DWs-ad-ASc" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" constant="30" id="Msp-uq-yoZ"/>
                             <constraint firstItem="i9M-8M-WB1" firstAttribute="centerX" secondItem="zSf-2P-KYT" secondAttribute="centerX" id="NPb-ZX-eMV"/>
-                            <constraint firstItem="Q4b-87-1kI" firstAttribute="leading" secondItem="3i0-um-rZR" secondAttribute="trailing" constant="30" id="NaZ-GL-4qB"/>
-                            <constraint firstItem="i9M-8M-WB1" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="PfA-j1-cwa"/>
-                            <constraint firstItem="REY-mA-5Sv" firstAttribute="top" secondItem="W3f-Xy-uYG" secondAttribute="bottom" id="QNd-8Y-ouD"/>
                             <constraint firstItem="cnc-5J-WYa" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" constant="20" id="TNU-or-qpk"/>
-                            <constraint firstItem="3i0-um-rZR" firstAttribute="top" secondItem="xMG-n1-35c" secondAttribute="top" id="WEh-hB-HoI"/>
+                            <constraint firstItem="W3f-Xy-uYG" firstAttribute="leading" secondItem="DWs-ad-ASc" secondAttribute="trailing" constant="15" id="UqR-y6-jzn"/>
                             <constraint firstItem="3i0-um-rZR" firstAttribute="centerX" secondItem="zSf-2P-KYT" secondAttribute="centerX" id="axL-2r-lHZ"/>
-                            <constraint firstItem="Q4b-87-1kI" firstAttribute="centerY" secondItem="W3f-Xy-uYG" secondAttribute="centerY" id="eG9-5p-I8C"/>
+                            <constraint firstItem="LO1-HK-idT" firstAttribute="leading" secondItem="Q4b-87-1kI" secondAttribute="trailing" constant="15" id="ec0-Df-cGM"/>
+                            <constraint firstItem="xMG-n1-35c" firstAttribute="trailing" secondItem="LO1-HK-idT" secondAttribute="trailing" constant="30" id="hTA-zZ-XVa"/>
                             <constraint firstItem="cnc-5J-WYa" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="kah-vY-iy6"/>
                             <constraint firstItem="REY-mA-5Sv" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="lKZ-HS-FzP"/>
                             <constraint firstItem="e2c-2z-Yth" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="mng-Gs-naA"/>
-                            <constraint firstItem="3i0-um-rZR" firstAttribute="leading" secondItem="W3f-Xy-uYG" secondAttribute="trailing" constant="30" id="or5-No-pfV"/>
+                            <constraint firstItem="i9M-8M-WB1" firstAttribute="top" secondItem="REY-mA-5Sv" secondAttribute="bottom" id="okf-Zg-Sgf"/>
                             <constraint firstItem="css-5S-DnE" firstAttribute="leading" secondItem="xMG-n1-35c" secondAttribute="leading" id="uS2-s0-w36"/>
                             <constraint firstAttribute="trailing" secondItem="REY-mA-5Sv" secondAttribute="trailing" id="wE1-KA-Si8"/>
+                            <constraint firstItem="W3f-Xy-uYG" firstAttribute="centerY" secondItem="DWs-ad-ASc" secondAttribute="centerY" id="zbU-kI-JFa"/>
                             <constraint firstItem="css-5S-DnE" firstAttribute="top" secondItem="cnc-5J-WYa" secondAttribute="bottom" id="zbf-Vl-HgY"/>
                         </constraints>
                     </view>
@@ -206,11 +243,13 @@
                         <outlet property="householdAccountBookTableView" destination="zUL-r6-iy1" id="A3l-8U-8lc"/>
                         <outlet property="incomeLabel" destination="VhE-dt-iw7" id="X8d-DW-MPY"/>
                         <outlet property="monthBackButton" destination="W3f-Xy-uYG" id="ZDb-6b-rvY"/>
-                        <outlet property="monthPassButton" destination="Q4b-87-1kI" id="7sF-oo-1QS"/>
+                        <outlet property="monthPassButton" destination="Q4b-87-1kI" id="wlR-50-pKa"/>
                         <outlet property="paymentLabel" destination="fUS-S5-QbJ" id="Jyb-1a-OK7"/>
                         <outlet property="paymentTableViewFlowLayout" destination="ewP-Pt-0lM" id="1VO-4a-rr3"/>
                         <outlet property="paymentView" destination="4lS-zk-Ukt" id="dgP-Y3-hUj"/>
                         <outlet property="segmentedControl" destination="css-5S-DnE" id="g7t-NK-x6d"/>
+                        <outlet property="threeMonthBackButton" destination="DWs-ad-ASc" id="rwe-Xz-5aV"/>
+                        <outlet property="threeMonthPassButton" destination="LO1-HK-idT" id="gv9-67-EUs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cK5-qv-65j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -319,6 +358,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrowtriangle.left" catalog="system" width="128" height="113"/>
+        <image name="arrowtriangle.right" catalog="system" width="128" height="113"/>
+        <image name="backward" catalog="system" width="128" height="77"/>
+        <image name="forward" catalog="system" width="128" height="77"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

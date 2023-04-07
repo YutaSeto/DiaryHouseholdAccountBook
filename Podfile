@@ -9,6 +9,7 @@ target 'DHAB' do
   pod 'FSCalendar'
   pod 'DKImagePickerController'
   pod 'CalculateCalendarLogic'
+  pod 'ChameleonFramework/Swift'
 
   # Pods for DHAB
 

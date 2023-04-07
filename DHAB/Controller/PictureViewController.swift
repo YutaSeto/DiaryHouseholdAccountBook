@@ -32,6 +32,7 @@ class PictureViewController:UIViewController{
         image = pictureViewModel.inputViewControllerImage
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()
+        setStatusBarBackgroundColor(.flatBlue())
         //ピンチジェスチャーの設定
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchGestureAction(_:)))
         imageView.isUserInteractionEnabled = true

@@ -34,7 +34,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="o0T-En-LdB">
-                                <rect key="frame" x="20" y="143.33333333333334" width="353" height="32"/>
+                                <rect key="frame" x="20" y="153.33333333333334" width="353" height="32"/>
                                 <segments>
                                     <segment title="支出"/>
                                     <segment title="収入"/>
@@ -46,41 +46,76 @@
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eR8-bB-D0J">
-                                <rect key="frame" x="179" y="103" width="35" height="20.333333333333329"/>
+                                <rect key="frame" x="179" y="113" width="35" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6eO-OR-cWP">
-                                <rect key="frame" x="70" y="95.666666666666671" width="59" height="35.000000000000014"/>
+                                <rect key="frame" x="75" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="EQw-ii-2Cc"/>
+                                    <constraint firstAttribute="height" constant="30" id="ZdT-qz-kir"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="戻す"/>
+                                <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.left" catalog="system" title=" "/>
                                 <connections>
                                     <action selector="dayBackButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="yDp-4x-l9N"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSE-hE-dXj">
-                                <rect key="frame" x="264" y="95.666666666666671" width="76" height="35.000000000000014"/>
+                                <rect key="frame" x="288" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="2KS-tU-Am8"/>
+                                    <constraint firstAttribute="height" constant="30" id="xRe-Ks-wmh"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="進める"/>
+                                <buttonConfiguration key="configuration" style="plain" image="arrowtriangle.right" catalog="system" title=" "/>
                                 <connections>
                                     <action selector="dayPassButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="pGF-gH-VWe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PR4-gQ-6ib">
+                                <rect key="frame" x="30" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Xcr-6s-ll7"/>
+                                    <constraint firstAttribute="width" constant="30" id="dc5-QC-2Uz"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="backward" catalog="system" title=" "/>
+                                <connections>
+                                    <action selector="threeMonthBackButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="Qix-gm-6bZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFT-fZ-Uiu">
+                                <rect key="frame" x="333" y="108.33333333333333" width="30" height="29.999999999999986"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="6w5-aa-3fw"/>
+                                    <constraint firstAttribute="width" constant="30" id="ZP1-zw-va7"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="forward" catalog="system" title=" "/>
+                                <connections>
+                                    <action selector="threeMonthPassButton:" destination="xpm-Tn-k0g" eventType="touchUpInside" id="nlO-2R-zM9"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WzP-Vq-YV9"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="SSE-hE-dXj" firstAttribute="leading" secondItem="eR8-bB-D0J" secondAttribute="trailing" constant="50" id="7TL-Ls-LyH"/>
+                            <constraint firstItem="SSE-hE-dXj" firstAttribute="centerY" secondItem="PR4-gQ-6ib" secondAttribute="centerY" id="56v-Uv-YCu"/>
+                            <constraint firstItem="HFT-fZ-Uiu" firstAttribute="centerY" secondItem="PR4-gQ-6ib" secondAttribute="centerY" id="7U1-UF-vr0"/>
                             <constraint firstItem="WzP-Vq-YV9" firstAttribute="trailing" secondItem="o0T-En-LdB" secondAttribute="trailing" constant="20" id="7hG-zF-692"/>
                             <constraint firstItem="o0T-En-LdB" firstAttribute="leading" secondItem="WzP-Vq-YV9" secondAttribute="leading" constant="20" id="FyU-04-OMn"/>
-                            <constraint firstItem="eR8-bB-D0J" firstAttribute="centerY" secondItem="6eO-OR-cWP" secondAttribute="centerY" id="YFY-cZ-3zI"/>
-                            <constraint firstItem="eR8-bB-D0J" firstAttribute="top" secondItem="WzP-Vq-YV9" secondAttribute="top" id="YxW-hP-ajH"/>
-                            <constraint firstItem="SSE-hE-dXj" firstAttribute="centerY" secondItem="6eO-OR-cWP" secondAttribute="centerY" id="awJ-Kx-AUQ"/>
-                            <constraint firstItem="o0T-En-LdB" firstAttribute="top" secondItem="eR8-bB-D0J" secondAttribute="bottom" constant="20" id="bTQ-Av-lUR"/>
+                            <constraint firstItem="o0T-En-LdB" firstAttribute="top" secondItem="eR8-bB-D0J" secondAttribute="bottom" constant="20" id="IBQ-bK-L5r"/>
+                            <constraint firstItem="6eO-OR-cWP" firstAttribute="leading" secondItem="PR4-gQ-6ib" secondAttribute="trailing" constant="15" id="N1w-8j-XtC"/>
+                            <constraint firstItem="HFT-fZ-Uiu" firstAttribute="leading" secondItem="SSE-hE-dXj" secondAttribute="trailing" constant="15" id="N48-cx-GPy"/>
+                            <constraint firstItem="eR8-bB-D0J" firstAttribute="centerY" secondItem="PR4-gQ-6ib" secondAttribute="centerY" id="WB7-0J-fcY"/>
+                            <constraint firstItem="eR8-bB-D0J" firstAttribute="top" secondItem="WzP-Vq-YV9" secondAttribute="top" constant="10" id="YxW-hP-ajH"/>
                             <constraint firstItem="eR8-bB-D0J" firstAttribute="centerX" secondItem="AXZ-sd-Ye4" secondAttribute="centerX" id="gy2-8e-he3"/>
-                            <constraint firstItem="SSE-hE-dXj" firstAttribute="centerY" secondItem="6eO-OR-cWP" secondAttribute="centerY" id="jhT-wv-rYo"/>
-                            <constraint firstItem="eR8-bB-D0J" firstAttribute="leading" secondItem="6eO-OR-cWP" secondAttribute="trailing" constant="50" id="v8m-8i-6K3"/>
+                            <constraint firstItem="WzP-Vq-YV9" firstAttribute="trailing" secondItem="HFT-fZ-Uiu" secondAttribute="trailing" constant="30" id="pJd-HL-9EK"/>
+                            <constraint firstItem="PR4-gQ-6ib" firstAttribute="leading" secondItem="WzP-Vq-YV9" secondAttribute="leading" constant="30" id="wAE-Nh-non"/>
+                            <constraint firstItem="6eO-OR-cWP" firstAttribute="centerY" secondItem="PR4-gQ-6ib" secondAttribute="centerY" id="zsq-vW-ytf"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="家計簿" id="SBn-cY-MKk"/>
@@ -107,6 +142,8 @@
                         <outlet property="sumIncomeTableViewHeight" destination="5bW-7B-nFA" id="ItI-BO-FKe"/>
                         <outlet property="sumPaymentTableView" destination="dRy-nZ-Lxz" id="AQI-pP-5tU"/>
                         <outlet property="sumPaymentTableViewHeight" destination="1Mg-K5-mem" id="2be-xL-xQT"/>
+                        <outlet property="threeMonthBackButton" destination="PR4-gQ-6ib" id="MtE-4T-rhQ"/>
+                        <outlet property="threeMonthPassButton" destination="HFT-fZ-Uiu" id="NuO-1K-T0M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ye-qn-076" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -257,6 +294,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrowtriangle.left" catalog="system" width="128" height="113"/>
+        <image name="arrowtriangle.right" catalog="system" width="128" height="113"/>
+        <image name="backward" catalog="system" width="128" height="77"/>
+        <image name="forward" catalog="system" width="128" height="77"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

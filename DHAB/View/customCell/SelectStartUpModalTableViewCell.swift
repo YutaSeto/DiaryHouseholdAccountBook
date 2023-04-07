@@ -25,14 +25,8 @@ class SelectStartUpModalTableViewCell: UITableViewCell {
     @IBAction func switchValueChanged(_ sender: UISwitch) {
         if sender.isOn{
             RecognitionChange.shared.startUpTimeModal = true
-            print(RecognitionChange.shared.startUpTimeModal)
         }else{
             RecognitionChange.shared.startUpTimeModal = false
-            print(RecognitionChange.shared.startUpTimeModal)
         }
-    }
-    
-    func switchOff(){
-        modalSwitch.isOn = false
     }
 }

@@ -28,6 +28,10 @@ protocol UpdateDiaryByLookDiaryViewDelegate{
     func updateDiaryByLookDiaryView()
 }
 
+protocol UpdateDiaryByCalendarViewDelegate{
+    func updateDiaryByCalendarView()
+}
+
 class InputViewController:UIViewController{
     
     let inputViewModel = InputViewModel()
@@ -41,6 +45,8 @@ class InputViewController:UIViewController{
     //家計簿記入画面関連
     var inputViewControllerDelegate:InputViewControllerDelegate?
     var inputByStartUpModalDelegate:InputByStartUpModalDelegate?
+    var forCalendarViewUpdateDiaryByCalendarViewDelegate:UpdateDiaryByCalendarViewDelegate?
+    var forLookDiaryViewUpdateDiaryByCalendarViewDelegate:UpdateDiaryByCalendarViewDelegate?
     var forDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
     var forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
     @IBOutlet weak var incomeCollectionView: UICollectionView!
@@ -96,8 +102,9 @@ class InputViewController:UIViewController{
         configureAddButton()
         setNavigationBarButton()
         setToolbar()
+        setStatusBarBackgroundColor(.flatBlue())
         configureTextView()
-        
+        setNavigationTitle()        
         if inputViewModel.journal == nil{
             addButton.setTitle("追加する",for: .normal)
         }else{
@@ -123,6 +130,18 @@ class InputViewController:UIViewController{
     override func viewDidLayoutSubviews() {
         settingCollectionViewAutoLayout()
     }
+    
+    func setNavigationTitle(){
+        if inputViewModel.journal == nil && inputViewModel.diary == nil{
+            navigationItem.title = "新規作成"
+        }else{
+            navigationItem.title = "編集"
+        }
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+    }
+    
     
     func setToolbar(){
         titleTextField.inputAccessoryView = toolbar
@@ -229,7 +248,7 @@ class InputViewController:UIViewController{
         incomeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         incomeCollectionView.topAnchor.constraint(equalTo: paymentCollectionView.bottomAnchor,constant: 10).isActive = true
         incomeCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 10).isActive = true
+        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         let incomeCollectionHeight = CGFloat((returnRows(items: incomeNumberOfItems) * Int(itemHeight)) + Int(returnRows(items: incomeNumberOfItems) - 1) * Int(space))
         incomeCollectionView.heightAnchor.constraint(equalToConstant: incomeCollectionHeight).isActive = true
     }
@@ -250,8 +269,14 @@ class InputViewController:UIViewController{
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
     }
+    @IBAction func oneWeekBackButton(_ sender: UIButton) {
+        oneWeekBack()
+    }
     @IBAction func dayPassButton(_ sender: UIButton) {
         dayPass()
+    }
+    @IBAction func oneWeekPassButton(_ sender: UIButton) {
+        oneWeekPass()
     }
     
     @IBAction func addButton(_ sender: UIButton) {
@@ -414,33 +439,51 @@ class InputViewController:UIViewController{
                 showAlert(title: "メモは10文字以内にしてください")
                 return
             }
-            
             inputViewModel.addNewJournal(priceText: Int(priceTextField.text!)!, expenseItem: inputViewModel.category, memo: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
-            RecognitionChange.shared.updateCalendar = true
-            inputViewModel.category = ""
-            priceTextField.text = ""
-            addButton.isEnabled = false
-            continueAddButton.isEnabled = false
-        }else if inputViewModel.journal != nil{
-            if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
-                showAlert(title: "金額は1億円以内にしてください")
-                return
+        }else if inputViewModel.journal != nil{ //paymetTableViewを選択した場合
+            if inputViewModel.journal?.isPayment == true{
+                if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                    showAlert(title: "金額は1億円以内にしてください")
+                    return
+                }
+                if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                    showAlert(title: "メモは10文字以内にしてください")
+                    return
+                }
+                
+                inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
+                
+                if inputViewModel.isPayment == false{
+                    inputViewControllerDelegate?.changeFromPaymentToIncome()
+                }
+            }else if inputViewModel.journal?.isPayment == false{
+                if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+                    showAlert(title: "金額は1億円以内にしてください")
+                    return
+                }
+                if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
+                    showAlert(title: "メモは10文字以内にしてください")
+                    return
+                }
+                
+                inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
+                if inputViewModel.isPayment == true{
+                    inputViewControllerDelegate?.changeFromIncomeToPayment()
+                }
             }
-            if inputViewModel.isValidMemoLimit(memo: memoTextField.text!){
-                showAlert(title: "メモは10文字以内にしてください")
-                return
-            }
-            
-            inputViewModel.overwriteJournal(price: Int(priceTextField.text!)!, result: inputViewModel.category, memo: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
-            RecognitionChange.shared.updateCalendar = true
+            inputViewControllerDelegate?.updateCalendar()
             inputViewModel.journal = nil
-            inputViewModel.category = ""
-            priceTextField.text = ""
-            addButton.isEnabled = false
-            continueAddButton.isEnabled = false
         }
+        inputViewModel.journal = nil
+        inputViewModel.category = ""
+        priceTextField.text = ""
+        addButton.setTitle("追加する",for: .normal)
+        addButton.isEnabled = false
+        continueAddButton.isEnabled = false
+        
+        RecognitionChange.shared.updateCalendar = true
     }
     
     func vanishSegmentedControl(){
@@ -465,23 +508,41 @@ class InputViewController:UIViewController{
     }
     
     func dayBack(){
-        inputViewModel.date = Calendar.current.date(byAdding: .day, value: -1, to: inputViewModel.date)!
-        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
-        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
+        inputViewModel.date = Calendar.current.date(byAdding: .day, value: -1, to: inputViewModel.date.zeroclock)!
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
+    }
+    
+    func oneWeekBack(){
+        inputViewModel.date = Calendar.current.date(byAdding: .day, value: -7, to: inputViewModel.date.zeroclock)!
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
     }
     
     func dayPass(){
-        inputViewModel.date = Calendar.current.date(byAdding: .day, value: 1, to: inputViewModel.date)!
-        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
-        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date)
+        inputViewModel.date = Calendar.current.date(byAdding: .day, value: 1, to: inputViewModel.date.zeroclock)!
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
+    }
+    
+    func oneWeekPass(){
+        inputViewModel.date = Calendar.current.date(byAdding: .day, value: 7, to: inputViewModel.date.zeroclock)!
+        dateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
+        diaryDateTextField.text = util.dayDateFormatter.string(from: inputViewModel.date.zeroclock)
     }
     
     //日記記入関連の画面
     @IBAction func diaryDayBackButton(_ sender: UIButton) {
         dayBack()
     }
+    @IBAction func diaryOneWeekBackButton(_ sender: UIButton) {
+        oneWeekBack()
+    }
     @IBAction func diaryDayPassButton(_ sender: UIButton) {
         dayPass()
+    }
+    @IBAction func diaryOneWeekPassButton(_ sender: UIButton) {
+        oneWeekPass()
     }
     
     @IBAction func addDiaryButton(_ sender: UIButton) {
@@ -549,7 +610,9 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             cell.categoryLabel.text = inputViewModel.categoryList[indexPath.row].name
             if inputViewModel.journal != nil{
                 cell.journal = inputViewModel.journal!
-                cell.toggleSelection()
+                if inputViewModel.journal!.isPayment == true{
+                    cell.toggleSelection()
+                }
             }
             return cell
         }else if collectionView === imageCollectionView{
@@ -565,7 +628,10 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             if inputViewModel.journal != nil{
                 cell.journal = inputViewModel.journal!
             }
-            cell.toggleSelection()
+            
+            if inputViewModel.journal?.isPayment == false{
+                cell.toggleSelection()
+            }
             return cell
         }
         return UICollectionViewCell()

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import ChameleonFramework
 
 class Util:UIViewController{
     public var yearDateFormatter:DateFormatter{
@@ -51,7 +52,7 @@ class Util:UIViewController{
     
     public var dayOfWeekDateFormatter:DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.dateFormat = "(E)"
         dateFormatter.timeZone = TimeZone(identifier: "Asia/tokyo")
         dateFormatter.locale = Locale(identifier: "ja-JP")
         return dateFormatter

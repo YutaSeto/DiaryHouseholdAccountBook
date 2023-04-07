@@ -83,7 +83,6 @@ class HouseholdAccountBookViewModel{
     func setPaymentPieGraphData() -> PieChartData {
         // データの配列を作成する
         var dataEntries:[PieChartDataEntry] = []
-        
         //こうすると項目の数が有限になってしまう
         for i in 0 ..< paymentTableViewDataSource.count{
             dataEntries.append(PieChartDataEntry(value: Double(paymentTableViewDataSource[i].paymentPrice), label: paymentTableViewDataSource[i].name))
@@ -92,6 +91,7 @@ class HouseholdAccountBookViewModel{
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
         dataSet.colors = colors
         dataSet.sliceSpace = 0.0
+        dataSet.valueFont = UIFont.boldSystemFont(ofSize: 12)
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
         return data
@@ -258,6 +258,7 @@ class HouseholdAccountBookViewModel{
     }
     
     func setMonthSumPayment(){
+        sumYearPayment = 0
         for i in 0 ..< 12{
             let calendar = Calendar(identifier: .gregorian)
             let comps = calendar.dateComponents([.year], from: date)
@@ -266,14 +267,14 @@ class HouseholdAccountBookViewModel{
             let add2Month = DateComponents(month: i + 1)
             let firstDay = calendar.date(byAdding: addIMonth, to: day)?.zeroclock
             let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
-            let dayCheckSumPayment = paymentList.filter({$0.date >= firstDay!})
-            let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
-            sumPaymentList[i] = Double(Int(dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1}))
+            let dayCheckSumPayment = paymentList.filter({$0.date >= firstDay!}).filter({$0.date < lastDay}).filter{$0.isPayment == true}
+            sumPaymentList[i] = Double(dayCheckSumPayment.map{$0.price}.reduce(0){$0 + $1})
             sumYearPayment += Int(sumPaymentList[i])
         }
     }
     
     func setMonthSumIncome(){
+        sumYearIncome = 0
         for i in 0 ..< 12{
             let calendar = Calendar(identifier: .gregorian)
             let comps = calendar.dateComponents([.year], from: date)
@@ -282,9 +283,8 @@ class HouseholdAccountBookViewModel{
             let add2Month = DateComponents(month: i + 1)
             let firstDay = calendar.date(byAdding: addIMonth, to: day)?.zeroclock
             let lastDay = calendar.date(byAdding: add2Month, to: day)!.zeroclock
-            let dayCheckSumPayment = incomeList.filter({$0.date >= firstDay!})
-            let dayCheckSumPayment2 = dayCheckSumPayment.filter({$0.date < lastDay})
-            sumIncomeList[i] = Double(dayCheckSumPayment2.map{$0.price}.reduce(0){$0 + $1})
+            let dayCheckSumIncome = incomeList.filter({$0.date >= firstDay!}).filter{$0.date < lastDay}
+            sumIncomeList[i] = Double(dayCheckSumIncome.map{$0.price}.reduce(0){$0 + $1})
             sumYearIncome += Int(sumIncomeList[i])
         }
     }

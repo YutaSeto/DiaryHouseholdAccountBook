@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
@@ -17,8 +18,8 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
         tabBarModel.setFirstCategory()
-        tabBarModel.configureBackgroundColor()
         controllers = tabBarModel.initTab()
         setViewControllers(controllers, animated: false)
     }
@@ -30,12 +31,28 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.viewDidLoad()
+        self.selectedIndex = 0
+        self.tabBarController(self, didSelect: self.selectedViewController!)
+    }
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
+            let selectedColor:UIColor = .flatBlue()
+            let unselectedColor:UIColor = .systemGray2
+            viewController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:selectedColor], for: .selected)
+            viewController.tabBarItem.image = viewController.tabBarItem.image?.withTintColor(selectedColor, renderingMode: .alwaysOriginal)
+            for tabBarItem in tabBarController.tabBar.items ?? []{
+                if tabBarController.tabBar.items?.firstIndex(of: tabBarItem) != index{
+                    tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:unselectedColor], for: .normal)
+                    tabBarItem.image = tabBarItem.image?.withTintColor(unselectedColor,renderingMode: .alwaysOriginal)
+                }
+            }
+            
+        }
     }
     
     
     func remakeViewController() {
-        print(" デリゲートが機能しました")
         let vc = self.viewControllers
         vc!.forEach{
             if let target = $0 as? CalendarViewController{

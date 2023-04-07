@@ -10,6 +10,7 @@ import FSCalendar
 import RealmSwift
 import UIKit
 import CalculateCalendarLogic
+import ChameleonFramework
 
 class CalendarViewController:UIViewController{
     
@@ -28,7 +29,9 @@ class CalendarViewController:UIViewController{
     @IBOutlet var diaryView: UIView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var monthBackButton: UIButton!
+    @IBOutlet weak var threeMonthBackButton: UIButton!
     @IBOutlet weak var monthPassButton: UIButton!
+    @IBOutlet weak var threeMonthPassButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var paymentTableViewFlowLayout: NSLayoutConstraint!
     @IBOutlet weak var stackView: UIStackView!
@@ -44,7 +47,6 @@ class CalendarViewController:UIViewController{
         householdAccountBookTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         calendarView.collectionView.register(UINib(nibName: "FSCalendarCustomCell", bundle: nil),forCellWithReuseIdentifier: "FSCalendarCustomCell")
-        configureButtonZIndex()
         addSubView()
         calendarViewModel.setTableView()
         calendarViewModel.setDisplayJournalList()
@@ -55,8 +57,11 @@ class CalendarViewController:UIViewController{
         calendarViewModel.setMonthPaymentModelList()
         calendarViewModel.setMonthIncomeModelList()
         setSum()
+        setButtonTitle()
+        setStatusBarBackgroundColor(.flatBlue())
+        setSegmentedControlColor(color: .flatBlue())
+        setNavigationTitle()
         dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.date)
-        
         if RecognitionChange.shared.startUpTimeModal == true{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
             guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
@@ -95,6 +100,13 @@ class CalendarViewController:UIViewController{
         }
     }
     
+    func setButtonTitle(){
+        threeMonthBackButton.setTitle(nil, for: .normal)
+        monthBackButton.setTitle(nil, for: .normal)
+        monthPassButton.setTitle(nil, for: .normal)
+        threeMonthPassButton.setTitle(nil, for: .normal)
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         paymentTableViewFlowLayout.constant = CGFloat(householdAccountBookTableView.contentSize.height)
@@ -115,6 +127,26 @@ class CalendarViewController:UIViewController{
         balanceLabel.text = util.getComma(Int(calendarViewModel.setMonthIncome() - calendarViewModel.setMonthPayment()))
         calendarView.setCurrentPage(prevMonth, animated: true)
         calendarViewModel.isButtonPush = false
+        householdAccountBookTableView.reloadData()
+        diaryTableView.reloadData()
+    }
+    @IBAction func threeMonthBackButton(_ sender: UIButton) {
+        calendarViewModel.isButtonPush = true
+        let currentPage = calendarView.currentPage
+        let prevMonth = Calendar.current.date(byAdding: .month, value: -3, to: currentPage)!
+        calendarViewModel.selectedDate = Calendar.current.date(byAdding: .month, value: -3, to: calendarViewModel.selectedDate)!
+        dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.selectedDate)
+        calendarView.select(calendarViewModel.selectedDate)
+        calendarViewModel.setTableView()
+        calendarViewModel.setDisplayJournalList()
+        calendarViewModel.setMonthPaymentModelList()
+        paymentLabel.text = util.getComma(calendarViewModel.setMonthPayment())
+        incomeLabel.text = util.getComma(calendarViewModel.setMonthIncome())
+        balanceLabel.text = util.getComma(Int(calendarViewModel.setMonthIncome() - calendarViewModel.setMonthPayment()))
+        calendarView.setCurrentPage(prevMonth, animated: true)
+        calendarViewModel.isButtonPush = false
+        householdAccountBookTableView.reloadData()
+        diaryTableView.reloadData()
     }
     
     @IBAction func monthPassButton(_ sender: UIButton) {
@@ -130,14 +162,47 @@ class CalendarViewController:UIViewController{
         paymentLabel.text = util.getComma(calendarViewModel.setMonthPayment())
         incomeLabel.text = util.getComma(calendarViewModel.setMonthIncome())
         balanceLabel.text = util.getComma(Int(calendarViewModel.setMonthIncome() - calendarViewModel.setMonthPayment()))
+        
         calendarView.setCurrentPage(nextMonth, animated: true)
         calendarViewModel.isButtonPush = false
+        householdAccountBookTableView.reloadData()
+        diaryTableView.reloadData()
     }
     
-    func configureButtonZIndex(){
-        monthBackButton.layer.zPosition = calendarView.layer.zPosition + 1
-        monthPassButton.layer.zPosition = calendarView.layer.zPosition + 1
+    
+    @IBAction func threeMonthPassButton(_ sender: UIButton) {
+        calendarViewModel.isButtonPush = true
+        let currentPage = calendarView.currentPage
+        let nextMonth = Calendar.current.date(byAdding: .month, value: 3, to: currentPage)!
+        calendarViewModel.selectedDate = Calendar.current.date(byAdding: .month, value: 3, to: calendarViewModel.selectedDate)!
+        dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.selectedDate)
+        calendarView.select(calendarViewModel.selectedDate)
+        calendarViewModel.setTableView()
+        calendarViewModel.setDisplayJournalList()
+        calendarViewModel.setMonthPaymentModelList()
+        paymentLabel.text = util.getComma(calendarViewModel.setMonthPayment())
+        incomeLabel.text = util.getComma(calendarViewModel.setMonthIncome())
+        balanceLabel.text = util.getComma(Int(calendarViewModel.setMonthIncome() - calendarViewModel.setMonthPayment()))
+        
+        calendarView.setCurrentPage(nextMonth, animated: true)
+        calendarViewModel.isButtonPush = false
+        householdAccountBookTableView.reloadData()
+        diaryTableView.reloadData()
     }
+    
+    func setSegmentedControlColor(color:UIColor){
+        segmentedControl.selectedSegmentTintColor = color
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)!], for: .selected)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
+    }
+    
+    func setNavigationTitle(){
+        navigationItem.title = "カレンダー"
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+    }
+    
 
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
@@ -266,18 +331,15 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
                 present(navigationController,animated:true)
                 tableView.deselectRow(at: indexPath, animated: true)
             }
+            RecognitionChange.shared.updateJournalByCalendar = true
         }else if tableView === diaryTableView{
-            let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
-            guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
-            let navigationController = UINavigationController(rootViewController: inputViewController)
-            inputViewController.inputViewControllerDelegate = self
-            inputViewController.inputViewModel.diary? = calendarViewModel.setDiaryTableView()[indexPath.row]
-            inputViewController.setDiary(data: calendarViewModel.setDiaryTableView()[indexPath.row])
-            present(navigationController,animated:true)
-            inputViewController.addDiaryView()
-            inputViewController.inputViewModel.isDiary = true
+            
+            let storyboard = UIStoryboard(name: "DiaryViewController", bundle: nil)
+            guard let lookDiaryViewController = storyboard.instantiateViewController(withIdentifier: "LookDiaryViewController") as? LookDiaryViewController else{return}
+            self.navigationController?.pushViewController(lookDiaryViewController, animated: true)
+            lookDiaryViewController.lookDiaryViewModel.diary = calendarViewModel.setDiaryTableView()[indexPath.row]
+            lookDiaryViewController.forCalendarViewUpdateDiaryByCalendarViewDelegate = self
             RecognitionChange.shared.updateDiaryByCalendar = true
-            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
@@ -287,9 +349,9 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             let item = calendarViewModel.displayJournalList[indexPath.row]
             let cell = cell as? BudgetTableViewCell
             if item.isPayment == true{
-                cell!.backgroundColor = .red
+                cell?.backgroundColor = .white
             }else{
-                cell!.backgroundColor = .blue
+                cell!.backgroundColor = .flatBlue().lighten(byPercentage: 5)
             }
         }
     }
@@ -324,12 +386,9 @@ extension CalendarViewController:InputViewControllerDelegate{
     }
     
     func updatePayment() {
-        print(paymentLabel.text!)
         calendarViewModel.setTableView()
-        print(paymentLabel.text!)
         calendarViewModel.setDisplayJournalList()
-        print(paymentLabel.text!)
-//        householdAccountBookTableView.reloadData()
+        householdAccountBookTableView.reloadData()
         
         view.layoutIfNeeded()
         view.updateConstraints()
@@ -344,9 +403,7 @@ extension CalendarViewController:InputViewControllerDelegate{
     func updateCalendar() {
         calendarViewModel.setTableView()
         calendarViewModel.setDisplayJournalList()
-        paymentLabel.text = util.getComma(calendarViewModel.setSumPayment())
-        incomeLabel.text = util.getComma(calendarViewModel.setSumIncome())
-        balanceLabel.text = util.getComma(Int(calendarViewModel.setMonthIncome() - calendarViewModel.setMonthPayment()))
+        setSum()
         calendarView.reloadData()
         householdAccountBookTableView.reloadData()
         view.layoutIfNeeded()
@@ -479,27 +536,28 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
             }
         }
         
+        if calendar.isDateInToday(date){
+            cell.dayLabel.backgroundColor = .flatBlue()
+            cell.dayLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: cell.dayLabel.backgroundColor!, isFlat: true)
+        }else{
+            cell.dayLabel.backgroundColor = nil
+        }
+        
+        
         let isEqualDate = calendarViewModel.diaryModelList.contains(where: {$0.date.zeroclock == date.zeroclock})
-        if isEqualDate{
-            cell.backgroundColor = .orange
+        if isEqualDate && date >= startOfMonth && date <= endOfMonth{
+            cell.backgroundColor = UIColor.flatBlue().lighten(byPercentage: 1)
         }else{
             cell.backgroundColor = .white
         }
-        
-        //cellの文字のサイズの調整
-        let cellWidth = cell.bounds.width * 0.9
-        let paymentLabelHeight = paymentLabel.frame.height - 100
-        let incomeLabelHeight = incomeLabel.frame.height + 5
-        cell.paymentLabel.adjustsFontSizeToFitWidth = true
-        cell.paymentLabel.minimumScaleFactor = 0.5
-        cell.paymentLabel.sizeToFit()
-        cell.incomeLabel.adjustsFontSizeToFitWidth = true
-        cell.incomeLabel.minimumScaleFactor = 0.5
-        cell.incomeLabel.sizeToFit()
-        cell.paymentLabel.frame.size = CGSize(width: cellWidth, height: paymentLabelHeight)
-        cell.incomeLabel.frame.size = CGSize(width: cellWidth, height: incomeLabelHeight)
-        
         return cell
+    }
+    
+    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
+        var newFrame = calendar.frame
+        newFrame.origin.y = calendar.frame.minY
+        newFrame.size.height = calendar.frame.height
+        calendar.frame = newFrame
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
@@ -548,6 +606,15 @@ extension CalendarViewController:InputByStartUpModalDelegate{
     }
     
     func updateDiaryAndCalendar() {
+        updateDiary()
+        updateCalendar()
+        diaryTableView.reloadData()
+        calendarView.reloadData()
+    }
+}
+
+extension CalendarViewController:UpdateDiaryByCalendarViewDelegate{
+    func updateDiaryByCalendarView() {
         updateDiary()
         updateCalendar()
         diaryTableView.reloadData()

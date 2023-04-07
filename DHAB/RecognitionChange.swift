@@ -23,10 +23,12 @@ final public class RecognitionChange{
             defaults.set(startUpTimeModal, forKey: "startUpTimeModal")
         }
     }
+    var updateJournalByCalendar:Bool = false
     static let shared = RecognitionChange()
     
     private init(){
         let defaults = UserDefaults.standard
         startUpTimeModal = defaults.bool(forKey: "startUpTimeModal")
     }
+    
 }

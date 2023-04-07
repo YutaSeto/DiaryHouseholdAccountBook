@@ -15,9 +15,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     let diaryViewModel = DiaryViewModel()
     //検索機能関連
     @IBOutlet weak var searchBar: UISearchBar!
-    
-    //日記関連
-    
+        
     @IBOutlet weak var diaryTableView: UITableView!
     
     override func viewDidLoad() {
@@ -29,6 +27,8 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         searchBar.delegate = self
         diaryTableView.reloadData()
         setNavigationBarButton()
+        setSearchBarPlaceholder()
+        setStatusBarBackgroundColor(.flatBlue())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,12 +45,16 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
             RecognitionChange.shared.updateDiaryByCalendar = false
         }
     }
+    
+    func setSearchBarPlaceholder(){
+        searchBar.placeholder = "過去の日記の検索"
+    }
         
     func setNavigationBarButton(){
         navigationItem.title = "日記"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
         let leftButtonActionSelector: Selector = #selector(showInputView)
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton

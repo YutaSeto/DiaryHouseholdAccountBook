@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dNP-Fo-lWe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dNP-Fo-lWe">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -34,11 +34,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NMR-Rv-0L7">
-                                <rect key="frame" x="20" y="199" width="353" height="599"/>
+                                <rect key="frame" x="20" y="179" width="353" height="619"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ZbT-AH-T2c">
-                                <rect key="frame" x="0.0" y="123" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="by8-77-SUy" id="ren-Zr-Xw6"/>
@@ -53,7 +53,7 @@
                             <constraint firstItem="NMR-Rv-0L7" firstAttribute="top" secondItem="ZbT-AH-T2c" secondAttribute="bottom" constant="20" id="LeD-DP-Wsg"/>
                             <constraint firstAttribute="trailing" secondItem="ZbT-AH-T2c" secondAttribute="trailing" id="fm4-FR-HOW"/>
                             <constraint firstItem="ZbT-AH-T2c" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" id="q4y-y6-6EG"/>
-                            <constraint firstItem="ZbT-AH-T2c" firstAttribute="top" secondItem="Ybz-Ja-FBK" secondAttribute="top" constant="20" id="qUd-6u-TEz"/>
+                            <constraint firstItem="ZbT-AH-T2c" firstAttribute="top" secondItem="Ybz-Ja-FBK" secondAttribute="top" id="qUd-6u-TEz"/>
                             <constraint firstItem="Ybz-Ja-FBK" firstAttribute="bottom" secondItem="NMR-Rv-0L7" secondAttribute="bottom" constant="20" id="yKP-XW-gmT"/>
                         </constraints>
                     </view>

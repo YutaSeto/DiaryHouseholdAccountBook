@@ -31,7 +31,7 @@ class FSCalendarCustomCell: FSCalendarCell {
         super.layoutSubviews()
         
         let labelWidth = paymentLabel.frame.width
-        let fontScaleFactor = min(labelWidth / 100.0,0.9)
+        _ = min(labelWidth / 100.0,0.9)
     }
         
     func select(){

@@ -51,7 +51,7 @@ class CalendarViewModel{
         let lastDay = util.setLastDay(date: selectedDate)
         
         var sum:Int = 0
-        let paymentList = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == true}
+        let paymentList = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date < lastDay}.filter{$0.isPayment == true}
         paymentList.forEach{payment in
             sum += payment.price
         }

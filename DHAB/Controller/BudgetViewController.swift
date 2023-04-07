@@ -45,6 +45,7 @@ class BudgetViewController: UIViewController{
         budgetViewModel.setBudgetTableViewDataSourse()
         budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
+        setStatusBarBackgroundColor(.flatBlue())
         
         budgetTableView.reloadData()
         incomeBudgetTableView.reloadData()
@@ -100,11 +101,6 @@ class BudgetViewController: UIViewController{
         updateList()
         budgetTableView.reloadData()
     }
-    
-    
-    
-    
-
     
     func updateList(){
         budgetViewModel.setPaymentBudgetData()

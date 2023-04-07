@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 import UIKit
 import Charts
+import ChameleonFramework
 
 class HouseholdAccountBookViewController:UIViewController{
         
@@ -17,7 +18,9 @@ class HouseholdAccountBookViewController:UIViewController{
     
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var dayBackButton: UIButton!
+    @IBOutlet weak var threeMonthBackButton: UIButton!
     @IBOutlet weak var dayPassButton: UIButton!
+    @IBOutlet weak var threeMonthPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
     @IBOutlet weak var menuButton: UIBarButtonItem!
     
@@ -68,7 +71,8 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumPayment()
         householdAccountBookViewModel.setMonthSumIncome()
         tableViewScroll()
-        
+        setSegmentedControlColor(color: .flatBlue())
+        setStatusBarBackgroundColor(.flatBlue())
         incomeTableView.reloadData()
         paymentTableView.reloadData()
         resultTableView.reloadData()
@@ -134,6 +138,31 @@ class HouseholdAccountBookViewController:UIViewController{
             updateIncomePieGraph()
             RecognitionChange.shared.deletePayment = false
         }
+        
+        if RecognitionChange.shared.updateJournalByCalendar == true{
+            householdAccountBookViewModel.setPaymentData()
+            householdAccountBookViewModel.setIncomeData()
+            householdAccountBookViewModel.setSumPaymentData()
+            householdAccountBookViewModel.setSumIncomeData()
+            householdAccountBookViewModel.paymentTableViewDataSource = []
+            householdAccountBookViewModel.incomeTableViewDataSource = []
+            
+            householdAccountBookViewModel.setPaymentTableViewDataSourse()
+            householdAccountBookViewModel.setIncomeTableViewDataSourse()
+            householdAccountBookViewModel.setMonthSumPayment()
+            householdAccountBookViewModel.setMonthSumIncome()
+            paymentTableView.reloadData()
+            sumPaymentTableView.reloadData()
+            incomeTableView.reloadData()
+            sumIncomeTableView.reloadData()
+            resultTableView.reloadData()
+            resultSumTableView.reloadData()
+            updateChartView()
+            updatePaymentPieGraph()
+            updateIncomePieGraph()
+            
+            RecognitionChange.shared.updateJournalByCalendar = false
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -147,6 +176,12 @@ class HouseholdAccountBookViewController:UIViewController{
         sumPaymentTableView.isScrollEnabled = false
         sumIncomeTableView.isScrollEnabled = false
         resultSumTableView.isScrollEnabled = false
+    }
+    
+    func setSegmentedControlColor(color:UIColor){
+        householdAccountBookSegmentedControl.selectedSegmentTintColor = color
+        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)!], for: .selected)
+        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
     func setNib(){
@@ -193,9 +228,16 @@ class HouseholdAccountBookViewController:UIViewController{
         }
     }
     
+    
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
-        
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
+    }
+    
+    @IBAction func threeMonthBackButton(_ sender: UIButton) {
+        threeMonthBack()
         updateChartView()
         updatePaymentPieGraph()
         updateIncomePieGraph()
@@ -203,11 +245,18 @@ class HouseholdAccountBookViewController:UIViewController{
     
     @IBAction func dayPassButton(_ sender: UIButton) {
         dayPass()
-        
         updateChartView()
         updatePaymentPieGraph()
         updateIncomePieGraph()
     }
+    
+    @IBAction func threeMonthPassButton(_ sender: UIButton) {
+        threeMonthPass()
+        updateChartView()
+        updatePaymentPieGraph()
+        updateIncomePieGraph()
+    }
+    
     
     func dayBack(){
         if householdAccountBookViewModel.isMonth{
@@ -217,6 +266,20 @@ class HouseholdAccountBookViewController:UIViewController{
             householdAccountBookViewModel.date = Calendar.current.date(byAdding: .year, value: -1, to: householdAccountBookViewModel.date)!
             dayLabel.text = util.yearDateFormatter.string(from: householdAccountBookViewModel.date)
         }
+        householdAccountBookViewModel.resetSumYearPaymentAndIncome()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
+        updateList()
+        updateIncome()
+        paymentTableView.reloadData()
+        incomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+    }
+    
+    func threeMonthBack(){
+        householdAccountBookViewModel.date = Calendar.current.date(byAdding: .month, value: -3, to: householdAccountBookViewModel.date)!
+        dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
         householdAccountBookViewModel.resetSumYearPaymentAndIncome()
         householdAccountBookViewModel.setMonthSumPayment()
         householdAccountBookViewModel.setMonthSumIncome()
@@ -247,6 +310,20 @@ class HouseholdAccountBookViewController:UIViewController{
         resultSumTableView.reloadData()
     }
     
+    func threeMonthPass(){
+        householdAccountBookViewModel.date = Calendar.current.date(byAdding: .month, value: 3, to: householdAccountBookViewModel.date)!
+        dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
+        householdAccountBookViewModel.resetSumYearPaymentAndIncome()
+        householdAccountBookViewModel.setMonthSumPayment()
+        householdAccountBookViewModel.setMonthSumIncome()
+        updateList()
+        updateIncome()
+        paymentTableView.reloadData()
+        incomeTableView.reloadData()
+        resultTableView.reloadData()
+        resultSumTableView.reloadData()
+    }
+    
     //subView関連
     func addSubView(){
         view.addSubview(incomeView)
@@ -260,12 +337,16 @@ class HouseholdAccountBookViewController:UIViewController{
         incomeView.isHidden = true
         paymentView.isHidden = false
         dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
+        threeMonthBackButton.isHidden = false
+        threeMonthPassButton.isHidden = false
     }
     func addIncomeView(){
         savingView.isHidden = true
         paymentView.isHidden = true
         incomeView.isHidden = false
         dayLabel.text = util.monthDateFormatter.string(from: householdAccountBookViewModel.date)
+        threeMonthBackButton.isHidden = false
+        threeMonthPassButton.isHidden = false
     }
     
     func addSavingView(){
@@ -273,6 +354,8 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentView.isHidden = true
         savingView.isHidden = false
         dayLabel.text = util.yearDateFormatter.string(from: householdAccountBookViewModel.date)
+        threeMonthBackButton.isHidden = true
+        threeMonthPassButton.isHidden = true
     }
     
     func settingSubView(){
@@ -345,9 +428,10 @@ class HouseholdAccountBookViewController:UIViewController{
     func setNavigationBarButton(){
         let buttonActionSelector: Selector = #selector(showMenuButton)
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
-        
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.title = "家計簿"
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatBlue(), isFlat: true)!]
+        
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
         
@@ -444,10 +528,6 @@ class HouseholdAccountBookViewController:UIViewController{
             chartView.notifyDataSetChanged()
         }
     }
-    
-
-    // チャートのデータを設定するメソッド
-
     
     func updateList() {
         householdAccountBookViewModel.setPaymentData()
@@ -704,17 +784,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 householdAccountBookViewModel.isExpanded = false
             case 2:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
-                if cell.modalSwitch.isOn{
-                    RecognitionChange.shared.startUpTimeModal = false
-                    
-                    cell.switchOff()
-                }else{
-                    RecognitionChange.shared.startUpTimeModal = true
-                    cell.modalSwitch.isOn = true
-
-                    print("modalSwitchIsOff")
-                    print(RecognitionChange.shared.startUpTimeModal)
-                }
+                return
             default:
                 return
             }

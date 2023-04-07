@@ -13,6 +13,7 @@ class LookDiaryViewController:UIViewController{
     let lookDiaryViewModel = LookDiaryViewModel()
     let util = Util()
     var forDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
+    var forCalendarViewUpdateDiaryByCalendarViewDelegate:UpdateDiaryByCalendarViewDelegate?
     
     @IBOutlet weak var titleTextView: UITextView!
     @IBOutlet weak var diaryTextView: UITextView!
@@ -28,8 +29,10 @@ class LookDiaryViewController:UIViewController{
         imageCollectionView.delegate = self
         titleTextView.isEditable = false
         diaryTextView.isEditable = false
+        configureTextFont()
         setNavigationBarButton()
         setNavigationBarTitle()
+        setStatusBarBackgroundColor(.flatBlue())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,6 +44,10 @@ class LookDiaryViewController:UIViewController{
         titleTextView.text! = lookDiaryViewModel.diary!.title
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
+    }
+    
+    func configureTextFont(){
+        titleTextView.font = UIFont.boldSystemFont(ofSize: 16)
     }
     
     func setNavigationBarTitle(){
@@ -82,6 +89,8 @@ class LookDiaryViewController:UIViewController{
         inputViewController.addDiaryView()
         inputViewController.inputViewModel.isDiary = true
         inputViewController.forDiaryViewUpdateDiaryByLookDiaryViewDelegate = forDiaryViewUpdateDiaryByLookDiaryViewDelegate
+        inputViewController.forCalendarViewUpdateDiaryByCalendarViewDelegate = forCalendarViewUpdateDiaryByCalendarViewDelegate
+        inputViewController.forLookDiaryViewUpdateDiaryByCalendarViewDelegate = self
         inputViewController.forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate = self
     }
 }
@@ -111,7 +120,6 @@ extension LookDiaryViewController:UICollectionViewDelegate,UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
     }
 }
 
@@ -122,4 +130,12 @@ extension LookDiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
         configureTextView()
         imageCollectionView.reloadData()
     }
+}
+
+extension LookDiaryViewController:UpdateDiaryByCalendarViewDelegate{
+    func updateDiaryByCalendarView() {
+        configureTextView()
+        imageCollectionView.reloadData()
+    }
+    
 }

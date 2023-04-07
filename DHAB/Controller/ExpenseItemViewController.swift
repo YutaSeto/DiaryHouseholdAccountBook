@@ -58,6 +58,7 @@ class ExpenseItemViewController: UIViewController{
         configureAddButton()
         categoryViewControllerDelegate?.updateHouseholdAccountBook()
         setNavigationBarButton()
+        setStatusBarBackgroundColor(.flatBlue())
         expenseItemTableView.reloadData()
         incomeTableView.reloadData()
     }
