@@ -58,14 +58,14 @@ PODS:
     - SDWebImage
     - SwiftyGif
   - FSCalendar (2.8.4)
-  - Realm (10.32.3):
-    - Realm/Headers (= 10.32.3)
-  - Realm/Headers (10.32.3)
-  - RealmSwift (10.32.3):
-    - Realm (= 10.32.3)
-  - SDWebImage (5.15.0):
-    - SDWebImage/Core (= 5.15.0)
-  - SDWebImage/Core (5.15.0)
+  - Realm (10.38.0):
+    - Realm/Headers (= 10.38.0)
+  - Realm/Headers (10.38.0)
+  - RealmSwift (10.38.0):
+    - Realm (= 10.38.0)
+  - SDWebImage (5.15.5):
+    - SDWebImage/Core (= 5.15.5)
+  - SDWebImage/Core (5.15.5)
   - SwiftAlgorithms (1.0.0)
   - SwiftyGif (5.4.4)
 
@@ -102,12 +102,12 @@ SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
-  Realm: fdf6732924dc5e69e30e0db2c11e869f92b53f3d
-  RealmSwift: 7c181da8fa1c2fe613656a77c198d6a3dc3879a1
-  SDWebImage: 9bec4c5cdd9579e1f57104735ee0c37df274d593
+  Realm: 5902885dd1d5e71b0b020830caab937ecdf5bf07
+  RealmSwift: 0fc037d6c32c7c4fc9362892380f380114ecdcf0
+  SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
 
 PODFILE CHECKSUM: c22f6156031d441d018f2579399106e569aa6b9c
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.11.3
