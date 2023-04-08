@@ -20,6 +20,8 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Logger.debug("")
+        
         diaryTableView.register(UINib(nibName: "DiaryTableViewCell", bundle: nil),forCellReuseIdentifier: "customCell")
         diaryViewModel.setDiaryData()
         diaryTableView.delegate = self

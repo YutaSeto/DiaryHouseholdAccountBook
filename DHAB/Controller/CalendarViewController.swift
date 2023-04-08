@@ -38,6 +38,8 @@ class CalendarViewController:UIViewController{
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        Logger.debug("")
+        
         calendarView.dataSource = self
         calendarView.delegate = self
         diaryTableView.delegate = self

@@ -63,6 +63,7 @@
 		23EEE7D32972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */; };
 		23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */; };
 		23EEE7D92972D7C000A52939 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7D82972D7C000A52939 /* Budget.swift */; };
+		C631F8A629E10915006A71DC /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F8A529E10915006A71DC /* Logger.swift */; };
 		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
 		EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */; };
 		EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */; };
@@ -129,6 +130,7 @@
 		23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DiaryViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D82972D7C000A52939 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
 		94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
+		C631F8A529E10915006A71DC /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
 		EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 		237B85DD2970471A001E4639 /* DHAB */ = {
 			isa = PBXGroup;
 			children = (
+				C631F8A529E10915006A71DC /* Logger.swift */,
 				237B85DE2970471A001E4639 /* AppDelegate.swift */,
 				237B85E02970471A001E4639 /* SceneDelegate.swift */,
 				23A0B28B29A84CA1000956CF /* RecognitionChange.swift */,
@@ -445,6 +448,7 @@
 				23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */,
 				237B860129704A59001E4639 /* InputViewController.swift in Sources */,
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
+				C631F8A629E10915006A71DC /* Logger.swift in Sources */,
 				23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */,
 				23D4070229DA92F600E92C52 /* HouseholdAccountBookViewModel.swift in Sources */,
 				2368D62329DE76D20070A67E /* SelectStartUpModalTableViewCell.swift in Sources */,

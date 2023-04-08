@@ -31,6 +31,9 @@ class BudgetConfigureViewController: UIViewController{
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        
+        Logger.debug("")
+        
         budgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         incomeBudgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         budgetConfigureTableView.delegate = self

@@ -75,8 +75,10 @@ class InputViewController:UIViewController{
     @IBOutlet weak var diaryDateTextField: UITextField!
     
     override func viewDidLoad(){
-        
         super.viewDidLoad()
+        
+        Logger.debug("")
+        
         paymentCollectionView.delegate = self
         paymentCollectionView.dataSource = self
         incomeCollectionView.delegate = self

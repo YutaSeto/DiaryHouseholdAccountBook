@@ -31,6 +31,8 @@ class BudgetViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Logger.debug("")
+        
         budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         incomeBudgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)

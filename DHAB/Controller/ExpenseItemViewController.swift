@@ -46,6 +46,9 @@ class ExpenseItemViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Logger.debug("")
+        
         expenseItemViewModel.setCategoryData()
         expenseItemViewModel.setIncomeCategoryData()
         expenseItemTableView.delegate = self

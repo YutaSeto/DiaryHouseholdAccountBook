@@ -22,6 +22,9 @@ class LookDiaryViewController:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Logger.debug("")
+        
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
         configureCollectionViewFlowLayout()

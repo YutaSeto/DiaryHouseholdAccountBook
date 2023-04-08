@@ -29,6 +29,9 @@ class PictureViewController:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Logger.debug("")
+        
         image = pictureViewModel.inputViewControllerImage
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()

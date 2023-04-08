@@ -54,6 +54,9 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var resultSumTableViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
+        
+        Logger.debug("")
+        
         setNib()
         dayLabel.text = util.monthDateFormatter.string(from:householdAccountBookViewModel.date)
         addSubView()
