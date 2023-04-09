@@ -232,6 +232,7 @@ class InputViewController:UIViewController{
         let numberOfItems = inputViewModel.categoryList.count
         let itemHeight: CGFloat = 38.0
         let space: CGFloat = 5
+        var paymentCollectionHeight: CGFloat = 0
         
         func returnRows(items:Int) -> Int{
             if items <= 4{
@@ -243,7 +244,11 @@ class InputViewController:UIViewController{
             }
             return 1
         }
-        let paymentCollectionHeight = CGFloat((returnRows(items: numberOfItems) * Int(itemHeight)) + Int(returnRows(items: numberOfItems) - 2) * Int(space))
+        if returnRows(items: numberOfItems) == 3{
+            paymentCollectionHeight = CGFloat((returnRows(items: numberOfItems) * Int(itemHeight)) + Int(returnRows(items: numberOfItems) - 2) * Int(space))
+        }else{
+            paymentCollectionHeight = CGFloat((returnRows(items: numberOfItems) * Int(itemHeight)) + Int(returnRows(items: numberOfItems) - 1) * Int(space))
+        }
         let incomeNumberOfItems = inputViewModel.incomeCategoryList.count
         paymentCollectionView.heightAnchor.constraint(equalToConstant: paymentCollectionHeight).isActive = true
         incomeCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -687,6 +692,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             }
             inputViewModel.isPayment = true
             
+            priceTextField.becomeFirstResponder()
             return
         }else if collectionView === imageCollectionView{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
@@ -718,6 +724,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                 continueAddButton.isEnabled = true
             }
             inputViewModel.isPayment = false
+            priceTextField.becomeFirstResponder()
             return
         }
     }

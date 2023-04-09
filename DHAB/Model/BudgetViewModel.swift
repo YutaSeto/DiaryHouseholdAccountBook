@@ -18,6 +18,8 @@ class BudgetViewModel{
     var incomeBudgetList:[Budget] = []
     var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
+    let menuList = ["予算の一括編集","先月の予算をコピー"]
+    var isExpanded = false
     
     let util = Util()
     let realm = try! Realm()
@@ -45,6 +47,7 @@ class BudgetViewModel{
     func setBudgetTableViewDataSourse(){
         let firstDay = util.setFirstDay(date: date)
         let lastDay = util.setLastDay(date: date)
+        var budgetTableViewDataSourceList:[BudgetTableViewCellItem] = []
         categoryList.forEach{ expense in
             let dayCheckBudget = self.paymentBudgetList.filter({$0.budgetDate >= firstDay}).filter({$0.budgetDate <= lastDay})
             if let budget:Budget = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
@@ -53,7 +56,7 @@ class BudgetViewModel{
                     name: expense.name,
                     price: budget.budgetPrice
                 )
-                budgetTableViewDataSource.append(item)
+                budgetTableViewDataSourceList.append(item)
             } else {
                 let budget = Budget()
                 budget.id = UUID().uuidString
@@ -69,7 +72,7 @@ class BudgetViewModel{
                     name: expense.name,
                     price: budget.budgetPrice
                 )
-                budgetTableViewDataSource.append(item)
+                budgetTableViewDataSourceList.append(item)
             }
         }
     }

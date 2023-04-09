@@ -26,17 +26,12 @@ class BudgetConfigureViewController: UIViewController{
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var budgetConfigureTableView: UITableView!
-    @IBOutlet weak var incomeBudgetConfigureTableView: UITableView!
-    @IBOutlet weak var budgetTableViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad(){
         super.viewDidLoad()
         budgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
-        incomeBudgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         budgetConfigureTableView.delegate = self
         budgetConfigureTableView.dataSource = self
-        incomeBudgetConfigureTableView.delegate = self
-        incomeBudgetConfigureTableView.dataSource = self
         budgetConfigureViewModel.setCategoryData()
         budgetConfigureViewModel.setIncomeCategoryData()
         budgetConfigureViewModel.setPaymentBudgetData()
@@ -46,11 +41,6 @@ class BudgetConfigureViewController: UIViewController{
         dateLabel.text = util.monthDateFormatter.string(from:budgetConfigureViewModel.date)
         configureNavigationBarButton()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        budgetTableViewHeight.constant = CGFloat(budgetConfigureTableView.contentSize.height)
     }
     
     @IBAction func saveButton(_ sender: UIButton) {
@@ -85,26 +75,25 @@ class BudgetConfigureViewController: UIViewController{
 extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView === budgetConfigureTableView{
+        if section == 0{
             return "支出"
-        }else if tableView === incomeBudgetConfigureTableView{
+        }else{
             return "収入"
         }
-        return ""
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView === budgetConfigureTableView{
-            return budgetConfigureViewModel.budgetTableViewDataSource.count
-        }else if tableView === incomeBudgetConfigureTableView{
-            return budgetConfigureViewModel.incomeBudgetTableViewDataSource.count
+        if section == 0{
+            return budgetConfigureViewModel.categoryList.count
+        }else{
+            return budgetConfigureViewModel.incomeCategoryList.count
         }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView === budgetConfigureTableView{
-            let cell = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
+        
+        let cell = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
+        if indexPath.section == 0{
             var item = budgetConfigureViewModel.budgetTableViewDataSource[indexPath.row]
             cell.data = item
             cell.categoryLabel.text = item.name
@@ -112,8 +101,7 @@ extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSourc
             item.price = cell.price
             cell.delegate = self
             return cell
-        }else if tableView === incomeBudgetConfigureTableView{
-            let cell = incomeBudgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
+        }else{
             var item = budgetConfigureViewModel.incomeBudgetTableViewDataSource[indexPath.row]
             cell.incomeData = item
             cell.categoryLabel.text = item.name
@@ -122,7 +110,10 @@ extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSourc
             cell.delegate = self
             return cell
         }
-        return UITableViewCell()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
 }
 

@@ -108,11 +108,6 @@ class CalendarViewController:UIViewController{
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        paymentTableViewFlowLayout.constant = CGFloat(householdAccountBookTableView.contentSize.height)
-    }
-    
     @IBAction func monthBackButton(_ sender: UIButton) {
         calendarViewModel.isButtonPush = true
         let currentPage = calendarView.currentPage

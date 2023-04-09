@@ -273,6 +273,7 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumIncome()
         updateList()
         updateIncome()
+        householdAccountBookViewModel.isExpanded = false
         paymentTableView.reloadData()
         incomeTableView.reloadData()
         resultTableView.reloadData()
@@ -287,6 +288,7 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumIncome()
         updateList()
         updateIncome()
+        householdAccountBookViewModel.isExpanded = false
         paymentTableView.reloadData()
         incomeTableView.reloadData()
         resultTableView.reloadData()
@@ -394,6 +396,7 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentPieGraphView.drawHoleEnabled = false
         paymentPieGraphView.rotationEnabled = false
         paymentPieGraphView.noDataTextColor = .black
+        paymentPieGraphView.sliceTextDrawingThreshold = paymentPieGraphView.sliceTextDrawingThreshold == 0.0 ? 30.0 : 0.0
     }
     
     private func updatePaymentPieGraph(){
@@ -413,6 +416,7 @@ class HouseholdAccountBookViewController:UIViewController{
         incomePieGraphView.drawHoleEnabled = false
         incomePieGraphView.rotationEnabled = false
         incomePieGraphView.noDataTextColor = .black
+        paymentPieGraphView.sliceTextDrawingThreshold = paymentPieGraphView.sliceTextDrawingThreshold == 0.0 ? 25.0 : 0.0
     }
     
     private func updateIncomePieGraph(){
@@ -449,6 +453,7 @@ class HouseholdAccountBookViewController:UIViewController{
         let navigationController = UINavigationController(rootViewController: inputViewController)
         inputViewController.inputViewControllerDelegate = self
         self.present(navigationController,animated:true)
+        householdAccountBookViewModel.isExpanded = false
     }
     
     @objc func showMenuButton(){
@@ -879,6 +884,12 @@ extension HouseholdAccountBookViewController:DeleteCategoryDelegate{
         householdAccountBookViewModel.deleteTargetCategory()
 //        paymentbudgetlistの削除
         householdAccountBookViewModel.deleteTargetBudget()
+        
+        
+        householdAccountBookViewModel.targetItem = nil
+        householdAccountBookViewModel.targetIndex = nil
+        householdAccountBookViewModel.targetJournal = nil
+        householdAccountBookViewModel.targetBudget = nil
         
         if data.isPayment == true{
             paymentTableView.deleteRows(at: [index], with: .automatic)

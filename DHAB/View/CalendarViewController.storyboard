@@ -245,7 +245,6 @@
                         <outlet property="monthBackButton" destination="W3f-Xy-uYG" id="ZDb-6b-rvY"/>
                         <outlet property="monthPassButton" destination="Q4b-87-1kI" id="wlR-50-pKa"/>
                         <outlet property="paymentLabel" destination="fUS-S5-QbJ" id="Jyb-1a-OK7"/>
-                        <outlet property="paymentTableViewFlowLayout" destination="ewP-Pt-0lM" id="1VO-4a-rr3"/>
                         <outlet property="paymentView" destination="4lS-zk-Ukt" id="dgP-Y3-hUj"/>
                         <outlet property="segmentedControl" destination="css-5S-DnE" id="g7t-NK-x6d"/>
                         <outlet property="threeMonthBackButton" destination="DWs-ad-ASc" id="rwe-Xz-5aV"/>
@@ -260,9 +259,6 @@
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zUL-r6-iy1">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="266"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="ewP-Pt-0lM"/>
-                            </constraints>
                         </tableView>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="yjP-TY-qCb"/>
