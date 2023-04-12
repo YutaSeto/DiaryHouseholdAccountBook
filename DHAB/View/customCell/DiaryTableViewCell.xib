@@ -30,13 +30,13 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSc-4J-EYU">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSc-4J-EYU">
                         <rect key="frame" x="5" y="5" width="34.666666666666664" height="20.333333333333332"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曜日" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x76-Yp-WjN">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曜日" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x76-Yp-WjN">
                         <rect key="frame" x="5" y="55.333333333333336" width="34.666666666666664" height="20.333333333333336"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
@@ -62,6 +62,7 @@
                     <constraint firstItem="yDy-el-dRb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="dSo-iA-XgF"/>
                     <constraint firstItem="x76-Yp-WjN" firstAttribute="leading" secondItem="iSc-4J-EYU" secondAttribute="leading" id="eaY-V2-PBj"/>
                     <constraint firstItem="x76-Yp-WjN" firstAttribute="top" secondItem="iSc-4J-EYU" secondAttribute="bottom" constant="30" id="fAU-lC-Ddf"/>
+                    <constraint firstItem="x76-Yp-WjN" firstAttribute="centerX" secondItem="iSc-4J-EYU" secondAttribute="centerX" id="kyr-lw-dKF"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

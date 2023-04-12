@@ -47,7 +47,6 @@ class BudgetViewModel{
     func setBudgetTableViewDataSourse(){
         let firstDay = util.setFirstDay(date: date)
         let lastDay = util.setLastDay(date: date)
-        var budgetTableViewDataSourceList:[BudgetTableViewCellItem] = []
         categoryList.forEach{ expense in
             let dayCheckBudget = self.paymentBudgetList.filter({$0.budgetDate >= firstDay}).filter({$0.budgetDate <= lastDay})
             if let budget:Budget = dayCheckBudget.filter({$0.expenseID == expense.id}).first{
@@ -56,7 +55,7 @@ class BudgetViewModel{
                     name: expense.name,
                     price: budget.budgetPrice
                 )
-                budgetTableViewDataSourceList.append(item)
+                budgetTableViewDataSource.append(item)
             } else {
                 let budget = Budget()
                 budget.id = UUID().uuidString
@@ -72,7 +71,7 @@ class BudgetViewModel{
                     name: expense.name,
                     price: budget.budgetPrice
                 )
-                budgetTableViewDataSourceList.append(item)
+                budgetTableViewDataSource.append(item)
             }
         }
     }

@@ -25,7 +25,6 @@ class LookDiaryViewController:UIViewController{
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
         configureCollectionViewFlowLayout()
-        diaryTextView.delegate = self
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
         titleTextView.isEditable = false
@@ -33,21 +32,21 @@ class LookDiaryViewController:UIViewController{
         configureTextFont()
         setNavigationBarButton()
         setNavigationBarTitle()
+        configureTextView()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureTextView()
     }
     
     func configureTextView(){
         titleTextView.text! = lookDiaryViewModel.diary!.title
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
+        let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
+        diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
-    
-    
     
     func configureTextFont(){
         titleTextView.font = UIFont.boldSystemFont(ofSize: 16)
@@ -81,7 +80,6 @@ class LookDiaryViewController:UIViewController{
     @objc func tapBackButton(){
         self.navigationController?.popViewController(animated: true)
     }
-    
     
     @objc func tapEditButton(){
         let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
@@ -129,29 +127,29 @@ extension LookDiaryViewController:UICollectionViewDelegate,UICollectionViewDataS
 
 
 extension LookDiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
+    func configureText(title:String, text:String){
+        titleTextView.text = title
+        diaryTextView.text = text
+    }
+    
     func updateDiaryByLookDiaryView() {
+        lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
         
-        configureTextView()
+        let constraints = diaryTextView.constraints
+        let heightConstraint = constraints.first { $0.firstAttribute == .height }
+        heightConstraint!.isActive = false
+        
+        let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
+        diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
         imageCollectionView.reloadData()
     }
 }
 
 extension LookDiaryViewController:UpdateDiaryByCalendarViewDelegate{
     func updateDiaryByCalendarView() {
-        configureTextView()
+        lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
+        let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
+        diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
         imageCollectionView.reloadData()
-    }
-    
-}
-
-extension LookDiaryViewController: UITextViewDelegate{
-    func textViewDidChange(_ textView: UITextView){
-        let size = CGSize(width: textView.frame.width, height: .infinity)
-        let estimatedSize = diaryTextView.sizeThatFits(size)
-        diaryTextView.constraints.forEach{ constraint in
-            if constraint.firstAttribute == .height{
-                constraint.constant = estimatedSize.height
-            }
-        }
     }
 }

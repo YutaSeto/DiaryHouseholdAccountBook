@@ -21,6 +21,13 @@ class BudgetViewController: UIViewController{
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
     var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
     var inputViewControllerDelegate:InputViewControllerDelegate?
+    var toolbar: UIToolbar{
+        let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
+        let toolbar = UIToolbar(frame: toolbarRect)
+        let doneItem = UIBarButtonItem(title: "閉じる", style: .plain, target: self, action: #selector(didTapFinishButton))
+        toolbar.setItems([doneItem], animated: modalPresentationCapturesStatusBarAppearance)
+        return toolbar
+    }
     
     @IBOutlet weak var budgetTableView: UITableView!
     @IBOutlet weak var dateBackButton: UIButton!
@@ -47,6 +54,11 @@ class BudgetViewController: UIViewController{
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         addSubView()
         setMenuView()
+        
+    }
+    
+    @objc func didTapFinishButton(){
+        view.endEditing(true)
     }
     
     @IBAction func dateBackButton(_ sender: UIButton) {
@@ -206,6 +218,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
         }
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView === budgetTableView{
             if indexPath.section == 0{
@@ -216,6 +229,8 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                 var textFieldOnAlert = UITextField()
                 alert.addTextField{textField in
                     textFieldOnAlert = textField
+                    textField.keyboardType = .numberPad
+                    textField.inputAccessoryView = self.toolbar
                     textField.placeholder = String(self.budgetViewModel.budgetTableViewDataSource[indexPath.row].price)
                     textField.textAlignment = NSTextAlignment.right
                 }

@@ -26,6 +26,7 @@ protocol InputByStartUpModalDelegate{
 
 protocol UpdateDiaryByLookDiaryViewDelegate{
     func updateDiaryByLookDiaryView()
+    func configureText(title:String,text:String)
 }
 
 protocol UpdateDiaryByCalendarViewDelegate{
@@ -60,7 +61,7 @@ class InputViewController:UIViewController{
     var toolbar: UIToolbar{
         let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
         let toolbar = UIToolbar(frame: toolbarRect)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapFinishButton))
+        let doneItem = UIBarButtonItem(title: "閉じる", style: .plain, target: self, action: #selector(didTapFinishButton))
         toolbar.setItems([doneItem], animated: modalPresentationCapturesStatusBarAppearance)
         return toolbar
     }
@@ -305,14 +306,6 @@ class InputViewController:UIViewController{
     }
     
     @objc func didTapFinishButton(){
-        if let targetDateText = dateTextField.text,
-           let targetDate = util.monthDateFormatter.date(from:targetDateText){
-            inputViewModel.date = targetDate.zeroclock
-        }
-        if let targetDateText = diaryDateTextField.text,
-           let targetDate = util.monthDateFormatter.date(from: targetDateText){
-            inputViewModel.date = targetDate.zeroclock
-        }
         view.endEditing(true)
     }
     
@@ -502,6 +495,7 @@ class InputViewController:UIViewController{
         priceTextField.textAlignment = NSTextAlignment.right
         memoTextField.placeholder = "店名や商品名など"
         memoTextField.textAlignment = NSTextAlignment.right
+        titleTextField.placeholder = "タイトルを記入してください"
     }
     
     func settingCollectionView(){
@@ -573,6 +567,11 @@ class InputViewController:UIViewController{
     @objc func diaryInputTextViewDidChange(_ textView:UITextView){
         let count = diaryInputTextView.text.count
         countLabel.text = "\(count) / 2000"
+        if diaryInputTextView.text!.count >= 2000{
+            countLabel.textColor = .red
+        }else{
+            countLabel.textColor = .systemGray2
+        }
     }
     
     
@@ -588,6 +587,7 @@ class InputViewController:UIViewController{
             RecognitionChange.shared.updateCalendar = true
             dismiss(animated: true)
         }
+        forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate?.configureText(title: titleTextField.text!, text: diaryInputTextView.text!)
         forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate?.updateDiaryByLookDiaryView()
         forDiaryViewUpdateDiaryByLookDiaryViewDelegate?.updateDiaryByLookDiaryView()
         inputByStartUpModalDelegate?.updateDiaryAndCalendar()
@@ -617,7 +617,6 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             if inputViewModel.journal != nil{
                 cell.journal = inputViewModel.journal!
                 if inputViewModel.journal!.isPayment == true{
-                    cell.toggleSelection()
                 }
             }
             return cell
@@ -635,9 +634,6 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                 cell.journal = inputViewModel.journal!
             }
             
-            if inputViewModel.journal?.isPayment == false{
-                cell.toggleSelection()
-            }
             return cell
         }
         return UICollectionViewCell()
@@ -674,25 +670,25 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
         if collectionView === paymentCollectionView{
             let cell = collectionView.cellForItem(at: indexPath)
             inputViewModel.category = inputViewModel.categoryList[indexPath.row].name
-            
-            
+
             for i in 0 ..< inputViewModel.categoryList.count{
                 collectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
-            cell?.backgroundColor = .lightGray
+            cell?.backgroundColor = .flatPowderBlue()
             
             for i in 0 ..< inputViewModel.incomeCategoryList.count{
                 incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
-            cell?.backgroundColor = .lightGray
+            cell?.backgroundColor = .flatPowderBlue()
             
             if priceTextField.text != ""{
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
             inputViewModel.isPayment = true
-            
-            priceTextField.becomeFirstResponder()
+            if priceTextField.text == ""{
+                priceTextField.becomeFirstResponder()
+            }
             return
         }else if collectionView === imageCollectionView{
             let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
@@ -712,19 +708,21 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             for i in 0 ..< inputViewModel.categoryList.count{
                 paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
-            cell?.backgroundColor = .lightGray
+            cell?.backgroundColor = .flatPowderBlue()
             
             for i in 0 ..< inputViewModel.incomeCategoryList.count{
                 incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
             }
-            cell?.backgroundColor = .lightGray
+            cell?.backgroundColor = .flatPowderBlue()
             
             if priceTextField.text != ""{
                 addButton.isEnabled = true
                 continueAddButton.isEnabled = true
             }
             inputViewModel.isPayment = false
-            priceTextField.becomeFirstResponder()
+            if priceTextField.text == ""{
+                priceTextField.becomeFirstResponder()
+            }
             return
         }
     }

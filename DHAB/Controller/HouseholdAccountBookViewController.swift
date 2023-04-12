@@ -722,6 +722,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 if RecognitionChange.shared.startUpTimeModal == false{
                     let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
                     cell.modalSwitch.isOn = false
+                    cell.selectionStyle = .none
                     return cell
                 }else{
                     let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
