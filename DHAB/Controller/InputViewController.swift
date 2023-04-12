@@ -111,6 +111,13 @@ class InputViewController:UIViewController{
         }else{
             addButton.setTitle("編集する", for: .normal)
         }
+        
+        if inputViewModel.diary == nil{
+            addDiaryButton.setTitle("追加する", for: .normal)
+        }else{
+            addDiaryButton.setTitle("編集する", for: .normal)
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
