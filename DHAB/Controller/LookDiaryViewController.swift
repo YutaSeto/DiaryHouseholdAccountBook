@@ -19,6 +19,7 @@ class LookDiaryViewController:UIViewController{
     @IBOutlet weak var diaryTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
+    @IBOutlet weak var diaryTextViewHeightConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,8 @@ class LookDiaryViewController:UIViewController{
         setNavigationBarTitle()
         configureTextView()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        
+        diaryTextView.backgroundColor = .yellow
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,8 +50,9 @@ class LookDiaryViewController:UIViewController{
         titleTextView.text! = lookDiaryViewModel.diary!.title
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
+        
         let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
-        diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        diaryTextViewHeightConstraint.constant = height
     }
     
     func configureTextFont(){

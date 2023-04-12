@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dNP-Fo-lWe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dNP-Fo-lWe">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -80,25 +80,28 @@
                                 <rect key="frame" x="25" y="69" width="343" height="30"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="XbT-iu-30s"/>
+                                    <constraint firstAttribute="height" constant="30" id="0wP-QB-dhd"/>
                                 </constraints>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" text="diaryTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WGX-NX-VaJ">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="diaryTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WGX-NX-VaJ">
                                 <rect key="frame" x="25" y="109" width="343" height="30"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="30" id="OtY-ce-fAi"/>
+                                    <constraint firstAttribute="height" constant="30" id="IKo-hM-Cfm"/>
                                 </constraints>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WmP-ZI-8nC">
-                                <rect key="frame" x="25" y="149" width="343" height="669"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WmP-ZI-8nC">
+                                <rect key="frame" x="25" y="149" width="343" height="100"/>
+                                <color key="backgroundColor" systemColor="systemCyanColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="Q4C-Jg-Y0L"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9CY-Tp-pPw">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -111,21 +114,21 @@
                         <viewLayoutGuide key="safeArea" id="yZV-1Y-iFc"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="1dH-d3-raD" firstAttribute="leading" secondItem="yZV-1Y-iFc" secondAttribute="leading" constant="25" id="4RX-Vh-fyB"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="top" secondItem="1dH-d3-raD" secondAttribute="bottom" constant="10" id="66H-X8-UZ7"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="trailing" secondItem="1dH-d3-raD" secondAttribute="trailing" id="Bnw-6s-CzF"/>
-                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="trailing" secondItem="WGX-NX-VaJ" secondAttribute="trailing" id="E4s-Yr-kDm"/>
-                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="trailing" secondItem="1dH-d3-raD" secondAttribute="trailing" constant="25" id="O3A-Tw-1As"/>
-                            <constraint firstItem="1dH-d3-raD" firstAttribute="top" secondItem="yZV-1Y-iFc" secondAttribute="top" constant="10" id="VI6-6P-0nH"/>
-                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="leading" secondItem="WGX-NX-VaJ" secondAttribute="leading" id="aQa-0K-vGR"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="top" secondItem="1dH-d3-raD" secondAttribute="bottom" constant="10" id="dsL-dU-owm"/>
-                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="bottom" secondItem="WmP-ZI-8nC" secondAttribute="bottom" id="h7n-iO-p4R"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="leading" secondItem="1dH-d3-raD" secondAttribute="leading" id="le8-q2-cuZ"/>
-                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="top" secondItem="WGX-NX-VaJ" secondAttribute="bottom" constant="10" id="twI-QC-wq8"/>
+                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="leading" secondItem="yZV-1Y-iFc" secondAttribute="leading" constant="25" id="C9u-HD-D33"/>
+                            <constraint firstItem="1dH-d3-raD" firstAttribute="leading" secondItem="yZV-1Y-iFc" secondAttribute="leading" constant="25" id="E2B-RS-l0h"/>
+                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="top" secondItem="1dH-d3-raD" secondAttribute="bottom" constant="10" id="Frq-qB-J4d"/>
+                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="trailing" secondItem="WmP-ZI-8nC" secondAttribute="trailing" constant="25" id="Fz7-1s-8WA"/>
+                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="trailing" secondItem="WGX-NX-VaJ" secondAttribute="trailing" constant="25" id="Nqe-9R-x0f"/>
+                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="trailing" secondItem="1dH-d3-raD" secondAttribute="trailing" constant="25" id="QGd-ik-9qg"/>
+                            <constraint firstItem="1dH-d3-raD" firstAttribute="top" secondItem="yZV-1Y-iFc" secondAttribute="top" constant="10" id="bkB-OY-ews"/>
+                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="WmP-ZI-8nC" secondAttribute="bottom" constant="40" id="eef-9G-IaP"/>
+                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="leading" secondItem="yZV-1Y-iFc" secondAttribute="leading" constant="25" id="qnX-3d-65S"/>
+                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="top" secondItem="WGX-NX-VaJ" secondAttribute="bottom" constant="10" id="sQv-gN-F97"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="diaryTextView" destination="WGX-NX-VaJ" id="GkO-qg-O6M"/>
+                        <outlet property="diaryTextViewHeightConstraint" destination="IKo-hM-Cfm" id="v8H-kj-7pS"/>
                         <outlet property="imageCollectionView" destination="WmP-ZI-8nC" id="Mrj-Ad-xPz"/>
                         <outlet property="titleTextView" destination="1dH-d3-raD" id="4Ff-Tt-GAk"/>
                     </connections>
@@ -148,6 +151,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemCyanColor">
+            <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
