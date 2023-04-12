@@ -332,12 +332,12 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)//ここで消している
                 print("realmのデータ削除完了")
                 
-                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
+                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()//家計簿画面のデータ再セット
                 print("remakeviewControllerを実施")
                 self.expenseItemViewModel.setCategoryData()
                 print("setCategoryDataの実施")
                 self.expenseItemTableView.reloadData()
-                self.deleteCategoryDelegateForTabBar?.remakeViewController()
+                self.deleteCategoryDelegateForTabBar?.remakeUIView()
                 self.deleteCategoryDelegateForHouseholdAccountBook?.remakeUIView()
             })
             

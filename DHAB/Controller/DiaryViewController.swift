@@ -13,9 +13,16 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
    
     let util = Util()
     let diaryViewModel = DiaryViewModel()
-    //検索機能関連
+    
+    var toolbar: UIToolbar{
+        let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
+        let toolbar = UIToolbar(frame: toolbarRect)
+        let doneItem = UIBarButtonItem(title: "閉じる", style: .plain, target: self, action: #selector(didTapFinishButton))
+        toolbar.setItems([doneItem], animated: modalPresentationCapturesStatusBarAppearance)
+        return toolbar
+    }
+    
     @IBOutlet weak var searchBar: UISearchBar!
-        
     @IBOutlet weak var diaryTableView: UITableView!
     
     override func viewDidLoad() {
@@ -29,8 +36,8 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         searchBar.delegate = self
         diaryTableView.reloadData()
         setNavigationBarButton()
-        setSearchBarPlaceholder()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        configureSearchBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,9 +55,16 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         }
     }
     
-    func setSearchBarPlaceholder(){
-        searchBar.placeholder = "過去の日記の検索"
+    @objc func didTapFinishButton(){
+        view.endEditing(true)
     }
+    
+    func configureSearchBar(){
+        searchBar.inputAccessoryView = toolbar
+        searchBar.placeholder = "過去の日記の検索"
+        searchBar.keyboardType = .asciiCapable
+    }
+    
         
     func setNavigationBarButton(){
         navigationItem.title = "日記"
@@ -221,6 +235,10 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
 }
 
 extension DiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
+    func configureText(title: String, text: String) {
+        return
+    }
+    
     func updateDiaryByLookDiaryView() {
         diaryViewModel.setDiaryData()
         diaryTableView.reloadData()

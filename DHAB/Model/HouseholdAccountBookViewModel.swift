@@ -30,6 +30,7 @@ class HouseholdAccountBookViewModel{
     var targetIndex:IndexPath?
     var targetJournal:[Journal]?
     var targetBudget:[Budget]?
+    var shouldShowLabel:Bool = false
     let menuList = ["カテゴリーの設定","予算の設定","初回起動時の設定"]
     var isExpanded:Bool = false
     var sumPaymentList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -92,9 +93,8 @@ class HouseholdAccountBookViewModel{
         }
         
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
+        dataSet.entryLabelColor = .flatBlack()
         dataSet.colors = paymentColors
-        dataSet.sliceSpace = 0.0
-        dataSet.valueFont = UIFont.boldSystemFont(ofSize: 12)
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
         return data
@@ -109,6 +109,8 @@ class HouseholdAccountBookViewModel{
         }
         
         let dataSet = PieChartDataSet(entries: dataEntries, label: "支出")
+        dataSet.entryLabelColor = .flatBlack()
+        
         dataSet.colors = incomeColors
         let data = PieChartData(dataSets: [dataSet])
         dataSet.drawValuesEnabled = false
@@ -321,6 +323,7 @@ class HouseholdAccountBookViewModel{
         }else if targetItem?.isPayment == false{
             incomeCategoryList.remove(at: targetIndex!.row)
         }
+        
         print("categoryList.count\(categoryList.count)")
     }
     

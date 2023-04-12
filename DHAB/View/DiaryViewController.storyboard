@@ -87,14 +87,17 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" text="diaryTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WGX-NX-VaJ">
-                                <rect key="frame" x="25" y="109" width="343" height="180"/>
+                                <rect key="frame" x="25" y="109" width="343" height="30"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="30" id="OtY-ce-fAi"/>
+                                </constraints>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WmP-ZI-8nC">
-                                <rect key="frame" x="25" y="299" width="343" height="519"/>
+                                <rect key="frame" x="25" y="149" width="343" height="669"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9CY-Tp-pPw">
                                     <size key="itemSize" width="128" height="128"/>
@@ -128,6 +131,13 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2p-hX-e7r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" id="69C-cU-A5e">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="aQy-vE-AL9"/>
+                    <viewLayoutGuide key="contentLayoutGuide" id="SrU-ay-iCz"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="tJT-kq-pOo"/>
+                </scrollView>
             </objects>
             <point key="canvasLocation" x="1177.8625954198474" y="350.7042253521127"/>
         </scene>

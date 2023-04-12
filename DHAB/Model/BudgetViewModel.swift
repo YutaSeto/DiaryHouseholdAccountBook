@@ -18,6 +18,8 @@ class BudgetViewModel{
     var incomeBudgetList:[Budget] = []
     var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
     var incomeBudgetTableViewDataSource: [IncomeBudgetTableViewCellItem] = []
+    let menuList = ["予算の一括編集","先月の予算をコピー"]
+    var isExpanded = false
     
     let util = Util()
     let realm = try! Realm()

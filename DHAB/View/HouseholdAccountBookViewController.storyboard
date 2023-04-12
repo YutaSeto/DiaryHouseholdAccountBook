@@ -286,7 +286,11 @@
                         <constraint firstItem="wNd-rK-nP2" firstAttribute="bottom" secondItem="EOy-CV-OW9" secondAttribute="bottom" id="NVJ-S1-Nca"/>
                         <constraint firstItem="EOy-CV-OW9" firstAttribute="leading" secondItem="wNd-rK-nP2" secondAttribute="leading" id="W6K-5n-IcU"/>
                         <constraint firstItem="EOy-CV-OW9" firstAttribute="trailing" secondItem="wNd-rK-nP2" secondAttribute="trailing" id="XKT-vA-yoX"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="trailing" secondItem="wNd-rK-nP2" secondAttribute="trailing" id="ZAy-go-nfY"/>
                         <constraint firstItem="EOy-CV-OW9" firstAttribute="top" secondItem="wNd-rK-nP2" secondAttribute="top" id="eBm-N8-pry"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="bottom" secondItem="wNd-rK-nP2" secondAttribute="bottom" id="ek8-zT-zmN"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="top" secondItem="wNd-rK-nP2" secondAttribute="top" id="yIy-Sd-tWL"/>
+                        <constraint firstItem="EOy-CV-OW9" firstAttribute="leading" secondItem="wNd-rK-nP2" secondAttribute="leading" id="zIh-We-a3Q"/>
                     </constraints>
                 </view>
             </objects>

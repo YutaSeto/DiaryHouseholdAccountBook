@@ -60,6 +60,7 @@ class CalendarViewController:UIViewController{
         calendarViewModel.setMonthIncomeModelList()
         setSum()
         setButtonTitle()
+        setNavigationBarButton()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         setSegmentedControlColor(color: .flatPowderBlueColorDark())
         setNavigationTitle()
@@ -108,11 +109,6 @@ class CalendarViewController:UIViewController{
         monthPassButton.setTitle(nil, for: .normal)
         threeMonthPassButton.setTitle(nil, for: .normal)
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        paymentTableViewFlowLayout.constant = CGFloat(householdAccountBookTableView.contentSize.height)
     }
     
     @IBAction func monthBackButton(_ sender: UIButton) {
@@ -206,6 +202,22 @@ class CalendarViewController:UIViewController{
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
     }
     
+    func setNavigationBarButton(){
+        let leftButtonActionSelector: Selector = #selector(showInputView)
+        let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
+        navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    @objc func showInputView(){
+        let storyboard = UIStoryboard(name: "InputViewController", bundle: nil)
+        guard let inputViewController = storyboard.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
+        let navigationController = UINavigationController(rootViewController: inputViewController)
+        present(navigationController,animated:true)
+        inputViewController.inputByStartUpModalDelegate = self
+        RecognitionChange.shared.updateCalendar = true
+        RecognitionChange.shared.updateJournalByCalendar = true
+    }
 
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
