@@ -15,6 +15,7 @@ class ExpenseItemViewModel{
     var categoryList:[Category] = []
     var incomeCategoryList:[Category] = []
     var isIncome: Bool?
+    var journalList:[Journal] = []
     
     func addNewCategory(value: String,isPayment: Bool){
         let categoryModel = Category()
@@ -25,11 +26,36 @@ class ExpenseItemViewModel{
         }
     }
     
-    func overwriteCategory(value:String, indexPath: IndexPath){
+    func setJournalList(){
+        let result = realm.objects(Journal.self)
+        journalList = Array(result)
+    }
+    
+    func overwritePaymentCategory(value:String, indexPath: IndexPath){
         let categoryModel = categoryList[indexPath.row]
+        let  changeNamePaymentCategoryList = journalList.filter{$0.category == categoryModel.name}.filter{$0.isPayment == true}
+        changeNamePaymentCategoryList.forEach{journal in
+            try! realm.write{
+                journal.category = value
+            }
+        }
         try! realm.write{
             categoryModel.name = value
             categoryList[indexPath.row] = categoryModel
+        }
+    }
+    
+    func overwriteIncomeCategory(value:String, indexPath: IndexPath){
+        let categoryModel = incomeCategoryList[indexPath.row]
+        let  changeNameIncomeCategoryList = journalList.filter{$0.category == categoryModel.name}.filter{$0.isPayment == false}
+        changeNameIncomeCategoryList.forEach{journal in
+            try! realm.write{
+                journal.category = value
+            }
+        }
+        try! realm.write{
+            categoryModel.name = value
+            incomeCategoryList[indexPath.row] = categoryModel
         }
     }
     

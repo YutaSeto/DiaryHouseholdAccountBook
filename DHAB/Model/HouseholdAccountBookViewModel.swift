@@ -314,7 +314,6 @@ class HouseholdAccountBookViewModel{
                 }
             }
         }
-        print("paymentList.count\(paymentList.count)")
     }
     
     func deleteTargetCategory(){
@@ -323,22 +322,19 @@ class HouseholdAccountBookViewModel{
         }else if targetItem?.isPayment == false{
             incomeCategoryList.remove(at: targetIndex!.row)
         }
-        
-        print("categoryList.count\(categoryList.count)")
     }
     
     func deleteTargetBudget(){
-        if targetItem!.isPayment == true{
-            targetBudget!.forEach{ budget in
-                let index = paymentBudgetList.firstIndex(where: {$0.id == budget.id})
-                paymentBudgetList.remove(at: index!)
+        if targetItem?.isPayment == true{
+            targetBudget?.forEach{ budget in
+                guard let index = paymentBudgetList.firstIndex(where: {$0.id == budget.id}) else{return}
+                paymentBudgetList.remove(at: index)
             }
-        }else if targetItem!.isPayment == false{
-            targetBudget!.forEach{ budget in
-                let index = incomeBudgetList.firstIndex(where: {$0.id == budget.id})
-                incomeBudgetList.remove(at: index!)
+        }else if targetItem?.isPayment == false{
+            targetBudget?.forEach{ budget in
+                guard let index = incomeBudgetList.firstIndex(where: {$0.id == budget.id}) else{return}
+                incomeBudgetList.remove(at: index)
             }
         }
-        print("paymentBudgetList.count\(paymentBudgetList.count)")
     }
 }

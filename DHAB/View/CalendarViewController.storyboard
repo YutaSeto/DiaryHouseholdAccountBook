@@ -129,13 +129,13 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9uh-CC-8s5">
                                         <rect key="frame" x="0.0" y="20.333333333333371" width="34.666666666666664" height="20.333333333333329"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="××" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VhE-dt-iw7">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="××" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VhE-dt-iw7">
                                                 <rect key="frame" x="0.0" y="0.0" width="20.666666666666668" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxo-Gc-Wjh">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="円" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxo-Gc-Wjh">
                                                 <rect key="frame" x="20.666666666666657" y="0.0" width="14" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <nil key="textColor"/>
@@ -238,12 +238,14 @@
                         <outlet property="balanceLabel" destination="yMe-HO-HHQ" id="0Uw-ce-LaR"/>
                         <outlet property="calendarView" destination="REY-mA-5Sv" id="iTd-Ap-WRt"/>
                         <outlet property="dateLabel" destination="3i0-um-rZR" id="5J8-Zb-zE0"/>
+                        <outlet property="diaryNoDataLabel" destination="AvA-Op-6Hq" id="3hc-tJ-x6c"/>
                         <outlet property="diaryTableView" destination="oEJ-FK-ufX" id="HNU-bg-iUZ"/>
                         <outlet property="diaryView" destination="TIg-NR-Nlx" id="vkE-cE-mwN"/>
                         <outlet property="householdAccountBookTableView" destination="zUL-r6-iy1" id="A3l-8U-8lc"/>
                         <outlet property="incomeLabel" destination="VhE-dt-iw7" id="X8d-DW-MPY"/>
                         <outlet property="monthBackButton" destination="W3f-Xy-uYG" id="ZDb-6b-rvY"/>
                         <outlet property="monthPassButton" destination="Q4b-87-1kI" id="wlR-50-pKa"/>
+                        <outlet property="noDataLabel" destination="PYU-am-g4y" id="Zm4-ZU-sTM"/>
                         <outlet property="paymentLabel" destination="fUS-S5-QbJ" id="Jyb-1a-OK7"/>
                         <outlet property="paymentView" destination="4lS-zk-Ukt" id="dgP-Y3-hUj"/>
                         <outlet property="segmentedControl" destination="css-5S-DnE" id="g7t-NK-x6d"/>
@@ -260,6 +262,12 @@
                             <rect key="frame" x="0.0" y="0.0" width="393" height="266"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データがありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PYU-am-g4y">
+                            <rect key="frame" x="118.66666666666669" y="20" width="156" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" systemColor="systemGray2Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="yjP-TY-qCb"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -267,7 +275,9 @@
                         <constraint firstItem="yjP-TY-qCb" firstAttribute="bottom" secondItem="zUL-r6-iy1" secondAttribute="bottom" id="Axf-wy-TjD"/>
                         <constraint firstItem="zUL-r6-iy1" firstAttribute="leading" secondItem="yjP-TY-qCb" secondAttribute="leading" id="MrU-Ug-Ovh"/>
                         <constraint firstItem="zUL-r6-iy1" firstAttribute="top" secondItem="4lS-zk-Ukt" secondAttribute="top" id="c28-j1-yYE"/>
+                        <constraint firstItem="PYU-am-g4y" firstAttribute="top" secondItem="4lS-zk-Ukt" secondAttribute="top" constant="20" id="lP8-b5-ECY"/>
                         <constraint firstItem="zUL-r6-iy1" firstAttribute="trailing" secondItem="yjP-TY-qCb" secondAttribute="trailing" id="ovn-6w-RxA"/>
+                        <constraint firstItem="PYU-am-g4y" firstAttribute="centerX" secondItem="4lS-zk-Ukt" secondAttribute="centerX" id="svi-Xd-vx0"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="TIg-NR-Nlx">
@@ -278,6 +288,12 @@
                             <rect key="frame" x="0.0" y="59" width="393" height="207"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データがありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AvA-Op-6Hq">
+                            <rect key="frame" x="118.66666666666669" y="20" width="156" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" systemColor="systemGray2Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="e7O-Rt-d31"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -285,7 +301,9 @@
                         <constraint firstItem="e7O-Rt-d31" firstAttribute="bottom" secondItem="oEJ-FK-ufX" secondAttribute="bottom" id="7Yf-Ns-FIQ"/>
                         <constraint firstItem="e7O-Rt-d31" firstAttribute="trailing" secondItem="oEJ-FK-ufX" secondAttribute="trailing" id="8Jb-Sd-OD4"/>
                         <constraint firstItem="oEJ-FK-ufX" firstAttribute="top" secondItem="e7O-Rt-d31" secondAttribute="top" id="Hod-7M-P9d"/>
+                        <constraint firstItem="AvA-Op-6Hq" firstAttribute="top" secondItem="TIg-NR-Nlx" secondAttribute="top" constant="20" id="NLJ-Qq-ygX"/>
                         <constraint firstItem="oEJ-FK-ufX" firstAttribute="leading" secondItem="e7O-Rt-d31" secondAttribute="leading" id="RV5-cu-7Yb"/>
+                        <constraint firstItem="AvA-Op-6Hq" firstAttribute="centerX" secondItem="TIg-NR-Nlx" secondAttribute="centerX" id="jSb-e6-Jj0"/>
                     </constraints>
                 </view>
             </objects>
@@ -347,6 +365,9 @@
                             <constraint firstItem="aLL-yj-000" firstAttribute="trailing" secondItem="AOe-iz-Gmu" secondAttribute="trailing" constant="25" id="xLd-fH-FZ4"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="calendarViewDiaryTextViewHeight" destination="OkR-4p-ifM" id="0zq-rB-LVJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jHf-PZ-5Lg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -363,6 +384,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

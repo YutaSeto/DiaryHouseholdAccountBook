@@ -14,6 +14,7 @@ class LookDiaryViewController:UIViewController{
     let util = Util()
     var forDiaryViewUpdateDiaryByLookDiaryViewDelegate:UpdateDiaryByLookDiaryViewDelegate?
     var forCalendarViewUpdateDiaryByCalendarViewDelegate:UpdateDiaryByCalendarViewDelegate?
+    @IBOutlet weak var diaryTextViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var titleTextView: UITextView!
     @IBOutlet weak var diaryTextView: UITextView!
@@ -45,7 +46,7 @@ class LookDiaryViewController:UIViewController{
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
         let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
-        diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        diaryTextViewHeight.constant = height
     }
     
     func configureTextFont(){

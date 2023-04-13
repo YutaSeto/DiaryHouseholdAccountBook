@@ -164,9 +164,9 @@ class BudgetViewController: UIViewController{
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView === budgetViewModel && section == 0{
+        if tableView === budgetTableView && section == 0{
             return "支出"
-        }else if tableView === budgetViewModel && section == 1{
+        }else if tableView === budgetTableView && section == 1{
             return "収入"
         }
         else{
@@ -217,7 +217,6 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
             return 1
         }
     }
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView === budgetTableView{
@@ -340,6 +339,7 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                 //alertを表示、先月の予算をforEach文で予算をコピー
         }
         budgetViewModel.isExpanded = false
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

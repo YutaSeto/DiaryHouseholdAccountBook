@@ -35,6 +35,9 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var paymentTableViewFlowLayout: NSLayoutConstraint!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var noDataLabel: UILabel!
+    @IBOutlet weak var diaryNoDataLabel: UILabel!
+    
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -268,8 +271,18 @@ class CalendarViewController:UIViewController{
 extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === householdAccountBookTableView {
+            if calendarViewModel.displayJournalList.count == 0{
+                noDataLabel.isHidden = false
+            }else {
+                noDataLabel.isHidden = true
+            }
             return calendarViewModel.displayJournalList.count
         }else if tableView === diaryTableView{
+            if calendarViewModel.setDiaryTableView().count == 0{
+                diaryNoDataLabel.isHidden = false
+            }else{
+                diaryNoDataLabel.isHidden = true
+            }
             return calendarViewModel.setDiaryTableView().count
         }
         return 0

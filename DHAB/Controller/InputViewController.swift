@@ -57,6 +57,8 @@ class InputViewController:UIViewController{
     @IBOutlet weak var continueAddButton: UIButton!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var memoTextField: UITextField!
+    @IBOutlet weak var paymentNodataLabel: UILabel!
+    @IBOutlet weak var incomeNodataLabel: UILabel!
     
     var toolbar: UIToolbar{
         let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
@@ -230,13 +232,21 @@ class InputViewController:UIViewController{
         diaryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        paymentNodataLabel.translatesAutoresizingMaskIntoConstraints = false
+        paymentNodataLabel.topAnchor.constraint(equalTo: paymentCollectionView.topAnchor,constant: 10).isActive = true
+        paymentNodataLabel.rightAnchor.constraint(equalTo: paymentCollectionView.rightAnchor, constant: -8).isActive = true
+        
+        incomeNodataLabel.translatesAutoresizingMaskIntoConstraints = false
+        incomeNodataLabel.topAnchor.constraint(equalTo: incomeCollectionView.topAnchor,constant: 10).isActive = true
+        incomeNodataLabel.rightAnchor.constraint(equalTo: incomeCollectionView.rightAnchor, constant: -8).isActive = true
     }
     
     private func settingCollectionViewAutoLayout(){
         paymentCollectionView.translatesAutoresizingMaskIntoConstraints = false
         paymentCollectionView.topAnchor.constraint(equalTo: dateTextField.bottomAnchor,constant: 10).isActive = true
-        paymentCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        paymentCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        paymentCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        paymentCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         let numberOfItems = inputViewModel.categoryList.count
         let itemHeight: CGFloat = 38.0
         let space: CGFloat = 5
@@ -261,8 +271,8 @@ class InputViewController:UIViewController{
         paymentCollectionView.heightAnchor.constraint(equalToConstant: paymentCollectionHeight).isActive = true
         incomeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         incomeCollectionView.topAnchor.constraint(equalTo: paymentCollectionView.bottomAnchor,constant: 10).isActive = true
-        incomeCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        incomeCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        incomeCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         let incomeCollectionHeight = CGFloat((returnRows(items: incomeNumberOfItems) * Int(itemHeight)) + Int(returnRows(items: incomeNumberOfItems) - 1) * Int(space))
         incomeCollectionView.heightAnchor.constraint(equalToConstant: incomeCollectionHeight).isActive = true
     }
@@ -608,10 +618,21 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView === paymentCollectionView{
+            if inputViewModel.categoryList.count == 0{
+                paymentNodataLabel.isHidden = false
+            }else{
+                paymentNodataLabel.isHidden = true
+            }
             return inputViewModel.categoryList.count
         }else if collectionView === imageCollectionView{
             return inputViewModel.imageArray.count
         }else if collectionView === incomeCollectionView{
+            if inputViewModel.incomeCategoryList.count == 0{
+                incomeNodataLabel.isHidden = false
+            }else{
+                incomeNodataLabel.isHidden = true
+            }
+            
             return inputViewModel.incomeCategoryList.count
         }
         return 0

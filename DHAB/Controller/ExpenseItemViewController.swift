@@ -48,6 +48,7 @@ class ExpenseItemViewController: UIViewController{
         super.viewDidLoad()
         expenseItemViewModel.setCategoryData()
         expenseItemViewModel.setIncomeCategoryData()
+        expenseItemViewModel.setJournalList()
         expenseItemTableView.delegate = self
         expenseItemTableView.dataSource = self
         incomeTableView.delegate = self
@@ -261,7 +262,7 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                     self.showAlert(title: "カテゴリー名は8文字以内にしてください")
                     return
                 }
-                self.expenseItemViewModel.overwriteCategory(value: text, indexPath: indexPath)
+                self.expenseItemViewModel.overwritePaymentCategory(value: text, indexPath: indexPath)
                 self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.expenseItemViewControllerDelegate?.updateCategory()
                 self.expenseItemViewControllerDelegate?.updatePayment()
@@ -290,7 +291,8 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                     self.showAlert(title: "カテゴリー名は8文字以内にしてください")
                     return
                 }
-                self.expenseItemViewModel.overwriteCategory(value: text, indexPath: indexPath)
+                self.expenseItemViewModel.overwriteIncomeCategory(value: text, indexPath: indexPath)
+                self.categoryViewControllerDelegate?.updateHouseholdAccountBook()
                 self.categoryViewControllerDelegate?.updateIncome()
                 self.expenseItemViewControllerDelegate?.updateCategory()
                 self.incomeTableView.reloadData()
@@ -316,26 +318,16 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
                 let targetJournal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == true}) //消すべきジャーナル一覧
                 let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == true}) //消すべき予算一覧
                 
-                //このビューでのデータ配列の削除、テーブルビューセルの削除
-                print("ここから開始")
                 self.expenseItemViewModel.categoryList.remove(at: indexPath.row)
                 self.expenseItemTableView.deleteRows(at: [indexPath], with: .automatic)
-                
-                print("expenseitemviewの削除が完了")
-                //ここで家計簿画面の配列とテーブルビューから消す必要がある。
-                self.deleteCategoryDelegateForHouseholdAccountBook!.deleteTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)//データを持ってく&削除
-                print("家計簿画面の削除が完了")
-                
+                self.deleteCategoryDelegateForHouseholdAccountBook!.deleteTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
                 self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)//ここで消している
-                print("realmのデータ削除完了")
-                
-                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()//家計簿画面のデータ再セット
-                print("remakeviewControllerを実施")
+                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
                 self.expenseItemViewModel.setCategoryData()
-                print("setCategoryDataの実施")
                 self.expenseItemTableView.reloadData()
                 self.deleteCategoryDelegateForTabBar?.remakeUIView()
                 self.deleteCategoryDelegateForHouseholdAccountBook?.remakeUIView()
+                RecognitionChange.shared.updateCalendar = true
             })
             
             let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
@@ -348,21 +340,33 @@ extension ExpenseItemViewController: UITableViewDelegate,UITableViewDataSource{
             
             
         }else if tableView === incomeTableView{
-            let realm = try! Realm()
-            let targetItem = expenseItemViewModel.incomeCategoryList[indexPath.row]
-            let targetJournal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == false}) //消すべきジャーナル一覧
-            let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == false}) //消すべき予算一覧
-            expenseItemViewModel.incomeCategoryList.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            let alert = UIAlertController(title: "関連する支出・収入・予算の履歴が\n全て削除されます。\nよろしいでしょうか", message: nil, preferredStyle: .alert)
             
-            self.deleteCategoryDelegateForHouseholdAccountBook!.deleteTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
+            let warning = UIAlertAction(title:"理解した上で削除する",style: .default, handler:{ [self](action) -> Void in
+                let realm = try! Realm()
+                let targetItem = expenseItemViewModel.incomeCategoryList[indexPath.row]
+                let targetJournal = Array(realm.objects(Journal.self).filter{$0.category == targetItem.name}.filter{$0.isPayment == false}) //消すべきジャーナル一覧
+                let targetBudget = Array(realm.objects(Budget.self).filter{$0.expenseID == targetItem.id}.filter{$0.isPayment == false}) //消すべき予算一覧
+                expenseItemViewModel.incomeCategoryList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                
+                self.deleteCategoryDelegateForHouseholdAccountBook!.deleteTargetItem(data: targetItem, index: indexPath,journal:targetJournal,budget: targetBudget)
+                
+                self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)
+                self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
+                self.expenseItemViewModel.setIncomeCategoryData()
+                tableView.reloadData()
+                categoryViewControllerDelegate?.updateIncome()
+                self.deleteCategoryDelegateForTabBar?.remakeViewController()
+                RecognitionChange.shared.updateCalendar = true
+            })
+            let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                return
+            })
             
-            self.expenseItemViewModel.deleteCategory(targetItem: targetItem, targetJournal: targetJournal, targetBudget: targetBudget)
-            self.deleteCategoryDelegateForHouseholdAccountBook?.remakeViewController()
-            self.expenseItemViewModel.setIncomeCategoryData()
-            tableView.reloadData()
-            categoryViewControllerDelegate?.updateIncome()
-            self.deleteCategoryDelegateForTabBar?.remakeViewController()
+            alert.addAction(cancel)
+            alert.addAction(warning)
+            self.present(alert,animated:true, completion: nil)
             
         }
     }

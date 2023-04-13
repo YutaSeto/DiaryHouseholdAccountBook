@@ -71,8 +71,10 @@
                         <outlet property="householdAccountBookView" destination="nU6-bC-CYB" id="flk-oI-nA4"/>
                         <outlet property="imageCollectionView" destination="tga-kJ-rCq" id="gR9-K1-jya"/>
                         <outlet property="incomeCollectionView" destination="H5p-6n-LAP" id="jfM-kU-aTL"/>
+                        <outlet property="incomeNodataLabel" destination="mik-mc-4LZ" id="GqG-CL-Yf7"/>
                         <outlet property="memoTextField" destination="V8v-jx-J9b" id="bPb-4z-ERK"/>
                         <outlet property="paymentCollectionView" destination="bRy-IY-AL9" id="J6Y-VM-sgz"/>
+                        <outlet property="paymentNodataLabel" destination="3g6-YQ-0CU" id="nQ3-6I-uNI"/>
                         <outlet property="priceTextField" destination="E78-I1-bxO" id="aTu-Sl-tug"/>
                         <outlet property="segmentedControlHeight" destination="sA3-us-Fmj" id="yZU-v0-klj"/>
                         <outlet property="titleTextField" destination="TTs-lB-pbb" id="ZRu-KE-VRD"/>
@@ -107,6 +109,13 @@
                             </collectionViewFlowLayout>
                             <cells/>
                         </collectionView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="家計簿画面から支出カテゴリーを設定してください" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3g6-YQ-0CU">
+                            <rect key="frame" x="63" y="50" width="305" height="41"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" systemColor="systemGray2Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WMF-zU-FFi">
                             <rect key="frame" x="20" y="382" width="348" height="34.333333333333371"/>
                             <subviews>
@@ -214,9 +223,16 @@
                                 <action selector="oneWeekPassButton:" destination="4SW-au-oaO" eventType="touchUpInside" id="rZf-lH-aR4"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="家計簿画面から収入カテゴリーを設定してください" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mik-mc-4LZ">
+                            <rect key="frame" x="41.666666666666657" y="173" width="305" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" systemColor="systemGray2Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="8x6-Vu-sdN"/>
                     <constraints>
+                        <constraint firstItem="mik-mc-4LZ" firstAttribute="centerX" secondItem="nU6-bC-CYB" secondAttribute="centerX" id="0BE-W4-HcS"/>
                         <constraint firstItem="H5p-6n-LAP" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="0Tv-7Y-tMb"/>
                         <constraint firstItem="uHA-xD-drh" firstAttribute="leading" secondItem="nU6-bC-CYB" secondAttribute="leading" constant="30" id="3BI-pd-xcv"/>
                         <constraint firstItem="7Re-CN-JLV" firstAttribute="centerX" secondItem="nU6-bC-CYB" secondAttribute="centerX" id="3v0-Cl-bO8"/>
@@ -225,20 +241,20 @@
                         <constraint firstItem="KUh-7d-STc" firstAttribute="leading" secondItem="uHA-xD-drh" secondAttribute="trailing" constant="15" id="FOw-Se-bbv"/>
                         <constraint firstItem="V8v-jx-J9b" firstAttribute="leading" secondItem="E78-I1-bxO" secondAttribute="leading" id="Fm7-Aw-ydq"/>
                         <constraint firstItem="V8v-jx-J9b" firstAttribute="top" secondItem="E78-I1-bxO" secondAttribute="bottom" constant="10" id="GwE-VF-6Km"/>
-                        <constraint firstItem="H5p-6n-LAP" firstAttribute="leading" secondItem="bRy-IY-AL9" secondAttribute="leading" id="HtJ-QO-Mqh"/>
+                        <constraint firstItem="E78-I1-bxO" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="IlT-R6-DMW"/>
+                        <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="V8v-jx-J9b" secondAttribute="trailing" constant="20" id="JHw-7r-Mud"/>
                         <constraint firstItem="7Re-CN-JLV" firstAttribute="top" secondItem="nU6-bC-CYB" secondAttribute="top" constant="10" id="JX2-sR-YFh"/>
                         <constraint firstItem="KUh-7d-STc" firstAttribute="centerY" secondItem="uHA-xD-drh" secondAttribute="centerY" id="Llo-WQ-PEb"/>
                         <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" constant="20" id="Mru-rG-S8h"/>
-                        <constraint firstItem="E78-I1-bxO" firstAttribute="leading" secondItem="bRy-IY-AL9" secondAttribute="leading" id="WRJ-sR-dHU"/>
                         <constraint firstItem="aAZ-jb-j6c" firstAttribute="centerY" secondItem="uHA-xD-drh" secondAttribute="centerY" id="Wsa-tn-r36"/>
                         <constraint firstItem="E78-I1-bxO" firstAttribute="top" secondItem="H5p-6n-LAP" secondAttribute="bottom" constant="10" id="XHc-Ou-JI6"/>
                         <constraint firstAttribute="trailing" secondItem="CAL-6d-owZ" secondAttribute="trailing" constant="30" id="Zd7-47-Gaq"/>
                         <constraint firstItem="WMF-zU-FFi" firstAttribute="leading" secondItem="E78-I1-bxO" secondAttribute="leading" id="aR5-pm-6M0"/>
                         <constraint firstItem="H5p-6n-LAP" firstAttribute="top" secondItem="bRy-IY-AL9" secondAttribute="bottom" constant="10" id="cTu-oE-mVz"/>
                         <constraint firstItem="WMF-zU-FFi" firstAttribute="trailing" secondItem="E78-I1-bxO" secondAttribute="trailing" id="eIk-U1-HWV"/>
+                        <constraint firstItem="V8v-jx-J9b" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="hje-Rh-cWa"/>
                         <constraint firstItem="CAL-6d-owZ" firstAttribute="leading" secondItem="aAZ-jb-j6c" secondAttribute="trailing" constant="15" id="jaU-Gj-iaS"/>
                         <constraint firstItem="8x6-Vu-sdN" firstAttribute="trailing" secondItem="E78-I1-bxO" secondAttribute="trailing" constant="20" id="l26-Wx-ZYZ"/>
-                        <constraint firstItem="H5p-6n-LAP" firstAttribute="trailing" secondItem="bRy-IY-AL9" secondAttribute="trailing" id="opl-9E-IaH"/>
                         <constraint firstItem="bRy-IY-AL9" firstAttribute="leading" secondItem="8x6-Vu-sdN" secondAttribute="leading" constant="20" id="uev-ox-F6a"/>
                         <constraint firstItem="7Re-CN-JLV" firstAttribute="centerY" secondItem="uHA-xD-drh" secondAttribute="centerY" id="uqn-Sv-UCI"/>
                         <constraint firstItem="V8v-jx-J9b" firstAttribute="trailing" secondItem="E78-I1-bxO" secondAttribute="trailing" id="vFA-k7-b3q"/>
@@ -446,6 +462,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -34,21 +34,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NMR-Rv-0L7">
-                                <rect key="frame" x="20" y="179" width="353" height="619"/>
+                                <rect key="frame" x="20" y="159" width="353" height="639"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ZbT-AH-T2c">
-                                <rect key="frame" x="0.0" y="103" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="36"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="by8-77-SUy" id="ren-Zr-Xw6"/>
                                 </connections>
                             </searchBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データがありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Q1Y-zy-yLF">
+                                <rect key="frame" x="20" y="159" width="353" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGray2Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ybz-Ja-FBK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="NMR-Rv-0L7" firstAttribute="leading" secondItem="Ybz-Ja-FBK" secondAttribute="leading" constant="20" id="1Nw-m7-9KE"/>
+                            <constraint firstItem="Q1Y-zy-yLF" firstAttribute="top" secondItem="ZbT-AH-T2c" secondAttribute="bottom" constant="20" id="2yZ-6X-Hzh"/>
                             <constraint firstItem="Ybz-Ja-FBK" firstAttribute="trailing" secondItem="NMR-Rv-0L7" secondAttribute="trailing" constant="20" id="Apb-uG-gXY"/>
                             <constraint firstItem="NMR-Rv-0L7" firstAttribute="top" secondItem="ZbT-AH-T2c" secondAttribute="bottom" constant="20" id="LeD-DP-Wsg"/>
                             <constraint firstAttribute="trailing" secondItem="ZbT-AH-T2c" secondAttribute="trailing" id="fm4-FR-HOW"/>
@@ -61,6 +69,7 @@
                     <navigationItem key="navigationItem" id="KZo-7e-p8p"/>
                     <connections>
                         <outlet property="diaryTableView" destination="NMR-Rv-0L7" id="xTT-ek-wbZ"/>
+                        <outlet property="noDataLabel" destination="Q1Y-zy-yLF" id="nEb-Op-mZq"/>
                         <outlet property="searchBar" destination="ZbT-AH-T2c" id="N72-FZ-oYg"/>
                     </connections>
                 </viewController>
@@ -126,18 +135,12 @@
                     </view>
                     <connections>
                         <outlet property="diaryTextView" destination="WGX-NX-VaJ" id="GkO-qg-O6M"/>
+                        <outlet property="diaryTextViewHeight" destination="OtY-ce-fAi" id="o1M-vn-AlW"/>
                         <outlet property="imageCollectionView" destination="WmP-ZI-8nC" id="Mrj-Ad-xPz"/>
                         <outlet property="titleTextView" destination="1dH-d3-raD" id="4Ff-Tt-GAk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2p-hX-e7r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" id="69C-cU-A5e">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <viewLayoutGuide key="safeArea" id="aQy-vE-AL9"/>
-                    <viewLayoutGuide key="contentLayoutGuide" id="SrU-ay-iCz"/>
-                    <viewLayoutGuide key="frameLayoutGuide" id="tJT-kq-pOo"/>
-                </scrollView>
             </objects>
             <point key="canvasLocation" x="1177.8625954198474" y="350.7042253521127"/>
         </scene>
@@ -148,6 +151,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

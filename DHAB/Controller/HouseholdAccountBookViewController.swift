@@ -79,9 +79,8 @@ class HouseholdAccountBookViewController:UIViewController{
         resultSumTableView.reloadData()
         
         setChartView()
-        chartView.data = householdAccountBookViewModel.setData()
         setIncomePieGraphView()
-        incomePieGraphView.data = householdAccountBookViewModel.setIncomePieGraphData()
+        setPaymentPieGraphView()
         setNavigationBarButton()
         
         if householdAccountBookViewModel.setSumPayment() == 0{
@@ -395,8 +394,8 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentPieGraphView.legend.enabled = false
         paymentPieGraphView.drawHoleEnabled = false
         paymentPieGraphView.rotationEnabled = false
-        paymentPieGraphView.noDataTextColor = .black
         paymentPieGraphView.sliceTextDrawingThreshold = paymentPieGraphView.sliceTextDrawingThreshold == 0.0 ? 30.0 : 0.0
+        paymentPieGraphView.noDataText = "データがありません"
     }
     
     private func updatePaymentPieGraph(){
@@ -415,8 +414,8 @@ class HouseholdAccountBookViewController:UIViewController{
         incomePieGraphView.legend.enabled = false
         incomePieGraphView.drawHoleEnabled = false
         incomePieGraphView.rotationEnabled = false
-        incomePieGraphView.noDataTextColor = .black
-        paymentPieGraphView.sliceTextDrawingThreshold = paymentPieGraphView.sliceTextDrawingThreshold == 0.0 ? 25.0 : 0.0
+        incomePieGraphView.sliceTextDrawingThreshold = incomePieGraphView.sliceTextDrawingThreshold == 0.0 ? 25.0 : 0.0
+        incomePieGraphView.noDataText = "データがありません"
     }
     
     private func updateIncomePieGraph(){
@@ -527,6 +526,7 @@ class HouseholdAccountBookViewController:UIViewController{
         chartView.legend.enabled = false
         chartView.xAxis.granularityEnabled = true
         chartView.xAxis.granularity = 1.0
+        chartView.noDataText = "データがありません"
     }
     
     private func updateChartView(){

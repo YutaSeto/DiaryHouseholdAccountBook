@@ -24,6 +24,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var diaryTableView: UITableView!
+    @IBOutlet weak var noDataLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,6 +153,12 @@ extension DiaryViewController:InputViewControllerDelegate{
 extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
+        if sortedKeys.count == 0{
+            noDataLabel.isHidden = false
+        }else{
+            noDataLabel.isHidden = true
+        }
+        
         return sortedKeys.count
     }
     
