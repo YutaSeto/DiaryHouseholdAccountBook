@@ -67,6 +67,7 @@
                         <outlet property="dateTextField" destination="7Re-CN-JLV" id="uW2-mH-ufm"/>
                         <outlet property="diaryDateTextField" destination="4nk-ou-JqQ" id="9Pa-1u-B7A"/>
                         <outlet property="diaryInputTextView" destination="7cH-uk-sXu" id="wa7-SX-gVZ"/>
+                        <outlet property="diaryNoDataLabel" destination="NYj-dz-OLN" id="Tpd-Ql-7e9"/>
                         <outlet property="diaryView" destination="rad-1v-mEU" id="qOC-Q4-tBb"/>
                         <outlet property="householdAccountBookView" destination="nU6-bC-CYB" id="flk-oI-nA4"/>
                         <outlet property="imageCollectionView" destination="tga-kJ-rCq" id="gR9-K1-jya"/>
@@ -301,7 +302,7 @@
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TTs-lB-pbb">
                             <rect key="frame" x="25" y="54" width="303" height="34"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
                                 <action selector="titleTextFieldActionDiaryButtonInactive:" destination="4SW-au-oaO" eventType="editingChanged" id="ra2-PO-2Mz"/>
@@ -339,7 +340,7 @@
                                 <constraint firstAttribute="height" constant="200" id="EAd-fw-p62"/>
                             </constraints>
                             <color key="textColor" systemColor="labelColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="文字数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mzb-Jv-Mhi">
@@ -384,6 +385,13 @@
                                 <action selector="diaryDayPassButton:" destination="4SW-au-oaO" eventType="touchUpInside" id="zCV-B7-Cbl"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="日記を記入してください" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NYj-dz-OLN">
+                            <rect key="frame" x="30" y="114" width="180" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <color key="textColor" systemColor="systemGray2Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="jWS-pe-qe5"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -427,11 +435,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iLD-Yo-b2y">
-                                <rect key="frame" x="0.0" y="321.33333333333331" width="393" height="209.33333333333331"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="iLD-Yo-b2y" secondAttribute="height" multiplier="15:8" id="slt-nL-LZI"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iLD-Yo-b2y">
+                                <rect key="frame" x="0.0" y="59" width="393" height="734"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="UFj-rb-gR7"/>

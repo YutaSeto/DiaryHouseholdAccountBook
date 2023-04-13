@@ -59,6 +59,8 @@ class InputViewController:UIViewController{
     @IBOutlet weak var memoTextField: UITextField!
     @IBOutlet weak var paymentNodataLabel: UILabel!
     @IBOutlet weak var incomeNodataLabel: UILabel!
+    @IBOutlet weak var diaryNoDataLabel: UILabel!
+    
     
     var toolbar: UIToolbar{
         let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
@@ -240,6 +242,11 @@ class InputViewController:UIViewController{
         incomeNodataLabel.translatesAutoresizingMaskIntoConstraints = false
         incomeNodataLabel.topAnchor.constraint(equalTo: incomeCollectionView.topAnchor,constant: 10).isActive = true
         incomeNodataLabel.rightAnchor.constraint(equalTo: incomeCollectionView.rightAnchor, constant: -8).isActive = true
+        
+        diaryNoDataLabel.translatesAutoresizingMaskIntoConstraints = false
+        diaryNoDataLabel.topAnchor.constraint(equalTo: diaryInputTextView.topAnchor,constant: 7).isActive = true
+        diaryNoDataLabel.leftAnchor.constraint(equalTo: diaryInputTextView.leftAnchor, constant: 13).isActive = true
+        
     }
     
     private func settingCollectionViewAutoLayout(){
@@ -589,6 +596,7 @@ class InputViewController:UIViewController{
         }else{
             countLabel.textColor = .systemGray2
         }
+        
     }
     
     
@@ -781,6 +789,12 @@ extension InputViewController:UITextViewDelegate{
             addDiaryButton.isEnabled = true
         }else{
             addDiaryButton.isEnabled = false
+        }
+        
+        if diaryInputTextView.text.count == 0{
+            diaryNoDataLabel.isHidden = false
+        }else{
+            diaryNoDataLabel.isHidden = true
         }
     }
 }

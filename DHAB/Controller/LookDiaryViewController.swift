@@ -19,7 +19,10 @@ class LookDiaryViewController:UIViewController{
     @IBOutlet weak var titleTextView: UITextView!
     @IBOutlet weak var diaryTextView: UITextView!
     @IBOutlet weak var imageCollectionView: UICollectionView!
-    
+    @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet weak var innerView: UIView!
+    @IBOutlet weak var innerViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var imageCollectionViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,10 +38,23 @@ class LookDiaryViewController:UIViewController{
         setNavigationBarTitle()
         configureTextView()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        imageCollectionViewHeight.constant = 0
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+    }
+    
+    func settingScrollView(){
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     func configureTextView(){
@@ -46,7 +62,9 @@ class LookDiaryViewController:UIViewController{
         diaryTextView.text! = lookDiaryViewModel.diary!.text
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
         let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
+        let collectionViewHeight = imageCollectionView.sizeThatFits(CGSize(width:imageCollectionView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
         diaryTextViewHeight.constant = height
+        imageCollectionView.fs_height = collectionViewHeight
     }
     
     func configureTextFont(){
@@ -112,6 +130,7 @@ extension LookDiaryViewController:UICollectionViewDelegate,UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         let image = UIImage(data: lookDiaryViewModel.pictureList[indexPath.row])
         let imageSize = image?.size
         let width:CGFloat = imageSize!.width
@@ -119,11 +138,19 @@ extension LookDiaryViewController:UICollectionViewDelegate,UICollectionViewDataS
         let cellWidth = collectionView.bounds.width
         let aspect = cellWidth / width
         let cellHeight = height * aspect
+        
+        imageCollectionViewHeight.constant += cellHeight
         return CGSize(width: cellWidth, height: cellHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        return
     }
+    
+    func  collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
 }
 
 
@@ -142,6 +169,7 @@ extension LookDiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
         
         let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
         diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        imageCollectionViewHeight.constant = 0
         imageCollectionView.reloadData()
     }
 }
@@ -151,6 +179,7 @@ extension LookDiaryViewController:UpdateDiaryByCalendarViewDelegate{
         lookDiaryViewModel.pictureList = Array(lookDiaryViewModel.diary!.pictureList)
         let height = diaryTextView.sizeThatFits(CGSize(width: diaryTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
         diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        imageCollectionViewHeight.constant = 0
         imageCollectionView.reloadData()
     }
 }

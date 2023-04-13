@@ -78,71 +78,105 @@
             <point key="canvasLocation" x="458.77862595419845" y="350.7042253521127"/>
         </scene>
         <!--Look Diary View Controller-->
-        <scene sceneID="2B6-Zy-e8q">
+        <scene sceneID="Hyg-Ts-j1g">
             <objects>
-                <viewController storyboardIdentifier="LookDiaryViewController" id="g8c-fs-PRD" customClass="LookDiaryViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xvm-vK-DZm">
+                <viewController storyboardIdentifier="LookDiaryViewController" id="cik-1s-vgk" customClass="LookDiaryViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Kee-Hv-XRy">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="titleTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="1dH-d3-raD">
-                                <rect key="frame" x="25" y="69" width="343" height="30"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F5Q-H5-zRW">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qz9-fW-G7s">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="424"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="titleTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Qek-gP-juj">
+                                                <rect key="frame" x="25" y="10" width="343" height="30"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="7C4-dR-0x8"/>
+                                                </constraints>
+                                                <color key="textColor" systemColor="labelColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="diaryTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="B6z-5D-XGb">
+                                                <rect key="frame" x="25" y="50" width="343" height="180"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="180" id="zZh-G9-r1h"/>
+                                                </constraints>
+                                                <color key="textColor" systemColor="labelColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3F8-uh-EAD">
+                                                <rect key="frame" x="25" y="240" width="343" height="30"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="JST-2G-pd9"/>
+                                                    <constraint firstAttribute="width" constant="343" id="Zg0-EK-k9w"/>
+                                                </constraints>
+                                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ef9-H3-Z0i">
+                                                    <size key="itemSize" width="128" height="128"/>
+                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                </collectionViewFlowLayout>
+                                                <cells/>
+                                            </collectionView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="3F8-uh-EAD" secondAttribute="trailing" constant="25" id="0th-wE-l7X"/>
+                                            <constraint firstItem="B6z-5D-XGb" firstAttribute="leading" secondItem="Qz9-fW-G7s" secondAttribute="leading" constant="25" id="43s-vR-Mvu"/>
+                                            <constraint firstItem="3F8-uh-EAD" firstAttribute="top" secondItem="B6z-5D-XGb" secondAttribute="bottom" constant="10" id="KCf-DB-J8K"/>
+                                            <constraint firstAttribute="trailing" secondItem="B6z-5D-XGb" secondAttribute="trailing" constant="25" id="KmD-CG-lOe"/>
+                                            <constraint firstAttribute="bottom" secondItem="3F8-uh-EAD" secondAttribute="bottom" constant="10" id="LCG-4m-1yJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="Qek-gP-juj" secondAttribute="trailing" constant="25" id="Lkt-5h-4js"/>
+                                            <constraint firstItem="3F8-uh-EAD" firstAttribute="leading" secondItem="Qz9-fW-G7s" secondAttribute="leading" constant="25" id="LvC-6l-ewe"/>
+                                            <constraint firstItem="Qek-gP-juj" firstAttribute="top" secondItem="Qz9-fW-G7s" secondAttribute="top" constant="10" id="azG-SB-bca"/>
+                                            <constraint firstItem="B6z-5D-XGb" firstAttribute="top" secondItem="Qek-gP-juj" secondAttribute="bottom" constant="10" id="glo-qZ-D3e"/>
+                                            <constraint firstItem="Qek-gP-juj" firstAttribute="leading" secondItem="Qz9-fW-G7s" secondAttribute="leading" constant="25" id="kcM-fp-wAa"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="XbT-iu-30s"/>
+                                    <constraint firstItem="Qz9-fW-G7s" firstAttribute="bottom" secondItem="a3b-rZ-yWP" secondAttribute="bottom" id="EMx-BX-o4C"/>
+                                    <constraint firstItem="Qz9-fW-G7s" firstAttribute="leading" secondItem="a3b-rZ-yWP" secondAttribute="leading" id="Mkd-LS-uAm"/>
+                                    <constraint firstItem="Qz9-fW-G7s" firstAttribute="width" secondItem="a3b-rZ-yWP" secondAttribute="width" id="Pch-sh-V9u"/>
+                                    <constraint firstItem="Qz9-fW-G7s" firstAttribute="top" secondItem="a3b-rZ-yWP" secondAttribute="top" id="n7n-qT-HMD"/>
+                                    <constraint firstItem="Qz9-fW-G7s" firstAttribute="trailing" secondItem="a3b-rZ-yWP" secondAttribute="trailing" id="te2-bV-9kE"/>
+                                    <constraint firstItem="Qz9-fW-G7s" firstAttribute="centerX" secondItem="F5Q-H5-zRW" secondAttribute="centerX" id="uu0-5z-fZl"/>
                                 </constraints>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" text="diaryTextView" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WGX-NX-VaJ">
-                                <rect key="frame" x="25" y="109" width="343" height="30"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="30" id="OtY-ce-fAi"/>
-                                </constraints>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WmP-ZI-8nC">
-                                <rect key="frame" x="25" y="149" width="343" height="669"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9CY-Tp-pPw">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                            </collectionView>
+                                <viewLayoutGuide key="contentLayoutGuide" id="a3b-rZ-yWP"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="mid-VJ-0gL"/>
+                            </scrollView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="yZV-1Y-iFc"/>
+                        <viewLayoutGuide key="safeArea" id="onP-AX-dxN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="1dH-d3-raD" firstAttribute="leading" secondItem="yZV-1Y-iFc" secondAttribute="leading" constant="25" id="4RX-Vh-fyB"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="top" secondItem="1dH-d3-raD" secondAttribute="bottom" constant="10" id="66H-X8-UZ7"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="trailing" secondItem="1dH-d3-raD" secondAttribute="trailing" id="Bnw-6s-CzF"/>
-                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="trailing" secondItem="WGX-NX-VaJ" secondAttribute="trailing" id="E4s-Yr-kDm"/>
-                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="trailing" secondItem="1dH-d3-raD" secondAttribute="trailing" constant="25" id="O3A-Tw-1As"/>
-                            <constraint firstItem="1dH-d3-raD" firstAttribute="top" secondItem="yZV-1Y-iFc" secondAttribute="top" constant="10" id="VI6-6P-0nH"/>
-                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="leading" secondItem="WGX-NX-VaJ" secondAttribute="leading" id="aQa-0K-vGR"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="top" secondItem="1dH-d3-raD" secondAttribute="bottom" constant="10" id="dsL-dU-owm"/>
-                            <constraint firstItem="yZV-1Y-iFc" firstAttribute="bottom" secondItem="WmP-ZI-8nC" secondAttribute="bottom" id="h7n-iO-p4R"/>
-                            <constraint firstItem="WGX-NX-VaJ" firstAttribute="leading" secondItem="1dH-d3-raD" secondAttribute="leading" id="le8-q2-cuZ"/>
-                            <constraint firstItem="WmP-ZI-8nC" firstAttribute="top" secondItem="WGX-NX-VaJ" secondAttribute="bottom" constant="10" id="twI-QC-wq8"/>
+                            <constraint firstItem="F5Q-H5-zRW" firstAttribute="leading" secondItem="onP-AX-dxN" secondAttribute="leading" id="BlV-3B-i6E"/>
+                            <constraint firstItem="F5Q-H5-zRW" firstAttribute="top" secondItem="onP-AX-dxN" secondAttribute="top" id="DbC-Aq-5I7"/>
+                            <constraint firstItem="onP-AX-dxN" firstAttribute="bottom" secondItem="F5Q-H5-zRW" secondAttribute="bottom" id="WFo-tL-pl4"/>
+                            <constraint firstItem="onP-AX-dxN" firstAttribute="trailing" secondItem="F5Q-H5-zRW" secondAttribute="trailing" id="h2e-KN-OQG"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="diaryTextView" destination="WGX-NX-VaJ" id="GkO-qg-O6M"/>
-                        <outlet property="diaryTextViewHeight" destination="OtY-ce-fAi" id="o1M-vn-AlW"/>
-                        <outlet property="imageCollectionView" destination="WmP-ZI-8nC" id="Mrj-Ad-xPz"/>
-                        <outlet property="titleTextView" destination="1dH-d3-raD" id="4Ff-Tt-GAk"/>
+                        <outlet property="diaryTextView" destination="B6z-5D-XGb" id="Sn8-TU-H3k"/>
+                        <outlet property="diaryTextViewHeight" destination="zZh-G9-r1h" id="InW-gr-8Fj"/>
+                        <outlet property="imageCollectionView" destination="3F8-uh-EAD" id="zjn-TX-B4v"/>
+                        <outlet property="imageCollectionViewHeight" destination="JST-2G-pd9" id="Sao-cY-b2p"/>
+                        <outlet property="innerView" destination="Qz9-fW-G7s" id="yoU-yu-QIU"/>
+                        <outlet property="scrollView" destination="F5Q-H5-zRW" id="iaq-mD-AA8"/>
+                        <outlet property="titleTextView" destination="Qek-gP-juj" id="wrt-mh-lIw"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="P2p-hX-e7r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dPJ-Je-oW6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1177.8625954198474" y="350.7042253521127"/>
+            <point key="canvasLocation" x="1185.4961832061069" y="350.7042253521127"/>
         </scene>
     </scenes>
     <resources>

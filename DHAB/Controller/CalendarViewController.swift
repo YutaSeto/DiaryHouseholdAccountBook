@@ -563,7 +563,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         }
         
         if calendar.isDateInToday(date){
-            cell.dayLabel.backgroundColor = .flatPowderBlue()
+            cell.dayLabel.backgroundColor = .flatRed()
             cell.dayLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: cell.dayLabel.backgroundColor!, isFlat: true)
         }else{
             cell.dayLabel.backgroundColor = nil

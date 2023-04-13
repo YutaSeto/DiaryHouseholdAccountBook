@@ -33,10 +33,6 @@ class PictureViewController:UIViewController{
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
-        //ピンチジェスチャーの設定
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchGestureAction(_:)))
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(pinchGesture)
     }
     
     override func viewDidLayoutSubviews() {
@@ -44,16 +40,7 @@ class PictureViewController:UIViewController{
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        imageView.contentMode = .scaleToFill
-    }
-    
-    
-    @objc func pinchGestureAction(_ gesture: UIPinchGestureRecognizer) {
-        if gesture.state == .began || gesture.state == .changed {
-            let scale = gesture.scale
-            imageView.transform = imageView.transform.scaledBy(x: scale, y: scale)
-            gesture.scale = 1.0
-        }
+        imageView.contentMode = .scaleAspectFit
     }
     
     func setNavigationBarBackButton(){
