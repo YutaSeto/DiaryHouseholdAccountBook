@@ -194,5 +194,8 @@ class CalendarViewModel{
         return util.getComma(realm.objects(Journal.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1})
     }
     
+    func setBalanceForCalendarCell(date:Date) -> Int{
+        return realm.objects(Journal.self).filter{$0.isPayment == false}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1} - realm.objects(Journal.self).filter{$0.isPayment == true}.filter{$0.date.zeroclock == date.zeroclock}.map{$0.price}.reduce(0){$0 + $1}
+    }
     
 }

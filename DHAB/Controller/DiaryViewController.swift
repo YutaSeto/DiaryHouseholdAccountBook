@@ -37,6 +37,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         setNavigationBarButton()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         configureSearchBar()
+        configureNoDataLabel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,6 +67,9 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
     
     func configureNoDataLabel(){
         
+        noDataLabel.translatesAutoresizingMaskIntoConstraints = false
+        noDataLabel.topAnchor.constraint(equalTo: diaryTableView.topAnchor,constant: 10).isActive = true
+        noDataLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
     }
     
         
@@ -158,8 +162,10 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         if sortedKeys.count == 0{
+            diaryTableView.isHidden = true
             noDataLabel.isHidden = false
         }else{
+            diaryTableView.isHidden = false
             noDataLabel.isHidden = true
         }
         

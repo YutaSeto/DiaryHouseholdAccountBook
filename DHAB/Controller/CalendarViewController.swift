@@ -37,6 +37,7 @@ class CalendarViewController:UIViewController{
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var noDataLabel: UILabel!
     @IBOutlet weak var diaryNoDataLabel: UILabel!
+    @IBOutlet weak var calendarViewHeight: NSLayoutConstraint!
     
     
     override func viewDidLoad(){
@@ -73,7 +74,6 @@ class CalendarViewController:UIViewController{
             present(navigationController,animated:true)
             inputViewController.inputByStartUpModalDelegate = self
         }
-        print(view.frame.height)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,12 +106,11 @@ class CalendarViewController:UIViewController{
     }
     
     override func viewWillLayoutSubviews() {
-        if view.frame.height < 650{
-            calendarView.heightAnchor.constraint(equalToConstant: 280).isActive = true
-            paymentLabel.font = paymentLabel.font.withSize(15)
-            incomeLabel.font = incomeLabel.font.withSize(15)
-            balanceLabel.font = balanceLabel.font.withSize(15)
-            
+        calendarViewHeight.constant = view.frame.height * 0.4
+        if view.frame.width < 340{
+            paymentLabel.font = UIFont.systemFont(ofSize: 15)
+            incomeLabel.font = UIFont.systemFont(ofSize: 15)
+            balanceLabel.font = UIFont.systemFont(ofSize: 15)
         }
     }
     
@@ -284,15 +283,19 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
         if tableView === householdAccountBookTableView {
             if calendarViewModel.displayJournalList.count == 0{
                 noDataLabel.isHidden = false
+                householdAccountBookTableView.isHidden = true
             }else {
                 noDataLabel.isHidden = true
+                householdAccountBookTableView.isHidden = false
             }
             return calendarViewModel.displayJournalList.count
         }else if tableView === diaryTableView{
             if calendarViewModel.setDiaryTableView().count == 0{
                 diaryNoDataLabel.isHidden = false
+                diaryTableView.isHidden = true
             }else{
                 diaryNoDataLabel.isHidden = true
+                diaryTableView.isHidden = false
             }
             return calendarViewModel.setDiaryTableView().count
         }
@@ -324,8 +327,6 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             cell.cellTextLabel.attributedText = attributedText
             cell.cellTextLabel.sizeToFit()
             cell.cellTitleLabel.text = item.title
-            
-            
             
             if item.pictureList.count != 0{
                 cell.thumbnailImageView.image = UIImage(data: item.pictureList[0])
@@ -514,15 +515,35 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: position) as! FSCalendarCustomCell
         cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
         cell.labelsDate = date
-        cell.paymentLabel.text = calendarViewModel.setSumPaymentForCalendarCell(date: date)
-        cell.incomeLabel.text = calendarViewModel.setSumIncomeForCalendarCell(date: date)
         
-        if view.frame.height < 650{
-            cell.dayLabel.font = cell.dayLabel.font.withSize(9)
-            cell.incomeLabel.font = cell.incomeLabel.font.withSize(9)
-            cell.paymentLabel.font = cell.paymentLabel.font.withSize(9)
+        if calendarViewHeight.constant <= 300{
+            
+            cell.dayLabel.font = UIFont.systemFont(ofSize: 10)
+            cell.paymentLabel.font = UIFont.systemFont(ofSize: 10)
+            cell.paymentLabel.text = util.getComma(calendarViewModel.setBalanceForCalendarCell(date: date))
+            if calendarViewModel.setBalanceForCalendarCell(date: date) < 0{
+                cell.paymentLabel.textColor = .red
+            }else if calendarViewModel.setBalanceForCalendarCell(date: date) == 0{
+                cell.paymentLabel.textColor = .clear
+            }else if calendarViewModel.setBalanceForCalendarCell(date: date) > 0{
+                cell.paymentLabel.textColor = .blue
+            }
+            cell.incomeLabel.textColor = .clear
+            
+        }else{
+            cell.paymentLabel.text = calendarViewModel.setSumPaymentForCalendarCell(date: date)
+            cell.incomeLabel.text = calendarViewModel.setSumIncomeForCalendarCell(date: date)
+            if cell.paymentLabel.text != "0"{
+                cell.paymentLabel.textColor = .red
+            }else{
+                cell.paymentLabel.textColor = .clear
+            }
+            if cell.incomeLabel.text != "0"{
+                cell.incomeLabel.textColor = .blue
+            }else{
+                cell.incomeLabel.textColor = .clear
+            }
         }
-        
         if date.zeroclock == calendarViewModel.selectedDate.zeroclock{
             cell.select()
         }else{
@@ -552,16 +573,8 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: targetMonth!)!.zeroclock
         
         //テキストの色変更
-        if cell.paymentLabel.text != "0"{
-            cell.paymentLabel.textColor = .red
-        }else{
-            cell.paymentLabel.textColor = .clear
-        }
-        if cell.incomeLabel.text != "0"{
-            cell.incomeLabel.textColor = .blue
-        }else{
-            cell.incomeLabel.textColor = .clear
-        }
+        
+        
         
         //日付の色変更+当月外のテキストの色変更
         if holidayArray.contains(date.zeroclock) && date.zeroclock >= startOfMonth && date.zeroclock <= endOfMonth{

@@ -112,6 +112,7 @@ class InputViewController:UIViewController{
         configureAddButton()
         setNavigationBarButton()
         setToolbar()
+        
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         configureTextView()
         setNavigationTitle()

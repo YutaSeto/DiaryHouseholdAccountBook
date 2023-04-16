@@ -237,6 +237,7 @@
                     <connections>
                         <outlet property="balanceLabel" destination="yMe-HO-HHQ" id="0Uw-ce-LaR"/>
                         <outlet property="calendarView" destination="REY-mA-5Sv" id="iTd-Ap-WRt"/>
+                        <outlet property="calendarViewHeight" destination="ruc-tk-UTu" id="BXD-KR-VZH"/>
                         <outlet property="dateLabel" destination="3i0-um-rZR" id="5J8-Zb-zE0"/>
                         <outlet property="diaryNoDataLabel" destination="AvA-Op-6Hq" id="3hc-tJ-x6c"/>
                         <outlet property="diaryTableView" destination="oEJ-FK-ufX" id="HNU-bg-iUZ"/>
@@ -285,7 +286,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="oEJ-FK-ufX">
-                            <rect key="frame" x="0.0" y="59" width="393" height="241"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データがありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AvA-Op-6Hq">
