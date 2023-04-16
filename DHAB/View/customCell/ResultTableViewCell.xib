@@ -43,7 +43,7 @@
                                         <rect key="frame" x="46.999999999999993" y="10" width="66.333333333333314" height="83"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xG4-su-nrf">
-                                                <rect key="frame" x="0.0" y="-62.333333333333336" width="66.333333333333329" height="20.333333333333336"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="66.333333333333329" height="8.0000000000000071"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -56,9 +56,6 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="gej-HC-uVH" firstAttribute="top" secondItem="xG4-su-nrf" secondAttribute="bottom" constant="50" id="WXT-s7-r0z"/>
-                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <constraints>

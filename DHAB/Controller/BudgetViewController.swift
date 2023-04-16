@@ -124,7 +124,7 @@ class BudgetViewController: UIViewController{
     
     func setNavigationBarButton(){
         let buttonActionSelector:Selector = #selector(tapMenuButton)
-        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
         
         let buttonActionSelector2:Selector = #selector(tapBackButton)

@@ -61,7 +61,7 @@ class BudgetConfigureViewController: UIViewController{
     
     func configureNavigationBarButton(){
         let buttonActionSelector:Selector = #selector(tapBackButton)
-        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"arrow.uturn.backward"), style: .plain
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"chevron.left"), style: .plain
                                             ,target: self,action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)

@@ -23,6 +23,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var threeMonthPassButton: UIButton!
     @IBOutlet weak var householdAccountBookSegmentedControl: UISegmentedControl!
     @IBOutlet weak var menuButton: UIBarButtonItem!
+    @IBOutlet weak var graphShowButton: UIButton!
     
     //subView関連
     @IBOutlet var paymentView: UIView!
@@ -52,6 +53,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet weak var resultTableView: UITableView!
     @IBOutlet weak var resultSumTableView: UITableView!
     @IBOutlet weak var resultSumTableViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var chartViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         setNib()
@@ -77,17 +79,25 @@ class HouseholdAccountBookViewController:UIViewController{
         paymentTableView.reloadData()
         resultTableView.reloadData()
         resultSumTableView.reloadData()
+        graphShowButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
+        graphShowButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
         setChartView()
         setIncomePieGraphView()
         setPaymentPieGraphView()
         setNavigationBarButton()
         
-        if householdAccountBookViewModel.setSumPayment() == 0{
-            return
-        }else{
-            setPaymentPieGraphView()
+        incomePieGraphView.isHidden = true
+        paymentPieGraphView.isHidden = true
+        chartView.isHidden = true
+        chartViewHeight.constant = 0
+        
+        if householdAccountBookViewModel.setSumPayment() != 0{
             paymentPieGraphView.data = householdAccountBookViewModel.setPaymentPieGraphData()
+        }
+        
+        if householdAccountBookViewModel.setSumIncome() != 0{
+            incomePieGraphView.data = householdAccountBookViewModel.setIncomePieGraphData()
         }
     }
     
@@ -212,7 +222,6 @@ class HouseholdAccountBookViewController:UIViewController{
         resultSumTableView.dataSource = self
     }
     
-    
     @IBAction func householdAccountBookSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
         case 0:
@@ -229,6 +238,16 @@ class HouseholdAccountBookViewController:UIViewController{
         }
     }
     
+    @IBAction func graphShowButton(_ sender: UIButton) {
+        paymentPieGraphView.isHidden = !paymentPieGraphView.isHidden
+        incomePieGraphView.isHidden = !incomePieGraphView.isHidden
+        chartView.isHidden = !chartView.isHidden
+        if chartView.isHidden{
+            chartViewHeight.constant = 0
+        }else{
+            chartViewHeight.constant = 100
+        }
+    }
     
     @IBAction func dayBackButton(_ sender: UIButton) {
         dayBack()
@@ -363,19 +382,19 @@ class HouseholdAccountBookViewController:UIViewController{
     
     func settingSubView(){
         paymentView.translatesAutoresizingMaskIntoConstraints = false
-        paymentView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        paymentView.topAnchor.constraint(equalTo: graphShowButton.bottomAnchor,constant: 10).isActive = true
         paymentView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         paymentView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         paymentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         incomeView.translatesAutoresizingMaskIntoConstraints = false
-        incomeView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        incomeView.topAnchor.constraint(equalTo: graphShowButton.bottomAnchor,constant: 10).isActive = true
         incomeView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         incomeView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         incomeView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         savingView.translatesAutoresizingMaskIntoConstraints = false
-        savingView.topAnchor.constraint(equalTo: householdAccountBookSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        savingView.topAnchor.constraint(equalTo: graphShowButton.bottomAnchor,constant: 10).isActive = true
         savingView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         savingView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         savingView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -414,7 +433,7 @@ class HouseholdAccountBookViewController:UIViewController{
         incomePieGraphView.legend.enabled = false
         incomePieGraphView.drawHoleEnabled = false
         incomePieGraphView.rotationEnabled = false
-        incomePieGraphView.sliceTextDrawingThreshold = incomePieGraphView.sliceTextDrawingThreshold == 0.0 ? 25.0 : 0.0
+        incomePieGraphView.sliceTextDrawingThreshold = incomePieGraphView.sliceTextDrawingThreshold == 0.0 ? 30.0 : 0.0
         incomePieGraphView.noDataText = "データがありません"
     }
     
@@ -432,7 +451,7 @@ class HouseholdAccountBookViewController:UIViewController{
     //slidemenu関連
     func setNavigationBarButton(){
         let buttonActionSelector: Selector = #selector(showMenuButton)
-        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: buttonActionSelector)
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.title = "家計簿"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
@@ -708,9 +727,9 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
         }else if tableView === sumIncomeTableView{
             let cell = sumIncomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
-            cell.budgetLabel.text = String(householdAccountBookViewModel.sumIncomeBudget())
-            cell.priceLabel.text = String(householdAccountBookViewModel.setSumIncome())
-            cell.balanceLabel.text = String(householdAccountBookViewModel.sumIncomeBudget() - householdAccountBookViewModel.setSumIncome())
+            cell.budgetLabel.text = util.getComma(householdAccountBookViewModel.sumIncomeBudget())
+            cell.priceLabel.text = util.getComma(householdAccountBookViewModel.setSumIncome())
+            cell.balanceLabel.text = util.getComma(householdAccountBookViewModel.sumIncomeBudget() - householdAccountBookViewModel.setSumIncome())
             guard householdAccountBookViewModel.sumIncomeBudget() != 0 else {
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
@@ -737,17 +756,17 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             let cell = resultTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "\(String(indexPath.row + 1))月"
-            cell.paymentLabel.text = String(Int(householdAccountBookViewModel.sumPaymentList[indexPath.row]))
-            cell.incomeLabel.text = String(Int(householdAccountBookViewModel.sumIncomeList[indexPath.row]))
-            cell.resultLabel.text = String(Int(householdAccountBookViewModel.sumIncomeList[indexPath.row] - householdAccountBookViewModel.sumPaymentList[indexPath.row]))
+            cell.paymentLabel.text = util.getComma(Int(householdAccountBookViewModel.sumPaymentList[indexPath.row]))
+            cell.incomeLabel.text = util.getComma(Int(householdAccountBookViewModel.sumIncomeList[indexPath.row]))
+            cell.resultLabel.text = util.getComma(Int(householdAccountBookViewModel.sumIncomeList[indexPath.row] - householdAccountBookViewModel.sumPaymentList[indexPath.row]))
             return cell
         }else if tableView === resultSumTableView{
             let cell = resultSumTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! ResultTableViewCell
             cell.selectionStyle = .none
             cell.dateLabel.text = "累計"
-            cell.paymentLabel.text = String(householdAccountBookViewModel.sumYearPayment)
-            cell.incomeLabel.text = String(householdAccountBookViewModel.sumYearIncome)
-            cell.resultLabel.text = String(householdAccountBookViewModel.sumYearIncome - householdAccountBookViewModel.sumYearPayment)
+            cell.paymentLabel.text = util.getComma(householdAccountBookViewModel.sumYearPayment)
+            cell.incomeLabel.text = util.getComma(householdAccountBookViewModel.sumYearIncome)
+            cell.resultLabel.text = util.getComma(householdAccountBookViewModel.sumYearIncome - householdAccountBookViewModel.sumYearPayment)
             return cell
         }
         return UITableViewCell()

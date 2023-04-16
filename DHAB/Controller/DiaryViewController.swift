@@ -64,6 +64,10 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         searchBar.keyboardType = .asciiCapable
     }
     
+    func configureNoDataLabel(){
+        
+    }
+    
         
     func setNavigationBarButton(){
         navigationItem.title = "日記"
@@ -213,6 +217,7 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         self.navigationController?.pushViewController(lookDiaryViewController, animated: true)
         lookDiaryViewController.lookDiaryViewModel.diary = diary
         lookDiaryViewController.forDiaryViewUpdateDiaryByLookDiaryViewDelegate = self
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

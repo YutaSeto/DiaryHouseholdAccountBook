@@ -24,17 +24,8 @@ class FSCalendarCustomCell: FSCalendarCell {
         // Initialization code
         self.layer.borderWidth = 1.0
         self.layer.borderColor = UIColor.lightGray.cgColor
-        
-        paymentLabel.translatesAutoresizingMaskIntoConstraints = false
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let labelWidth = paymentLabel.frame.width
-        _ = min(labelWidth / 100.0,0.9)
-    }
-        
+            
     func select(){
         _isSelected = true
         self.layer.borderColor = UIColor.flatPowderBlueColorDark().cgColor

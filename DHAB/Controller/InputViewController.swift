@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import RealmSwift
 import DKImagePickerController
+import ChameleonFramework
 
 protocol InputViewControllerDelegate{
     func updatePayment()
@@ -113,13 +114,17 @@ class InputViewController:UIViewController{
         if inputViewModel.journal == nil{
             addButton.setTitle("追加する",for: .normal)
         }else{
-            addButton.setTitle("編集する", for: .normal)
+            addButton.setTitle("修正する", for: .normal)
         }
         
         if inputViewModel.diary == nil{
             addDiaryButton.setTitle("追加する", for: .normal)
         }else{
-            addDiaryButton.setTitle("編集する", for: .normal)
+            addDiaryButton.setTitle("修正する", for: .normal)
+        }
+        
+        if inputViewModel.diary != nil{
+            diaryNoDataLabel.isHidden = true
         }
         
     }

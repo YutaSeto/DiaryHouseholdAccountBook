@@ -73,6 +73,7 @@ class CalendarViewController:UIViewController{
             present(navigationController,animated:true)
             inputViewController.inputByStartUpModalDelegate = self
         }
+        print(view.frame.height)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,6 +102,16 @@ class CalendarViewController:UIViewController{
             calendarViewModel.setDiaryData()
             diaryTableView.reloadData()
             RecognitionChange.shared.deleteDiaryByDiary = false
+        }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        if view.frame.height < 650{
+            calendarView.heightAnchor.constraint(equalToConstant: 280).isActive = true
+            paymentLabel.font = paymentLabel.font.withSize(15)
+            incomeLabel.font = incomeLabel.font.withSize(15)
+            balanceLabel.font = balanceLabel.font.withSize(15)
+            
         }
     }
     
@@ -499,6 +510,12 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         cell.labelsDate = date
         cell.paymentLabel.text = calendarViewModel.setSumPaymentForCalendarCell(date: date)
         cell.incomeLabel.text = calendarViewModel.setSumIncomeForCalendarCell(date: date)
+        
+        if view.frame.height < 650{
+            cell.dayLabel.font = cell.dayLabel.font.withSize(9)
+            cell.incomeLabel.font = cell.incomeLabel.font.withSize(9)
+            cell.paymentLabel.font = cell.paymentLabel.font.withSize(9)
+        }
         
         if date.zeroclock == calendarViewModel.selectedDate.zeroclock{
             cell.select()
