@@ -184,6 +184,9 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        
         let cell = diaryTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! DiaryTableViewCell
         let sortedKeys = diaryViewModel.diaryByMonth.keys.sorted(by: {$0 > $1})
         let month = sortedKeys[indexPath.section]
@@ -193,6 +196,9 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         paragraphStyle.lineBreakMode = .byTruncatingTail
         let attributedText = NSAttributedString(string:diary!.text,attributes:[.font:cell.cellTextLabel.font!,.paragraphStyle: paragraphStyle])
         
+        if view.frame.height < 650{
+            cell.cellTextLabel.numberOfLines = 3
+        }
         
         cell.cellDateLabel.text = util.onliDayDateFormatter.string(from:diary!.date)
         cell.dayOfWeekLabel.text = util.dayOfWeekDateFormatter.string(from: diary!.date)
@@ -240,7 +246,11 @@ extension DiaryViewController:UITableViewDelegate,UITableViewDataSource{
         //カレンダービューの日記の更新をする必要あり
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        if view.frame.height < 650 {
+            return 90
+        }else{
+            return 120
+        }
     }
 }
 

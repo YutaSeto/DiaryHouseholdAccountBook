@@ -41,6 +41,8 @@ class InputViewController:UIViewController{
     
     //subView関連
     @IBOutlet var householdAccountBookView: UIView!
+    @IBOutlet var householdAccountBookScrollView: UIScrollView!
+    
     @IBOutlet var diaryView: UIView!
     @IBOutlet weak var viewChangeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var segmentedControlHeight: NSLayoutConstraint!
@@ -90,6 +92,8 @@ class InputViewController:UIViewController{
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
         diaryInputTextView.delegate = self
+        priceTextField.delegate = self
+        memoTextField.delegate = self
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         let collectionViewNib = UINib(nibName: "InputCollectionViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
@@ -110,7 +114,8 @@ class InputViewController:UIViewController{
         setToolbar()
         setStatusBarBackgroundColor(.flatPowderBlueColorDark())
         configureTextView()
-        setNavigationTitle()        
+        setNavigationTitle()
+        print(householdAccountBookView.frame.height)
         if inputViewModel.journal == nil{
             addButton.setTitle("追加する",for: .normal)
         }else{
@@ -140,8 +145,6 @@ class InputViewController:UIViewController{
         if inputViewModel.diary != nil || inputViewModel.journal != nil || inputViewControllerDelegate != nil{
             vanishSegmentedControl()
         }
-        
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -213,32 +216,47 @@ class InputViewController:UIViewController{
     }
     
     func addSubView(){
-        view.addSubview(householdAccountBookView)
+        view.addSubview(householdAccountBookScrollView)
         view.addSubview(diaryView)
     }
     
     private func addHouseholdAccountView(){
         diaryView.isHidden = true
-        householdAccountBookView.isHidden = false
+        householdAccountBookScrollView.isHidden = false
     }
     
     func addDiaryView(){
-        householdAccountBookView.isHidden = true
+        householdAccountBookScrollView.isHidden = true
         diaryView.isHidden = false
     }
     
     private func settingSubView(){
+        householdAccountBookScrollView.isScrollEnabled = false
+        householdAccountBookScrollView.translatesAutoresizingMaskIntoConstraints = false
+        householdAccountBookScrollView.topAnchor.constraint(equalTo: viewChangeSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        householdAccountBookScrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        householdAccountBookScrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        householdAccountBookScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
         householdAccountBookView.translatesAutoresizingMaskIntoConstraints = false
-        householdAccountBookView.topAnchor.constraint(equalTo: viewChangeSegmentedControl.bottomAnchor,constant: 10).isActive = true
+        householdAccountBookView.topAnchor.constraint(equalTo: householdAccountBookScrollView.topAnchor).isActive = true
         householdAccountBookView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         householdAccountBookView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        householdAccountBookView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        householdAccountBookView.heightAnchor.constraint(equalToConstant: 1200).isActive = true
         
         diaryView.translatesAutoresizingMaskIntoConstraints = false
         diaryView.topAnchor.constraint(equalTo: viewChangeSegmentedControl.bottomAnchor,constant: 10).isActive = true
         diaryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         diaryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         diaryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        if view.frame.height < 650{
+            diaryInputTextView.translatesAutoresizingMaskIntoConstraints = false
+            diaryInputTextView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor,constant: 10).isActive = true
+            diaryInputTextView.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 25).isActive = true
+            diaryInputTextView.rightAnchor.constraint(equalTo: view.rightAnchor,constant: -25).isActive = true
+            diaryInputTextView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        }
         
         paymentNodataLabel.translatesAutoresizingMaskIntoConstraints = false
         paymentNodataLabel.topAnchor.constraint(equalTo: paymentCollectionView.topAnchor,constant: 10).isActive = true
@@ -332,10 +350,18 @@ class InputViewController:UIViewController{
         }
         inputByStartUpModalDelegate?.updateJournal()
         inputViewModel.journal = nil
+        
+        if view.frame.height < 650{
+            view.endEditing(true)
+            householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
+            
+        }
+        
     }
     
     @objc func didTapFinishButton(){
         view.endEditing(true)
+        householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
     }
     
     func configureDateTextField(){
@@ -812,5 +838,23 @@ extension InputViewController:PictureViewControllerDelegate{
     func deletePicuture() {
         inputViewModel.imageArray.remove(at: inputViewModel.selectedIndex!)
         imageCollectionView.reloadData()
+    }
+}
+
+extension InputViewController:UITextFieldDelegate{
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if view.frame.height < 650{
+            householdAccountBookScrollView.isScrollEnabled = true
+            if textField === priceTextField || textField === memoTextField{
+                let scrollPoint = CGPoint(x:0, y: memoTextField.frame.origin.y - 50)
+                householdAccountBookScrollView.setContentOffset(scrollPoint, animated: true)
+            }
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if view.frame.height < 650{
+            householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
+        }
     }
 }

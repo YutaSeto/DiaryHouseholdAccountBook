@@ -315,6 +315,10 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
             paragraphStyle.lineBreakMode = .byTruncatingTail
             let attributedText = NSAttributedString(string:item.text,attributes:[.font:cell.cellTextLabel.font!,.paragraphStyle: paragraphStyle])
             
+            if view.frame.height < 650 {
+                cell.cellTextLabel.numberOfLines = 3
+            }
+            
             cell.cellDateLabel.text = util.onliDayDateFormatter.string(from: item.date)
             cell.dayOfWeekLabel.text = util.dayOfWeekDateFormatter.string(from: item.date)
             cell.cellTextLabel.attributedText = attributedText
@@ -394,7 +398,9 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView === diaryTableView{
+        if tableView === diaryTableView && view.frame.height < 650{
+            return 90
+        }else if tableView === diaryTableView{
             return 120.0
         }
         return UITableView.automaticDimension
