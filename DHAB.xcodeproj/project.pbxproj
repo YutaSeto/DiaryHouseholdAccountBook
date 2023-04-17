@@ -37,6 +37,8 @@
 		239137F62970FF5500BF09F8 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 239137F42970FF5500BF09F8 /* DiaryTableViewCell.xib */; };
 		23A0B28C29A84CA1000956CF /* RecognitionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A0B28B29A84CA1000956CF /* RecognitionChange.swift */; };
 		23A0B29229AA4522000956CF /* extension + Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A0B29129AA4522000956CF /* extension + Date.swift */; };
+		23AA408B29ECDEA8004E5BBB /* LookJournalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */; };
+		23AA409129ECDF70004E5BBB /* LookJournalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA409029ECDF70004E5BBB /* LookJournalModel.swift */; };
 		23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ACC13F297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift */; };
 		23ACC142297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23ACC140297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib */; };
 		23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ACC1442988AC5500ABA10D /* SliderViewCell.swift */; };
@@ -102,6 +104,8 @@
 		239137F42970FF5500BF09F8 /* DiaryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiaryTableViewCell.xib; sourceTree = "<group>"; };
 		23A0B28B29A84CA1000956CF /* RecognitionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionChange.swift; sourceTree = "<group>"; };
 		23A0B29129AA4522000956CF /* extension + Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension + Date.swift"; sourceTree = "<group>"; };
+		23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookJournalViewController.swift; sourceTree = "<group>"; };
+		23AA409029ECDF70004E5BBB /* LookJournalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookJournalModel.swift; sourceTree = "<group>"; };
 		23ACC13F297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetConfigureTableViewCell.swift; sourceTree = "<group>"; };
 		23ACC140297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BudgetConfigureTableViewCell.xib; sourceTree = "<group>"; };
 		23ACC1442988AC5500ABA10D /* SliderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderViewCell.swift; sourceTree = "<group>"; };
@@ -224,6 +228,7 @@
 				23D4070929DA937C00E92C52 /* ExpenseItemViewModel.swift */,
 				23D4070B29DA939100E92C52 /* PictureViewModel.swift */,
 				23D4070D29DA93AA00E92C52 /* LookDiaryViewModel.swift */,
+				23AA409029ECDF70004E5BBB /* LookJournalModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -256,6 +261,7 @@
 				237AFB6F297506A20060ECD0 /* ExpenseItemViewController.swift */,
 				23CBECC129CD4E3000A5E777 /* PictureViewController.swift */,
 				23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */,
+				23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -431,6 +437,7 @@
 				23D4070C29DA939100E92C52 /* PictureViewModel.swift in Sources */,
 				23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */,
 				237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */,
+				23AA408B29ECDEA8004E5BBB /* LookJournalViewController.swift in Sources */,
 				233E500729C2C55E00F35DB8 /* InputCollectionViewCell.swift in Sources */,
 				EDE9354629BE0FAA006109C7 /* Util.swift in Sources */,
 				23D406FC29DA927F00E92C52 /* TabBarModel.swift in Sources */,
@@ -446,6 +453,7 @@
 				237B860129704A59001E4639 /* InputViewController.swift in Sources */,
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
 				23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */,
+				23AA409129ECDF70004E5BBB /* LookJournalModel.swift in Sources */,
 				23D4070229DA92F600E92C52 /* HouseholdAccountBookViewModel.swift in Sources */,
 				2368D62329DE76D20070A67E /* SelectStartUpModalTableViewCell.swift in Sources */,
 				237B860529704A7E001E4639 /* HouseholdAccountBookViewController.swift in Sources */,

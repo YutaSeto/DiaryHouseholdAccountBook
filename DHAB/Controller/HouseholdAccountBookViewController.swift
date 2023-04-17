@@ -814,16 +814,36 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 returnView0Second()
                 householdAccountBookViewModel.isExpanded = false
             case 2:
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! SelectStartUpModalTableViewCell
                 return
             default:
                 return
             }
             tableView.deselectRow(at: indexPath, animated: true)
-        }else{
-            if householdAccountBookViewModel.isExpanded == true{
-                returnView()
+        }else if tableView === paymentTableView {
+            if householdAccountBookViewModel.paymentTableViewDataSource[indexPath.row].paymentPrice == 0{
+                return
             }
+            let storyboard = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
+            guard let lookJournalViewController = storyboard.instantiateViewController(withIdentifier: "LookJournalViewController") as? LookJournalViewController else{return}
+            self.navigationController?.pushViewController(lookJournalViewController, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
+            //カテゴリーと日付を渡す必要がある。
+            lookJournalViewController.lookJournalModel.date = householdAccountBookViewModel.date
+            lookJournalViewController.lookJournalModel.category = householdAccountBookViewModel.categoryList[indexPath.row]
+        }else if tableView === incomeTableView{
+            if householdAccountBookViewModel.incomeTableViewDataSource[indexPath.row].incomePrice == 0{
+                return
+            }
+            let storyboard = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
+            guard let lookJournalViewController = storyboard.instantiateViewController(withIdentifier: "LookJournalViewController") as? LookJournalViewController else{return}
+            self.navigationController?.pushViewController(lookJournalViewController, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
+            lookJournalViewController.lookJournalModel.date = householdAccountBookViewModel.date
+            lookJournalViewController.lookJournalModel.category = householdAccountBookViewModel.incomeCategoryList[indexPath.row]
+        }
+        
+        if householdAccountBookViewModel.isExpanded == true{
+            returnView()
         }
         return
     }
