@@ -94,6 +94,7 @@ class InputViewController:UIViewController{
         diaryInputTextView.delegate = self
         priceTextField.delegate = self
         memoTextField.delegate = self
+        titleTextField.delegate = self
         let nib = UINib(nibName: "SliderViewCell", bundle: nil)
         let collectionViewNib = UINib(nibName: "InputCollectionViewCell", bundle: nil)
         imageCollectionView.register(nib, forCellWithReuseIdentifier: "SliderViewCell")
@@ -313,8 +314,10 @@ class InputViewController:UIViewController{
         switch sender.selectedSegmentIndex{
         case 0:
             addHouseholdAccountView()
+            view.endEditing(true)
         case 1:
             addDiaryView()
+            view.endEditing(true)
         default:
             return
         }
@@ -857,5 +860,13 @@ extension InputViewController:UITextFieldDelegate{
         if view.frame.height < 650{
             householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === titleTextField{
+            textField.resignFirstResponder()
+            diaryInputTextView.becomeFirstResponder()
+        }
+        return true
     }
 }
