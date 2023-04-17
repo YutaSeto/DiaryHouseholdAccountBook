@@ -31,7 +31,7 @@ class LookJournalModel{
     }
     
     func setGroupedJournals(){
-        groupedJournals = Dictionary(grouping: journalList){ journal in
+        groupedJournals = Dictionary(grouping: journalList.sorted{$0.date > $1.date}){ journal in
             return Calendar.current.startOfDay(for:journal.date.zeroclock)
         }
     }
@@ -43,7 +43,7 @@ class LookJournalModel{
     }
     
     func journalsForSection(_section:Int) -> [Journal]{
-        let sectionDate = Array(groupedJournals.keys)[_section]
-        return groupedJournals[sectionDate] ?? []
+        let sectionDate = Array(groupedJournals.keys.sorted(by: >))[_section]
+        return sortedJournals[sectionDate] ?? []
     }
 }

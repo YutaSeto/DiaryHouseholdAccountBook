@@ -24,17 +24,15 @@ class LookJournalViewController:UIViewController{
         lookJournalModel.setSortedJournals()
         journalTableView.delegate = self
         journalTableView.dataSource = self
-        print(lookJournalModel.date)
-        print(lookJournalModel.category)
-        print(lookJournalModel.journalsForSection(_section: 0))
+        print(lookJournalModel.setGroupedJournals())
     }
 }
 
 extension LookJournalViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        let sectionTitles = lookJournalModel.sortedJournals.keys.sorted{$0 > $1}
-//        let sectionTitle = sectionTitles[section]
-        return lookJournalModel.journalsForSection(_section: section).count
+        let sectionTitles = lookJournalModel.sortedJournals.keys.sorted(by:>)
+        let sectionDate = sectionTitles[section]
+        return lookJournalModel.sortedJournals[sectionDate]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -47,13 +45,12 @@ extension LookJournalViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-//        let sectionTitles = lookJournalModel.sortedJournals.keys.sorted{$0 > $1}
-//        let numberOfSections = sectionTitles.count
         return lookJournalModel.sortedJournals.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let date = Array(lookJournalModel.sortedJournals.keys)[section]
+        let sortedKeys = Array(lookJournalModel.sortedJournals.keys).sorted(by: >)
+        let date = sortedKeys[section]
         return util.dayDateFormatter.string(from: date)
     }
 }
