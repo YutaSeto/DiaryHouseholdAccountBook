@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lv6-bL-vdC">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="JG7-Ov-vso">
+            <objects>
+                <navigationController storyboardIdentifier="NavigationController" id="lv6-bL-vdC" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="WRf-0j-xua">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="8Wb-0Y-vrd"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eYZ-Vb-Osa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-555" y="-2"/>
+        </scene>
+        <!--Notification View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="NotificationViewController" id="Y6W-OH-hqX" customClass="NotificationViewController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Iii-Z3-6wx">
+                                <rect key="frame" x="10" y="113" width="373" height="32"/>
+                                <segments>
+                                    <segment title="通知オン"/>
+                                    <segment title="通知オン"/>
+                                </segments>
+                            </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="vTI-1b-HEh">
+                                <rect key="frame" x="10" y="154" width="373" height="32"/>
+                                <segments>
+                                    <segment title="毎日"/>
+                                    <segment title="毎週"/>
+                                </segments>
+                            </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VE2-yQ-E6d">
+                                <rect key="frame" x="10" y="195" width="373" height="32"/>
+                                <segments>
+                                    <segment title="日"/>
+                                    <segment title="月"/>
+                                    <segment title="火"/>
+                                    <segment title="水"/>
+                                    <segment title="木"/>
+                                    <segment title="金"/>
+                                    <segment title="土"/>
+                                </segments>
+                            </segmentedControl>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DwF-hX-wDS">
+                                <rect key="frame" x="10" y="236" width="373" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="時刻" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmM-T1-vDa">
+                                <rect key="frame" x="20" y="242.66666666666666" width="35" height="20.999999999999972"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="vTI-1b-HEh" secondAttribute="trailing" constant="10" id="0BB-M1-q6n"/>
+                            <constraint firstItem="Iii-Z3-6wx" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="8Ag-jf-1kb"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Iii-Z3-6wx" secondAttribute="trailing" constant="10" id="BdX-tg-Grl"/>
+                            <constraint firstItem="vTI-1b-HEh" firstAttribute="top" secondItem="Iii-Z3-6wx" secondAttribute="bottom" constant="10" id="FCr-gr-gl5"/>
+                            <constraint firstItem="Iii-Z3-6wx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="IZB-Hl-HC8"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="DwF-hX-wDS" secondAttribute="trailing" constant="10" id="Iph-xp-HZa"/>
+                            <constraint firstItem="DwF-hX-wDS" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="Ll8-PF-caN"/>
+                            <constraint firstItem="vTI-1b-HEh" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="Q37-QK-Jv8"/>
+                            <constraint firstItem="VE2-yQ-E6d" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="Xb8-O7-PHV"/>
+                            <constraint firstItem="pmM-T1-vDa" firstAttribute="centerY" secondItem="DwF-hX-wDS" secondAttribute="centerY" id="fdw-fY-kyS"/>
+                            <constraint firstItem="VE2-yQ-E6d" firstAttribute="top" secondItem="vTI-1b-HEh" secondAttribute="bottom" constant="10" id="gXw-iu-V71"/>
+                            <constraint firstItem="DwF-hX-wDS" firstAttribute="top" secondItem="VE2-yQ-E6d" secondAttribute="bottom" constant="10" id="iXy-ro-3az"/>
+                            <constraint firstItem="pmM-T1-vDa" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="mlw-a4-nH7"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="VE2-yQ-E6d" secondAttribute="trailing" constant="10" id="r6U-IY-MkW"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Lk7-s3-tBV"/>
+                    <connections>
+                        <outlet property="daylyOrWeeklySegmentedControl" destination="vTI-1b-HEh" id="2Z3-u3-4ff"/>
+                        <outlet property="notificationSegmentedControl" destination="Iii-Z3-6wx" id="rpI-fv-dxm"/>
+                        <outlet property="timeLabel" destination="pmM-T1-vDa" id="YrO-PJ-ziO"/>
+                        <outlet property="timeTextField" destination="DwF-hX-wDS" id="Ihx-d4-J4E"/>
+                        <outlet property="weekdaySegmentedControl" destination="VE2-yQ-E6d" id="4w1-Uf-RuO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139.69465648854961" y="-2.1126760563380285"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

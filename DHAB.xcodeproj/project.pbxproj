@@ -39,6 +39,9 @@
 		23A0B29229AA4522000956CF /* extension + Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A0B29129AA4522000956CF /* extension + Date.swift */; };
 		23AA408B29ECDEA8004E5BBB /* LookJournalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */; };
 		23AA409129ECDF70004E5BBB /* LookJournalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA409029ECDF70004E5BBB /* LookJournalModel.swift */; };
+		23AA409329ED0F58004E5BBB /* NotificationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23AA409229ED0F58004E5BBB /* NotificationViewController.storyboard */; };
+		23AA409529ED0F6C004E5BBB /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA409429ED0F6C004E5BBB /* NotificationViewController.swift */; };
+		23AA409729ED0FA3004E5BBB /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA409629ED0FA3004E5BBB /* NotificationModel.swift */; };
 		23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ACC13F297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift */; };
 		23ACC142297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23ACC140297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib */; };
 		23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ACC1442988AC5500ABA10D /* SliderViewCell.swift */; };
@@ -106,6 +109,9 @@
 		23A0B29129AA4522000956CF /* extension + Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension + Date.swift"; sourceTree = "<group>"; };
 		23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookJournalViewController.swift; sourceTree = "<group>"; };
 		23AA409029ECDF70004E5BBB /* LookJournalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookJournalModel.swift; sourceTree = "<group>"; };
+		23AA409229ED0F58004E5BBB /* NotificationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NotificationViewController.storyboard; sourceTree = "<group>"; };
+		23AA409429ED0F6C004E5BBB /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		23AA409629ED0FA3004E5BBB /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 		23ACC13F297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetConfigureTableViewCell.swift; sourceTree = "<group>"; };
 		23ACC140297F9C2600ABA10D /* BudgetConfigureTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BudgetConfigureTableViewCell.xib; sourceTree = "<group>"; };
 		23ACC1442988AC5500ABA10D /* SliderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderViewCell.swift; sourceTree = "<group>"; };
@@ -229,6 +235,7 @@
 				23D4070B29DA939100E92C52 /* PictureViewModel.swift */,
 				23D4070D29DA93AA00E92C52 /* LookDiaryViewModel.swift */,
 				23AA409029ECDF70004E5BBB /* LookJournalModel.swift */,
+				23AA409629ED0FA3004E5BBB /* NotificationModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -244,6 +251,7 @@
 				23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */,
 				237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */,
 				237AFB6D297506930060ECD0 /* ExpenseItemViewController.storyboard */,
+				23AA409229ED0F58004E5BBB /* NotificationViewController.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -262,6 +270,7 @@
 				23CBECC129CD4E3000A5E777 /* PictureViewController.swift */,
 				23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */,
 				23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */,
+				23AA409429ED0F6C004E5BBB /* NotificationViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -374,6 +383,7 @@
 				23EEE7CF2972CF2700A52939 /* InputViewController.storyboard in Resources */,
 				23EEE7D32972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard in Resources */,
 				23EC22BC2971FEDB004FD6A1 /* HouseholdAccountBookTableViewCell.xib in Resources */,
+				23AA409329ED0F58004E5BBB /* NotificationViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +454,7 @@
 				23ACC141297F9C2600ABA10D /* BudgetConfigureTableViewCell.swift in Sources */,
 				EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */,
 				237B85F62970492B001E4639 /* Journal.swift in Sources */,
+				23AA409729ED0FA3004E5BBB /* NotificationModel.swift in Sources */,
 				23C1600D29795E0F0026EAF9 /* BudgetConfigureViewController.swift in Sources */,
 				239137F52970FF5500BF09F8 /* DiaryTableViewCell.swift in Sources */,
 				23507F0E298E9AD70025EAE5 /* Category.swift in Sources */,
@@ -460,6 +471,7 @@
 				237B85FF29704A49001E4639 /* TabBarController.swift in Sources */,
 				23CBECCB29D30AAD00A5E777 /* FSCalendarCustomCell.swift in Sources */,
 				23A0B28C29A84CA1000956CF /* RecognitionChange.swift in Sources */,
+				23AA409529ED0F6C004E5BBB /* NotificationViewController.swift in Sources */,
 				23D4070029DA92D300E92C52 /* CalendarViewModel.swift in Sources */,
 				237AFB70297506A20060ECD0 /* ExpenseItemViewController.swift in Sources */,
 				237B860329704A68001E4639 /* CalendarViewController.swift in Sources */,

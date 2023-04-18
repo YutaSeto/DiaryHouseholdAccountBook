@@ -100,10 +100,6 @@
                                         <action selector="textFieldActionAddButtonInactive:" destination="4SW-au-oaO" eventType="editingChanged" id="6ZS-e1-ohB"/>
                                     </connections>
                                 </textField>
-                                <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Sws-j0-pzC">
-                                    <rect key="frame" x="-61" y="30" width="388" height="0.0"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                </datePicker>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bRy-IY-AL9">
                                     <rect key="frame" x="20" y="54.333333333333343" width="348" height="100"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>

@@ -815,6 +815,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 householdAccountBookViewModel.isExpanded = false
             case 2:
                 return
+            case 3:
+                let storyboard = UIStoryboard(name: "NotificationViewController", bundle: nil)
+                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                let notificationViewController = storyboard.instantiateViewController(withIdentifier: "NotificationViewController") as! NotificationViewController
+                navigationController.pushViewController(notificationViewController, animated: true)
+                present(navigationController,animated: true)
             default:
                 return
             }
@@ -827,7 +833,6 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             guard let lookJournalViewController = storyboard.instantiateViewController(withIdentifier: "LookJournalViewController") as? LookJournalViewController else{return}
             self.navigationController?.pushViewController(lookJournalViewController, animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
-            //カテゴリーと日付を渡す必要がある。
             lookJournalViewController.lookJournalModel.date = householdAccountBookViewModel.date
             lookJournalViewController.lookJournalModel.category = householdAccountBookViewModel.categoryList[indexPath.row]
         }else if tableView === incomeTableView{

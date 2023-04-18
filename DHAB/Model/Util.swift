@@ -66,6 +66,14 @@ class Util:UIViewController{
         return dateFormatter
     }
     
+    public var timeDateFormatter:DateFormatter{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH時mm分"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        dateFormatter.locale = Locale(identifier: "ja-JP")
+        return dateFormatter
+    }
+    
     func getComma(_ num: Int) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
