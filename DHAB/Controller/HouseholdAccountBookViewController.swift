@@ -73,7 +73,6 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumPayment()
         householdAccountBookViewModel.setMonthSumIncome()
         tableViewScroll()
-        setSegmentedControlColor(color: .flatPowderBlueColorDark())
         incomeTableView.reloadData()
         paymentTableView.reloadData()
         resultTableView.reloadData()
@@ -81,7 +80,7 @@ class HouseholdAccountBookViewController:UIViewController{
         graphShowButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
         graphShowButton.titleLabel?.adjustsFontSizeToFitWidth = true
         changeNavigationBarColor()
-        
+        changeSegmentedControlColor()
         setChartView()
         setIncomePieGraphView()
         setPaymentPieGraphView()
@@ -197,6 +196,14 @@ class HouseholdAccountBookViewController:UIViewController{
     func setSegmentedControlColor(color:UIColor){
         householdAccountBookSegmentedControl.selectedSegmentTintColor = color
         householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)!], for: .selected)
+        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
+    }
+    
+    func changeSegmentedControlColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        householdAccountBookSegmentedControl.selectedSegmentTintColor = themeColor.color
+        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
         householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
@@ -459,7 +466,6 @@ class HouseholdAccountBookViewController:UIViewController{
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.title = "家計簿"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
         
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -467,7 +473,6 @@ class HouseholdAccountBookViewController:UIViewController{
         let leftButtonActionSelector: Selector = #selector(showInputView)
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
-        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     func changeNavigationBarColor(){
@@ -483,6 +488,7 @@ class HouseholdAccountBookViewController:UIViewController{
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func showInputView(){
@@ -841,7 +847,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 guard let colorViewController = storyboard.instantiateViewController(withIdentifier: "ColorViewController") as? ColorViewController else{return}
                 self.navigationController?.pushViewController(colorViewController, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
-                
+                colorViewController.delegate = self
                 return
             default:
                 return
@@ -1048,4 +1054,13 @@ extension HouseholdAccountBookViewController:ForHouseholdAccountBookDeleagte,Bud
         updatePaymentPieGraph()
         updateIncomePieGraph()
     }
+}
+
+extension HouseholdAccountBookViewController:ColorViewControllerDelegate{
+    func changeColor() {
+        changeSegmentedControlColor()
+        changeNavigationBarColor()
+    }
+    
+    
 }

@@ -5,6 +5,10 @@
 //  Created by setoon on 2023/04/19.
 //
 
+protocol ColorViewControllerDelegate{
+    func changeColor()
+}
+
 import Foundation
 import UIKit
 import ChameleonFramework
@@ -13,6 +17,7 @@ class ColorViewController:UIViewController{
     let colorModel = ColorModel()
     
     let themeColorType = "themeColorType"
+    var delegate:ColorViewControllerDelegate?
     
     @IBOutlet weak var colorTableView: UITableView!
     
@@ -70,6 +75,7 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        delegate?.changeColor()
     }
     
 }

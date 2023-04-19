@@ -28,7 +28,10 @@ class FSCalendarCustomCell: FSCalendarCell {
             
     func select(){
         _isSelected = true
-        self.layer.borderColor = UIColor.flatPowderBlueColorDark().cgColor
+        
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        self.layer.borderColor = themeColor.color.cgColor
         self.layer.borderWidth = 2.0
     }
     

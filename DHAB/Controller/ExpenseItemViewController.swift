@@ -60,6 +60,7 @@ class ExpenseItemViewController: UIViewController{
         categoryViewControllerDelegate?.updateHouseholdAccountBook()
         setNavigationBarButton()
         changeNavigationBarColor()
+        changeSegmentedControlColor()
         expenseItemTableView.reloadData()
         incomeTableView.reloadData()
         
@@ -77,7 +78,6 @@ class ExpenseItemViewController: UIViewController{
         let buttonActionSelector:Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"xmark"), style: .plain,target: self,action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
-        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     func changeNavigationBarColor(){
@@ -93,6 +93,7 @@ class ExpenseItemViewController: UIViewController{
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -104,6 +105,14 @@ class ExpenseItemViewController: UIViewController{
         default:
             return
         }
+    }
+    
+    func changeSegmentedControlColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        segmentedControl.selectedSegmentTintColor = themeColor.color
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
     @IBAction func addButton(_ sender: UIButton) {

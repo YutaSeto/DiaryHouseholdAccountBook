@@ -115,6 +115,7 @@ class InputViewController:UIViewController{
         setNavigationBarButton()
         setToolbar()
         changeNavigationBarColor()
+        changeSegmentedControlColor()
         configureTextView()
         setNavigationTitle()
         print(householdAccountBookView.frame.height)
@@ -161,7 +162,6 @@ class InputViewController:UIViewController{
         }
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
     }
     
     
@@ -176,24 +176,22 @@ class InputViewController:UIViewController{
         let buttonActionSelector: Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
-        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     func changeNavigationBarColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
-        
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
-
+    
     @objc func tapBackButton(){
         dismiss(animated: true)
     }
@@ -426,25 +424,36 @@ class InputViewController:UIViewController{
     }
     
     func configureButton(){
-        addButton.backgroundColor = FlatPowderBlue()
-        addButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        addButton.backgroundColor = themeColor.color
+        addButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         addButton.layer.cornerRadius = 5
-        continueAddButton.backgroundColor = FlatPowderBlue()
-        continueAddButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        addButton.layer.borderColor = UIColor.systemGray2.cgColor
+        
+        continueAddButton.backgroundColor = themeColor.color
+        continueAddButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         continueAddButton.layer.cornerRadius = 5
-        addDiaryButton.backgroundColor = FlatPowderBlue()
-        addDiaryButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        continueAddButton.layer.borderColor = UIColor.systemGray2.cgColor
+        addDiaryButton.backgroundColor = themeColor.color
+        addDiaryButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         addDiaryButton.layer.cornerRadius = 5
-        addImageButton.backgroundColor = FlatPowderBlue()
-        addImageButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        addDiaryButton.layer.borderColor = UIColor.systemGray2.cgColor
+        addImageButton.backgroundColor = themeColor.color
+        addImageButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         addImageButton.layer.cornerRadius = 5
+        addImageButton.layer.borderColor = UIColor.systemGray2.cgColor
         
     }
     
     func configureAddButton(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         if inputViewModel.journal != nil{
             addButton.isEnabled = true
             continueAddButton.isEnabled = true
+            addButton.setTitleColor(UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true), for: .normal)
+            continueAddButton.setTitleColor(UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true), for: .normal)
         }else if inputViewModel.diary != nil{
             addDiaryButton.isEnabled = true
         }else{
@@ -576,8 +585,16 @@ class InputViewController:UIViewController{
     }
     
     func vanishSegmentedControl(){
-            viewChangeSegmentedControl.isHidden = true
-            segmentedControlHeight.constant = 0
+        viewChangeSegmentedControl.isHidden = true
+        segmentedControlHeight.constant = 0
+    }
+    
+    func changeSegmentedControlColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        viewChangeSegmentedControl.selectedSegmentTintColor = themeColor.color
+        viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
     func configureTextfield(){
@@ -740,7 +757,7 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
         }else if collectionView === incomeCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCell", for: indexPath) as! InputCollectionViewCell
             cell.categoryLabel.text = inputViewModel.incomeCategoryList[indexPath.row].name
-
+            
             if inputViewModel.journal != nil{
                 cell.journal = inputViewModel.journal!
             }
@@ -778,19 +795,29 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         if collectionView === paymentCollectionView{
-            let cell = collectionView.cellForItem(at: indexPath)
+            let cell = collectionView.cellForItem(at: indexPath) as! InputCollectionViewCell
             inputViewModel.category = inputViewModel.categoryList[indexPath.row].name
-
+            
             for i in 0 ..< inputViewModel.categoryList.count{
-                collectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
+                if let targetCell = collectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                    targetCell.backgroundColor = .white
+                    targetCell.categoryLabel.textColor = .flatBlack()
+                }
             }
-            cell?.backgroundColor = .flatPowderBlue()
+            print(indexPath)
+            cell.backgroundColor = themeColor.color
+            cell.categoryLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+            
             
             for i in 0 ..< inputViewModel.incomeCategoryList.count{
-                incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
+                if let targetCell = incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                    targetCell.backgroundColor = .white
+                    targetCell.categoryLabel.textColor = .flatBlack()
+                }
             }
-            cell?.backgroundColor = .flatPowderBlue()
             
             if priceTextField.text != ""{
                 addButton.isEnabled = true
@@ -813,18 +840,24 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
             pictureViewController.pictureViewModel.text = diaryInputTextView.text
             pictureViewController.pictureViewModel.titleText = titleTextField.text
         }else if collectionView === incomeCollectionView{
-            let cell = incomeCollectionView.cellForItem(at: indexPath)
+            let cell = incomeCollectionView.cellForItem(at: indexPath) as? InputCollectionViewCell
             inputViewModel.category = inputViewModel.incomeCategoryList[indexPath.row].name
             
             for i in 0 ..< inputViewModel.categoryList.count{
-                paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
+                if let targetCell = collectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                    targetCell.backgroundColor = .white
+                    targetCell.categoryLabel.textColor = .flatBlack()
+                }
             }
-            cell?.backgroundColor = .flatPowderBlue()
+            cell?.backgroundColor = themeColor.color
+            cell!.categoryLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
             
-            for i in 0 ..< inputViewModel.incomeCategoryList.count{
-                incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0))?.backgroundColor = .white
+            for i in 0 ..< inputViewModel.categoryList.count{
+                if let targetCell = paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                    targetCell.backgroundColor = .white
+                    targetCell.categoryLabel.textColor = .flatBlack()
+                }
             }
-            cell?.backgroundColor = .flatPowderBlue()
             
             if priceTextField.text != ""{
                 addButton.isEnabled = true
@@ -840,12 +873,12 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
 }
 
 extension InputViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate{
-   
+    
     func imagePickerController(_ picker:UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]){
         
         let image = (info[.originalImage] as! UIImage)
         let imageData = image.jpegData(compressionQuality: 0.5)
-
+        
         inputViewModel.imageArray.append(imageData!)
         imageCollectionView.reloadData()
         dismiss(animated:true)

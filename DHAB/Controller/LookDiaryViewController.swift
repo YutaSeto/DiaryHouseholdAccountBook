@@ -93,7 +93,6 @@ class LookDiaryViewController:UIViewController{
         let rightButtonActionSelector: Selector = #selector(tapEditButton)
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: rightButtonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
-        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     func changeNavigationBarColor(){
@@ -109,6 +108,7 @@ class LookDiaryViewController:UIViewController{
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
 
     @objc func tapBackButton(){

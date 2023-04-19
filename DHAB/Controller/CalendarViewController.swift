@@ -62,7 +62,6 @@ class CalendarViewController:UIViewController{
         setSum()
         setButtonTitle()
         setNavigationBarButton()
-        setSegmentedControlColor(color: .flatPowderBlueColorDark())
         setNavigationTitle()
         dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.date)
         if RecognitionChange.shared.startUpTimeModal == true{
@@ -77,6 +76,7 @@ class CalendarViewController:UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         changeNavigationBarColor()
+        changeSegmentedControlColor()
         
         if RecognitionChange.shared.updateCalendar == true{
             calendarViewModel.setDiaryData()
@@ -114,11 +114,13 @@ class CalendarViewController:UIViewController{
     }
     
     func setButtonTitle(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         threeMonthBackButton.setTitle(nil, for: .normal)
         monthBackButton.setTitle(nil, for: .normal)
         monthPassButton.setTitle(nil, for: .normal)
         threeMonthPassButton.setTitle(nil, for: .normal)
-        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
     
     @IBAction func monthBackButton(_ sender: UIButton) {
@@ -199,9 +201,11 @@ class CalendarViewController:UIViewController{
         diaryTableView.reloadData()
     }
     
-    func setSegmentedControlColor(color:UIColor){
-        segmentedControl.selectedSegmentTintColor = color
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)!], for: .selected)
+    func changeSegmentedControlColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        segmentedControl.selectedSegmentTintColor = themeColor.color
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
@@ -209,14 +213,12 @@ class CalendarViewController:UIViewController{
         navigationItem.title = "カレンダー"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:  UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)!]
     }
     
     func setNavigationBarButton(){
         let leftButtonActionSelector: Selector = #selector(showInputView)
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
-        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
     }
     
     func changeNavigationBarColor(){
@@ -232,6 +234,7 @@ class CalendarViewController:UIViewController{
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func showInputView(){
