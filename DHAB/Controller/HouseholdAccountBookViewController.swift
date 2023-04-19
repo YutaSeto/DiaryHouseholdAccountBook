@@ -99,6 +99,11 @@ class HouseholdAccountBookViewController:UIViewController{
         if householdAccountBookViewModel.setSumIncome() != 0{
             incomePieGraphView.data = householdAccountBookViewModel.setIncomePieGraphData()
         }
+        
+        if householdAccountBookViewModel.sumYearPayment != 0 || householdAccountBookViewModel.sumYearIncome != 0{
+            chartView.data = householdAccountBookViewModel.setData()
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -815,6 +820,14 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 householdAccountBookViewModel.isExpanded = false
             case 2:
                 return
+            case 3:
+                
+                let storyboard = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
+                guard let colorViewController = storyboard.instantiateViewController(withIdentifier: "ColorViewController") as? ColorViewController else{return}
+                self.navigationController?.pushViewController(colorViewController, animated: true)
+                tableView.deselectRow(at: indexPath, animated: true)
+                
+                return
             default:
                 return
             }
@@ -827,7 +840,6 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             guard let lookJournalViewController = storyboard.instantiateViewController(withIdentifier: "LookJournalViewController") as? LookJournalViewController else{return}
             self.navigationController?.pushViewController(lookJournalViewController, animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
-            //カテゴリーと日付を渡す必要がある。
             lookJournalViewController.lookJournalModel.date = householdAccountBookViewModel.date
             lookJournalViewController.lookJournalModel.category = householdAccountBookViewModel.categoryList[indexPath.row]
         }else if tableView === incomeTableView{

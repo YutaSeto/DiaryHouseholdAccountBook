@@ -101,6 +101,7 @@ class InputViewController:UIViewController{
         paymentCollectionView.register(collectionViewNib, forCellWithReuseIdentifier: "customCell")
         incomeCollectionView.register(collectionViewNib, forCellWithReuseIdentifier: "customCell")
         configureTextfield()
+        configureButton()
         configureDateTextField()
         addSubView()
         addHouseholdAccountView()
@@ -410,6 +411,22 @@ class InputViewController:UIViewController{
         countLabel.alpha = 0.3
     }
     
+    func configureButton(){
+        addButton.backgroundColor = FlatPowderBlue()
+        addButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        addButton.layer.cornerRadius = 5
+        continueAddButton.backgroundColor = FlatPowderBlue()
+        continueAddButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        continueAddButton.layer.cornerRadius = 5
+        addDiaryButton.backgroundColor = FlatPowderBlue()
+        addDiaryButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        addDiaryButton.layer.cornerRadius = 5
+        addImageButton.backgroundColor = FlatPowderBlue()
+        addImageButton.tintColor = UIColor(contrastingBlackOrWhiteColorOn: FlatPowderBlue(), isFlat: true)
+        addImageButton.layer.cornerRadius = 5
+        
+    }
+    
     func configureAddButton(){
         if inputViewModel.journal != nil{
             addButton.isEnabled = true
@@ -552,9 +569,18 @@ class InputViewController:UIViewController{
     func configureTextfield(){
         priceTextField.placeholder = "金額を記入してください"
         priceTextField.textAlignment = NSTextAlignment.right
+        priceTextField.layer.borderColor = UIColor.systemGray2.cgColor
+        priceTextField.layer.borderWidth = 1.0
+        priceTextField.layer.cornerRadius = 5.0
         memoTextField.placeholder = "店名や商品名など"
         memoTextField.textAlignment = NSTextAlignment.right
+        memoTextField.layer.borderColor = UIColor.systemGray2.cgColor
+        memoTextField.layer.borderWidth = 1.0
+        memoTextField.layer.cornerRadius = 5.0
         titleTextField.placeholder = "タイトルを記入してください"
+        titleTextField.layer.borderColor = UIColor.systemGray2.cgColor
+        titleTextField.layer.borderWidth = 1.0
+        titleTextField.layer.cornerRadius = 5.0
     }
     
     func settingCollectionView(){

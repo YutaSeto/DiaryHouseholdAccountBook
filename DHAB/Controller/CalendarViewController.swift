@@ -385,7 +385,6 @@ extension CalendarViewController:UITableViewDelegate,UITableViewDataSource{
         }
     }
     
-    //色は要調整
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView === householdAccountBookTableView{
             let item = calendarViewModel.displayJournalList[indexPath.row]
