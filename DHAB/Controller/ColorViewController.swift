@@ -76,6 +76,7 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         delegate?.changeColor()
+        RecognitionChange.shared.changeColor = true
     }
     
 }

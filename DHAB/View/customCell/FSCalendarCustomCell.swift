@@ -31,7 +31,7 @@ class FSCalendarCustomCell: FSCalendarCell {
         
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        self.layer.borderColor = themeColor.color.cgColor
+        self.layer.borderColor = themeColor.darkColor.cgColor
         self.layer.borderWidth = 2.0
     }
     

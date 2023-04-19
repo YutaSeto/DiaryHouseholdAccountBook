@@ -78,6 +78,11 @@ class CalendarViewController:UIViewController{
         changeNavigationBarColor()
         changeSegmentedControlColor()
         
+        if RecognitionChange.shared.changeColor == true{
+            calendarView.reloadData()
+            RecognitionChange.shared.changeColor = false
+        }
+        
         if RecognitionChange.shared.updateCalendar == true{
             calendarViewModel.setDiaryData()
             calendarViewModel.setTableView()
@@ -527,6 +532,8 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
     }
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         
         let cell = calendar.dequeueReusableCell(withIdentifier: "FSCalendarCustomCell", for: date, at: position) as! FSCalendarCustomCell
         cell.dayLabel.text = util.onliDayDateFormatter.string(from: date)
@@ -624,7 +631,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         let isEqualDate = calendarViewModel.diaryModelList.contains(where: {$0.date.zeroclock == date.zeroclock})
         if isEqualDate && date >= startOfMonth && date <= endOfMonth{
-            cell.backgroundColor = UIColor.flatPowderBlueColorDark().lighten(byPercentage: 1)
+            cell.backgroundColor = themeColor.color
         }else{
             cell.backgroundColor = .white
         }

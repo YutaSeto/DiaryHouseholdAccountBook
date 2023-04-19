@@ -17,7 +17,7 @@ final public class RecognitionChange{
     var deleteDiaryByCalendar:Bool = false
     var deleteDiaryByDiary:Bool = false
     var updateDiaryByCalendar:Bool = false
-    
+    var changeColor:Bool = false
     var startUpTimeModal:Bool = false{
         didSet{
             let defaults = UserDefaults.standard
