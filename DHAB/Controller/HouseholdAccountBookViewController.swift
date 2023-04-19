@@ -74,7 +74,7 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumIncome()
         tableViewScroll()
         setSegmentedControlColor(color: .flatPowderBlueColorDark())
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         incomeTableView.reloadData()
         paymentTableView.reloadData()
         resultTableView.reloadData()

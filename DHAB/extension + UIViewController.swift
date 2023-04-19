@@ -11,21 +11,23 @@ import UIKit
 extension UIViewController {
     private final class StatusBarView: UIView { }
 
-    func setStatusBarBackgroundColor(_ color: UIColor?) {
+    func setStatusBarBackgroundColor(color: UIColor?) {
         for subView in self.view.subviews where subView is StatusBarView {
             subView.removeFromSuperview()
         }
         guard let color = color else {
             return
         }
-        let statusBarView = StatusBarView()
-        statusBarView.backgroundColor = color
-        statusBarView.tintColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
-        self.view.addSubview(statusBarView)
-        statusBarView.translatesAutoresizingMaskIntoConstraints = false
-        statusBarView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        statusBarView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        statusBarView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        statusBarView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = color
+        appearance.shadowColor = color
+        navigationController?.navigationBar.barTintColor = color
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.isTranslucent = false
     }
 }
+

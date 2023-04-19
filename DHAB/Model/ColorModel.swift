@@ -6,7 +6,10 @@
 //
 
 import Foundation
+import UIKit
+import ChameleonFramework
 
 class ColorModel{
-    var colorList = ["red","pink","orange","plum","lime","mint","blue","sand","teal","powderblue","brown","green","maroon","coffee"]
+    var colorList:[UIColor] = [.flatWhite(),.flatRed(),.flatPink(),.flatOrange(),.flatLime(),.flatGreen(),.flatMint(),.flatSand(),.flatTeal(),.flatBlue(),.flatPowderBlue(),.flatBrown(),.flatGray(),.flatBlack()]
+    var colorNameList:[String] = ["ホワイト","レッド","ピンク","オレンジ","ライム","グリーン","ミント","サンド","ターコイズ","ブルー","パウダーブルー","ブラウン","グレー","ブラック"]
 }

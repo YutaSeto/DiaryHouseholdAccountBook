@@ -115,7 +115,7 @@ class InputViewController:UIViewController{
         setNavigationBarButton()
         setToolbar()
         
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         configureTextView()
         setNavigationTitle()
         print(householdAccountBookView.frame.height)

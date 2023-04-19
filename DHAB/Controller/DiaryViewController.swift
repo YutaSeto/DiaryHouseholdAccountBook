@@ -35,7 +35,7 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
         searchBar.delegate = self
         diaryTableView.reloadData()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         configureSearchBar()
         configureNoDataLabel()
     }

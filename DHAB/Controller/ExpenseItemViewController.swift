@@ -59,7 +59,7 @@ class ExpenseItemViewController: UIViewController{
         configureAddButton()
         categoryViewControllerDelegate?.updateHouseholdAccountBook()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         expenseItemTableView.reloadData()
         incomeTableView.reloadData()
         

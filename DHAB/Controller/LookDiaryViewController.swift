@@ -37,7 +37,7 @@ class LookDiaryViewController:UIViewController{
         setNavigationBarButton()
         setNavigationBarTitle()
         configureTextView()
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         imageCollectionViewHeight.constant = 0
     }
     

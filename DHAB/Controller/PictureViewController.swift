@@ -32,7 +32,7 @@ class PictureViewController:UIViewController{
         image = pictureViewModel.inputViewControllerImage
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
     }
     
     override func viewDidLayoutSubviews() {

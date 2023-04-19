@@ -51,7 +51,7 @@ class BudgetViewController: UIViewController{
         budgetViewModel.setBudgetTableViewDataSourse()
         budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         addSubView()
         setMenuView()
         

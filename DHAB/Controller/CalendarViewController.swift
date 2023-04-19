@@ -63,7 +63,7 @@ class CalendarViewController:UIViewController{
         setSum()
         setButtonTitle()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(.flatPowderBlueColorDark())
+        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         setSegmentedControlColor(color: .flatPowderBlueColorDark())
         setNavigationTitle()
         dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.date)
