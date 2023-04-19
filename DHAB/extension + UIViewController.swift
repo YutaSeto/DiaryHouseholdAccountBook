@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension UIViewController {
+extension UIViewController {    
     private final class StatusBarView: UIView { }
 
     func setStatusBarBackgroundColor(color: UIColor?) {

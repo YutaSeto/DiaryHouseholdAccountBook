@@ -24,7 +24,6 @@ class LookJournalViewController:UIViewController{
         lookJournalModel.setSortedJournals()
         journalTableView.delegate = self
         journalTableView.dataSource = self
-        print(lookJournalModel.setGroupedJournals())
     }
 }
 

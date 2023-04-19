@@ -74,13 +74,13 @@ class HouseholdAccountBookViewController:UIViewController{
         householdAccountBookViewModel.setMonthSumIncome()
         tableViewScroll()
         setSegmentedControlColor(color: .flatPowderBlueColorDark())
-        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         incomeTableView.reloadData()
         paymentTableView.reloadData()
         resultTableView.reloadData()
         resultSumTableView.reloadData()
         graphShowButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
         graphShowButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        changeNavigationBarColor()
         
         setChartView()
         setIncomePieGraphView()
@@ -468,6 +468,21 @@ class HouseholdAccountBookViewController:UIViewController{
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
     
     @objc func showInputView(){

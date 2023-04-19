@@ -114,8 +114,7 @@ class InputViewController:UIViewController{
         configureAddButton()
         setNavigationBarButton()
         setToolbar()
-        
-        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
+        changeNavigationBarColor()
         configureTextView()
         setNavigationTitle()
         print(householdAccountBookView.frame.height)
@@ -178,6 +177,21 @@ class InputViewController:UIViewController{
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
 
     @objc func tapBackButton(){

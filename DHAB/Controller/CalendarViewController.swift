@@ -18,7 +18,6 @@ class CalendarViewController:UIViewController{
     let calendarViewModel = CalendarViewModel()
     let holiday = CalculateCalendarLogic()
     
-    
     @IBOutlet weak var paymentLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var balanceLabel: UILabel!
@@ -63,7 +62,6 @@ class CalendarViewController:UIViewController{
         setSum()
         setButtonTitle()
         setNavigationBarButton()
-        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
         setSegmentedControlColor(color: .flatPowderBlueColorDark())
         setNavigationTitle()
         dateLabel.text = util.monthDateFormatter.string(from: calendarViewModel.date)
@@ -78,6 +76,7 @@ class CalendarViewController:UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        changeNavigationBarColor()
         
         if RecognitionChange.shared.updateCalendar == true{
             calendarViewModel.setDiaryData()
@@ -218,6 +217,21 @@ class CalendarViewController:UIViewController{
         let leftBarButton = UIBarButtonItem(image:UIImage(systemName: "plus"),style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
     
     @objc func showInputView(){

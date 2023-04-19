@@ -48,7 +48,7 @@
 		23CBECC429CD726F00A5E777 /* LookDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */; };
 		23CBECCB29D30AAD00A5E777 /* FSCalendarCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CBECC929D30AAD00A5E777 /* FSCalendarCustomCell.swift */; };
 		23CBECCC29D30AAD00A5E777 /* FSCalendarCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23CBECCA29D30AAD00A5E777 /* FSCalendarCustomCell.xib */; };
-		23CF14BC29EF7B2400773C2C /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF14BB29EF7B2400773C2C /* Color.swift */; };
+		23CF14BC29EF7B2400773C2C /* ColorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF14BB29EF7B2400773C2C /* ColorType.swift */; };
 		23CF14BE29EF817100773C2C /* ColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF14BD29EF817100773C2C /* ColorViewController.swift */; };
 		23CF14C029EF818E00773C2C /* ColorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF14BF29EF818E00773C2C /* ColorModel.swift */; };
 		23CF14C329EF88CE00773C2C /* ColorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF14C129EF88CE00773C2C /* ColorTableViewCell.swift */; };
@@ -120,7 +120,7 @@
 		23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookDiaryViewController.swift; sourceTree = "<group>"; };
 		23CBECC929D30AAD00A5E777 /* FSCalendarCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSCalendarCustomCell.swift; sourceTree = "<group>"; };
 		23CBECCA29D30AAD00A5E777 /* FSCalendarCustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FSCalendarCustomCell.xib; sourceTree = "<group>"; };
-		23CF14BB29EF7B2400773C2C /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		23CF14BB29EF7B2400773C2C /* ColorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorType.swift; sourceTree = "<group>"; };
 		23CF14BD29EF817100773C2C /* ColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewController.swift; sourceTree = "<group>"; };
 		23CF14BF29EF818E00773C2C /* ColorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModel.swift; sourceTree = "<group>"; };
 		23CF14C129EF88CE00773C2C /* ColorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTableViewCell.swift; sourceTree = "<group>"; };
@@ -289,7 +289,7 @@
 				23507F0D298E9AD70025EAE5 /* Category.swift */,
 				23507F0F298E9BD00025EAE5 /* BudgetTableViewCellItem.swift */,
 				23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */,
-				23CF14BB29EF7B2400773C2C /* Color.swift */,
+				23CF14BB29EF7B2400773C2C /* ColorType.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -472,7 +472,7 @@
 				23CF14C329EF88CE00773C2C /* ColorTableViewCell.swift in Sources */,
 				237B860729704A8D001E4639 /* DiaryViewController.swift in Sources */,
 				23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */,
-				23CF14BC29EF7B2400773C2C /* Color.swift in Sources */,
+				23CF14BC29EF7B2400773C2C /* ColorType.swift in Sources */,
 				237B860129704A59001E4639 /* InputViewController.swift in Sources */,
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
 				23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */,

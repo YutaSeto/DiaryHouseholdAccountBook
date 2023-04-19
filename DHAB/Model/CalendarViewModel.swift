@@ -30,8 +30,6 @@ class CalendarViewModel{
     var incomeModelList:[Journal] = []
     var displayJournalList:[Journal] = []
     
-
-    
     func setMonthPaymentModelList(){
         let firstDay = util.setFirstDay(date: selectedDate)
         let lastDay = util.setLastDay(date: selectedDate)

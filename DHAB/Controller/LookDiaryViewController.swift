@@ -37,7 +37,7 @@ class LookDiaryViewController:UIViewController{
         setNavigationBarButton()
         setNavigationBarTitle()
         configureTextView()
-        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
+        changeNavigationBarColor()
         imageCollectionViewHeight.constant = 0
     }
     
@@ -94,6 +94,21 @@ class LookDiaryViewController:UIViewController{
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: rightButtonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
 
     @objc func tapBackButton(){

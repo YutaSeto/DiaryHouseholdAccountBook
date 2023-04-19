@@ -32,7 +32,7 @@ class PictureViewController:UIViewController{
         image = pictureViewModel.inputViewControllerImage
         setNavigationBarBackButton()
         setNavigationBarDeleteButton()
-        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
+        changeNavigationBarColor()
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,7 +47,21 @@ class PictureViewController:UIViewController{
         let leftButtonActionSelector: Selector = #selector(tapBackButton)
         let leftBarButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: leftButtonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
-//        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
     
     @objc func tapBackButton(){

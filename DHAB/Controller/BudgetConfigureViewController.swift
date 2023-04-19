@@ -40,7 +40,7 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureViewModel.setIncomeBudgetTableViewDataSourse()
         dateLabel.text = util.monthDateFormatter.string(from:budgetConfigureViewModel.date)
         configureNavigationBarButton()
-        setStatusBarBackgroundColor(color: .flatPowderBlueColorDark())
+        changeNavigationBarColor()
     }
     
     @IBAction func saveButton(_ sender: UIButton) {
@@ -65,6 +65,21 @@ class BudgetConfigureViewController: UIViewController{
                                             ,target: self,action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
     
     @IBAction func cancelButton(_ sender: UIButton) {
