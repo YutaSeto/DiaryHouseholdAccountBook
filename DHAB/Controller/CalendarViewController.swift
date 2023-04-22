@@ -631,7 +631,7 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         
         let isEqualDate = calendarViewModel.diaryModelList.contains(where: {$0.date.zeroclock == date.zeroclock})
         if isEqualDate && date >= startOfMonth && date <= endOfMonth{
-            cell.backgroundColor = themeColor.color
+            cell.backgroundColor = themeColor.lightColor
         }else{
             cell.backgroundColor = .white
         }

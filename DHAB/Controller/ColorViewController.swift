@@ -26,6 +26,7 @@ class ColorViewController:UIViewController{
         colorTableView.delegate = self
         colorTableView.dataSource = self
         colorTableView.register(UINib(nibName: "ColorTableViewCell", bundle: nil), forCellReuseIdentifier: "customCell")
+        print(colorModel.colorList)
     }
     
     func saveThemeColor(type: ColorType){
