@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HouseholdAccountBookTableViewCellDelegate{
-    func progressBar(didChangeNumber number:Int, data: PaymentBudgetModel )
+    func progressBar(didChangeNumber number:Int, data: Budget)
 }
 
 class HouseholdAccountBookTableViewCell: UITableViewCell {
@@ -20,11 +20,11 @@ class HouseholdAccountBookTableViewCell: UITableViewCell {
     @IBOutlet weak var progressBar: UIProgressView!
     var delegate:HouseholdAccountBookTableViewCellDelegate?
     var data:HouseholdAccountBookTableViewCellItem?
+    var incomeData:IncomeTableViewCellItem?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

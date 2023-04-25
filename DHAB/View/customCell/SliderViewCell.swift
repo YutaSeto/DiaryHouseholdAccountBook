@@ -16,9 +16,13 @@ class SliderViewCell: UICollectionViewCell {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imageView.frame = bounds
+        imageView.contentMode = .scaleAspectFit
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
 }

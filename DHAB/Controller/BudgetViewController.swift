@@ -15,187 +15,362 @@ protocol BudgetViewControllerDelegate{
 
 class BudgetViewController: UIViewController{
     
-    private var date = Date()
-    var categoryList:[CategoryModel] = []
-    var paymentBudgetList:[PaymentBudgetModel] = []
-    var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
+    var util = Util()
+    let budgetViewModel = BudgetViewModel()
+    
     var budgetViewControllerDelegate:BudgetViewControllerDelegate?
-    let realm = try! Realm()
+    var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
+    var inputViewControllerDelegate:InputViewControllerDelegate?
+    var toolbar: UIToolbar{
+        let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
+        let toolbar = UIToolbar(frame: toolbarRect)
+        let doneItem = UIBarButtonItem(title: "閉じる", style: .plain, target: self, action: #selector(didTapFinishButton))
+        toolbar.setItems([doneItem], animated: modalPresentationCapturesStatusBarAppearance)
+        return toolbar
+    }
     
     @IBOutlet weak var budgetTableView: UITableView!
     @IBOutlet weak var dateBackButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var datePassButton: UIButton!
+    @IBOutlet var menuView: UIView!
+    @IBOutlet weak var menuTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         budgetTableView.register(UINib(nibName: "BudgetTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
         budgetTableView.delegate = self
         budgetTableView.dataSource = self
-        setPaymentBudgetData()
-        setCategoryData()
-        setBudgetTableViewDataSourse()
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
+        budgetViewModel.setPaymentBudgetData()
+        budgetViewModel.setIncomeBudgetData()
+        budgetViewModel.setCategoryData()
+        budgetViewModel.setIncomeCategoryData()
+        budgetViewModel.setBudgetTableViewDataSourse()
+        budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
+        changeNavigationBarColor()
+        addSubView()
+        setMenuView()
+        
+    }
+    
+    @objc func didTapFinishButton(){
+        view.endEditing(true)
     }
     
     @IBAction func dateBackButton(_ sender: UIButton) {
         dayBack()
+        budgetViewModel.isExpanded = false
     }
     
     @IBAction func datePassButton(_ sender: UIButton) {
         dayPass()
+        budgetViewModel.isExpanded = false
     }
     
-    @objc func tapConfigureButton(){
-        let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-        let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
-        navigationController?.pushViewController(budgetConfigureViewController, animated: true)
-        budgetConfigureViewController.delegate = self
-        budgetConfigureViewController.date = date
+    func addSubView(){
+        view.addSubview(menuView)
+    }
+    
+    func setMenuView(){
+        menuView.translatesAutoresizingMaskIntoConstraints = false
+        menuView.topAnchor.constraint(equalTo: dateLabel.topAnchor, constant: -10).isActive = true
+        menuView.leftAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        menuView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        menuView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    func returnView(){
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: .curveEaseIn,
+            animations:  {
+                self.menuView.frame.origin.x = self.view.frame.width + self.menuView.frame.width
+            },
+            completion: nil
+        )
+        budgetViewModel.isExpanded = false
+    }
+    
+    func showMenu(shouldExpand:Bool){
+        if shouldExpand{
+            returnView()
+            budgetViewModel.isExpanded = false
+        }else{
+            UIView.animate(
+                withDuration: 0.3,
+                delay: 0,
+                usingSpringWithDamping: 1,
+                initialSpringVelocity: 0,
+                options: .curveEaseInOut,
+                animations: {
+                    self.menuView.frame.origin.x = self.view.frame.width - self.menuView.frame.width
+                }, completion: nil)
+            budgetViewModel.isExpanded = true
+        }
+    }
+    
+    @objc func tapMenuButton(){
+        showMenu(shouldExpand: budgetViewModel.isExpanded)
+    }
+        
+    @objc func tapBackButton(){
+        dismiss(animated: true)
     }
     
     func setNavigationBarButton(){
-        let buttonActionSelector:Selector = #selector(tapConfigureButton)
-        let rightBarButton = UIBarButtonItem(barButtonSystemItem: .add,target: self,action: buttonActionSelector)
+        let buttonActionSelector:Selector = #selector(tapMenuButton)
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: buttonActionSelector)
         navigationItem.rightBarButtonItem = rightBarButton
+        
+        let buttonActionSelector2:Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"xmark"), style: .plain,target: self,action: buttonActionSelector2)
+        navigationItem.leftBarButtonItem = leftBarButton
+        
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     func dayBack(){
-        budgetViewControllerDelegate = self
-        date = Calendar.current.date(byAdding: .month, value: -1, to:date)!
-        dateLabel.text = dateFormatter.string(from: date)
-        self.budgetViewControllerDelegate?.updateList()
+        budgetViewModel.date = Calendar.current.date(byAdding: .month, value: -1, to:budgetViewModel.date)!
+        dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
+        updateList()
         budgetTableView.reloadData()
     }
     
     func dayPass(){
-        budgetViewControllerDelegate = self
-        date = Calendar.current.date(byAdding: .month, value: 1, to:date)!
-        dateLabel.text = dateFormatter.string(from: date)
-        self.budgetViewControllerDelegate?.updateList()
+        budgetViewModel.date = Calendar.current.date(byAdding: .month, value: 1, to:budgetViewModel.date)!
+        dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
+        updateList()
         budgetTableView.reloadData()
     }
     
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
-    
-    func setCategoryData(){
-        let result = realm.objects(CategoryModel.self)
-        categoryList = Array(result)
+    func updateList(){
+        budgetViewModel.setPaymentBudgetData()
+        budgetViewModel.setCategoryData()
+        budgetViewModel.budgetTableViewDataSource = []
+        budgetViewModel.incomeBudgetTableViewDataSource = []
+        budgetViewModel.setBudgetTableViewDataSourse()
+        budgetViewModel.setIncomeBudgetTableViewDataSourse()
         budgetTableView.reloadData()
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
-    
-    func setPaymentBudgetData(){
-        let result = realm.objects(PaymentBudgetModel.self)
-        paymentBudgetList = Array(result)
-        budgetTableView.reloadData()
-    }
-    
-    func setBudgetTableViewDataSourse(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-        let add = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!
-        categoryList.forEach{ expense in
-            let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
-            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
-                let item = BudgetTableViewCellItem(
-                    id: budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                budgetTableViewDataSource.append(item)
-            } else {
-                let budget = PaymentBudgetModel()
-                budget.id = UUID().uuidString
-                budget.expenseID = expense.id
-                budget.budgetDate = date
-                budget.budgetPrice = 0
-                try! realm.write { realm.add(budget)}
-                paymentBudgetList.append(budget)
-                
-                let item = BudgetTableViewCellItem(
-                    id:budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                budgetTableViewDataSource.append(item)
-            }
-            
-            budgetTableView.reloadData()
-        }
-    }
-    
 }
 
 extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView === budgetTableView && section == 0{
+            return "支出"
+        }else if tableView === budgetTableView && section == 1{
+            return "収入"
+        }
+        else{
+            return nil
+        }
+            
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        budgetTableViewDataSource.count
+        if tableView === budgetTableView{
+            if section == 0{
+                return budgetViewModel.categoryList.count
+            }else{
+                return budgetViewModel.incomeCategoryList.count
+            }
+        }else if tableView === menuTableView{
+            return budgetViewModel.menuList.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        let item = budgetTableViewDataSource[indexPath.row]
-        cell.budgetCategoryLabel.text = item.name
-        cell.budgetPriceLabel.text = String(item.price)
-        return cell
+        if tableView === budgetTableView{
+            let cell = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+            if indexPath.section == 0{
+                let item = budgetViewModel.budgetTableViewDataSource[indexPath.row]
+                cell.budgetCategoryLabel.text = item.name
+                cell.budgetPriceLabel.text = String(item.price)
+                return cell
+            }else{
+                let item = budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row]
+                cell.budgetCategoryLabel.text = item.name
+                cell.budgetPriceLabel.text = String(item.price)
+                return cell
+            }
+        }else if tableView === menuTableView{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for:indexPath)
+            cell.textLabel!.text = budgetViewModel.menuList[indexPath.row]
+            return cell
+        }
+        return UITableViewCell()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView === budgetTableView{
+            return 2
+        }else{
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _ = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
-        budgetViewControllerDelegate = self
-        
-        let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
-        
-        var textFieldOnAlert = UITextField()
-        alert.addTextField{textField in
-            textFieldOnAlert = textField
-            textField.placeholder = "0"
-        }
-        let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
-            let dataSource = self.budgetTableViewDataSource[indexPath.row]
-            if let budget = self.paymentBudgetList.filter({$0.id == dataSource.id}).first{
-                let realm = try!Realm()
-                try! realm.write{
-                    budget.budgetPrice = Int(textFieldOnAlert.text!)!
+        if tableView === budgetTableView{
+            if indexPath.section == 0{
+                _ = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+                
+                let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
+                
+                var textFieldOnAlert = UITextField()
+                alert.addTextField{textField in
+                    textFieldOnAlert = textField
+                    textField.keyboardType = .numberPad
+                    textField.inputAccessoryView = self.toolbar
+                    textField.placeholder = String(self.budgetViewModel.budgetTableViewDataSource[indexPath.row].price)
+                    textField.textAlignment = NSTextAlignment.right
                 }
+                
+                let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+                    let dataSource = self.budgetViewModel.budgetTableViewDataSource[indexPath.row]
+                    if let budget = self.budgetViewModel.paymentBudgetList.filter({$0.id == dataSource.id}).first{
+                        let realm = try!Realm()
+                        try! realm.write{
+                            budget.budgetPrice = Int(textFieldOnAlert.text!)!
+                        }
+                    }
+                    self.updateList()
+                    self.budgetViewControllerDelegate?.updateList()
+                })
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                alert.addAction(cancel)
+                alert.addAction(edit)
+                self.present(alert,animated: true, completion: nil)
+                tableView.deselectRow(at: indexPath, animated: true)
+            }else{
+                _ = budgetTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetTableViewCell
+                let alert = UIAlertController(title:"予算を変更します", message: nil, preferredStyle: .alert)
+                
+                var textFieldOnAlert = UITextField()
+                alert.addTextField{textField in
+                    textFieldOnAlert = textField
+                    textField.placeholder = String(self.budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row].price)
+                    textField.textAlignment = NSTextAlignment.right
+                }
+                let edit = UIAlertAction(title:"修正する",style: .default, handler:{(action) ->Void in
+                    let dataSource = self.budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row]
+                    if let budget = self.budgetViewModel.incomeBudgetList.filter({$0.id == dataSource.id}).first{
+                        let realm = try!Realm()
+                        try! realm.write{
+                            budget.budgetPrice = Int(textFieldOnAlert.text!)!
+                        }
+                    }
+                    self.budgetViewControllerDelegate?.updateList()
+                    self.updateList()
+                })
+                
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                alert.addAction(cancel)
+                alert.addAction(edit)
+                self.present(alert,animated: true, completion: nil)
+                tableView.deselectRow(at: indexPath, animated: true)
             }
-            self.budgetViewControllerDelegate?.updateList()
-            self.budgetTableView.reloadData()
-        })
-        
-        let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
-            return
-        })
-        
-        alert.addAction(cancel)
-        alert.addAction(edit)
-        self.present(alert,animated: true, completion: nil)
+        }else if tableView === menuTableView{
+            if indexPath.row == 0{
+                let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
+                let budgetConfigureViewController = storyboard.instantiateViewController(identifier: "BudgetConfigureViewController") as! BudgetConfigureViewController
+                navigationController?.pushViewController(budgetConfigureViewController, animated: true)
+                budgetConfigureViewController.forHouseholdAccountBookDelegate = forHouseholdAccountBookDelegate
+                budgetConfigureViewController.delegate = self
+                budgetConfigureViewController.budgetConfigureViewModel.date = budgetViewModel.date.zeroclock
+            }else{
+                let calendar = Calendar(identifier: .gregorian)
+                let comps = calendar.dateComponents([.year, .month], from: budgetViewModel.date.zeroclock)
+                let minusMonth = DateComponents(month: -1)
+                let thisMonth = calendar.date(from:comps)!.zeroclock
+                let lastMonth = calendar.date(byAdding: minusMonth, to: thisMonth)?.zeroclock
+                let nextMonth = util.setLastDay(date: budgetViewModel.date.zeroclock)
+                let lastPaymentBudgetList = budgetViewModel.paymentBudgetList.filter{$0.budgetDate >= lastMonth!}.filter{$0.budgetDate < thisMonth}
+                let lastIncomeBudgetList = budgetViewModel.incomeBudgetList.filter{$0.budgetDate >= lastMonth!}.filter{$0.budgetDate < thisMonth}
+                let thisMonthPaymentBudget:[Budget] = self.budgetViewModel.paymentBudgetList.filter{$0.budgetDate >= thisMonth}.filter{$0.budgetDate < nextMonth}//今月の予算一覧
+                let thisMonthIncomeBudget:[Budget] = self.budgetViewModel.incomeBudgetList.filter{$0.budgetDate >= thisMonth}.filter{$0.budgetDate < nextMonth}
+                let alert = UIAlertController(title: "\(util.monthDateFormatter.string(from:lastMonth!))の予算をコピーします", message: nil, preferredStyle: .alert)
+                let copy = UIAlertAction(title:"コピーする", style: .default,handler: {(action) -> Void in
+                    
+                    thisMonthPaymentBudget.forEach{budget in
+                        if let target = lastPaymentBudgetList.first(where: {$0.expenseID == budget.expenseID}){
+                            let realm = try! Realm()
+                            try! realm.write{
+                                budget.budgetPrice = target.budgetPrice
+                            }
+                        }
+                    }
+                    
+                    thisMonthIncomeBudget.forEach{budget in
+                        if let target = lastIncomeBudgetList.first(where: {$0.expenseID == budget.expenseID}){
+                            let realm = try! Realm()
+                            try! realm.write{
+                                budget.budgetPrice = target.budgetPrice
+                            }
+                        }
+                    }
+                    self.updateList()
+                    self.budgetViewControllerDelegate?.updateList()
+                })
+                let cancel = UIAlertAction(title:"キャンセル", style: .default, handler:{(action) -> Void in
+                    return
+                })
+                
+                
+                alert.addAction(cancel)
+                alert.addAction(copy)
+                
+                self.present(alert,animated:true, completion: nil)
+            }
+                //alertを表示、先月の予算をforEach文で予算をコピー
+        }
+        budgetViewModel.isExpanded = false
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-extension BudgetViewController:BudgetViewControllerDelegate{
-    func updateList(){
-        setPaymentBudgetData()
-        setCategoryData()
-        budgetTableViewDataSource = []
-        setBudgetTableViewDataSourse()
-    }
-}
 
 extension BudgetViewController:BudgetConfigureViewControllerDelegate{
     func updateBudget(){
-            setPaymentBudgetData()
-            setCategoryData()
-            budgetTableViewDataSource = []
-            setBudgetTableViewDataSourse()
+        budgetViewModel.setPaymentBudgetData()
+        budgetViewModel.setIncomeCategoryData()
+        budgetViewModel.setCategoryData()
+        budgetViewModel.budgetTableViewDataSource = []
+        budgetViewModel.incomeBudgetTableViewDataSource = []
+        budgetViewModel.setBudgetTableViewDataSourse()
+        budgetViewModel.setIncomeBudgetTableViewDataSourse()
+        budgetTableView.reloadData()
+        
+        view.layoutIfNeeded()
+        view.updateConstraints()
     }
 }

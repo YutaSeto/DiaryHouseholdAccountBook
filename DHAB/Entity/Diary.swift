@@ -8,12 +8,11 @@
 import Foundation
 import RealmSwift
 
-class DiaryModel: Object{
+class Diary: Object{
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var date: Date = Date()
     @objc dynamic var title: String = ""
     @objc dynamic var text: String = ""
-    override static func primaryKey() -> String? {
-        return "id"
-    }
+    
+    var pictureList = List<Data>()
 }

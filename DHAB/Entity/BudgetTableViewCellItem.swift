@@ -13,3 +13,9 @@ struct BudgetTableViewCellItem{
     var name: String = ""
     var price: Int = 0
 }
+
+struct IncomeBudgetTableViewCellItem{
+    var id: String = ""
+    var name: String = ""
+    var price: Int = 0
+}

@@ -13,14 +13,16 @@ protocol BudgetConfigureViewControllerDelegate{
     func updateBudget()
 }
 
+protocol ForHouseholdAccountBookDeleagte{
+    func updateHouseholdAccountBookView()
+}
+
 class BudgetConfigureViewController: UIViewController{
     
-    let realm = try! Realm()
-    var date: Date = Date()
+    let util = Util()
+    let budgetConfigureViewModel = BudgetConfigureViewModel()
     var delegate:BudgetConfigureViewControllerDelegate?
-    var categoryList:[CategoryModel] = []
-    var paymentBudgetList:[PaymentBudgetModel] = []
-    var budgetTableViewDataSource: [BudgetTableViewCellItem] = []
+    var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var budgetConfigureTableView: UITableView!
@@ -30,10 +32,15 @@ class BudgetConfigureViewController: UIViewController{
         budgetConfigureTableView.register(UINib(nibName: "BudgetConfigureTableViewCell", bundle: nil),forCellReuseIdentifier: "cell")
         budgetConfigureTableView.delegate = self
         budgetConfigureTableView.dataSource = self
-        setCategoryData()
-        setPaymentBudgetData()
-        setBudgetTableViewDataSourse()
-        dateLabel.text = dateFormatter.string(from:date)
+        budgetConfigureViewModel.setCategoryData()
+        budgetConfigureViewModel.setIncomeCategoryData()
+        budgetConfigureViewModel.setPaymentBudgetData()
+        budgetConfigureViewModel.setIncomeBudgetData()
+        budgetConfigureViewModel.setBudgetTableViewDataSourse()
+        budgetConfigureViewModel.setIncomeBudgetTableViewDataSourse()
+        dateLabel.text = util.monthDateFormatter.string(from:budgetConfigureViewModel.date)
+        configureNavigationBarButton()
+        changeNavigationBarColor()
     }
     
     @IBAction func saveButton(_ sender: UIButton) {
@@ -42,103 +49,103 @@ class BudgetConfigureViewController: UIViewController{
     }
     
     func tapSaveButton(){
-        budgetTableViewDataSource.forEach{ data in
-            if let index = paymentBudgetList.firstIndex(where: {$0.id == data.id}){
-                try! realm.write{
-                    paymentBudgetList[index].budgetPrice = data.price
-                }
-            }
-            delegate?.updateBudget()
-        }
+        budgetConfigureViewModel.overwritePaymentBudget()
+        budgetConfigureViewModel.overwriteIncomeBudget()
+        delegate?.updateBudget()
+        forHouseholdAccountBookDelegate?.updateHouseholdAccountBookView()
+    }
+    
+    @objc func tapBackButton(){
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func configureNavigationBarButton(){
+        let buttonActionSelector:Selector = #selector(tapBackButton)
+        let leftBarButton = UIBarButtonItem(image: UIImage(systemName:"chevron.left"), style: .plain
+                                            ,target: self,action: buttonActionSelector)
+        navigationItem.leftBarButtonItem = leftBarButton
+        self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func changeNavigationBarColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        appearance.backgroundColor = themeColor.color
+        
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @IBAction func cancelButton(_ sender: UIButton) {
         navigationController?.popToViewController(navigationController!.viewControllers[0], animated: true)
     }
-
-    private var dateFormatter: DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy年MM月"
-        dateFormatter.locale = Locale(identifier: "ja-JP")
-        return dateFormatter
-    }
-    
-    func setPaymentBudgetData(){
-        let result = realm.objects(PaymentBudgetModel.self)
-        paymentBudgetList = Array(result)
-        budgetConfigureTableView.reloadData()
-    }
-    
-    func setCategoryData(){
-        let result = realm.objects(CategoryModel.self)
-        categoryList = Array(result)
-        budgetConfigureTableView.reloadData()
-    }
-    
-    func setBudgetTableViewDataSourse(){
-        let calendar = Calendar(identifier: .gregorian)
-        let comps = calendar.dateComponents([.year, .month], from: date)
-        let firstDay = calendar.date(from: comps)!
-        let add = DateComponents(month: 1, day: -1)
-        let lastDay = calendar.date(byAdding: add, to: firstDay)!
-        categoryList.forEach{ expense in
-            let dayCheckBudget = paymentBudgetList.filter({$0.budgetDate >= firstDay})
-            let dayCheckBudget2 = dayCheckBudget.filter({$0.budgetDate <= lastDay})
-            
-            if let budget:PaymentBudgetModel = dayCheckBudget2.filter({$0.expenseID == expense.id}).first{
-                let item = BudgetTableViewCellItem(
-                    id: budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                budgetTableViewDataSource.append(item)
-            } else {
-                let budget = PaymentBudgetModel()
-                budget.id = UUID().uuidString
-                budget.expenseID = expense.id
-                budget.budgetDate = date
-                budget.budgetPrice = 0
-                try! realm.write { realm.add(budget)}
-                paymentBudgetList.append(budget)
-                
-                let item = BudgetTableViewCellItem(
-                    id:budget.id,
-                    name: expense.name,
-                    price: budget.budgetPrice
-                )
-                budgetTableViewDataSource.append(item)
-            }
-            
-            budgetConfigureTableView.reloadData()
-        }
-    }
 }
 
 extension BudgetConfigureViewController:UITableViewDelegate,UITableViewDataSource{
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0{
+            return "支出"
+        }else{
+            return "収入"
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        budgetTableViewDataSource.count
+        if section == 0{
+            return budgetConfigureViewModel.categoryList.count
+        }else{
+            return budgetConfigureViewModel.incomeCategoryList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = budgetConfigureTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BudgetConfigureTableViewCell
-        var item = budgetTableViewDataSource[indexPath.row]
-        cell.data = item
-        cell.categoryLabel.text = item.name
-        cell.priceTextField.text = String(item.price)
-        item.price = cell.price
-        cell.delegate = self
-        return cell
+        if indexPath.section == 0{
+            var item = budgetConfigureViewModel.budgetTableViewDataSource[indexPath.row]
+            cell.data = item
+            cell.categoryLabel.text = item.name
+            cell.priceTextField.text = String(item.price)
+            item.price = cell.price
+            cell.delegate = self
+            return cell
+        }else{
+            var item = budgetConfigureViewModel.incomeBudgetTableViewDataSource[indexPath.row]
+            cell.incomeData = item
+            cell.categoryLabel.text = item.name
+            cell.priceTextField.text = String(item.price)
+            item.price = cell.price
+            cell.delegate = self
+            return cell
+        }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
 }
 
 extension BudgetConfigureViewController: BudgetConfigureTableViewCellDelegate{
+    func tableViewCell(didChangeTextIncome text: String, incomeData: IncomeBudgetTableViewCellItem?) {
+        guard let data = incomeData else {return}
+        if let index = budgetConfigureViewModel.incomeBudgetTableViewDataSource.firstIndex(where: {$0.id == data.id}){
+            budgetConfigureViewModel.incomeBudgetTableViewDataSource[index].price = incomeData!.price
+        }
+    }
+    
     func tableViewCell(didChngeText text: String, data: BudgetTableViewCellItem?) {
         guard let data = data else {return}
-        if let index = budgetTableViewDataSource.firstIndex(where: {$0.id == data.id}){
-            budgetTableViewDataSource[index].price = data.price
+        if let index = budgetConfigureViewModel.budgetTableViewDataSource.firstIndex(where: {$0.id == data.id}){
+            budgetConfigureViewModel.budgetTableViewDataSource[index].price = data.price
         }
-        print(budgetTableViewDataSource)
     }
     
 }

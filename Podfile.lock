@@ -1,36 +1,113 @@
 PODS:
+  - CalculateCalendarLogic (0.6.1)
+  - ChameleonFramework/Default (2.1.0)
+  - ChameleonFramework/Swift (2.1.0):
+    - ChameleonFramework/Default
   - Charts (4.1.0):
     - Charts/Core (= 4.1.0)
   - Charts/Core (4.1.0):
     - SwiftAlgorithms (~> 1.0)
+  - CropViewController (2.6.1)
+  - DKCamera (1.6.7)
+  - DKImagePickerController (4.3.4):
+    - DKImagePickerController/Camera (= 4.3.4)
+    - DKImagePickerController/Core (= 4.3.4)
+    - DKImagePickerController/ImageDataManager (= 4.3.4)
+    - DKImagePickerController/InlineCamera (= 4.3.4)
+    - DKImagePickerController/PhotoEditor (= 4.3.4)
+    - DKImagePickerController/PhotoGallery (= 4.3.4)
+    - DKImagePickerController/Resource (= 4.3.4)
+  - DKImagePickerController/Camera (4.3.4):
+    - DKCamera
+    - DKImagePickerController/Core
+  - DKImagePickerController/Core (4.3.4):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.3.4)
+  - DKImagePickerController/InlineCamera (4.3.4):
+    - DKCamera
+    - DKImagePickerController/Core
+  - DKImagePickerController/PhotoEditor (4.3.4):
+    - CropViewController (~> 2.5)
+    - DKImagePickerController/Core
+  - DKImagePickerController/PhotoGallery (4.3.4):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.3.4)
+  - DKPhotoGallery (0.0.17):
+    - DKPhotoGallery/Core (= 0.0.17)
+    - DKPhotoGallery/Model (= 0.0.17)
+    - DKPhotoGallery/Preview (= 0.0.17)
+    - DKPhotoGallery/Resource (= 0.0.17)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.17):
+    - SDWebImage
+    - SwiftyGif
   - FSCalendar (2.8.4)
   - Realm (10.32.3):
     - Realm/Headers (= 10.32.3)
   - Realm/Headers (10.32.3)
   - RealmSwift (10.32.3):
     - Realm (= 10.32.3)
+  - SDWebImage (5.15.0):
+    - SDWebImage/Core (= 5.15.0)
+  - SDWebImage/Core (5.15.0)
   - SwiftAlgorithms (1.0.0)
+  - SwiftyGif (5.4.4)
 
 DEPENDENCIES:
+  - CalculateCalendarLogic
+  - ChameleonFramework/Swift
   - Charts
+  - DKImagePickerController
   - FSCalendar
   - RealmSwift
 
 SPEC REPOS:
   trunk:
+    - CalculateCalendarLogic
+    - ChameleonFramework
     - Charts
+    - CropViewController
+    - DKCamera
+    - DKImagePickerController
+    - DKPhotoGallery
     - FSCalendar
     - Realm
     - RealmSwift
+    - SDWebImage
     - SwiftAlgorithms
+    - SwiftyGif
 
 SPEC CHECKSUMS:
+  CalculateCalendarLogic: e4f7c7fe17f68b1d30fb51560acc634b4629a622
+  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Charts: 354f86803d11d9c35de280587fef50d1af063978
+  CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
+  DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
+  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
+  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Realm: fdf6732924dc5e69e30e0db2c11e869f92b53f3d
   RealmSwift: 7c181da8fa1c2fe613656a77c198d6a3dc3879a1
+  SDWebImage: 9bec4c5cdd9579e1f57104735ee0c37df274d593
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
 
-PODFILE CHECKSUM: 6c3c38b1e5143c7a35661349926ff0831883cf5f
+PODFILE CHECKSUM: c22f6156031d441d018f2579399106e569aa6b9c
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0

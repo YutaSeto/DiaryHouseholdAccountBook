@@ -7,44 +7,95 @@
 
 import Foundation
 import UIKit
+import RealmSwift
+import ChameleonFramework
 
 class TabBarController:UITabBarController, UITabBarControllerDelegate{
     
     @IBOutlet weak var tabMenuBar: UITabBar!
+    var controllers:[UIViewController] = []
+    let tabBarModel = TabBarModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
+        tabBarModel.setFirstCategory()
+        controllers = tabBarModel.initTab()
+        setViewControllers(controllers, animated: false)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        super.viewDidLoad()
-
-        initTab()
-        
+        self.selectedIndex = 0
+        self.tabBarController(self, didSelect: self.selectedViewController!)
     }
     
-    func initTab(){
-        var controllers:[UIViewController] = []
-        
-        let storyboard1 = UIStoryboard(name: "CalendarViewController", bundle: nil)
-        if let calendarViewController = storyboard1.instantiateInitialViewController(){
-            calendarViewController.tabBarItem = UITabBarItem(title: "カレンダー", image: UIImage(systemName: "calendar"), tag: 0)
-            controllers.append(calendarViewController)
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
+            let selectedColor:UIColor = themeColor.color
+            let unselectedColor:UIColor = .systemGray2
+            viewController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:selectedColor], for: .selected)
+            viewController.tabBarItem.image = viewController.tabBarItem.image?.withTintColor(selectedColor, renderingMode: .alwaysOriginal)
+            for tabBarItem in tabBarController.tabBar.items ?? []{
+                if tabBarController.tabBar.items?.firstIndex(of: tabBarItem) != index{
+                    tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:unselectedColor], for: .normal)
+                    tabBarItem.image = tabBarItem.image?.withTintColor(unselectedColor,renderingMode: .alwaysOriginal)
+                }
+            }
+            
         }
-        
-        let storyboard2 = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
-        if let householdAccountBookViewController = storyboard2.instantiateInitialViewController(){
-            householdAccountBookViewController.tabBarItem = UITabBarItem(title: "家計簿", image: UIImage(systemName: "yensign.circle"), tag: 1)
-            controllers.append(householdAccountBookViewController)
+    }
+    
+    
+    func remakeViewController() {
+        let vc = self.viewControllers
+        vc!.forEach{
+            if let target = $0 as? CalendarViewController{
+                target.reloadInputViews()
+            }else if let target = $0 as? HouseholdAccountBookViewController{
+                target.reloadInputViews()
+            }else if let target = $0 as? DiaryViewController{
+                target.reloadInputViews()
+            }
         }
-        
-        let storyboard3 = UIStoryboard(name: "DiaryViewController", bundle: nil)
-        if let diaryViewController = storyboard3.instantiateInitialViewController(){
-            diaryViewController.tabBarItem = UITabBarItem(title: "日記", image: UIImage(systemName: "book"), tag: 2)
-            controllers.append(diaryViewController)
-        }
-        
-        setViewControllers(controllers, animated: false)
+    }
+}
+extension TabBarController:InputViewControllerDelegate{
+    func changeFromPaymentToIncome() {
+        return
+    }
+    
+    func changeFromIncomeToPayment() {
+        return
+    }
+    
+    func didReceiveNotification() {
+        return
+    }
+    
+    func updatePayment() {
+        return
+    }
+    func updateDiary() {
+        return
+    }
+    
+    func updateCalendar() {
+        return
+    }
+    
+    func updateIncome() {
+        return
+    }
+    
+    func inputViewController(_ viewController: InputViewController, didUpdateData data: String) {
+        return
     }
 }

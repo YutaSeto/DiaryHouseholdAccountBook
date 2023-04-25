@@ -1,18 +1,18 @@
 //
-//  BudgetTableViewCell.swift
+//  ResultTableViewCell.swift
 //  DHAB
 //
-//  Created by setoon on 2023/01/16.
+//  Created by 瀬戸雄太 on 2023/03/06.
 //
 
 import UIKit
 
-class BudgetTableViewCell: UITableViewCell {
+class ResultTableViewCell: UITableViewCell {
 
-    var journal:Journal?
-    @IBOutlet weak var budgetCategoryLabel: UILabel!
-    @IBOutlet weak var budgetPriceLabel: UILabel!
-    @IBOutlet weak var memoLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var paymentLabel: UILabel!
+    @IBOutlet weak var incomeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,7 +21,6 @@ class BudgetTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
 
         // Configure the view for the selected state
     }

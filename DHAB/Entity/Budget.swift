@@ -9,9 +9,10 @@ import Foundation
 import RealmSwift
 
 
-class PaymentBudgetModel: Object{
+class Budget: Object{
     @objc dynamic var id: String = ""
     @objc dynamic var expenseID: String = ""
     @objc dynamic var budgetDate: Date = Date()
+    @objc dynamic var isPayment: Bool = true
     @objc dynamic var budgetPrice: Int = 0
 }
