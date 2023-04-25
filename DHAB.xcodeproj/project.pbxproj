@@ -14,7 +14,6 @@
 		23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */; };
 		2368D62329DE76D20070A67E /* SelectStartUpModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */; };
 		2368D62429DE76D20070A67E /* SelectStartUpModalTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */; };
-		2368D62829DFC5840070A67E /* extension + UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368D62729DFC5840070A67E /* extension + UIViewController.swift */; };
 		237AFB652974ECAC0060ECD0 /* BudgetViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */; };
 		237AFB672974ECBC0060ECD0 /* BudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */; };
 		237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237AFB692975027B0060ECD0 /* BudgetTableViewCell.swift */; };
@@ -83,7 +82,6 @@
 		23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookTableViewCellItem.swift; sourceTree = "<group>"; };
 		2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectStartUpModalTableViewCell.swift; sourceTree = "<group>"; };
 		2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectStartUpModalTableViewCell.xib; sourceTree = "<group>"; };
-		2368D62729DFC5840070A67E /* extension + UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension + UIViewController.swift"; sourceTree = "<group>"; };
 		237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BudgetViewController.storyboard; sourceTree = "<group>"; };
 		237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewController.swift; sourceTree = "<group>"; };
 		237AFB692975027B0060ECD0 /* BudgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTableViewCell.swift; sourceTree = "<group>"; };
@@ -212,7 +210,6 @@
 				237B85E02970471A001E4639 /* SceneDelegate.swift */,
 				23A0B28B29A84CA1000956CF /* RecognitionChange.swift */,
 				23A0B29129AA4522000956CF /* extension + Date.swift */,
-				2368D62729DFC5840070A67E /* extension + UIViewController.swift */,
 				23CBECC029CBE87500A5E777 /* Entity */,
 				237B85F22970472F001E4639 /* Model */,
 				237B85F32970473B001E4639 /* View */,
@@ -483,7 +480,6 @@
 				237AFB70297506A20060ECD0 /* ExpenseItemViewController.swift in Sources */,
 				237B860329704A68001E4639 /* CalendarViewController.swift in Sources */,
 				23CBECC229CD4E3000A5E777 /* PictureViewController.swift in Sources */,
-				2368D62829DFC5840070A67E /* extension + UIViewController.swift in Sources */,
 				23D4070A29DA937C00E92C52 /* ExpenseItemViewModel.swift in Sources */,
 				237B85E12970471A001E4639 /* SceneDelegate.swift in Sources */,
 				23D406FE29DA92AC00E92C52 /* InputViewModel.swift in Sources */,

@@ -215,9 +215,24 @@ class CalendarViewController:UIViewController{
     }
     
     func setNavigationTitle(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         navigationItem.title = "カレンダー"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
+        if #available(iOS 15.0, *) {
+                let appearance = UINavigationBarAppearance()
+                // 背景色
+            appearance.titleTextAttributes = [.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
+                                              
+            appearance.backgroundColor = themeColor.color
+                                              
+            
+                // ナビゲーションバーに反映
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+            }
     }
     
     func setNavigationBarButton(){
