@@ -10,7 +10,8 @@ protocol ColorViewControllerDelegate{
 }
 
 protocol ChangeTabBarColorDelegate{
-    func changeTabBarColor(_ tabBarController: UITabBarController,viewController: UIViewController)
+    func changeTabBarColor()
+//    func tabBarController(tabBarController: UITabBarController, didSelect viewController: UIViewController)
 }
 
 import Foundation
@@ -84,7 +85,10 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         delegate?.changeColor()
         if let tabBarController = tabBarController as? TabBarController {
             tabBarController.tabBar.tintColor = themeColor.color
-            }
+        }
+        changeTabBarColorDelegate?.changeTabBarColor()
+//        changeTabBarColorDelegate?.tabBarController(tabBarController, didSelect: tabBarController.selectedViewController!)
+
         RecognitionChange.shared.changeColor = true
     }
     

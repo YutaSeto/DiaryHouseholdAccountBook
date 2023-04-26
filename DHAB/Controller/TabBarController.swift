@@ -15,6 +15,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     @IBOutlet weak var tabMenuBar: UITabBar!
     var controllers:[UIViewController] = []
     let tabBarModel = TabBarModel()
+    var colorDelegate:ChangeTabBarColorDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +63,14 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
             }else if let target = $0 as? DiaryViewController{
                 target.reloadInputViews()
             }
+        }
+    }
+}
+
+extension TabBarController:ChangeTabBarColorDelegate{
+    func changeTabBarColor() {
+        if let selectedViewController = self.selectedViewController {
+            self.tabBarController(self, didSelect: selectedViewController)
         }
     }
 }

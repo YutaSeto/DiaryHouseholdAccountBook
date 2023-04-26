@@ -850,7 +850,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 tableView.deselectRow(at: indexPath, animated: true)
                 colorViewController.delegate = self
                 if let tabBar = self.tabBarController as? TabBarController{
-                    colorViewController.changeTabBarColorDelegate = tabBar as? any ChangeTabBarColorDelegate
+                    colorViewController.changeTabBarColorDelegate = tabBar
                 }
                 
                 return
