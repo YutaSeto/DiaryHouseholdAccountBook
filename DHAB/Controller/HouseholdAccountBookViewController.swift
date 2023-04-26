@@ -104,7 +104,6 @@ class HouseholdAccountBookViewController:UIViewController{
             chartView.data = householdAccountBookViewModel.setData()
         }
         
-        print(colorDelegate)
         
     }
     
@@ -850,7 +849,10 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 self.navigationController?.pushViewController(colorViewController, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
                 colorViewController.delegate = self
-                colorViewController.changeTabBarColorDelegate = colorDelegate
+                if let tabBar = self.tabBarController as? TabBarController{
+                    colorViewController.changeTabBarColorDelegate = tabBar as? any ChangeTabBarColorDelegate
+                }
+                
                 return
             default:
                 return

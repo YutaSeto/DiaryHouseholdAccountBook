@@ -15,7 +15,6 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     @IBOutlet weak var tabMenuBar: UITabBar!
     var controllers:[UIViewController] = []
     let tabBarModel = TabBarModel()
-    var colorDelegate:ChangeTabBarColorDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,12 +49,6 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
                     tabBarItem.image = tabBarItem.image?.withTintColor(unselectedColor,renderingMode: .alwaysOriginal)
                 }
             }
-            
-            if viewController is HouseholdAccountBookViewController{
-                let storyboard = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
-                guard let householdAccountBookViewController = storyboard.instantiateViewController(withIdentifier: "HouseholdAccountBookViewController") as? HouseholdAccountBookViewController else {return}
-                householdAccountBookViewController.colorDelegate = self
-            }
         }
     }
     
@@ -68,25 +61,6 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
                 target.reloadInputViews()
             }else if let target = $0 as? DiaryViewController{
                 target.reloadInputViews()
-            }
-        }
-    }
-}
-
-extension TabBarController:ChangeTabBarColorDelegate{
-    func changeTabBarColor(_ tabBarController: UITabBarController,viewController: UIViewController) {
-        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
-        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
-            let selectedColor:UIColor = themeColor.color
-            let unselectedColor:UIColor = .systemGray2
-            viewController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:selectedColor], for: .selected)
-            viewController.tabBarItem.image = viewController.tabBarItem.image?.withTintColor(selectedColor, renderingMode: .alwaysOriginal)
-            for tabBarItem in tabBarController.tabBar.items ?? []{
-                if tabBarController.tabBar.items?.firstIndex(of: tabBarItem) != index{
-                    tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:unselectedColor], for: .normal)
-                    tabBarItem.image = tabBarItem.image?.withTintColor(unselectedColor,renderingMode: .alwaysOriginal)
-                }
             }
         }
     }
