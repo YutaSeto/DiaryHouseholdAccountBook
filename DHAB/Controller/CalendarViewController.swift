@@ -220,19 +220,6 @@ class CalendarViewController:UIViewController{
         navigationItem.title = "カレンダー"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
-        if #available(iOS 15.0, *) {
-                let appearance = UINavigationBarAppearance()
-                // 背景色
-            appearance.titleTextAttributes = [.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
-                                              
-            appearance.backgroundColor = themeColor.color
-                                              
-            
-                // ナビゲーションバーに反映
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            }
     }
     
     func setNavigationBarButton(){
@@ -244,17 +231,17 @@ class CalendarViewController:UIViewController{
     func changeNavigationBarColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
-        
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
+
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func showInputView(){
@@ -508,6 +495,10 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         return UIColor.clear
     }
     
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+        return .clear
+    }
+    
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor?{
         return UIColor.clear
     }
@@ -555,7 +546,6 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         cell.labelsDate = date
         
         if calendarViewHeight.constant <= 300{
-            
             cell.dayLabel.font = UIFont.systemFont(ofSize: 10)
             cell.paymentLabel.font = UIFont.systemFont(ofSize: 10)
             cell.paymentLabel.text = util.getComma(calendarViewModel.setBalanceForCalendarCell(date: date))

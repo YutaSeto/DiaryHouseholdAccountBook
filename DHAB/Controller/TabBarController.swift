@@ -15,6 +15,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     @IBOutlet weak var tabMenuBar: UITabBar!
     var controllers:[UIViewController] = []
     let tabBarModel = TabBarModel()
+    var colorDelegate:ChangeTabBarColorDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,9 +51,13 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
                 }
             }
             
+            if viewController is HouseholdAccountBookViewController{
+                let storyboard = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
+                guard let householdAccountBookViewController = storyboard.instantiateViewController(withIdentifier: "HouseholdAccountBookViewController") as? HouseholdAccountBookViewController else {return}
+                householdAccountBookViewController.colorDelegate = self
+            }
         }
     }
-    
     
     func remakeViewController() {
         let vc = self.viewControllers
@@ -67,35 +72,22 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
         }
     }
 }
-extension TabBarController:InputViewControllerDelegate{
-    func changeFromPaymentToIncome() {
-        return
-    }
-    
-    func changeFromIncomeToPayment() {
-        return
-    }
-    
-    func didReceiveNotification() {
-        return
-    }
-    
-    func updatePayment() {
-        return
-    }
-    func updateDiary() {
-        return
-    }
-    
-    func updateCalendar() {
-        return
-    }
-    
-    func updateIncome() {
-        return
-    }
-    
-    func inputViewController(_ viewController: InputViewController, didUpdateData data: String) {
-        return
+
+extension TabBarController:ChangeTabBarColorDelegate{
+    func changeTabBarColor(_ tabBarController: UITabBarController,viewController: UIViewController) {
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
+            let selectedColor:UIColor = themeColor.color
+            let unselectedColor:UIColor = .systemGray2
+            viewController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:selectedColor], for: .selected)
+            viewController.tabBarItem.image = viewController.tabBarItem.image?.withTintColor(selectedColor, renderingMode: .alwaysOriginal)
+            for tabBarItem in tabBarController.tabBar.items ?? []{
+                if tabBarController.tabBar.items?.firstIndex(of: tabBarItem) != index{
+                    tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:unselectedColor], for: .normal)
+                    tabBarItem.image = tabBarItem.image?.withTintColor(unselectedColor,renderingMode: .alwaysOriginal)
+                }
+            }
+        }
     }
 }

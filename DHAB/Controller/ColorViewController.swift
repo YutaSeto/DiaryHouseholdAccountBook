@@ -9,15 +9,19 @@ protocol ColorViewControllerDelegate{
     func changeColor()
 }
 
+protocol ChangeTabBarColorDelegate{
+    func changeTabBarColor(_ tabBarController: UITabBarController,viewController: UIViewController)
+}
+
 import Foundation
 import UIKit
 import ChameleonFramework
 
 class ColorViewController:UIViewController{
     let colorModel = ColorModel()
-    
     let themeColorType = "themeColorType"
     var delegate:ColorViewControllerDelegate?
+    var changeTabBarColorDelegate:ChangeTabBarColorDelegate?
     
     @IBOutlet weak var colorTableView: UITableView!
     
@@ -72,11 +76,15 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         delegate?.changeColor()
+        if let tabBarController = tabBarController as? TabBarController {
+            tabBarController.tabBar.tintColor = themeColor.color
+            }
         RecognitionChange.shared.changeColor = true
     }
     

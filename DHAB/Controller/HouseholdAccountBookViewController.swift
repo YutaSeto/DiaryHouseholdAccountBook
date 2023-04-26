@@ -47,6 +47,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet var slideMenuView: UIView!
     @IBOutlet weak var menuTableView: UITableView!
     var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?
+    var colorDelegate:ChangeTabBarColorDelegate?
     
     //推移画面関連
     @IBOutlet weak var chartView: BarChartView!
@@ -102,6 +103,8 @@ class HouseholdAccountBookViewController:UIViewController{
         if householdAccountBookViewModel.sumYearPayment != 0 || householdAccountBookViewModel.sumYearIncome != 0{
             chartView.data = householdAccountBookViewModel.setData()
         }
+        
+        print(colorDelegate)
         
     }
     
@@ -484,11 +487,10 @@ class HouseholdAccountBookViewController:UIViewController{
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
-        
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func showInputView(){
@@ -848,6 +850,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 self.navigationController?.pushViewController(colorViewController, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
                 colorViewController.delegate = self
+                colorViewController.changeTabBarColorDelegate = colorDelegate
                 return
             default:
                 return
