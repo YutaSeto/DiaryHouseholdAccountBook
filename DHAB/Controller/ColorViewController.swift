@@ -24,6 +24,15 @@ class ColorViewController:UIViewController{
     var delegate:ColorViewControllerDelegate?
     var changeTabBarColorDelegate:ChangeTabBarColorDelegate?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        if themeColorTypeInt == 0 || themeColorTypeInt == 2 || themeColorTypeInt == 4 || themeColorTypeInt == 5 || themeColorTypeInt == 7 || themeColorTypeInt == 9 || themeColorTypeInt == 11{
+            return .lightContent
+        } else {
+            return .darkContent
+        }
+    }
+    
     @IBOutlet weak var colorTableView: UITableView!
     
     override func viewDidLoad() {
@@ -31,9 +40,7 @@ class ColorViewController:UIViewController{
         colorTableView.delegate = self
         colorTableView.dataSource = self
         colorTableView.register(UINib(nibName: "ColorTableViewCell", bundle: nil), forCellReuseIdentifier: "customCell")
-        print(changeTabBarColorDelegate)
     }
-    
     func saveThemeColor(type: ColorType){
     }
 }
@@ -83,13 +90,12 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         delegate?.changeColor()
+        print(preferredStatusBarStyle)
+        setNeedsStatusBarAppearanceUpdate()
         if let tabBarController = tabBarController as? TabBarController {
             tabBarController.tabBar.tintColor = themeColor.color
         }
         changeTabBarColorDelegate?.changeTabBarColor()
-//        changeTabBarColorDelegate?.tabBarController(tabBarController, didSelect: tabBarController.selectedViewController!)
-
         RecognitionChange.shared.changeColor = true
     }
-    
 }

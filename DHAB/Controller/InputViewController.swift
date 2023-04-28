@@ -64,6 +64,11 @@ class InputViewController:UIViewController{
     @IBOutlet weak var incomeNodataLabel: UILabel!
     @IBOutlet weak var diaryNoDataLabel: UILabel!
     
+    @IBOutlet weak var weekBackButton: UIButton!
+    @IBOutlet weak var dayBackButton: UIButton!
+    @IBOutlet weak var dayPassButton: UIButton!
+    @IBOutlet weak var weekPassButton: UIButton!
+    
     
     var toolbar: UIToolbar{
         let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
@@ -81,6 +86,11 @@ class InputViewController:UIViewController{
     @IBOutlet weak var addDiaryButton: UIButton!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var diaryDateTextField: UITextField!
+    
+    @IBOutlet weak var diaryWeekBackButton: UIButton!
+    @IBOutlet weak var diaryDayBackButton: UIButton!
+    @IBOutlet weak var diaryDayPassButton: UIButton!
+    @IBOutlet weak var diaryWeekPassButton: UIButton!
     
     override func viewDidLoad(){
         
@@ -116,6 +126,7 @@ class InputViewController:UIViewController{
         setToolbar()
         changeNavigationBarColor()
         changeSegmentedControlColor()
+        changeButtonColor()
         configureTextView()
         setNavigationTitle()
         print(householdAccountBookView.frame.height)
@@ -377,7 +388,20 @@ class InputViewController:UIViewController{
             householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
             
         }
-        
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        weekBackButton.tintColor = themeColor.arrowColor
+        dayBackButton.tintColor = themeColor.arrowColor
+        weekPassButton.tintColor = themeColor.arrowColor
+        dayPassButton.tintColor = themeColor.arrowColor
+        diaryWeekBackButton.tintColor = themeColor.arrowColor
+        diaryDayBackButton.tintColor = themeColor.arrowColor
+        diaryWeekPassButton.tintColor = themeColor.arrowColor
+        diaryDayPassButton.tintColor = themeColor.arrowColor
+
     }
     
     @objc func didTapFinishButton(){
@@ -596,8 +620,8 @@ class InputViewController:UIViewController{
     func changeSegmentedControlColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        viewChangeSegmentedControl.selectedSegmentTintColor = themeColor.color
-        viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        viewChangeSegmentedControl.selectedSegmentTintColor = themeColor.segmentedControlColor
+        viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.segmentedControlColor, isFlat: true)!], for: .selected)
         viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     

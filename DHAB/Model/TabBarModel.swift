@@ -10,7 +10,8 @@ import UIKit
 import RealmSwift
 
 class TabBarModel{
-    func setFirstCategory(){
+
+    func setFirstCategoryAndColor(){
         let userDefaults = UserDefaults.standard
         if !userDefaults.bool(forKey: "hasLaunchedBefore"){
             userDefaults.set(true, forKey: "hasLaunchedBefore")
@@ -86,6 +87,8 @@ class TabBarModel{
                 category.isPayment = false
                 realm.add(category)
             }
+            
+            UserDefaults.standard.setValue(5, forKey: "themeColorType")
         }
     }
     

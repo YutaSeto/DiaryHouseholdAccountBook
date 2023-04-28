@@ -51,7 +51,7 @@ class PictureViewController:UIViewController{
     
     func changeNavigationBarColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
-        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .blue
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()

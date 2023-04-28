@@ -77,6 +77,7 @@ class CalendarViewController:UIViewController{
         super.viewWillAppear(animated)
         changeNavigationBarColor()
         changeSegmentedControlColor()
+        changeButtonColor()
         
         if RecognitionChange.shared.changeColor == true{
             calendarView.reloadData()
@@ -126,6 +127,15 @@ class CalendarViewController:UIViewController{
         monthPassButton.setTitle(nil, for: .normal)
         threeMonthPassButton.setTitle(nil, for: .normal)
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        threeMonthBackButton.tintColor = themeColor.arrowColor
+        monthBackButton.tintColor = themeColor.arrowColor
+        monthPassButton.tintColor = themeColor.arrowColor
+        threeMonthPassButton.tintColor = themeColor.arrowColor
     }
     
     @IBAction func monthBackButton(_ sender: UIButton) {
@@ -209,8 +219,8 @@ class CalendarViewController:UIViewController{
     func changeSegmentedControlColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        segmentedControl.selectedSegmentTintColor = themeColor.color
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        segmentedControl.selectedSegmentTintColor = themeColor.segmentedControlColor
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.segmentedControlColor, isFlat: true)!], for: .selected)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     

@@ -82,6 +82,7 @@ class HouseholdAccountBookViewController:UIViewController{
         graphShowButton.titleLabel?.adjustsFontSizeToFitWidth = true
         changeNavigationBarColor()
         changeSegmentedControlColor()
+        changeButtonColor()
         setChartView()
         setIncomePieGraphView()
         setPaymentPieGraphView()
@@ -195,17 +196,11 @@ class HouseholdAccountBookViewController:UIViewController{
         resultSumTableView.isScrollEnabled = false
     }
     
-    func setSegmentedControlColor(color:UIColor){
-        householdAccountBookSegmentedControl.selectedSegmentTintColor = color
-        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)!], for: .selected)
-        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
-    }
-    
     func changeSegmentedControlColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        householdAccountBookSegmentedControl.selectedSegmentTintColor = themeColor.color
-        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        householdAccountBookSegmentedControl.selectedSegmentTintColor = themeColor.segmentedControlColor
+        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.segmentedControlColor, isFlat: true)!], for: .selected)
         householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
@@ -289,6 +284,15 @@ class HouseholdAccountBookViewController:UIViewController{
         updateChartView()
         updatePaymentPieGraph()
         updateIncomePieGraph()
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        threeMonthBackButton.tintColor = themeColor.arrowColor
+        dayBackButton.tintColor = themeColor.arrowColor
+        dayPassButton.tintColor = themeColor.arrowColor
+        threeMonthPassButton.tintColor = themeColor.arrowColor
     }
     
     
@@ -1065,7 +1069,6 @@ extension HouseholdAccountBookViewController:ColorViewControllerDelegate{
     func changeColor() {
         changeSegmentedControlColor()
         changeNavigationBarColor()
+        changeButtonColor()
     }
-    
-    
 }

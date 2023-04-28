@@ -52,6 +52,7 @@ class BudgetViewController: UIViewController{
         budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
         changeNavigationBarColor()
+        changeButtonColor()
         addSubView()
         setMenuView()
         
@@ -161,6 +162,13 @@ class BudgetViewController: UIViewController{
         dateLabel.text = util.monthDateFormatter.string(from: budgetViewModel.date)
         updateList()
         budgetTableView.reloadData()
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        dateBackButton.tintColor = themeColor.arrowColor
+        datePassButton.tintColor = themeColor.arrowColor
     }
     
     func updateList(){

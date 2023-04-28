@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cqe-U2-Ncb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cqe-U2-Ncb">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -65,10 +65,16 @@
                         <outlet property="continueAddButton" destination="W2c-KJ-R3W" id="9bQ-qF-Mit"/>
                         <outlet property="countLabel" destination="Mzb-Jv-Mhi" id="ssm-2u-ckD"/>
                         <outlet property="dateTextField" destination="7Re-CN-JLV" id="uW2-mH-ufm"/>
+                        <outlet property="dayBackButton" destination="KUh-7d-STc" id="eAG-TJ-s2z"/>
+                        <outlet property="dayPassButton" destination="aAZ-jb-j6c" id="vdz-0T-orQ"/>
                         <outlet property="diaryDateTextField" destination="4nk-ou-JqQ" id="9Pa-1u-B7A"/>
+                        <outlet property="diaryDayBackButton" destination="2Wg-8M-tUr" id="aa3-u8-UKw"/>
+                        <outlet property="diaryDayPassButton" destination="Vei-Mt-fYU" id="BIj-95-ha6"/>
                         <outlet property="diaryInputTextView" destination="7cH-uk-sXu" id="wa7-SX-gVZ"/>
                         <outlet property="diaryNoDataLabel" destination="NYj-dz-OLN" id="Tpd-Ql-7e9"/>
                         <outlet property="diaryView" destination="rad-1v-mEU" id="qOC-Q4-tBb"/>
+                        <outlet property="diaryWeekBackButton" destination="EPM-tj-fTV" id="6sv-pi-zjW"/>
+                        <outlet property="diaryWeekPassButton" destination="Dtq-tw-qXV" id="CNq-EZ-ezr"/>
                         <outlet property="householdAccountBookScrollView" destination="deW-ET-Kyp" id="b4E-ht-a1h"/>
                         <outlet property="householdAccountBookView" destination="nU6-bC-CYB" id="flk-oI-nA4"/>
                         <outlet property="imageCollectionView" destination="tga-kJ-rCq" id="gR9-K1-jya"/>
@@ -81,6 +87,8 @@
                         <outlet property="segmentedControlHeight" destination="sA3-us-Fmj" id="yZU-v0-klj"/>
                         <outlet property="titleTextField" destination="TTs-lB-pbb" id="ZRu-KE-VRD"/>
                         <outlet property="viewChangeSegmentedControl" destination="7cL-QX-Ga4" id="a3Y-xK-bJp"/>
+                        <outlet property="weekBackButton" destination="uHA-xD-drh" id="cuh-v1-vDn"/>
+                        <outlet property="weekPassButton" destination="CAL-6d-owZ" id="nNi-K5-eO0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JHf-Hx-Efu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

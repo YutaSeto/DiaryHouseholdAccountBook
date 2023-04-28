@@ -20,7 +20,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
-        tabBarModel.setFirstCategory()
+        tabBarModel.setFirstCategoryAndColor()
         controllers = tabBarModel.initTab()
         setViewControllers(controllers, animated: false)
     }
@@ -40,7 +40,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
-            let selectedColor:UIColor = themeColor.color
+            let selectedColor:UIColor = themeColor.tabBarColor
             let unselectedColor:UIColor = .systemGray2
             viewController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:selectedColor], for: .selected)
             viewController.tabBarItem.image = viewController.tabBarItem.image?.withTintColor(selectedColor, renderingMode: .alwaysOriginal)
