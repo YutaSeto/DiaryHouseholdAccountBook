@@ -23,16 +23,7 @@ class ColorViewController:UIViewController{
     let themeColorType = "themeColorType"
     var delegate:ColorViewControllerDelegate?
     var changeTabBarColorDelegate:ChangeTabBarColorDelegate?
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
-        if themeColorTypeInt == 0 || themeColorTypeInt == 2 || themeColorTypeInt == 4 || themeColorTypeInt == 5 || themeColorTypeInt == 7 || themeColorTypeInt == 9 || themeColorTypeInt == 11{
-            return .lightContent
-        } else {
-            return .darkContent
-        }
-    }
-    
+        
     @IBOutlet weak var colorTableView: UITableView!
     
     override func viewDidLoad() {
@@ -41,8 +32,16 @@ class ColorViewController:UIViewController{
         colorTableView.dataSource = self
         colorTableView.register(UINib(nibName: "ColorTableViewCell", bundle: nil), forCellReuseIdentifier: "customCell")
     }
-    func saveThemeColor(type: ColorType){
+    
+    func changeStatusBarStyle()-> UIStatusBarStyle{
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        if themeColorTypeInt == 0 || themeColorTypeInt == 2 || themeColorTypeInt == 4 || themeColorTypeInt == 5 || themeColorTypeInt == 7 || themeColorTypeInt == 9 || themeColorTypeInt == 11{
+            return .lightContent
+        } else {
+            return .darkContent
+        }
     }
+    
 }
 
 extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
@@ -58,8 +57,6 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         if indexPath.row == UserDefaults.standard.integer(forKey: "themeColorType"){
             cell.checkMark.isHidden = false
         }
-        
-        
         return cell
     }
     
@@ -90,8 +87,9 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         delegate?.changeColor()
-        print(preferredStatusBarStyle)
+        print("aa")
         setNeedsStatusBarAppearanceUpdate()
+        print("bb")
         if let tabBarController = tabBarController as? TabBarController {
             tabBarController.tabBar.tintColor = themeColor.color
         }

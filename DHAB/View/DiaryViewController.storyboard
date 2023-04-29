@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Navigation Bar Controller-->
         <scene sceneID="pAq-mN-OUl">
             <objects>
-                <navigationController id="dNP-Fo-lWe" sceneMemberID="viewController">
+                <navigationController id="dNP-Fo-lWe" customClass="NavigationBarController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="PgP-3f-MX8">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
