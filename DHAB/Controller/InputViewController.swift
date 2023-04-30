@@ -373,19 +373,29 @@ class InputViewController:UIViewController{
     @IBAction func continueAddButton(_ sender: UIButton) {
         tapContinueAddButton()
         inputViewControllerDelegate?.didReceiveNotification()
-        if let selectedItem = paymentCollectionView.indexPathsForSelectedItems?.first{
-            paymentCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
+        for i in 0 ..< inputViewModel.categoryList.count{
+            if let targetCell = paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                targetCell.backgroundColor = .white
+                targetCell.categoryLabel.textColor = .flatBlack()
+            }
         }
+
+        for i in 0 ..< inputViewModel.incomeCategoryList.count{
+            if let targetCell = incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                targetCell.backgroundColor = .white
+                targetCell.categoryLabel.textColor = .flatBlack()
+            }
+        }
+        
         if let selectedItem = incomeCollectionView.indexPathsForSelectedItems?.first{
             incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
         inputByStartUpModalDelegate?.updateJournal()
         inputViewModel.journal = nil
-        
+
         if view.frame.height < 650{
             view.endEditing(true)
             householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
-            
         }
     }
     

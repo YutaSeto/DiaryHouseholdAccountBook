@@ -638,6 +638,8 @@
 				DEVELOPMENT_TEAM = UGB2RBGPCV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DHAB/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "家計簿日記";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -669,6 +671,8 @@
 				DEVELOPMENT_TEAM = UGB2RBGPCV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DHAB/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "家計簿日記";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

@@ -124,8 +124,15 @@ class ExpenseItemViewController: UIViewController{
     }
     
     func configureAddButton(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         addButton.layer.cornerRadius = addButton.bounds.width / 2
         addIncomeButton.layer.cornerRadius = addIncomeButton.bounds.width / 2
+        addButton.backgroundColor = themeColor.color
+        addIncomeButton.backgroundColor = themeColor.color
+        addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        addIncomeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        
     }
     
     func addSubView(){

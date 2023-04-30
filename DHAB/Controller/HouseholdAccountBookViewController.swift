@@ -809,7 +809,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             case 0:
                 if householdAccountBookSegmentedControl.selectedSegmentIndex == 1{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
-                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! UINavigationController
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
                     expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
@@ -823,7 +823,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     householdAccountBookViewModel.isExpanded = false
                 }else{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
-                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! UINavigationController
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
                     expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
@@ -835,7 +835,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 }
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! UINavigationController
                 let budgetViewController = storyboard.instantiateViewController(withIdentifier: "BudgetViewController") as! BudgetViewController
                 budgetViewController.forHouseholdAccountBookDelegate = self
                 budgetViewController.budgetViewControllerDelegate = self
