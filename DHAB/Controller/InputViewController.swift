@@ -129,7 +129,6 @@ class InputViewController:UIViewController{
         changeButtonColor()
         configureTextView()
         setNavigationTitle()
-        print(householdAccountBookView.frame.height)
         if inputViewModel.journal == nil{
             addButton.setTitle("追加する",for: .normal)
         }else{
@@ -835,7 +834,6 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                     targetCell.categoryLabel.textColor = .flatBlack()
                 }
             }
-            print(indexPath)
             cell.backgroundColor = themeColor.color
             cell.categoryLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
             

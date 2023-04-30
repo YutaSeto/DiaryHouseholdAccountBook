@@ -39,6 +39,7 @@ class TabBarController:UITabBarController, UITabBarControllerDelegate{
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        
         if let index = tabBarController.viewControllers?.firstIndex(of: viewController){
             let selectedColor:UIColor = themeColor.tabBarColor
             let unselectedColor:UIColor = .systemGray2

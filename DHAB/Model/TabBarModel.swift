@@ -95,22 +95,19 @@ class TabBarModel{
     func initTab() -> [UIViewController]{
         var controllers = [UIViewController]()
         let storyboard = UIStoryboard(name: "CalendarViewController", bundle: nil)
-        let calendarViewController = storyboard.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController
-        calendarViewController?.tabBarItem = UITabBarItem(title: "カレンダー", image: UIImage(systemName: "calendar"), tag: 0)
-        let calendarNavigationController = UINavigationController(rootViewController: calendarViewController!)
-        controllers.append(calendarNavigationController)
+        let calendarViewController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! NavigationBarController
+        calendarViewController.tabBarItem = UITabBarItem(title: "カレンダー", image: UIImage(systemName: "calendar"), tag: 0)
+        controllers.append(calendarViewController)
         
         let storyboard1 = UIStoryboard(name: "HouseholdAccountBookViewController", bundle: nil)
-        let householdAccountBookViewController = storyboard1.instantiateViewController(withIdentifier: "HouseholdAccountBookViewController") as? HouseholdAccountBookViewController
-        householdAccountBookViewController!.tabBarItem = UITabBarItem(title: "家計簿", image: UIImage(systemName: "yensign.circle"), tag: 1)
-        let householdAccoutBookNavigationController = UINavigationController(rootViewController: householdAccountBookViewController!)
-        controllers.append(householdAccoutBookNavigationController)
+        let householdAccountBookViewController = storyboard1.instantiateViewController(withIdentifier: "NavigationBarController") as! NavigationBarController
+        householdAccountBookViewController.tabBarItem = UITabBarItem(title: "家計簿", image: UIImage(systemName: "yensign.circle"), tag: 1)
+        controllers.append(householdAccountBookViewController)
         
         let storyboard2 = UIStoryboard(name: "DiaryViewController", bundle: nil)
-        let diaryViewController = storyboard2.instantiateViewController(withIdentifier: "DiaryViewController") as? DiaryViewController
-        diaryViewController!.tabBarItem = UITabBarItem(title: "日記", image: UIImage(systemName: "book"), tag: 2)
-        let diaryNavigationController = UINavigationController(rootViewController: diaryViewController!)
-        controllers.append(diaryNavigationController)
+        let diaryViewController = storyboard2.instantiateViewController(withIdentifier: "NavigationBarController") as! NavigationBarController
+        diaryViewController.tabBarItem = UITabBarItem(title: "日記", image: UIImage(systemName: "book"), tag: 2)
+        controllers.append(diaryViewController)
         return controllers
     }
     

@@ -87,9 +87,8 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         delegate?.changeColor()
-        print("aa")
+        StatusBarStyle.shared.style = .darkContent
         setNeedsStatusBarAppearanceUpdate()
-        print("bb")
         if let tabBarController = tabBarController as? TabBarController {
             tabBarController.tabBar.tintColor = themeColor.color
         }

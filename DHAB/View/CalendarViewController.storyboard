@@ -12,7 +12,7 @@
         <!--Navigation Bar Controller-->
         <scene sceneID="XMD-dH-DVZ">
             <objects>
-                <navigationController id="kLZ-Ma-zhj" customClass="NavigationBarController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavigationBarController" id="kLZ-Ma-zhj" customClass="NavigationBarController" customModule="DHAB" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="u3I-hX-Rdy">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

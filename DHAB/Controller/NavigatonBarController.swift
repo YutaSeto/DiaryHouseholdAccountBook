@@ -11,11 +11,9 @@ import UIKit
 class NavigationBarController:UINavigationController{
     override var preferredStatusBarStyle: UIStatusBarStyle {
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
-        if themeColorTypeInt == 0 || themeColorTypeInt == 2 || themeColorTypeInt == 4 || themeColorTypeInt == 5 || themeColorTypeInt == 7 || themeColorTypeInt == 9 || themeColorTypeInt == 11{
-            print("lightContent")
+        if themeColorTypeInt == 0 || themeColorTypeInt == 2 || themeColorTypeInt == 5 || themeColorTypeInt == 7 || themeColorTypeInt == 8 || themeColorTypeInt == 10 || themeColorTypeInt == 12{
             return .lightContent
         } else {
-            print("darkContent")
             return .darkContent
         }
     }
