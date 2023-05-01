@@ -225,8 +225,6 @@ class CalendarViewController:UIViewController{
     }
     
     func setNavigationTitle(){
-        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
-        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         navigationItem.title = "カレンダー"
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -695,6 +693,11 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
 }
 
 extension CalendarViewController:InputByStartUpModalDelegate{
+    func fixSelectedDate(date: Date) {
+        calendarViewModel.selectedDate = date
+        calendarView.setCurrentPage(calendarViewModel.selectedDate, animated: false)
+    }
+    
     func updateJournal() {
         calendarViewModel.setMonthIncomeModelList()
         calendarViewModel.setMonthPaymentModelList()

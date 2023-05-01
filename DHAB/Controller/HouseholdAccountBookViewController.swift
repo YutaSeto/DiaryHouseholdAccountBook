@@ -1047,6 +1047,8 @@ extension HouseholdAccountBookViewController:ForHouseholdAccountBookDeleagte,Bud
         householdAccountBookViewModel.setIncomeData()
         householdAccountBookViewModel.setSumPaymentData()
         householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.setIncomeBudgetData()
         householdAccountBookViewModel.paymentTableViewDataSource = []
         householdAccountBookViewModel.incomeTableViewDataSource = []
         householdAccountBookViewModel.setPaymentTableViewDataSourse()

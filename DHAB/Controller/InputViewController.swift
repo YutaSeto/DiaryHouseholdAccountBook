@@ -23,6 +23,7 @@ protocol InputViewControllerDelegate{
 protocol InputByStartUpModalDelegate{
     func updateJournal()
     func updateDiaryAndCalendar()
+    func fixSelectedDate(date:Date)
 }
 
 protocol UpdateDiaryByLookDiaryViewDelegate{
@@ -368,6 +369,7 @@ class InputViewController:UIViewController{
         tapAddButton()
         inputViewControllerDelegate?.didReceiveNotification()
         inputByStartUpModalDelegate?.updateJournal()
+        inputByStartUpModalDelegate?.fixSelectedDate(date: inputViewModel.date)
     }
     
     @IBAction func continueAddButton(_ sender: UIButton) {
