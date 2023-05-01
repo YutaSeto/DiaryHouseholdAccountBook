@@ -260,6 +260,7 @@ class CalendarViewController:UIViewController{
         let navigationController = UINavigationController(rootViewController: inputViewController)
         present(navigationController,animated:true)
         inputViewController.inputByStartUpModalDelegate = self
+        inputViewController.inputViewModel.date = calendarViewModel.selectedDate
         RecognitionChange.shared.updateCalendar = true
         RecognitionChange.shared.updateJournalByCalendar = true
     }

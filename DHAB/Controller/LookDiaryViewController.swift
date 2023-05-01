@@ -186,6 +186,7 @@ extension LookDiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
         diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
         imageCollectionViewHeight.constant = 0
         imageCollectionView.reloadData()
+        setNavigationBarTitle()
     }
 }
 

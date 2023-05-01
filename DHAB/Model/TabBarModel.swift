@@ -59,6 +59,14 @@ class TabBarModel{
             try! realm.write{
                 let category = Category()
                 category.id = NSUUID().uuidString
+                category.name = "住居費"
+                category.isPayment = true
+                realm.add(category)
+            }
+            
+            try! realm.write{
+                let category = Category()
+                category.id = NSUUID().uuidString
                 category.name = "その他"
                 category.isPayment = true
                 realm.add(category)
