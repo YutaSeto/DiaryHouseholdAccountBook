@@ -261,6 +261,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     let dataSource = self.budgetViewModel.budgetTableViewDataSource[indexPath.row]
                     if let budget = self.budgetViewModel.paymentBudgetList.filter({$0.id == dataSource.id}).first{
                         let realm = try!Realm()
+                        if textFieldOnAlert.text == ""{
+                            textFieldOnAlert.text = "0"
+                        }
                         try! realm.write{
                             budget.budgetPrice = Int(textFieldOnAlert.text!)!
                         }
@@ -291,6 +294,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     let dataSource = self.budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row]
                     if let budget = self.budgetViewModel.incomeBudgetList.filter({$0.id == dataSource.id}).first{
                         let realm = try!Realm()
+                        if textFieldOnAlert.text == ""{
+                            textFieldOnAlert.text = "0"
+                        }
                         try! realm.write{
                             budget.budgetPrice = Int(textFieldOnAlert.text!)!
                         }

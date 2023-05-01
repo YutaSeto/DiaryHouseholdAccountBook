@@ -706,7 +706,6 @@ extension CalendarViewController:InputByStartUpModalDelegate{
         setSum()
         householdAccountBookTableView.reloadData()
         calendarView.reloadData()
-        
     }
     
     func updateDiaryAndCalendar() {

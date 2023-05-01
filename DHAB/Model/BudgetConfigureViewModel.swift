@@ -24,6 +24,7 @@ class BudgetConfigureViewModel{
     func overwritePaymentBudget(){
         budgetTableViewDataSource.forEach{ data in
             if let index = paymentBudgetList.firstIndex(where: {$0.id == data.id}){
+                
                 try! realm.write{
                     paymentBudgetList[index].budgetPrice = data.price
                 }

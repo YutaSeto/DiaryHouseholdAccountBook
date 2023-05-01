@@ -33,7 +33,10 @@ class BudgetConfigureTableViewCell: UITableViewCell {
     }
     
     @objc func textFieldDidChange(_ textField:UITextField){
-        guard let text = textField.text else{return}
+        guard var text = textField.text else{return}
+        if text == ""{
+            text = "0"
+        }
         if let price = Int(text){
             data?.price = price
             incomeData?.price = price
