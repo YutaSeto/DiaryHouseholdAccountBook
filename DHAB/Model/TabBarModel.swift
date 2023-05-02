@@ -10,6 +10,8 @@ import UIKit
 import RealmSwift
 
 class TabBarModel{
+    
+    
 
     func setFirstCategoryAndColor(){
         let userDefaults = UserDefaults.standard

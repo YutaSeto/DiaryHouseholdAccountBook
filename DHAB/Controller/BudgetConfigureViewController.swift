@@ -24,6 +24,8 @@ class BudgetConfigureViewController: UIViewController{
     var delegate:BudgetConfigureViewControllerDelegate?
     var forHouseholdAccountBookDelegate:ForHouseholdAccountBookDeleagte?
     
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var budgetConfigureTableView: UITableView!
     
@@ -41,6 +43,7 @@ class BudgetConfigureViewController: UIViewController{
         dateLabel.text = util.monthDateFormatter.string(from:budgetConfigureViewModel.date)
         configureNavigationBarButton()
         changeNavigationBarColor()
+        configureButton()
     }
     
     @IBAction func saveButton(_ sender: UIButton) {
@@ -65,6 +68,15 @@ class BudgetConfigureViewController: UIViewController{
                                             ,target: self,action: buttonActionSelector)
         navigationItem.leftBarButtonItem = leftBarButton
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: .flatPowderBlueColorDark(), isFlat: true)
+    }
+    
+    func configureButton(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        cancelButton.backgroundColor = themeColor.color
+        cancelButton.titleLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+        saveButton.backgroundColor = themeColor.color
+        saveButton.titleLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
     }
     
     func changeNavigationBarColor(){

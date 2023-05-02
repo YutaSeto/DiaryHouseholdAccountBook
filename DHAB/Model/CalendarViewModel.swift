@@ -33,14 +33,14 @@ class CalendarViewModel{
     func setMonthPaymentModelList(){
         let firstDay = util.setFirstDay(date: selectedDate)
         let lastDay = util.setLastDay(date: selectedDate)
-        let paymentList:[Journal] = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == true}
+        let paymentList:[Journal] = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date < lastDay}.filter{$0.isPayment == true}
         monthPaymentModelList = paymentList
     }
     
     func setMonthIncomeModelList(){
         let firstDay = util.setFirstDay(date: selectedDate)
         let lastDay = util.setLastDay(date: selectedDate)
-        let incomeList:[Journal] = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == false}
+        let incomeList:[Journal] = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date < lastDay}.filter{$0.isPayment == false}
         monthIncomeModelList = incomeList
     }
     
@@ -61,7 +61,7 @@ class CalendarViewModel{
         let lastDay = util.setLastDay(date: selectedDate)
         
         var sum:Int = 0
-        let incomeList = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date <= lastDay}.filter{$0.isPayment == false}
+        let incomeList = realm.objects(Journal.self).filter{($0.date >= firstDay)}.filter{$0.date < lastDay}.filter{$0.isPayment == false}
         incomeList.forEach{income in
             sum += income.price
         }

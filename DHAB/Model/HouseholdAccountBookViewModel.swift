@@ -37,6 +37,7 @@ class HouseholdAccountBookViewModel{
     var sumYearPayment: Int = 0
     var sumIncomeList: [Double] = [0,0,0,0,0,0,0,0,0,0,0,0]
     var sumYearIncome: Int = 0
+    let month:[String] = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
     
     let paymentColors:[UIColor] = [.flatRed(), .flatOrange(), .flatMagenta(), .flatYellow(), .flatWatermelon(), .flatPink(), .flatRedColorDark(), .flatOrangeColorDark(), .flatMagentaColorDark(), .flatYellowColorDark(), .flatWatermelonColorDark(), .flatPinkColorDark()]
     
@@ -122,15 +123,16 @@ class HouseholdAccountBookViewModel{
         
         var barColors: [UIColor] = []
         var dataEntries:[BarChartDataEntry] = []
+        
+        let month:[String] = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
         for i in 0 ..< 12{
-            dataEntries.append(BarChartDataEntry(x: Double(i), y: sumIncomeList[i] - sumPaymentList[i]))
+            dataEntries.append(BarChartDataEntry(x: Double(i), y: sumIncomeList[i] - sumPaymentList[i], data: String(month[i])))
             if sumIncomeList[i] - sumPaymentList[i] <= 0 {
                 barColors.append(.red)
             } else {
                 barColors.append(.blue)
             }
         }
-        
         // データセットを作成する
         let dataSet = BarChartDataSet(entries: dataEntries, label: "収支")
         dataSet.colors = barColors
@@ -138,7 +140,6 @@ class HouseholdAccountBookViewModel{
         // チャートデータを作成する
         let data = BarChartData(dataSets: [dataSet])
         data.barWidth = 0.6
-        
         return data
     }
     

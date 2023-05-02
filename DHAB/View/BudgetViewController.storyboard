@@ -188,7 +188,9 @@
                     </view>
                     <connections>
                         <outlet property="budgetConfigureTableView" destination="oQC-3G-ien" id="k1R-Y6-CqF"/>
+                        <outlet property="cancelButton" destination="3TZ-uz-FNA" id="X1a-xL-uMb"/>
                         <outlet property="dateLabel" destination="Dch-2f-QpN" id="jkR-j5-UFe"/>
+                        <outlet property="saveButton" destination="DfG-cJ-Rnh" id="CjQ-Er-F9m"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LL6-KL-xwR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

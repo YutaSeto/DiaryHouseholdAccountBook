@@ -244,7 +244,7 @@
                             <rect key="frame" x="0.0" y="259" width="353" height="305"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </tableView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WN0-1e-N5K" customClass="BarChartView" customModule="Charts">
+                        <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WN0-1e-N5K" customClass="BarChartView" customModule="Charts">
                             <rect key="frame" x="0.0" y="59" width="353" height="100"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
@@ -261,13 +261,13 @@
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="aJh-BJ-J6S"/>
                     <constraints>
+                        <constraint firstItem="0Ku-zV-GNL" firstAttribute="top" secondItem="WN0-1e-N5K" secondAttribute="bottom" id="25G-Td-xpD"/>
                         <constraint firstItem="WN0-1e-N5K" firstAttribute="top" secondItem="aJh-BJ-J6S" secondAttribute="top" id="EfO-rS-gaa"/>
                         <constraint firstItem="rDx-Lm-2P4" firstAttribute="top" secondItem="0Ku-zV-GNL" secondAttribute="bottom" id="FbW-2M-adS"/>
+                        <constraint firstItem="WN0-1e-N5K" firstAttribute="leading" secondItem="aJh-BJ-J6S" secondAttribute="leading" id="HMy-iP-dUX"/>
                         <constraint firstItem="rDx-Lm-2P4" firstAttribute="leading" secondItem="aJh-BJ-J6S" secondAttribute="leading" id="RnK-e8-A9m"/>
-                        <constraint firstItem="0Ku-zV-GNL" firstAttribute="top" secondItem="WN0-1e-N5K" secondAttribute="bottom" id="SDL-A0-CwR"/>
                         <constraint firstItem="0Ku-zV-GNL" firstAttribute="trailing" secondItem="aJh-BJ-J6S" secondAttribute="trailing" id="eDL-5H-z46"/>
-                        <constraint firstItem="aJh-BJ-J6S" firstAttribute="trailing" secondItem="WN0-1e-N5K" secondAttribute="trailing" id="pgd-v5-TtT"/>
-                        <constraint firstItem="WN0-1e-N5K" firstAttribute="leading" secondItem="aJh-BJ-J6S" secondAttribute="leading" id="sS1-nd-ysK"/>
+                        <constraint firstItem="WN0-1e-N5K" firstAttribute="trailing" secondItem="aJh-BJ-J6S" secondAttribute="trailing" id="hgh-OC-BNx"/>
                         <constraint firstItem="aJh-BJ-J6S" firstAttribute="trailing" secondItem="rDx-Lm-2P4" secondAttribute="trailing" id="sUt-E2-bQH"/>
                         <constraint firstItem="0Ku-zV-GNL" firstAttribute="leading" secondItem="aJh-BJ-J6S" secondAttribute="leading" id="xiE-mH-5yv"/>
                         <constraint firstItem="aJh-BJ-J6S" firstAttribute="bottom" secondItem="rDx-Lm-2P4" secondAttribute="bottom" id="zkW-i7-Ul7"/>
