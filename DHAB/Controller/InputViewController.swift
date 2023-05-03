@@ -23,6 +23,7 @@ protocol InputViewControllerDelegate{
 protocol InputByStartUpModalDelegate{
     func updateJournal()
     func updateDiaryAndCalendar()
+    func fixSelectedDate(date:Date)
 }
 
 protocol UpdateDiaryByLookDiaryViewDelegate{
@@ -64,6 +65,11 @@ class InputViewController:UIViewController{
     @IBOutlet weak var incomeNodataLabel: UILabel!
     @IBOutlet weak var diaryNoDataLabel: UILabel!
     
+    @IBOutlet weak var weekBackButton: UIButton!
+    @IBOutlet weak var dayBackButton: UIButton!
+    @IBOutlet weak var dayPassButton: UIButton!
+    @IBOutlet weak var weekPassButton: UIButton!
+    
     
     var toolbar: UIToolbar{
         let toolbarRect = CGRect(x: 0,y: 0, width:view.frame.size.width,height: 35)
@@ -81,6 +87,11 @@ class InputViewController:UIViewController{
     @IBOutlet weak var addDiaryButton: UIButton!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var diaryDateTextField: UITextField!
+    
+    @IBOutlet weak var diaryWeekBackButton: UIButton!
+    @IBOutlet weak var diaryDayBackButton: UIButton!
+    @IBOutlet weak var diaryDayPassButton: UIButton!
+    @IBOutlet weak var diaryWeekPassButton: UIButton!
     
     override func viewDidLoad(){
         
@@ -116,9 +127,9 @@ class InputViewController:UIViewController{
         setToolbar()
         changeNavigationBarColor()
         changeSegmentedControlColor()
+        changeButtonColor()
         configureTextView()
         setNavigationTitle()
-        print(householdAccountBookView.frame.height)
         if inputViewModel.journal == nil{
             addButton.setTitle("追加する",for: .normal)
         }else{
@@ -155,10 +166,14 @@ class InputViewController:UIViewController{
     }
     
     func setNavigationTitle(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
         if inputViewModel.journal == nil && inputViewModel.diary == nil{
             navigationItem.title = "新規作成"
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         }else{
             navigationItem.title = "編集"
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         }
         navigationController?.navigationBar.barStyle = .default
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -186,10 +201,10 @@ class InputViewController:UIViewController{
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func tapBackButton(){
@@ -354,26 +369,50 @@ class InputViewController:UIViewController{
         tapAddButton()
         inputViewControllerDelegate?.didReceiveNotification()
         inputByStartUpModalDelegate?.updateJournal()
+        inputByStartUpModalDelegate?.fixSelectedDate(date: inputViewModel.date)
     }
     
     @IBAction func continueAddButton(_ sender: UIButton) {
         tapContinueAddButton()
         inputViewControllerDelegate?.didReceiveNotification()
-        if let selectedItem = paymentCollectionView.indexPathsForSelectedItems?.first{
-            paymentCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
+        for i in 0 ..< inputViewModel.categoryList.count{
+            if let targetCell = paymentCollectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                targetCell.backgroundColor = .white
+                targetCell.categoryLabel.textColor = .flatBlack()
+            }
         }
+
+        for i in 0 ..< inputViewModel.incomeCategoryList.count{
+            if let targetCell = incomeCollectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? InputCollectionViewCell{
+                targetCell.backgroundColor = .white
+                targetCell.categoryLabel.textColor = .flatBlack()
+            }
+        }
+        
         if let selectedItem = incomeCollectionView.indexPathsForSelectedItems?.first{
             incomeCollectionView.cellForItem(at: selectedItem)?.backgroundColor = .white
         }
         inputByStartUpModalDelegate?.updateJournal()
         inputViewModel.journal = nil
-        
+
         if view.frame.height < 650{
             view.endEditing(true)
             householdAccountBookScrollView.setContentOffset(CGPoint.zero, animated: true)
-            
         }
-        
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        weekBackButton.tintColor = themeColor.arrowColor
+        dayBackButton.tintColor = themeColor.arrowColor
+        weekPassButton.tintColor = themeColor.arrowColor
+        dayPassButton.tintColor = themeColor.arrowColor
+        diaryWeekBackButton.tintColor = themeColor.arrowColor
+        diaryDayBackButton.tintColor = themeColor.arrowColor
+        diaryWeekPassButton.tintColor = themeColor.arrowColor
+        diaryDayPassButton.tintColor = themeColor.arrowColor
+
     }
     
     @objc func didTapFinishButton(){
@@ -592,8 +631,8 @@ class InputViewController:UIViewController{
     func changeSegmentedControlColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        viewChangeSegmentedControl.selectedSegmentTintColor = themeColor.color
-        viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        viewChangeSegmentedControl.selectedSegmentTintColor = themeColor.segmentedControlColor
+        viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.segmentedControlColor, isFlat: true)!], for: .selected)
         viewChangeSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
@@ -807,7 +846,6 @@ extension InputViewController:UICollectionViewDelegate,UICollectionViewDataSourc
                     targetCell.categoryLabel.textColor = .flatBlack()
                 }
             }
-            print(indexPath)
             cell.backgroundColor = themeColor.color
             cell.categoryLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
             

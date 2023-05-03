@@ -52,7 +52,7 @@ class InputViewModel{
     func addNewJournal(priceText:Int, expenseItem: String, memo:String){
         try! realm.write{
             let journal = Journal()
-            journal.date = date
+            journal.date = date.zeroclock
             journal.price = priceText
             journal.category = expenseItem
             journal.isPayment = isPayment
@@ -63,9 +63,8 @@ class InputViewModel{
     
     func overwriteJournal(price:Int,result:String, memo:String){
         try! realm.write{
-            journal?.date = date
+            journal?.date = date.zeroclock
             journal?.isPayment = isPayment
-            journal?.price = price
             journal?.price = price
             journal?.category = result
             journal?.memo = memo

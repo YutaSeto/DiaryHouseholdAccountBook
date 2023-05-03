@@ -9,16 +9,21 @@ protocol ColorViewControllerDelegate{
     func changeColor()
 }
 
+protocol ChangeTabBarColorDelegate{
+    func changeTabBarColor()
+//    func tabBarController(tabBarController: UITabBarController, didSelect viewController: UIViewController)
+}
+
 import Foundation
 import UIKit
 import ChameleonFramework
 
 class ColorViewController:UIViewController{
     let colorModel = ColorModel()
-    
     let themeColorType = "themeColorType"
     var delegate:ColorViewControllerDelegate?
-    
+    var changeTabBarColorDelegate:ChangeTabBarColorDelegate?
+        
     @IBOutlet weak var colorTableView: UITableView!
     
     override func viewDidLoad() {
@@ -26,11 +31,17 @@ class ColorViewController:UIViewController{
         colorTableView.delegate = self
         colorTableView.dataSource = self
         colorTableView.register(UINib(nibName: "ColorTableViewCell", bundle: nil), forCellReuseIdentifier: "customCell")
-        print(colorModel.colorList)
     }
     
-    func saveThemeColor(type: ColorType){
+    func changeStatusBarStyle()-> UIStatusBarStyle{
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        if themeColorTypeInt == 0 || themeColorTypeInt == 2 || themeColorTypeInt == 4 || themeColorTypeInt == 5 || themeColorTypeInt == 7 || themeColorTypeInt == 9 || themeColorTypeInt == 11{
+            return .lightContent
+        } else {
+            return .darkContent
+        }
     }
+    
 }
 
 extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
@@ -46,8 +57,6 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         if indexPath.row == UserDefaults.standard.integer(forKey: "themeColorType"){
             cell.checkMark.isHidden = false
         }
-        
-        
         return cell
     }
     
@@ -72,12 +81,18 @@ extension ColorViewController:UITableViewDataSource,UITableViewDelegate{
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
         delegate?.changeColor()
+        StatusBarStyle.shared.style = .darkContent
+        setNeedsStatusBarAppearanceUpdate()
+        if let tabBarController = tabBarController as? TabBarController {
+            tabBarController.tabBar.tintColor = themeColor.color
+        }
+        changeTabBarColorDelegate?.changeTabBarColor()
         RecognitionChange.shared.changeColor = true
     }
-    
 }

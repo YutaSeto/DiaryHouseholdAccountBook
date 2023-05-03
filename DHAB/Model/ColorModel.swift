@@ -10,18 +10,17 @@ import UIKit
 import ChameleonFramework
 
 class ColorModel{
-    var colorList:[UIColor] = [.flatWhite(),.flatRed(),.flatPink(),.flatOrange(),.flatLime(),.flatGreen(),.flatMint(),.flatSand(),.flatTeal(),.flatBlue(),.flatPowderBlue(),.flatBrown(),.flatGray(),.flatBlack()]
-    var colorNameList:[String] = ["ホワイト","レッド","ピンク","オレンジ","ライム","グリーン","ミント","サンド","ターコイズ","ブルー","パウダーブルー","ブラウン","グレー","ブラック"]
+    var colorList:[UIColor] = [.flatRed(),.flatPink(),.flatOrange(),.flatLime(),.flatGreen(),.flatMint(),.flatSand(),.flatTeal(),.flatBlue(),.flatPowderBlue(),.flatBrown(),.flatGray(),.flatBlack()]
+    var colorNameList:[String] = ["レッド","ピンク","オレンジ","ライム","グリーン","ミント","サンド","ターコイズ","ブルー","パウダーブルー","ブラウン","グレー","ブラック"]
 }
 
 enum ColorType:Int{
-    case `default`
     case red
     case pink
     case orange
     case lime
     case green
-    case mint
+    case `default`
     case sand
     case teal
     case blue
@@ -32,13 +31,12 @@ enum ColorType:Int{
     
     var color: UIColor{
         switch self{
-        case .default: return FlatWhite()
         case .red: return FlatRed()//問題あり
         case .pink:  return FlatPink()
         case .orange: return FlatOrange()
         case .lime: return FlatLime()
         case .green: return FlatGreen()
-        case .mint: return FlatMint()
+        case .default: return FlatMint()
         case .sand: return FlatSand()
         case .teal: return FlatTeal()
         case .blue: return FlatBlue()
@@ -47,18 +45,52 @@ enum ColorType:Int{
         case .gray: return FlatGray()
         case .black: return FlatBlack()
         }
-        
     }
     
-    var darkColor: UIColor{
+    var arrowColor: UIColor{
         switch self{
-        case .default: return FlatWhiteDark()
+        case .red: return FlatRed()
+        case .pink:  return FlatPink()
+        case .orange: return FlatOrange()
+        case .lime: return FlatLime()
+        case .green: return FlatGreen()
+        case .default: return FlatMint()
+        case .sand: return FlatSand()
+        case .teal: return FlatTeal()
+        case .blue: return FlatBlue()
+        case .powderblue: return FlatPowderBlue()
+        case .brown: return FlatBrown()
+        case .gray: return FlatGray()
+        case .black: return FlatBlack()
+        }
+    }
+    
+    var segmentedControlColor: UIColor{
+        switch self{
+        case .red: return FlatRed()
+        case .pink:  return FlatPink()
+        case .orange: return FlatOrange()
+        case .lime: return FlatLime()
+        case .green: return FlatGreen()
+        case .default: return FlatMint()
+        case .sand: return FlatSand()
+        case .teal: return FlatTeal()
+        case .blue: return FlatBlue()
+        case .powderblue: return FlatPowderBlue()
+        case .brown: return FlatBrown()
+        case .gray: return FlatGray()
+        case .black: return FlatBlack()
+        }
+    }
+    
+    var selectedCalendarColor: UIColor{
+        switch self{
         case .red: return FlatRedDark()
         case .pink:  return FlatPinkDark()
         case .orange: return FlatOrangeDark()
         case .lime: return FlatLimeDark()
         case .green: return FlatGreenDark()
-        case .mint: return FlatMintDark()
+        case .default: return FlatMintDark()
         case .sand: return FlatSandDark()
         case .teal: return FlatTealDark()
         case .blue: return FlatBlueDark()
@@ -69,17 +101,26 @@ enum ColorType:Int{
         }
     }
     
+    var tabBarColor: UIColor{
+        switch self{
+        case .red: return FlatRed()
+        case .pink:  return FlatPink()
+        case .orange: return FlatOrange()
+        case .lime: return FlatLime()
+        case .green: return FlatGreen()
+        case .default: return FlatMint()
+        case .sand: return FlatSandDark()
+        case .teal: return FlatTeal()
+        case .blue: return FlatBlue()
+        case .powderblue: return FlatPowderBlueDark()
+        case .brown: return FlatBrown()
+        case .gray: return FlatGrayDark()
+        case .black: return FlatBlack()
+        }
+    }
+    
     var lightColor: UIColor{
         switch self{
-        case .default:
-            let color = UIColor.init(displayP3Red: 0.931, green: 0.9462, blue: 0.95, alpha: 1.0)
-            var hue: CGFloat = 0
-            var saturation: CGFloat = 0
-            var brightness: CGFloat = 0
-            var alpha: CGFloat = 0
-            color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-            alpha *= 0.5
-            return UIColor.init(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
         case .red:
             let color = UIColor.init(displayP3Red: 0.91 * 0.9, green: 0.30394 * 0.9, blue: 0.2366 * 0.9, alpha: 1.0)
             var hue: CGFloat = 0
@@ -126,7 +167,7 @@ enum ColorType:Int{
             color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
             alpha *= 0.5
             return UIColor.init(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
-        case .mint:
+        case .default:
             let color = UIColor.init(displayP3Red: 0.1036 * 0.9, green: 0.74 * 0.9, blue: 0.61272 * 0.9, alpha: 1.0)
             var hue: CGFloat = 0
             var saturation: CGFloat = 0

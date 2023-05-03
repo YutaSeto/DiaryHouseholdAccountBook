@@ -104,11 +104,11 @@ class LookDiaryViewController:UIViewController{
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
 
     @objc func tapBackButton(){
@@ -186,6 +186,7 @@ extension LookDiaryViewController:UpdateDiaryByLookDiaryViewDelegate{
         diaryTextView.heightAnchor.constraint(equalToConstant: height).isActive = true
         imageCollectionViewHeight.constant = 0
         imageCollectionView.reloadData()
+        setNavigationBarTitle()
     }
 }
 

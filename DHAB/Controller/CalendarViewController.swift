@@ -77,6 +77,7 @@ class CalendarViewController:UIViewController{
         super.viewWillAppear(animated)
         changeNavigationBarColor()
         changeSegmentedControlColor()
+        changeButtonColor()
         
         if RecognitionChange.shared.changeColor == true{
             calendarView.reloadData()
@@ -126,6 +127,15 @@ class CalendarViewController:UIViewController{
         monthPassButton.setTitle(nil, for: .normal)
         threeMonthPassButton.setTitle(nil, for: .normal)
         self.navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        threeMonthBackButton.tintColor = themeColor.arrowColor
+        monthBackButton.tintColor = themeColor.arrowColor
+        monthPassButton.tintColor = themeColor.arrowColor
+        threeMonthPassButton.tintColor = themeColor.arrowColor
     }
     
     @IBAction func monthBackButton(_ sender: UIButton) {
@@ -209,8 +219,8 @@ class CalendarViewController:UIViewController{
     func changeSegmentedControlColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        segmentedControl.selectedSegmentTintColor = themeColor.color
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        segmentedControl.selectedSegmentTintColor = themeColor.segmentedControlColor
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.segmentedControlColor, isFlat: true)!], for: .selected)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
@@ -229,17 +239,17 @@ class CalendarViewController:UIViewController{
     func changeNavigationBarColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
-        
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
+
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func showInputView(){
@@ -248,6 +258,7 @@ class CalendarViewController:UIViewController{
         let navigationController = UINavigationController(rootViewController: inputViewController)
         present(navigationController,animated:true)
         inputViewController.inputByStartUpModalDelegate = self
+        inputViewController.inputViewModel.date = calendarViewModel.selectedDate
         RecognitionChange.shared.updateCalendar = true
         RecognitionChange.shared.updateJournalByCalendar = true
     }
@@ -493,6 +504,10 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         return UIColor.clear
     }
     
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+        return .clear
+    }
+    
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor?{
         return UIColor.clear
     }
@@ -540,7 +555,6 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
         cell.labelsDate = date
         
         if calendarViewHeight.constant <= 300{
-            
             cell.dayLabel.font = UIFont.systemFont(ofSize: 10)
             cell.paymentLabel.font = UIFont.systemFont(ofSize: 10)
             cell.paymentLabel.text = util.getComma(calendarViewModel.setBalanceForCalendarCell(date: date))
@@ -679,6 +693,11 @@ extension CalendarViewController:FSCalendarDataSource,FSCalendarDelegate,FSCalen
 }
 
 extension CalendarViewController:InputByStartUpModalDelegate{
+    func fixSelectedDate(date: Date) {
+        calendarViewModel.selectedDate = date
+        calendarView.setCurrentPage(calendarViewModel.selectedDate, animated: false)
+    }
+    
     func updateJournal() {
         calendarViewModel.setMonthIncomeModelList()
         calendarViewModel.setMonthPaymentModelList()
@@ -687,7 +706,6 @@ extension CalendarViewController:InputByStartUpModalDelegate{
         setSum()
         householdAccountBookTableView.reloadData()
         calendarView.reloadData()
-        
     }
     
     func updateDiaryAndCalendar() {

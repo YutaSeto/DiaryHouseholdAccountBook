@@ -14,7 +14,6 @@
 		23507F1429911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */; };
 		2368D62329DE76D20070A67E /* SelectStartUpModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */; };
 		2368D62429DE76D20070A67E /* SelectStartUpModalTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */; };
-		2368D62829DFC5840070A67E /* extension + UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368D62729DFC5840070A67E /* extension + UIViewController.swift */; };
 		237AFB652974ECAC0060ECD0 /* BudgetViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */; };
 		237AFB672974ECBC0060ECD0 /* BudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */; };
 		237AFB6B2975027B0060ECD0 /* BudgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237AFB692975027B0060ECD0 /* BudgetTableViewCell.swift */; };
@@ -72,6 +71,7 @@
 		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
 		EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */; };
 		EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */; };
+		EDE35F3F29FD1F80007884EB /* NavigatonBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE35F3E29FD1F80007884EB /* NavigatonBarController.swift */; };
 		EDE9354629BE0FAA006109C7 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE9354529BE0FAA006109C7 /* Util.swift */; };
 /* End PBXBuildFile section */
 
@@ -83,7 +83,6 @@
 		23507F1329911D690025EAE5 /* HouseholdAccountBookTableViewCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdAccountBookTableViewCellItem.swift; sourceTree = "<group>"; };
 		2368D62129DE76D20070A67E /* SelectStartUpModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectStartUpModalTableViewCell.swift; sourceTree = "<group>"; };
 		2368D62229DE76D20070A67E /* SelectStartUpModalTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectStartUpModalTableViewCell.xib; sourceTree = "<group>"; };
-		2368D62729DFC5840070A67E /* extension + UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension + UIViewController.swift"; sourceTree = "<group>"; };
 		237AFB642974ECAC0060ECD0 /* BudgetViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BudgetViewController.storyboard; sourceTree = "<group>"; };
 		237AFB662974ECBC0060ECD0 /* BudgetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewController.swift; sourceTree = "<group>"; };
 		237AFB692975027B0060ECD0 /* BudgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTableViewCell.swift; sourceTree = "<group>"; };
@@ -145,6 +144,7 @@
 		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
 		EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
 		EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResultTableViewCell.xib; sourceTree = "<group>"; };
+		EDE35F3E29FD1F80007884EB /* NavigatonBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatonBarController.swift; sourceTree = "<group>"; };
 		EDE9354529BE0FAA006109C7 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -212,7 +212,6 @@
 				237B85E02970471A001E4639 /* SceneDelegate.swift */,
 				23A0B28B29A84CA1000956CF /* RecognitionChange.swift */,
 				23A0B29129AA4522000956CF /* extension + Date.swift */,
-				2368D62729DFC5840070A67E /* extension + UIViewController.swift */,
 				23CBECC029CBE87500A5E777 /* Entity */,
 				237B85F22970472F001E4639 /* Model */,
 				237B85F32970473B001E4639 /* View */,
@@ -274,6 +273,7 @@
 				23CBECC329CD726F00A5E777 /* LookDiaryViewController.swift */,
 				23AA408A29ECDEA8004E5BBB /* LookJournalViewController.swift */,
 				23CF14BD29EF817100773C2C /* ColorViewController.swift */,
+				EDE35F3E29FD1F80007884EB /* NavigatonBarController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -471,6 +471,7 @@
 				23ACC1462988AC5500ABA10D /* SliderViewCell.swift in Sources */,
 				237B860129704A59001E4639 /* InputViewController.swift in Sources */,
 				237B85DF2970471A001E4639 /* AppDelegate.swift in Sources */,
+				EDE35F3F29FD1F80007884EB /* NavigatonBarController.swift in Sources */,
 				23D4070629DA932D00E92C52 /* BudgetViewModel.swift in Sources */,
 				23AA409129ECDF70004E5BBB /* LookJournalModel.swift in Sources */,
 				23D4070229DA92F600E92C52 /* HouseholdAccountBookViewModel.swift in Sources */,
@@ -483,7 +484,6 @@
 				237AFB70297506A20060ECD0 /* ExpenseItemViewController.swift in Sources */,
 				237B860329704A68001E4639 /* CalendarViewController.swift in Sources */,
 				23CBECC229CD4E3000A5E777 /* PictureViewController.swift in Sources */,
-				2368D62829DFC5840070A67E /* extension + UIViewController.swift in Sources */,
 				23D4070A29DA937C00E92C52 /* ExpenseItemViewModel.swift in Sources */,
 				237B85E12970471A001E4639 /* SceneDelegate.swift in Sources */,
 				23D406FE29DA92AC00E92C52 /* InputViewModel.swift in Sources */,
@@ -633,11 +633,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UGB2RBGPCV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DHAB/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "家計簿日記";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -652,6 +655,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = setoon47.DHAB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -664,11 +668,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UGB2RBGPCV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DHAB/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "家計簿日記";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -683,6 +690,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = setoon47.DHAB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

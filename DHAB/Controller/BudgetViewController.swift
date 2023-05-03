@@ -52,6 +52,7 @@ class BudgetViewController: UIViewController{
         budgetViewModel.setIncomeBudgetTableViewDataSourse()
         setNavigationBarButton()
         changeNavigationBarColor()
+        changeButtonColor()
         addSubView()
         setMenuView()
         
@@ -163,6 +164,13 @@ class BudgetViewController: UIViewController{
         budgetTableView.reloadData()
     }
     
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        dateBackButton.tintColor = themeColor.arrowColor
+        datePassButton.tintColor = themeColor.arrowColor
+    }
+    
     func updateList(){
         budgetViewModel.setPaymentBudgetData()
         budgetViewModel.setCategoryData()
@@ -253,6 +261,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     let dataSource = self.budgetViewModel.budgetTableViewDataSource[indexPath.row]
                     if let budget = self.budgetViewModel.paymentBudgetList.filter({$0.id == dataSource.id}).first{
                         let realm = try!Realm()
+                        if textFieldOnAlert.text == ""{
+                            textFieldOnAlert.text = "0"
+                        }
                         try! realm.write{
                             budget.budgetPrice = Int(textFieldOnAlert.text!)!
                         }
@@ -283,6 +294,9 @@ extension BudgetViewController:UITableViewDelegate,UITableViewDataSource{
                     let dataSource = self.budgetViewModel.incomeBudgetTableViewDataSource[indexPath.row]
                     if let budget = self.budgetViewModel.incomeBudgetList.filter({$0.id == dataSource.id}).first{
                         let realm = try!Realm()
+                        if textFieldOnAlert.text == ""{
+                            textFieldOnAlert.text = "0"
+                        }
                         try! realm.write{
                             budget.budgetPrice = Int(textFieldOnAlert.text!)!
                         }

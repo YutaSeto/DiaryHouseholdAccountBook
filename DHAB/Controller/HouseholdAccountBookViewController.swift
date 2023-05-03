@@ -47,6 +47,7 @@ class HouseholdAccountBookViewController:UIViewController{
     @IBOutlet var slideMenuView: UIView!
     @IBOutlet weak var menuTableView: UITableView!
     var deleteCategoryDelegateForTabBar:DeleteCategoryDelegate?
+    var colorDelegate:ChangeTabBarColorDelegate?
     
     //推移画面関連
     @IBOutlet weak var chartView: BarChartView!
@@ -81,6 +82,7 @@ class HouseholdAccountBookViewController:UIViewController{
         graphShowButton.titleLabel?.adjustsFontSizeToFitWidth = true
         changeNavigationBarColor()
         changeSegmentedControlColor()
+        changeButtonColor()
         setChartView()
         setIncomePieGraphView()
         setPaymentPieGraphView()
@@ -102,6 +104,7 @@ class HouseholdAccountBookViewController:UIViewController{
         if householdAccountBookViewModel.sumYearPayment != 0 || householdAccountBookViewModel.sumYearIncome != 0{
             chartView.data = householdAccountBookViewModel.setData()
         }
+        
         
     }
     
@@ -193,17 +196,11 @@ class HouseholdAccountBookViewController:UIViewController{
         resultSumTableView.isScrollEnabled = false
     }
     
-    func setSegmentedControlColor(color:UIColor){
-        householdAccountBookSegmentedControl.selectedSegmentTintColor = color
-        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)!], for: .selected)
-        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
-    }
-    
     func changeSegmentedControlColor(){
         let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
         let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
-        householdAccountBookSegmentedControl.selectedSegmentTintColor = themeColor.color
-        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)!], for: .selected)
+        householdAccountBookSegmentedControl.selectedSegmentTintColor = themeColor.segmentedControlColor
+        householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: themeColor.segmentedControlColor, isFlat: true)!], for: .selected)
         householdAccountBookSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor(contrastingBlackOrWhiteColorOn: UIColor.systemGray3, isFlat: true)!], for: .normal)
     }
     
@@ -287,6 +284,15 @@ class HouseholdAccountBookViewController:UIViewController{
         updateChartView()
         updatePaymentPieGraph()
         updateIncomePieGraph()
+    }
+    
+    func changeButtonColor(){
+        let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+        let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
+        threeMonthBackButton.tintColor = themeColor.arrowColor
+        dayBackButton.tintColor = themeColor.arrowColor
+        dayPassButton.tintColor = themeColor.arrowColor
+        threeMonthPassButton.tintColor = themeColor.arrowColor
     }
     
     
@@ -484,11 +490,10 @@ class HouseholdAccountBookViewController:UIViewController{
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         appearance.backgroundColor = themeColor.color
-        
+        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: themeColor.color, isFlat: true) ?? .black]
     }
     
     @objc func showInputView(){
@@ -572,6 +577,14 @@ class HouseholdAccountBookViewController:UIViewController{
         chartView.xAxis.granularityEnabled = true
         chartView.xAxis.granularity = 1.0
         chartView.noDataText = "データがありません"
+        chartView.xAxis.labelPosition = .bottom
+        chartView.xAxis.labelFont = .systemFont(ofSize: 12)
+        chartView.xAxis.labelRotationAngle = 0.0
+        chartView.xAxis.spaceMin = 0.5
+        chartView.xAxis.spaceMax = 0.5
+        chartView.xAxis.labelTextColor = .black
+        chartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: householdAccountBookViewModel.month)
+        chartView.xAxis.labelCount = 13
     }
     
     private func updateChartView(){
@@ -711,6 +724,8 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView === paymentTableView{
+            let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+            let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
             let cell = paymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             let item = householdAccountBookViewModel.paymentTableViewDataSource[indexPath.row]
             cell.data = item
@@ -722,9 +737,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
             }
+            cell.progressBar.tintColor = themeColor.color
             cell.progressBar.setProgress(1 - Float(Float(item.budgetPrice - item.paymentPrice) / Float(item.budgetPrice)), animated: false)
             return cell
         }else if tableView === incomeTableView{
+            let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+            let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
             let cell = incomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             let item = householdAccountBookViewModel.incomeTableViewDataSource[indexPath.row]
             cell.incomeData = item
@@ -736,9 +754,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
             }
+            cell.progressBar.tintColor = themeColor.color
             cell.progressBar.setProgress(1 - Float(Float(item.incomeBudget - item.incomePrice) / Float(item.incomeBudget)), animated: false)
             return cell
         }else if tableView === sumPaymentTableView{
+            let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+            let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
             let cell = sumPaymentTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
             cell.budgetLabel.text = util.getComma(householdAccountBookViewModel.sumPaymentBudget())
@@ -748,9 +769,12 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
             }
+            cell.progressBar.tintColor = themeColor.color
             cell.progressBar.setProgress(1 - Float(Float(householdAccountBookViewModel.sumPaymentBudget() - householdAccountBookViewModel.setSumPayment()) / Float(householdAccountBookViewModel.sumPaymentBudget())), animated: false)
             return cell
         }else if tableView === sumIncomeTableView{
+            let themeColorTypeInt = UserDefaults.standard.integer(forKey: "themeColorType")
+            let themeColor = ColorType(rawValue: themeColorTypeInt) ?? .default
             let cell = sumIncomeTableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! HouseholdAccountBookTableViewCell
             cell.expenceItemLabel.text = "合計"
             cell.budgetLabel.text = util.getComma(householdAccountBookViewModel.sumIncomeBudget())
@@ -760,6 +784,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 cell.progressBar.setProgress(Float(0), animated: false)
                 return cell
             }
+            cell.progressBar.tintColor = themeColor.color
             cell.progressBar.setProgress(1 - Float(Float(householdAccountBookViewModel.sumIncomeBudget() - householdAccountBookViewModel.setSumIncome()) / Float(householdAccountBookViewModel.sumIncomeBudget())), animated: false)
             return cell
         }else if tableView === menuTableView{
@@ -804,7 +829,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
             case 0:
                 if householdAccountBookSegmentedControl.selectedSegmentIndex == 1{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
-                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! UINavigationController
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
                     expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
@@ -818,7 +843,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                     householdAccountBookViewModel.isExpanded = false
                 }else{
                     let storyboard = UIStoryboard(name: "ExpenseItemViewController", bundle: nil)
-                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                    let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! UINavigationController
                     let expenseItemViewController = storyboard.instantiateViewController(withIdentifier: "ExpenseItemViewController") as! ExpenseItemViewController
                     expenseItemViewController.categoryViewControllerDelegate = self
                     expenseItemViewController.deleteCategoryDelegateForTabBar = deleteCategoryDelegateForTabBar
@@ -830,7 +855,7 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 }
             case 1:
                 let storyboard = UIStoryboard(name: "BudgetViewController", bundle: nil)
-                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+                let navigationController = storyboard.instantiateViewController(withIdentifier: "NavigationBarController") as! UINavigationController
                 let budgetViewController = storyboard.instantiateViewController(withIdentifier: "BudgetViewController") as! BudgetViewController
                 budgetViewController.forHouseholdAccountBookDelegate = self
                 budgetViewController.budgetViewControllerDelegate = self
@@ -848,6 +873,10 @@ extension HouseholdAccountBookViewController:UITableViewDelegate,UITableViewData
                 self.navigationController?.pushViewController(colorViewController, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
                 colorViewController.delegate = self
+                if let tabBar = self.tabBarController as? TabBarController{
+                    colorViewController.changeTabBarColorDelegate = tabBar
+                }
+                
                 return
             default:
                 return
@@ -1038,6 +1067,8 @@ extension HouseholdAccountBookViewController:ForHouseholdAccountBookDeleagte,Bud
         householdAccountBookViewModel.setIncomeData()
         householdAccountBookViewModel.setSumPaymentData()
         householdAccountBookViewModel.setSumIncomeData()
+        householdAccountBookViewModel.setPaymentBudgetData()
+        householdAccountBookViewModel.setIncomeBudgetData()
         householdAccountBookViewModel.paymentTableViewDataSource = []
         householdAccountBookViewModel.incomeTableViewDataSource = []
         householdAccountBookViewModel.setPaymentTableViewDataSourse()
@@ -1060,7 +1091,6 @@ extension HouseholdAccountBookViewController:ColorViewControllerDelegate{
     func changeColor() {
         changeSegmentedControlColor()
         changeNavigationBarColor()
+        changeButtonColor()
     }
-    
-    
 }
