@@ -68,7 +68,7 @@
 		23EEE7D32972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */; };
 		23EEE7D52972CF6800A52939 /* DiaryViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */; };
 		23EEE7D92972D7C000A52939 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23EEE7D82972D7C000A52939 /* Budget.swift */; };
-		D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */; };
+		5BB6241F76ED550915F47ACC /* Pods_DHAB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12B360E78366C1BCA47C2A59 /* Pods_DHAB.framework */; };
 		EDCA5F0129B5795900980AC7 /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */; };
 		EDCA5F0229B5795900980AC7 /* ResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */; };
 		EDE35F3F29FD1F80007884EB /* NavigatonBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE35F3E29FD1F80007884EB /* NavigatonBarController.swift */; };
@@ -76,6 +76,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		12B360E78366C1BCA47C2A59 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		16A96FBCFD2BCABA6D824697 /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
 		233E500529C2C55E00F35DB8 /* InputCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCollectionViewCell.swift; sourceTree = "<group>"; };
 		233E500629C2C55E00F35DB8 /* InputCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputCollectionViewCell.xib; sourceTree = "<group>"; };
 		23507F0D298E9AD70025EAE5 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -139,13 +141,11 @@
 		23EEE7D22972CF5A00A52939 /* HouseholdAccountBookViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HouseholdAccountBookViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D42972CF6800A52939 /* DiaryViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DiaryViewController.storyboard; sourceTree = "<group>"; };
 		23EEE7D82972D7C000A52939 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
-		94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.debug.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.debug.xcconfig"; sourceTree = "<group>"; };
-		C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DHAB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
 		EDCA5EFF29B5795900980AC7 /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
 		EDCA5F0029B5795900980AC7 /* ResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResultTableViewCell.xib; sourceTree = "<group>"; };
 		EDE35F3E29FD1F80007884EB /* NavigatonBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatonBarController.swift; sourceTree = "<group>"; };
 		EDE9354529BE0FAA006109C7 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		FB1A519918EDE4EC008F99C5 /* Pods-DHAB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DHAB.release.xcconfig"; path = "Target Support Files/Pods-DHAB/Pods-DHAB.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,7 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D17BA5BDC5939C115581FFA5 /* Pods_DHAB.framework in Frameworks */,
+				5BB6241F76ED550915F47ACC /* Pods_DHAB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,7 +193,7 @@
 				237B85DD2970471A001E4639 /* DHAB */,
 				237B85DC2970471A001E4639 /* Products */,
 				FE69DA473FAE4DA6B3C756F1 /* Pods */,
-				D2158A32236C05243A74B6CD /* Frameworks */,
+				DC0AC679A149E17B0D1B6DDA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,10 +291,10 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
-		D2158A32236C05243A74B6CD /* Frameworks */ = {
+		DC0AC679A149E17B0D1B6DDA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C8D4546030A0C2986A8CB944 /* Pods_DHAB.framework */,
+				12B360E78366C1BCA47C2A59 /* Pods_DHAB.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -302,8 +302,8 @@
 		FE69DA473FAE4DA6B3C756F1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */,
-				DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */,
+				16A96FBCFD2BCABA6D824697 /* Pods-DHAB.debug.xcconfig */,
+				FB1A519918EDE4EC008F99C5 /* Pods-DHAB.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -315,11 +315,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 237B85EF2970471B001E4639 /* Build configuration list for PBXNativeTarget "DHAB" */;
 			buildPhases = (
-				72339C8B430D61FA6D58C0AA /* [CP] Check Pods Manifest.lock */,
+				99AA14F34867D6234962415C /* [CP] Check Pods Manifest.lock */,
 				237B85D72970471A001E4639 /* Sources */,
 				237B85D82970471A001E4639 /* Frameworks */,
 				237B85D92970471A001E4639 /* Resources */,
-				784DE5190519702EC67FB89D /* [CP] Embed Pods Frameworks */,
+				A77E38E97BD3C5D87989203D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -396,7 +396,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		72339C8B430D61FA6D58C0AA /* [CP] Check Pods Manifest.lock */ = {
+		99AA14F34867D6234962415C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -418,7 +418,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		784DE5190519702EC67FB89D /* [CP] Embed Pods Frameworks */ = {
+		A77E38E97BD3C5D87989203D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -629,7 +629,7 @@
 		};
 		237B85F02970471B001E4639 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 94AAD655EF8C982DC0DBC82A /* Pods-DHAB.debug.xcconfig */;
+			baseConfigurationReference = 16A96FBCFD2BCABA6D824697 /* Pods-DHAB.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -665,7 +665,7 @@
 		};
 		237B85F12970471B001E4639 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DF5F7A0342BDC4EB912424AC /* Pods-DHAB.release.xcconfig */;
+			baseConfigurationReference = FB1A519918EDE4EC008F99C5 /* Pods-DHAB.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
