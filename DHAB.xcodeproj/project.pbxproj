@@ -641,7 +641,7 @@
 				INFOPLIST_FILE = DHAB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "家計簿日記";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "このアプリでは、写真ライブラリにアクセスして、ユーザーが撮影した画像を表示するために使用しています。";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -677,7 +677,7 @@
 				INFOPLIST_FILE = DHAB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "家計簿日記";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "このアプリでは、写真ライブラリにアクセスして、ユーザーが撮影した画像を表示するために使用しています。";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
