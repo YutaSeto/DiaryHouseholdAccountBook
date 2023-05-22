@@ -504,7 +504,7 @@ class InputViewController:UIViewController{
     
     private func tapAddButton(){
         if inputViewModel.journal == nil{
-            if inputViewModel.isValidPrice(price: Int(priceTextField.text!)!){
+            if inputViewModel.isValidPrice(price: (Int(priceTextField.text!) ?? Int("0"))!){
                 showAlert(title: "金額は1億円以内にしてください")
                 return
             }
@@ -512,7 +512,7 @@ class InputViewController:UIViewController{
                 showAlert(title: "メモは10文字以内にしてください")
                 return
             }
-            inputViewModel.addNewJournal(priceText: Int(priceTextField.text!)!, expenseItem: inputViewModel.category, memo: memoTextField.text!)
+            inputViewModel.addNewJournal(priceText: Int(priceTextField.text!) ?? Int("0")!, expenseItem: inputViewModel.category, memo: memoTextField.text!)
             inputViewControllerDelegate?.updatePayment()
             dismiss(animated: true)
         }else if inputViewModel.journal != nil{ //paymetTableViewを選択した場合
