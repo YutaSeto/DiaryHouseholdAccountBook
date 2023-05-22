@@ -53,6 +53,12 @@ class DiaryViewController:UIViewController,UISearchBarDelegate{
             diaryTableView.reloadData()
             RecognitionChange.shared.updateDiaryByCalendar = false
         }
+        
+        if RecognitionChange.shared.updateDiaryByCalendarForDiary == true{
+            diaryViewModel.setDiaryData()
+            diaryTableView.reloadData()
+            RecognitionChange.shared.updateDiaryByCalendarForDiary = false
+        }
     }
     
     @objc func didTapFinishButton(){

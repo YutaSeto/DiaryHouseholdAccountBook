@@ -734,15 +734,13 @@ class InputViewController:UIViewController{
     func addDiary(){
         if inputViewModel.diary == nil{
             inputViewModel.addNewDiary(titleText: titleTextField.text!, diaryText: diaryInputTextView.text!)
-            inputViewControllerDelegate?.updateDiary()
-            RecognitionChange.shared.updateCalendar = true
-            dismiss(animated: true)
         }else{
             inputViewModel.overwriteDiary(titleText:titleTextField.text!,diaryText:diaryInputTextView.text!)
-            inputViewControllerDelegate?.updateDiary()
-            RecognitionChange.shared.updateCalendar = true
-            dismiss(animated: true)
         }
+        inputViewControllerDelegate?.updateDiary()
+        dismiss(animated: true)
+        RecognitionChange.shared.updateCalendar = true
+        RecognitionChange.shared.updateDiaryByCalendarForDiary = true
         forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate?.configureText(title: titleTextField.text!, text: diaryInputTextView.text!)
         forLookDiaryViewUpdateDiaryByLookDiaryViewDelegate?.updateDiaryByLookDiaryView()
         forDiaryViewUpdateDiaryByLookDiaryViewDelegate?.updateDiaryByLookDiaryView()
